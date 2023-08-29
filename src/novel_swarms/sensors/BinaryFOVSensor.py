@@ -23,8 +23,8 @@ class BinaryFOVSensor(AbstractSensor):
                  time_step_between_sensing=1,
                  store_history=False,
                  detect_goal_with_added_state=False,
-                 ):
-        super(BinaryFOVSensor, self).__init__(parent=parent)
+                 show=False):
+        super(BinaryFOVSensor, self).__init__(parent=parent, draw=show)
         self.current_state = 0
         self.angle = 0
         self.theta = theta

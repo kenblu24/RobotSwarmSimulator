@@ -50,7 +50,7 @@ class MazeAgent(Agent):
         self.i_1 = np.random.normal(I1_MEAN, I1_SD) if self.idiosyncrasies else 1.0
         self.i_2 = np.random.normal(I2_MEAN, I2_SD) if self.idiosyncrasies else 1.0
         self.stop_on_collision = config.stop_on_collision
-        self.catastrophic_collisions = config.catastophic_collisions
+        self.catastrophic_collisions = config.catastrophic_collisions
         self.dead = False
         self.stop_at_goal = config.stop_at_goal
         self.config = config

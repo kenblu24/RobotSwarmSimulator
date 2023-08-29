@@ -1,0 +1,179 @@
+from typing import Tuple, Any
+# import pygame
+import random
+import math
+import numpy as np
+from dataclasses import dataclass
+from .MazeAgent import MazeAgent
+from ..config.AgentConfig import MazeAgentConfig
+from ..util.collider.AABB import AABB
+from ..util.collider.CircularCollider import CircularCollider
+from ..util.timer import Timer
+
+# typing
+from ..config.WorldConfig import RectangularWorldConfig
+from ..sensors.SensorSet import SensorSet
+from ..world.World import World
+
+import neuro
+import caspian
+
+
+@dataclass
+class MazeAgentCaspianConfig(MazeAgentConfig):
+    x: float = None
+    y: float = None
+    angle: float = None
+    world: World = None
+    world_config: RectangularWorldConfig = None
+    seed: Any = None
+    agent_radius: float = 5
+    dt: float = 1.0
+    sensors: SensorSet = None
+    idiosyncrasies: Any = False
+    stop_on_collision: bool = False
+    stop_at_goal: bool = False
+    body_color: Tuple[int, int, int] = (255, 255, 255)
+    body_filled: bool = False
+    catastrophic_collisions: bool = False
+    trace_length: Tuple[int, int, int] = None
+    trace_color: Tuple[int, int, int] = None
+    network: neuro.json = None
+    neuro_tpc: int = 10
+    controller: None = None
+
+    def __post_init__(self):
+        if self.stop_at_goal is not False:
+            raise NotImplementedError
+
+    def asdict(self):
+        for key, value in self.__dict__:
+            if callable(value.asdict):
+                yield key, value.asdict()
+            elif callable(value.as_dict):
+                yield key, value.as_dict()
+            elif callable(value.as_config_dict):
+                yield key, value.as_config_dict()
+            else:
+                yield key, value
+
+    def create(self, name=None):
+        return MazeAgentCaspian(self, name)
+
+
+class MazeAgentCaspian(MazeAgent):
+
+    def __init__(self, config: MazeAgentConfig = None, name=None, network: dict = None) -> None:
+        if config is None:
+            config = MazeAgentCaspianConfig()
+
+        super().__init__(config=config, name=name)
+
+        self.controller = "Caspian"
+        self.network = network if network is not None else config.network
+
+        # self.net = neuro.Network()
+        # self.net.from_json(network)  # load network from json: dict
+        self.processor_params = self.network.get_data("processor")
+        # self.app_params = self.net.get_data("application").to_python()
+
+        self.setup_processor(self.processor_params, self.network)
+        # how many ticks the neuromorphic processor should run for
+        self.neuro_tpc = config.neuro_tpc
+        self.setup_encoders()
+
+    @staticmethod
+    def get_default_encoders(neuro_tpc):
+        encoder_params = {
+            "dmin": [0] * 4,  # two bins for each binary input
+            "dmax": [1] * 4,
+            "interval": neuro_tpc,
+            "named_encoders": {"s": "spikes"},
+            "use_encoders": ["s"] * 4
+        }
+        decoder_params = {
+            # see notes near where decoder is used
+            "dmin": [0] * 3,
+            "dmax": [neuro_tpc] * 3,
+            "divisor": neuro_tpc,
+            "named_decoders": {"r": {"rate": {"discrete": True}}},
+            "use_decoders": ["r", "r", "r"]
+        }
+        encoder = neuro.EncoderArray(encoder_params)
+        decoder = neuro.DecoderArray(decoder_params)
+
+        return (
+            encoder.get_num_neurons(),
+            decoder.get_num_neurons(),
+            encoder,
+            decoder
+        )
+
+    def setup_encoders(self, class_homogenous=True) -> None:
+        # Note: encoders/decoders *can* be saved to or read from the network. not implemented yet.
+
+        # Setup encoder
+        # for each binary raw input, we encode it to constant spikes on bins, kinda like traditional one-hot
+
+        # Setup decoder
+        # Read spikes to a discrete set of floats using rate-based decoding
+
+        x = MazeAgentCaspian if class_homogenous else self
+
+        encoders = x.get_default_encoders(self.neuro_tpc)
+
+        x.n_inputs, x.n_outputs, x.encoder, x.decoder = encoders
+
+    def setup_processor(self, pprops, network):
+        # pprops = processor.get_configuration()
+        self.processor = caspian.Processor(pprops)
+        self.processor.load_network(network)
+        neuro.track_all_output_events(self.processor, network)
+
+    @staticmethod
+    def bool_to_one_hot(x: bool):
+        return (0, 1) if x else (1, 0)
+
+    def run_processor(self, observation):
+        # b2oh = self.bool_to_one_hot
+        # # unpack observation
+        # sensor_triggered, see_goal = observation
+        # # convert each binary to one-hot and concatenate
+        # input_vector = b2oh(sensor_triggered) + b2oh(see_goal)
+
+        # translate observation to vector
+        if observation == 0:
+            input_vector = (1, 0, 0)
+        elif observation == 1:
+            input_vector = (0, 1, 0)
+        elif observation == 2:
+            input_vector = (0, 0, 1)
+        else:
+            raise ValueError("Expected 0, 1, or 2 as observation.")
+        input_vector += (1,)  # add 1 as constant on input to 4th input neuron
+
+        spikes = self.encoder.get_spikes(input_vector)
+        self.processor.apply_spikes(spikes)
+        self.processor.run(self.neuro_tpc)
+        # action: bool = bool(proc.output_vectors())  # old. don't use.
+        data = self.decoder.get_data_from_processor(self.processor)
+        """  old wheelspeed code.
+            # four bins. Two for each wheel, one for positive, one for negative.
+            wl, wr = 2 * (data[1] - data[0]), 2 * (data[3] - data[2])
+            return (wl, wr)
+        """
+        # three bins. One for +v, -v, omega.
+        v = 2 * (data[0] - data[1])
+        omega = data[2]
+        return v, omega
+
+    def interpretSensors(self) -> Tuple:
+        sensor_state = self.sensors.getState()
+        sensor_detection_id = self.sensors.getDetectionId()
+        # self.set_color_by_id(sensor_detection_id)
+
+        # if sensor_state == 2:
+        #     return 12, 0
+
+        v, omega = self.run_processor(sensor_state)
+        return v, omega

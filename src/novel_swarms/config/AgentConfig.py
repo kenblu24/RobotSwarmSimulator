@@ -280,7 +280,7 @@ class MazeAgentConfig:
         self.stop_at_goal = stop_at_goal
         self.body_color = body_color
         self.body_filled = body_filled
-        self.catastophic_collisions = catastrophic_collisions
+        self.catastrophic_collisions = catastrophic_collisions
         self.trace_length = trace_length
         self.trace_color = trace_color
 
@@ -303,13 +303,14 @@ class MazeAgentConfig:
             "idiosyncrasies": self.idiosyncrasies,
             "stop_on_collision": self.stop_on_collision,
             "stop_at_goal": self.stop_at_goal,
-            "catastophic_collisions" : self.catastophic_collisions
+            "catastrophic_collisions": self.catastrophic_collisions
         }
 
     @staticmethod
     def from_dict(d):
         ret = MazeAgentConfig()
         for k, v in d.items():
+
             if k != "type":
                 setattr(ret, k, v)
         ret.sensors = SensorFactory.create(ret.sensors)
@@ -413,6 +414,7 @@ class StaticAgentConfig:
             if k != "type":
                 setattr(ret, k, v)
         return ret
+
 
 class AgentConfigFactory:
     @staticmethod
