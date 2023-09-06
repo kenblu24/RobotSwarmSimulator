@@ -41,6 +41,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     network: neuro.json = None
     neuro_tpc: int = 10
     controller: None = None
+    neuro_track_all: bool = False
 
     def __post_init__(self):
         if self.stop_at_goal is not False:
@@ -77,13 +78,14 @@ class MazeAgentCaspian(MazeAgent):
         self.processor_params = self.network.get_data("processor")
         # self.app_params = self.net.get_data("application").to_python()
 
-        self.setup_processor(self.processor_params, self.network)
+        self.setup_processor(self.processor_params, track_all=config.neuro_track_all)
         # how many ticks the neuromorphic processor should run for
         self.neuro_tpc = config.neuro_tpc
+        self.iostream = None
         self.setup_encoders()
         self.rng = random.Random()
 
-    @staticmethod
+    @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
     def get_default_encoders(neuro_tpc):
         encoder_params = {
             "dmin": [0] * 5,  # two bins for each binary input + random
@@ -125,11 +127,15 @@ class MazeAgentCaspian(MazeAgent):
 
         x.n_inputs, x.n_outputs, x.encoder, x.decoder = encoders
 
-    def setup_processor(self, pprops, network):
+    def setup_processor(self, pprops, track_all=False):
         # pprops = processor.get_configuration()
         self.processor = caspian.Processor(pprops)
-        self.processor.load_network(network)
-        neuro.track_all_output_events(self.processor, network)
+        self.processor.load_network(self.network)
+        neuro.track_all_output_events(self.processor, self.network)  # track only output fires
+        if track_all:  # used for visualizing network activity
+            neuro.track_all_neuron_events(self.processor, self.network)
+            self.network.make_sorted_node_vector()
+            self.neuron_ids = [x.id for x in self.network.sorted_node_vector]
 
     @staticmethod
     def bool_to_one_hot(x: bool):
@@ -157,6 +163,11 @@ class MazeAgentCaspian(MazeAgent):
         self.processor.apply_spikes(spikes)
         self.processor.run(self.neuro_tpc)
         # action: bool = bool(proc.output_vectors())  # old. don't use.
+        if self.iostream is not None:
+            self.iostream.write_json({
+                "Neuron Alias": self.neuron_ids,
+                "Event Counts": self.processor.neuron_counts()
+            })
         data = self.decoder.get_data_from_processor(self.processor)
         """  old wheelspeed code.
             # four bins. Two for each wheel, one for positive, one for negative.
@@ -177,7 +188,5 @@ class MazeAgentCaspian(MazeAgent):
         #     return 12, 0
 
         v, omega = self.run_processor(sensor_state)
-        if self.name == '0':
-            print(v, omega)
         v /= 0.151
         return v, omega
