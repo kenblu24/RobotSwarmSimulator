@@ -44,7 +44,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
 
     def __post_init__(self):
         if self.stop_at_goal is not False:
-            raise NotImplementedError
+            raise NotImplementedError  # not tested
 
     def asdict(self):
         for key, value in self.__dict__:
@@ -81,23 +81,24 @@ class MazeAgentCaspian(MazeAgent):
         # how many ticks the neuromorphic processor should run for
         self.neuro_tpc = config.neuro_tpc
         self.setup_encoders()
+        self.rng = random.Random()
 
     @staticmethod
     def get_default_encoders(neuro_tpc):
         encoder_params = {
-            "dmin": [0] * 4,  # two bins for each binary input
-            "dmax": [1] * 4,
+            "dmin": [0] * 5,  # two bins for each binary input + random
+            "dmax": [1] * 5,
             "interval": neuro_tpc,
             "named_encoders": {"s": "spikes"},
-            "use_encoders": ["s"] * 4
+            "use_encoders": ["s"] * 5
         }
         decoder_params = {
             # see notes near where decoder is used
-            "dmin": [0] * 3,
-            "dmax": [neuro_tpc] * 3,
+            "dmin": [0] * 4,
+            "dmax": [neuro_tpc] * 4,
             "divisor": neuro_tpc,
             "named_decoders": {"r": {"rate": {"discrete": True}}},
-            "use_decoders": ["r", "r", "r"]
+            "use_decoders": ["r"] * 4
         }
         encoder = neuro.EncoderArray(encoder_params)
         decoder = neuro.DecoderArray(decoder_params)
@@ -135,7 +136,7 @@ class MazeAgentCaspian(MazeAgent):
         return (0, 1) if x else (1, 0)
 
     def run_processor(self, observation):
-        # b2oh = self.bool_to_one_hot
+        b2oh = self.bool_to_one_hot
         # # unpack observation
         # sensor_triggered, see_goal = observation
         # # convert each binary to one-hot and concatenate
@@ -143,14 +144,14 @@ class MazeAgentCaspian(MazeAgent):
 
         # translate observation to vector
         if observation == 0:
-            input_vector = (1, 0, 0)
+            input_vector = b2oh(0) + b2oh(0)
         elif observation == 1:
-            input_vector = (0, 1, 0)
+            input_vector = b2oh(1) + b2oh(0)
         elif observation == 2:
-            input_vector = (0, 0, 1)
+            input_vector = b2oh(1) + b2oh(1)
         else:
             raise ValueError("Expected 0, 1, or 2 as observation.")
-        input_vector += (1,)  # add 1 as constant on input to 4th input neuron
+        input_vector += (self.rng.randint(0, 1),)  # add 1 as constant on input to 4th input neuron
 
         spikes = self.encoder.get_spikes(input_vector)
         self.processor.apply_spikes(spikes)
@@ -163,9 +164,9 @@ class MazeAgentCaspian(MazeAgent):
             return (wl, wr)
         """
         # three bins. One for +v, -v, omega.
-        v = 2 * (data[0] - data[1])
-        omega = data[2]
-        return v, omega
+        v = 0.2 * (data[1] - data[0])
+        w = 2.0 * (data[3] - data[2])
+        return v, w
 
     def interpretSensors(self) -> Tuple:
         sensor_state = self.sensors.getState()
@@ -176,4 +177,7 @@ class MazeAgentCaspian(MazeAgent):
         #     return 12, 0
 
         v, omega = self.run_processor(sensor_state)
+        if self.name == '0':
+            print(v, omega)
+        v /= 0.151
         return v, omega
