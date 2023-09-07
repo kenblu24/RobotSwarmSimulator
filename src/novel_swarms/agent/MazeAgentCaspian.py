@@ -73,16 +73,19 @@ class MazeAgentCaspian(MazeAgent):
         self.controller = "Caspian"
         self.network = network if network is not None else config.network
 
-        # self.net = neuro.Network()
-        # self.net.from_json(network)  # load network from json: dict
-        self.processor_params = self.network.get_data("processor")
-        # self.app_params = self.net.get_data("application").to_python()
+        # for tracking neuron activity
+        self.neuron_counts = None
+        self.neuron_ids = None
+        self.neuro_track_all = config.neuro_track_all
 
-        self.setup_processor(self.processor_params, track_all=config.neuro_track_all)
         # how many ticks the neuromorphic processor should run for
         self.neuro_tpc = config.neuro_tpc
-        self.iostream = None
+
         self.setup_encoders()
+
+        self.processor_params = self.network.get_data("processor")
+        self.setup_processor(self.processor_params)
+
         self.rng = random.Random()
 
     @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
@@ -127,12 +130,13 @@ class MazeAgentCaspian(MazeAgent):
 
         x.n_inputs, x.n_outputs, x.encoder, x.decoder = encoders
 
-    def setup_processor(self, pprops, track_all=False):
+    def setup_processor(self, pprops):
         # pprops = processor.get_configuration()
         self.processor = caspian.Processor(pprops)
         self.processor.load_network(self.network)
         neuro.track_all_output_events(self.processor, self.network)  # track only output fires
-        if track_all:  # used for visualizing network activity
+
+        if self.neuro_track_all:  # used for visualizing network activity
             neuro.track_all_neuron_events(self.processor, self.network)
             self.network.make_sorted_node_vector()
             self.neuron_ids = [x.id for x in self.network.sorted_node_vector]
@@ -143,10 +147,6 @@ class MazeAgentCaspian(MazeAgent):
 
     def run_processor(self, observation):
         b2oh = self.bool_to_one_hot
-        # # unpack observation
-        # sensor_triggered, see_goal = observation
-        # # convert each binary to one-hot and concatenate
-        # input_vector = b2oh(sensor_triggered) + b2oh(see_goal)
 
         # translate observation to vector
         if observation == 0:
@@ -163,11 +163,8 @@ class MazeAgentCaspian(MazeAgent):
         self.processor.apply_spikes(spikes)
         self.processor.run(self.neuro_tpc)
         # action: bool = bool(proc.output_vectors())  # old. don't use.
-        if self.iostream is not None:
-            self.iostream.write_json({
-                "Neuron Alias": self.neuron_ids,
-                "Event Counts": self.processor.neuron_counts()
-            })
+        if self.neuro_track_all:
+            self.neuron_counts = self.processor.neuron_counts()
         data = self.decoder.get_data_from_processor(self.processor)
         """  old wheelspeed code.
             # four bins. Two for each wheel, one for positive, one for negative.
@@ -184,9 +181,7 @@ class MazeAgentCaspian(MazeAgent):
         sensor_detection_id = self.sensors.getDetectionId()
         # self.set_color_by_id(sensor_detection_id)
 
-        # if sensor_state == 2:
-        #     return 12, 0
-
         v, omega = self.run_processor(sensor_state)
         v /= 0.151
-        return v, omega
+        self.requested = v, omega
+        return self.requested
