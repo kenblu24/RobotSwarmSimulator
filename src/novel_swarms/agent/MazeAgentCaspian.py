@@ -97,7 +97,7 @@ class MazeAgentCaspian(MazeAgent):
         decoder_params = {
             # see notes near where decoder is used
             "dmin": [0] * 4,
-            "dmax": [neuro_tpc] * 4,
+            "dmax": [1] * 4,
             "divisor": neuro_tpc,
             "named_decoders": {"r": {"rate": {"discrete": True}}},
             "use_decoders": ["r"] * 4
