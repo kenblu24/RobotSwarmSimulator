@@ -1,6 +1,9 @@
 # Ignore Experiment Files
 git.sh
 
+# Media
+*.gif
+
 # Distribution / packaging
 __pycache__
 *__pycache__
@@ -25,6 +28,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+demo/results/out
+demo/evolution/noveltysearch/out
 
 # Unit test / coverage reports
 htmlcov/

@@ -23,8 +23,10 @@ class BinaryFOVSensor(AbstractSensor):
                  time_step_between_sensing=1,
                  store_history=False,
                  detect_goal_with_added_state=False,
-                 show=False):
-        super(BinaryFOVSensor, self).__init__(parent=parent, draw=show)
+                 show=True,
+                 seed=None
+                 ):
+        super(BinaryFOVSensor, self).__init__(parent=parent)
         self.current_state = 0
         self.angle = 0
         self.theta = theta
@@ -39,11 +41,17 @@ class BinaryFOVSensor(AbstractSensor):
         self.store_history = store_history
         self.use_goal_state = detect_goal_with_added_state
         self.goal_sensing_range = goal_sensing_range
+        self.show = show
+        self.goal_detected = False
 
         if degrees:
             self.theta = np.deg2rad(self.theta)
             self.bias = np.deg2rad(self.bias)
         self.r = distance
+
+        self.seed = seed
+        if self.seed is not None:
+            np.random.seed(self.seed)
 
     def checkForLOSCollisions(self, world: World) -> None:
         # Mathematics obtained from Sundaram Ramaswamy
@@ -101,19 +109,6 @@ class BinaryFOVSensor(AbstractSensor):
                 if self.lines_segments_intersect(segment, r):
                     d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
                     consideration_set.append((d_to_inter, None))
-
-        # Add this to its own class later -- need to separate the binary from the trinary sensors
-        if self.use_goal_state:
-            for world_goal in world.goals:
-                if isinstance(world_goal, CylinderGoal):
-                    u = np.array(world_goal.center) - sensor_origin
-                    if np.linalg.norm(u) < self.goal_sensing_range + world_goal.r:
-                        d = self.circle_interesect_sensing_cone(u, world_goal.r)
-                        if d is not None:
-                            self.parent.agent_in_sight = None
-                            self.current_state = 2
-                            return
-
         # Detect Other Agents
         for agent in bag:
             u = agent.getPosition() - sensor_origin
@@ -122,13 +117,30 @@ class BinaryFOVSensor(AbstractSensor):
                 consideration_set.append((d, agent))
 
         if not consideration_set:
-            self.determineState(False, None)
+            self.determineState(False, None, world)
             return
 
         # consideration_set.sort()
         # print(consideration_set)
         score, val = consideration_set.pop(0)
-        self.determineState(True, val)
+        self.determineState(True, val, world)
+
+    def check_goals(self, world):
+        # Add this to its own class later -- need to separate the binary from the trinary sensors
+        if self.use_goal_state:
+            sensor_origin = self.parent.getPosition()
+            for world_goal in world.goals:
+                if isinstance(world_goal, CylinderGoal):
+                    u = np.array(world_goal.center) - sensor_origin
+                    if np.linalg.norm(u) < self.goal_sensing_range + world_goal.r:
+                        d = self.circle_interesect_sensing_cone(u, world_goal.r)
+                        if d is not None:
+                            self.parent.agent_in_sight = None
+                            self.current_state = 2
+                            self.goal_detected = True
+                            return self.goal_detected
+        self.goal_detected = False
+        return self.goal_detected
 
     def lines_segments_intersect(self, l1, l2):
         p1, q1 = l1
@@ -173,7 +185,7 @@ class BinaryFOVSensor(AbstractSensor):
             rot = -1
         return rot
 
-    def determineState(self, real_value, agent):
+    def determineState(self, real_value, agent, world=None):
         if real_value:
             # Consider Reporting False Negative
             if np.random.random_sample() < self.fn:
@@ -197,9 +209,11 @@ class BinaryFOVSensor(AbstractSensor):
                 self.current_state = 0
                 self.detection_id = 0
 
-    def step(self, world):
+    def step(self, world, only_check_goals=False):
         super(BinaryFOVSensor, self).step(world=world)
-        self.checkForLOSCollisions(world=world)
+        goal_detected = self.check_goals(world=world)
+        if not goal_detected and not only_check_goals:
+            self.checkForLOSCollisions(world=world)
         if self.store_history:
             if self.parent.agent_in_sight:
                 self.history.append(int(self.parent.agent_in_sight.name))
@@ -208,31 +222,31 @@ class BinaryFOVSensor(AbstractSensor):
 
     def draw(self, screen):
         super(BinaryFOVSensor, self).draw(screen)
+        if self.show:
+            # Draw Sensory Vector (Vision Vector)
+            sight_color = (255, 0, 0)
+            if self.current_state == 1:
+                sight_color = (0, 255, 0)
+            if self.current_state == 2:
+                sight_color = (255, 255, 0)
 
-        # Draw Sensory Vector (Vision Vector)
-        sight_color = (255, 0, 0)
-        if self.current_state == 1:
-            sight_color = (0, 255, 0)
-        if self.current_state == 2:
-            sight_color = (255, 255, 0)
+            magnitude = self.r if self.parent.is_highlighted else self.parent.radius * 5
 
-        magnitude = self.r if self.parent.is_highlighted else self.parent.radius * 5
+            head = (self.parent.x_pos, self.parent.y_pos)
+            e_left, e_right = self.getSectorVectors()
 
-        head = (self.parent.x_pos, self.parent.y_pos)
-        e_left, e_right = self.getSectorVectors()
+            tail_l = (self.parent.x_pos + (magnitude * e_left[0]),
+                    self.parent.y_pos + (magnitude * e_left[1]))
 
-        tail_l = (self.parent.x_pos + (magnitude * e_left[0]),
-                  self.parent.y_pos + (magnitude * e_left[1]))
+            tail_r = (self.parent.x_pos + (magnitude * e_right[0]),
+                    self.parent.y_pos + (magnitude * e_right[1]))
 
-        tail_r = (self.parent.x_pos + (magnitude * e_right[0]),
-                  self.parent.y_pos + (magnitude * e_right[1]))
-
-        pygame.draw.line(screen, sight_color, head, tail_l)
-        pygame.draw.line(screen, sight_color, head, tail_r)
-        if self.parent.is_highlighted:
-            pygame.draw.circle(screen, sight_color, self.parent.getPosition(), self.r, 3)
-            if self.wall_sensing_range:
-                pygame.draw.circle(screen, (150, 150, 150), self.parent.getPosition(), self.wall_sensing_range, 3)
+            pygame.draw.line(screen, sight_color, head, tail_l)
+            pygame.draw.line(screen, sight_color, head, tail_r)
+            if self.parent.is_highlighted:
+                pygame.draw.circle(screen, sight_color, self.parent.getPosition(), self.r, 3)
+                if self.wall_sensing_range:
+                    pygame.draw.circle(screen, (150, 150, 150), self.parent.getPosition(), self.wall_sensing_range, 3)
 
     def circle_interesect_sensing_cone(self, u, r):
         e_left, e_right = self.getSectorVectors()
@@ -328,6 +342,7 @@ class BinaryFOVSensor(AbstractSensor):
             "wall_sensing_range": self.wall_sensing_range,
             "goal_sensing_range": self.goal_sensing_range,
             "agent_sensing_range": self.r,
+            "seed": self.seed,
         }
 
     @staticmethod
@@ -342,5 +357,6 @@ class BinaryFOVSensor(AbstractSensor):
             store_history=d["store_history"],
             detect_goal_with_added_state=d["use_goal_state"],
             wall_sensing_range=d["wall_sensing_range"],
-            goal_sensing_range=d["goal_sensing_range"]
+            goal_sensing_range=d["goal_sensing_range"],
+            seed=d["seed"] if "seed" in d else None,
         )
