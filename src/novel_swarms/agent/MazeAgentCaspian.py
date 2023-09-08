@@ -157,7 +157,8 @@ class MazeAgentCaspian(MazeAgent):
             input_vector = b2oh(1) + b2oh(1)
         else:
             raise ValueError("Expected 0, 1, or 2 as observation.")
-        input_vector += (self.rng.randint(0, 1),)  # add 1 as constant on input to 4th input neuron
+        input_vector += (1,)  # add 1 as constant on input to 4th input neuron
+        # input_vector += (self.rng.randint(0, 1),)  # add random input to 4th input neuron
 
         spikes = self.encoder.get_spikes(input_vector)
         self.processor.apply_spikes(spikes)
