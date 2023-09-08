@@ -2,9 +2,9 @@ import os
 import warnings
 import numpy as np
 
-from src.novel_swarms.world.initialization.FixedInit import FixedInitialization
-from src.novel_swarms.world.initialization.AbstractInit import AbstractInitialization
-from src.novel_swarms.world.initialization.RandomInit import RectRandomInitialization
+from novel_swarms.world.initialization.FixedInit import FixedInitialization
+from novel_swarms.world.initialization.AbstractInit import AbstractInitialization
+from novel_swarms.world.initialization.RandomInit import RectRandomInitialization
 
 class RectangularWorldConfig:
     def __init__(self, **kwargs):
@@ -144,7 +144,7 @@ class WorldYAMLFactory:
         if w_type == "RectangularWorld":
             init_type = config["init_type"]["type"]
             if init_type == "RectRandomInit":
-                from src.novel_swarms.world.initialization.RandomInit import RectRandomInitialization
+                from novel_swarms.world.initialization.RandomInit import RectRandomInitialization
                 if "num_agents" not in config["init_type"]:
                     config["init_type"]["num_agents"] = int(config["n_agents"])
                 config["init_type"] = RectRandomInitialization(**config["init_type"])
@@ -152,5 +152,3 @@ class WorldYAMLFactory:
             return RectangularWorldConfig.from_dict(config)
         else:
             raise Exception(f"Unknown World type: {config['type']}")
-
-

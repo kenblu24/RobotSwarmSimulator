@@ -42,6 +42,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     neuro_tpc: int = 10
     controller: None = None
     neuro_track_all: bool = False
+    type: str = ""
 
     def __post_init__(self):
         if self.stop_at_goal is not False:
@@ -70,7 +71,6 @@ class MazeAgentCaspian(MazeAgent):
 
         super().__init__(config=config, name=name)
 
-        self.controller = "Caspian"
         self.network = network if network is not None else config.network
 
         # for tracking neuron activity
@@ -176,7 +176,7 @@ class MazeAgentCaspian(MazeAgent):
         w = 2.0 * (data[3] - data[2])
         return v, w
 
-    def interpretSensors(self) -> Tuple:
+    def get_actions(self) -> Tuple:
         sensor_state = self.sensors.getState()
         sensor_detection_id = self.sensors.getDetectionId()
         # self.set_color_by_id(sensor_detection_id)
