@@ -24,6 +24,7 @@ __all__ = [
     "DistanceToGoal",
     "PercentageAtGoal",
     "AgentsAtGoal",
+    "Circliness",
     "TotalCollisionsBehavior",
     "RadialVarianceBehavior",
     "Fatness",
