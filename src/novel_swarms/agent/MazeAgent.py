@@ -5,18 +5,23 @@ import math
 import numpy as np
 from copy import deepcopy
 from .Agent import Agent
-from ..config.AgentConfig import MazeAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
 from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
 from .control.Controller import Controller
 
+# # typing
+# try:
+#     from ..config.AgentConfig import MazeAgentConfig
+# except ImportError:
+#     pass
+
 
 class MazeAgent(Agent):
     SEED = -1
 
-    def __init__(self, config: MazeAgentConfig = None, name=None) -> None:
+    def __init__(self, config=None, name=None) -> None:
 
         if isinstance(config.controller, list):
             self.controller = Controller(config.controller)

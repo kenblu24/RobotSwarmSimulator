@@ -21,11 +21,11 @@ class Controller:
         # Case 1: Controller is a Python List
         if isinstance(controller, list):
             self.type = ControllerType.list_based
-            self.controller.controller_as_list = controller
+            self.controller_as_list = controller
         # Case 2: Controller is a Python Function
         elif callable(controller):
             self.type = ControllerType.method_based
-            self.controller.controller_as_method = controller
+            self.controller_as_method = controller
         # case 3: Agent has or inherits a "get_action" method with no additional arguments
         elif controller == "self":
             self.type = ControllerType.inherit_agent
