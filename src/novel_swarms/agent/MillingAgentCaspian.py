@@ -81,7 +81,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
 
         spikes = self.encoder.get_spikes(input_vector)
         self.processor.apply_spikes(spikes)
-        self.processor.run(3)
+        self.processor.run(5)
         self.processor.run(self.neuro_tpc)
         # action: bool = bool(proc.output_vectors())  # old. don't use.
         if self.neuro_track_all:
