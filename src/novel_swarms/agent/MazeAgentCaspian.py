@@ -102,7 +102,7 @@ class MazeAgentCaspian(MazeAgent):
             "dmin": [0] * 4,
             "dmax": [1] * 4,
             "divisor": neuro_tpc,
-            "named_decoders": {"r": {"rate": {"discrete": True}}},
+            "named_decoders": {"r": {"rate": {"discrete": False}}},
             "use_decoders": ["r"] * 4
         }
         encoder = neuro.EncoderArray(encoder_params)
