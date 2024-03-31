@@ -91,3 +91,4 @@ class MillingAgentCaspian(MazeAgentCaspian):
         v = 0.2 * (data[1] - data[0])
         w = 2.0 * (data[3] - data[2])
         return v, w
+        # return (0.08, 0.4) if not observation else (0.18, 0.0)  # CMA best controller

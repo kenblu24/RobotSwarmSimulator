@@ -36,6 +36,7 @@ class Controller:
     def get_actions(self, agent):
         if self.type == ControllerType.list_based:
             sensor_state = agent.get_sensors().getState()
+            # e1, e2 = self.controller_as_list[slice(0, 1) if not sensor_state else slice(2, 3)]
             e1 = self.controller_as_list[sensor_state * 2]
             e2 = self.controller_as_list[(sensor_state * 2) + 1]
             return e1, e2
