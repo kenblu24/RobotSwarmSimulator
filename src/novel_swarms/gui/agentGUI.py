@@ -15,7 +15,7 @@ class DifferentialDriveGUI(AbstractGUI):
 
     def __init__(self, x=0, y=0, w=0, h=0):
         super().__init__(x=x, y=y, w=w, h=h)
-        self.time = 0
+        self.time: int = 0
 
     def set_selected(self, agent: DifferentialDriveAgent):
         super().set_selected(agent)

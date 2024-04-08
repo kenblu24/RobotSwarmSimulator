@@ -1,16 +1,9 @@
-from typing import Tuple, Any
 # import pygame
-import random
-import math
-import numpy as np
 from dataclasses import dataclass
 from .MazeAgentCaspian import MazeAgentCaspian, MazeAgentCaspianConfig
-from ..util.timer import Timer
 
 # typing
-from ..config.WorldConfig import RectangularWorldConfig
-from ..sensors.SensorSet import SensorSet
-from ..world.World import World
+from typing import Any, override
 
 import neuro
 import caspian
@@ -18,18 +11,20 @@ import caspian
 
 @dataclass
 class MillingAgentCaspianConfig(MazeAgentCaspianConfig):
+    @override
     def create(self, name=None):
         return MillingAgentCaspian(self, name)
 
 
 class MillingAgentCaspian(MazeAgentCaspian):
 
-    def __init__(self, config: MillingAgentCaspianConfig = None, name=None, network: dict = None) -> None:
+    def __init__(self, config: MillingAgentCaspianConfig | None = None, name=None, network: dict[str, Any] | None = None) -> None:  # noqa: E501
         if config is None:
             config = MillingAgentCaspianConfig()
 
         super().__init__(config=config, name=name)
 
+    @override
     @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
     def get_default_encoders(neuro_tpc):
         encoder_params = {
@@ -57,6 +52,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
             decoder
         )
 
+    @override
     def setup_encoders(self, class_homogenous=True) -> None:
         # Note: encoders/decoders *can* be saved to or read from the network. not implemented yet.
 
@@ -72,6 +68,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
 
         x.n_inputs, x.n_outputs, x.encoder, x.decoder = encoders
 
+    @override
     def run_processor(self, observation):
         b2oh = self.bool_to_one_hot
 

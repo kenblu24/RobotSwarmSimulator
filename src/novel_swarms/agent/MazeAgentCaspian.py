@@ -1,4 +1,4 @@
-from typing import Tuple, Any
+from typing import Any, override
 # import pygame
 import random
 import math
@@ -14,6 +14,7 @@ from ..util.timer import Timer
 from ..config.WorldConfig import RectangularWorldConfig
 from ..sensors.SensorSet import SensorSet
 from ..world.World import World
+from .control.Controller import Controller
 
 import neuro
 import caspian
@@ -21,26 +22,26 @@ import caspian
 
 @dataclass
 class MazeAgentCaspianConfig(MazeAgentConfig):
-    x: float = None
-    y: float = None
-    angle: float = None
-    world: World = None
-    world_config: RectangularWorldConfig = None
+    x: float | None = None
+    y: float | None = None
+    angle: float | None = None
+    world: World | None = None
+    world_config: RectangularWorldConfig | None = None
     seed: Any = None
     agent_radius: float = 5
     dt: float = 1.0
-    sensors: SensorSet = None
+    sensors: SensorSet | None = None
     idiosyncrasies: Any = False
     stop_on_collision: bool = False
     stop_at_goal: bool = False
-    body_color: Tuple[int, int, int] = (255, 255, 255)
+    body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
     catastrophic_collisions: bool = False
-    trace_length: Tuple[int, int, int] = None
-    trace_color: Tuple[int, int, int] = None
+    trace_length: tuple[int, int, int] | None = None
+    trace_color: tuple[int, int, int] | None = None
     network: neuro.json = None
     neuro_tpc: int = 10
-    controller: None = None
+    controller: Controller | None = None
     neuro_track_all: bool = False
     type: str = ""
 
@@ -59,13 +60,14 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
             else:
                 yield key, value
 
+    @override
     def create(self, name=None):
         return MazeAgentCaspian(self, name)
 
 
 class MazeAgentCaspian(MazeAgent):
 
-    def __init__(self, config: MazeAgentConfig = None, name=None, network: dict = None) -> None:
+    def __init__(self, config: MazeAgentConfig | None = None, name=None, network: dict[str, Any] | None = None) -> None:
         if config is None:
             config = MazeAgentCaspianConfig()
 
@@ -87,6 +89,13 @@ class MazeAgentCaspian(MazeAgent):
         self.setup_processor(self.processor_params)
 
         self.rng = random.Random()
+
+        # typing
+        self.n_inputs: int
+        self.n_outputs: int
+        self.encoder: neuro.EncoderArray
+        self.decoder: neuro.DecoderArray
+        self.processor: caspian.Processor
 
     @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
     def get_default_encoders(neuro_tpc):
@@ -162,6 +171,7 @@ class MazeAgentCaspian(MazeAgent):
 
         spikes = self.encoder.get_spikes(input_vector)
         self.processor.apply_spikes(spikes)
+        self.processor.run(10)
         self.processor.run(self.neuro_tpc)
         # action: bool = bool(proc.output_vectors())  # old. don't use.
         if self.neuro_track_all:
@@ -177,10 +187,10 @@ class MazeAgentCaspian(MazeAgent):
         w = 2.0 * (data[3] - data[2])
         return v, w
 
-    def get_actions(self) -> Tuple:
+    def get_actions(self) -> tuple[float, float]:
         sensor_state = self.sensors.getState()
         sensor_detection_id = self.sensors.getDetectionId()
-        # self.set_color_by_id(sensor_detection_id)
+        self.set_color_by_id(sensor_detection_id)
 
         v, omega = self.run_processor(sensor_state)
         v /= 0.151 / 10
