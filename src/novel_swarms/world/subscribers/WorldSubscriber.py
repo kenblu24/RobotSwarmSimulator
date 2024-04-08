@@ -1,4 +1,3 @@
-
 class WorldSubscriber:
     def __init__(self, func):
         """

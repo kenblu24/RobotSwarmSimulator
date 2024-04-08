@@ -1,5 +1,5 @@
-from src.novel_swarms.world.initialization.AbstractInit import AbstractInitialization
-from src.novel_swarms.world.World import World
+from ...world.initialization.AbstractInit import AbstractInitialization
+from ...world.World import World
 import numpy as np
 import copy
 from typing import Tuple, Iterable

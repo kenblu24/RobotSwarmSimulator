@@ -51,7 +51,7 @@ class RectangularWorld(World):
 
         else:
             self.population = [
-                AgentFactory.create(config.agentConfig, name=f"{i}") for i in range(int(self.population_size))
+                config.agentConfig.create(name=f"{i}") for i in range(int(self.population_size))
             ]
 
         # Attach Walls to sensors

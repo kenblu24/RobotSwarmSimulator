@@ -5,6 +5,7 @@ from pygame import math
 from .WorldConfig import RectangularWorldConfig
 from ..sensors.SensorSet import SensorSet
 from ..sensors.SensorFactory import SensorFactory
+from ..agent.MazeAgent import MazeAgent
 
 
 class DiffDriveAgentConfig:
@@ -266,7 +267,7 @@ class MazeAgentConfig:
         self.stop_at_goal = kwargs.get("stop_at_goal", True)
         self.body_color = kwargs.get("body_color", (255, 255, 255))
         self.body_filled = kwargs.get("body_filled", False)
-        self.catastophic_collisions = kwargs.get("catastrophic_collisions", False)
+        self.catastrophic_collisions = kwargs.get("catastrophic_collisions", False)
         self.trace_length = kwargs.get("trace_length", None)
         self.trace_color = kwargs.get("trace_color", None)
 
@@ -289,7 +290,7 @@ class MazeAgentConfig:
             "idiosyncrasies": self.idiosyncrasies,
             "stop_on_collision": self.stop_on_collision,
             "stop_at_goal": self.stop_at_goal,
-            "catastophic_collisions" : self.catastophic_collisions
+            "catastrophic_collisions": self.catastrophic_collisions
         }
 
     @staticmethod
@@ -305,6 +306,10 @@ class MazeAgentConfig:
                 s.r *= zoom
                 s.goal_sensing_range *= zoom
                 s.wall_sensing_range *= zoom
+
+    def create(self, **kwargs):
+        return MazeAgent(config=self, **kwargs)
+
 
 class ModeSwitchingAgentConfig():
     def __init__(self,
@@ -374,6 +379,7 @@ class StaticAgentConfig:
             if k != "type":
                 setattr(ret, k, v)
         return ret
+
 
 class AgentConfigFactory:
     @staticmethod

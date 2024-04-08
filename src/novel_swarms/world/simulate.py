@@ -51,6 +51,8 @@ def main(world_config, show_gui=True, gui=None, stop_detection=None, world_key_e
     labels = [pygame.K_RETURN, pygame.K_q, pygame.K_0, pygame.K_KP0, pygame.K_1, pygame.K_KP1, pygame.K_2, pygame.K_KP2,
               pygame.K_3, pygame.K_KP3, pygame.K_4, pygame.K_KP4, pygame.K_5, pygame.K_KP5]
 
+    do_plot = False
+
     # Main loop
     time_me = Timer("World Step")
     while running:
@@ -61,7 +63,7 @@ def main(world_config, show_gui=True, gui=None, stop_detection=None, world_key_e
                 if event.type == pygame.QUIT:
                     return world
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
+                    if event.key == pygame.K_SPACE or pygame.K_k:
                         paused = not paused
                         # print(f"Paused on Simulation Step: {steps_taken}")
                     if event.key == pygame.K_RIGHT and paused:
@@ -92,6 +94,20 @@ def main(world_config, show_gui=True, gui=None, stop_detection=None, world_key_e
                     if event.key == pygame.K_F4:
                         from .subscribers.World2Gif import World2Gif
                         world_subscribers.append(World2Gif(duration=save_duration, every_ith_frame=save_every_ith_frame, time_per_frame=save_time_per_frame))
+                    if event.key == pygame.K_u:
+                        pass
+                    if event.key == pygame.K_i:
+                        do_plot = not do_plot
+                    if event.key == pygame.K_o:
+                        pass
+                    if event.key == pygame.K_p:
+                        pass
+                    if event.key == pygame.K_j:
+                        pass
+                    if event.key == pygame.K_l and paused:
+                        pass
+                        # step_all_snns()
+
                     if world_key_events:
                         world.handle_key_press(event)
                     if gui and gui_key_events:

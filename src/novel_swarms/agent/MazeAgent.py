@@ -5,18 +5,23 @@ import math
 import numpy as np
 from copy import deepcopy
 from .Agent import Agent
-from ..config.AgentConfig import MazeAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
 from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
 from .control.Controller import Controller
 
+# # typing
+# try:
+#     from ..config.AgentConfig import MazeAgentConfig
+# except ImportError:
+#     pass
+
 
 class MazeAgent(Agent):
     SEED = -1
 
-    def __init__(self, config: MazeAgentConfig = None, name=None) -> None:
+    def __init__(self, config=None, name=None) -> None:
 
         if isinstance(config.controller, list):
             self.controller = Controller(config.controller)
@@ -54,7 +59,7 @@ class MazeAgent(Agent):
         self.i_1 = np.random.normal(I1_MEAN, I1_SD) if self.idiosyncrasies else 1.0
         self.i_2 = np.random.normal(I2_MEAN, I2_SD) if self.idiosyncrasies else 1.0
         self.stop_on_collision = config.stop_on_collision
-        self.catastrophic_collisions = config.catastophic_collisions
+        self.catastrophic_collisions = config.catastrophic_collisions
         self.dead = False
         self.goal_seen = False
         self.stop_at_goal = config.stop_at_goal
