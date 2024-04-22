@@ -22,20 +22,29 @@ class RectRandomInitialization(AbstractInitialization):
         self.bb = copy.deepcopy(dwargs.get("bb"))
         self.seed = dwargs.get("seed", None)
 
-        if self.seed is not None:
-            np.random.seed(self.seed)
-
         # Store the initialization information in an iterable
         self.positions = []
 
         # Determine Positions, but don't set them until the user explicitly calls 'set_to_world' method
         self._calculate_positions()
-        
+
+    @property
+    def seed(self):
+        return self._seed
+
+    @seed.setter
+    def seed(self, new_seed):
+        if new_seed is None:
+            self._seed = int(np.random.rand() * (2**32 - 1))
+        else:
+            self._seed = new_seed
+            np.random.seed(self._seed)
 
     def _calculate_positions(self):
         """
         Using the bounding box (self.bb) information, randomly sample positions from the rectangle, and orientations from the range [0, 2pi].
         """
+        np.random.seed(self._seed)
         bounds = [(self.bb[0][0], self.bb[1][0]), (self.bb[0][1], self.bb[1][1]), (0, 2*np.pi)]
         self.positions = self.random_vec(bounds, n=self.num_agents, round_to=2)
 
