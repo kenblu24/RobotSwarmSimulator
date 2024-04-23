@@ -10,7 +10,6 @@ from src.novel_swarms.world.initialization.PredefInit import PredefinedInitializ
 
 from .milling_search import DECISION_VARS, SCALE, BL
 # from .milling_search import fitness
-from .milling_search import get_world_generator
 
 
 def metric_to_canon(genome: tuple[float, float, float, float], scale=SCALE):
@@ -27,8 +26,23 @@ def canon_to_metric(genome: tuple[float, float, float, float], scale=SCALE):
     return (v0, w0, v1, w1)
 
 
-def run(world_config, gui=True):
+def run(args, genome, callback=lambda x: x):
     from src.novel_swarms.world.simulate import main as sim
+    from .milling_search import get_world_generator
+
+    world_generator = get_world_generator(args.n, args.t)
+    world_config, *_ = world_generator(genome, [-1, -1, -1, -1])
+    # note: world_config contains some persistent stuff like behaviors
+
+    gui = not args.nogui
+
+    if args.no_stop:
+        world_config.stop_at = None
+    else:
+        world_config.stop_at = args.t
+
+    world_config = callback(world_config)
+
     w = sim(world_config=world_config, save_every_ith_frame=2, save_duration=1000, show_gui=gui)
     try:
         return w.behavior[0].out_average()[1]
@@ -77,8 +91,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    gui = not args.nogui
-
     if args.normalized_genome:
         genome = args.normalized_genome
 
@@ -105,15 +117,6 @@ if __name__ == "__main__":
         print(f"v0 (canon):\t{g[0]:>16.12f}\tv1 (canon):\t{g[2]:>16.12f}")
         print(f"w0 (rad/s):\t{g[1]:>16.12f}\tw1 (rad/s):\t{g[3]:>16.12f}")
 
-    # Save World Config by sampling from generator
-    world_generator = get_world_generator(args.n, args.t)
-    world_config, *_ = world_generator(genome, [-1, -1, -1, -1])
-
-    if args.no_stop:
-        world_config.stop_at = None
-    else:
-        world_config.stop_at = args.t
-
     if args.positions:
         import pandas as pd
         fpath = args.positions
@@ -127,16 +130,21 @@ if __name__ == "__main__":
 
         pinit = PredefinedInitialization()  # num_agents isn't used yet here
 
-        def setup_i(i):
-            pinit.set_states_from_xlsx(args.positions, sheet_number=i)
-            pinit.rescale(SCALE)
-            world_config.init_type = pinit
-            return world_config
+        def callback_factory(i):
+            def callback(world_config):
+                pinit.set_states_from_xlsx(args.positions, sheet_number=i)
+                pinit.rescale(SCALE)
+                world_config.init_type = pinit
+                return world_config
+            return callback
 
-        fitnesses = [run(setup_i(i), gui) for i in range(n_runs)]
+        def run_with_positions(i):
+            run(args, genome, callback=callback_factory(i))
+
+        fitnesses = [run_with_positions(i) for i in range(n_runs)]
         print("Circlinesses")
         print(fitnesses)
     else:
-        fitness = run(world_config, gui)
+        fitness = run(args, genome)
         print(f"Circliness: {fitness}")
 
