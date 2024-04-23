@@ -83,7 +83,8 @@ class CMAES:
         es.result_pretty()
         return es.result, es
 
-    def round_to_nearest(self, a, increment):
+    @staticmethod
+    def round_to_nearest(a, increment):
         return [round(round(a_i / increment) * increment, 2) for a_i in a]
 
     def sweep_parameters(self, divisions: list[int]):

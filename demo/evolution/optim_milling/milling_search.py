@@ -1,26 +1,30 @@
 """
 Find the best Homogeneous Agents for Milling
 """
-import numpy as np
+# import numpy as np
 import argparse
 from src.novel_swarms.optim.CMAES import CMAES
 from src.novel_swarms.optim.OptimVar import CMAESVarSet
 from src.novel_swarms.results.Experiment import Experiment
 from src.novel_swarms.config.AgentConfig import AgentYAMLFactory
 from src.novel_swarms.config.WorldConfig import WorldYAMLFactory
-from src.novel_swarms.world.initialization.FixedInit import FixedInitialization
-from src.novel_swarms.behavior import *
-from src.novel_swarms.agent.control.Controller import Controller
+# from src.novel_swarms.world.initialization.FixedInit import FixedInitialization
+from src.novel_swarms.behavior import Circliness
+# from src.novel_swarms.agent.control.Controller import Controller
 from src.novel_swarms.agent.control.HomogeneousController import HomogeneousController
-from src.novel_swarms.world.simulate import main as sim
+# from src.novel_swarms.world.simulate import main as sim
 
 SCALE = 10
 
+MMS_MAX = 0.2  # max speed in mm/s
+BL = 0.151  # body length
+BLS_MAX = MMS_MAX / BL  # max speed in body lengths per second
+
 DECISION_VARS = CMAESVarSet(
     {
-        "forward_rate_0": [-(1.33 * SCALE), 1.33 * SCALE],  # Body Lengths / second, will be converted to pixel values during search
+        "forward_rate_0": [-(BLS_MAX * SCALE), BLS_MAX * SCALE],  # Body Lengths / second, will be converted to pixel values during search
         "turning_rate_0": [-2.0, 2.0],  # Radians / second
-        "forward_rate_1": [-(1.33 * SCALE), 1.33 * SCALE],  # Body Lengths / second, will be converted to pixel values during search
+        "forward_rate_1": [-(BLS_MAX * SCALE), BLS_MAX * SCALE],  # Body Lengths / second, will be converted to pixel values during search
         "turning_rate_1": [-2.0, 2.0],  # Radians / second
     }
 )
@@ -28,12 +32,14 @@ DECISION_VARS = CMAESVarSet(
 PERFECT_CIRCLE_SCORE = -1.0
 CIRCLINESS_HISTORY = 450
 
-def FITNESS(world_set):
+
+def fitness(world_set):
     total = 0
     for w in world_set:
         total += w.behavior[0].out_average()[1]
     avg = total / len(world_set)
     return -avg
+
 
 def get_world_generator(n_agents, horizon, round_genome=False):
 
@@ -97,7 +103,7 @@ if __name__ == "__main__":
     sample_worlds[0].save_yaml(exp)
 
     cmaes = CMAES(
-        FITNESS,
+        fitness,
         genome_to_world=get_world_generator(args.n, args.t),
         dvars=DECISION_VARS,
         num_processes=args.processes,
@@ -110,7 +116,6 @@ if __name__ == "__main__":
     )
 
     cmaes.minimize()
-
 
 
 """

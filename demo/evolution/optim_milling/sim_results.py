@@ -1,71 +1,39 @@
 """
 Find the best Homogeneous Agents for Milling
 """
+from ctypes import ArgumentError
 import numpy as np
+from io import BytesIO
 import argparse
 from src.novel_swarms.optim.CMAES import CMAES
-from src.novel_swarms.optim.OptimVar import CMAESVarSet
-from src.novel_swarms.results.Experiment import Experiment
-from src.novel_swarms.config.AgentConfig import AgentYAMLFactory
-from src.novel_swarms.config.WorldConfig import WorldYAMLFactory
-from src.novel_swarms.world.initialization.FixedInit import FixedInitialization
-from src.novel_swarms.behavior import *
-from src.novel_swarms.agent.control.Controller import Controller
-from src.novel_swarms.agent.control.HomogeneousController import HomogeneousController
-from src.novel_swarms.world.simulate import main as sim
+from src.novel_swarms.world.initialization.PredefInit import PredefinedInitialization
 
-SCALE = 10
+from .milling_search import DECISION_VARS, SCALE, BL
+# from .milling_search import fitness
+from .milling_search import get_world_generator
 
-DECISION_VARS = CMAESVarSet(
-    {
-        "forward_rate_0": [-(1.33 * SCALE), 1.33 * SCALE],  # Body Lengths / second, will be converted to pixel values during search
-        "turning_rate_0": [-2.0, 2.0],  # Radians / second
-        "forward_rate_1": [-(1.33 * SCALE), 1.33 * SCALE],  # Body Lengths / second, will be converted to pixel values during search
-        "turning_rate_1": [-2.0, 2.0],  # Radians / second
-    }
-)
 
-PERFECT_CIRCLE_SCORE = -1.0
-CIRCLINESS_HISTORY = 450
+def metric_to_canon(genome: tuple[float, float, float, float], scale=SCALE):
+    v0, w0, v1, w1 = genome
+    v0 *= scale / BL
+    v1 *= scale / BL
+    return (v0, w0, v1, w1)
 
-def FITNESS(world_set):
-    total = 0
-    for w in world_set:
-        total += w.behavior[0].out_average()[1]
-    avg = total / len(world_set)
-    return -avg
 
-def get_world_generator(n_agents, horizon):
+def canon_to_metric(genome: tuple[float, float, float, float], scale=SCALE):
+    v0, w0, v1, w1 = genome
+    v0 /= scale / BL
+    v1 /= scale / BL
+    return (v0, w0, v1, w1)
 
-    def gene_to_world(genome, hash_val):
 
-        goal_agent = AgentYAMLFactory.from_yaml("demo/configs/flockbots-icra-milling/flockbot.yaml")
-        goal_agent.controller = HomogeneousController(genome)
-        goal_agent.seed = 0
-        goal_agent.rescale(SCALE)
-
-        world = WorldYAMLFactory.from_yaml("demo/configs/flockbots-icra-milling/world.yaml")
-        world.seed = 0
-        world.behavior = [
-            Circliness(avg_history_max=CIRCLINESS_HISTORY)
-        ]
-        world.population_size = n_agents
-        world.stop_at = horizon
-        world.detectable_walls = False
-
-        world.factor_zoom(zoom=SCALE)
-        world.addAgentConfig(goal_agent)
-        world.metadata = {'hash': hash(tuple(list(hash_val)))}
-        worlds = [world]
-
-        return worlds
-
-    return gene_to_world
-
-def m_per_s_to_pixels_per_second(genome):
-    genome[0] *= (100 / 15) * SCALE
-    genome[2] *= (100 / 15) * SCALE
-    return genome
+def run(world_config, gui=True):
+    from src.novel_swarms.world.simulate import main as sim
+    w = sim(world_config=world_config, save_every_ith_frame=2, save_duration=1000, show_gui=gui)
+    try:
+        return w.behavior[0].out_average()[1]
+    except BaseException:
+        pass
 
 
 if __name__ == "__main__":
@@ -78,27 +46,97 @@ if __name__ == "__main__":
 
     parser.add_argument("--n", type=int, default=10, help="Number of agents")
     parser.add_argument("--t", type=int, default=1000, help="Environment Horizon")
-    parser.add_argument("--v0", type=float, help="Forward_Speed_0", default=None)
-    parser.add_argument("--w0", type=float, help="Turning_Rate_0", default=None)
-    parser.add_argument("--v1", type=float, help="Forward_Speed_1", default=None)
-    parser.add_argument("--w1", type=float, help="Turning_Rate_1", default=None)
     parser.add_argument("--no-stop", action="store_true", help="Whether to stop at T limit or not")
+    parser.add_argument("--print", action="store_true")
+    parser.add_argument("--nogui", action="store_true")
+    parser.add_argument("--discrete-bins", default=None, help="How many bins to discretize the decision variables into")
+    parser.add_argument('--positions', default=None,
+                             help="file containing agent positions")
+    genome_parser = parser.add_mutually_exclusive_group(required=True)
+    genome_parser.add_argument(
+        "--genome",
+        type=float,
+        help="meters/second genome",
+        default=None,
+        nargs=4,
+    )
+    genome_parser.add_argument(
+        "--normalized_genome",
+        type=float,
+        help="Genome values (4 floats expected between [0, 1])",
+        default=None,
+        nargs=4,
+    )
+    genome_parser.add_argument(
+        "--metric_genome",
+        type=float,
+        help="Genome values (4 floats expected between [0, 1])",
+        default=None,
+        nargs=4,
+    )
 
     args = parser.parse_args()
 
-    # Save World Config by sampling from generator
-    world_gen_example = get_world_generator(args.n, args.t)
+    gui = not args.nogui
 
-    translated_genome = m_per_s_to_pixels_per_second([args.v0, args.w0, args.v1, args.w1])
-    sample_worlds = world_gen_example(translated_genome, [-1, -1, -1, -1])
+    if args.normalized_genome:
+        genome = args.normalized_genome
+
+        if args.discrete_bins:
+            increment = 1 / (int(args.discrete_bins) - 1)
+            genome = [CMAES.round_to_nearest(x, increment=increment) for x in genome]
+
+        genome = DECISION_VARS.from_normalized_to_scaled(genome)
+
+    elif args.metric_genome:
+        genome = metric_to_canon(args.metric_genome)
+
+    else:
+        genome = args.genome
+
+    if args.discrete_bins and not args.normalized_genome:
+        raise ArgumentError(args.discrete_bins, "Discrete binning can only be used with --normalized_genome")
+
+    if args.print:
+        metric_genome = canon_to_metric(genome)
+        m = metric_genome
+        g = genome
+        print(f"v0   (m/s):\t{m[0]:>16.12f}\tv1   (m/s):\t{m[2]:>16.12f}")
+        print(f"v0 (canon):\t{g[0]:>16.12f}\tv1 (canon):\t{g[2]:>16.12f}")
+        print(f"w0 (rad/s):\t{g[1]:>16.12f}\tw1 (rad/s):\t{g[3]:>16.12f}")
+
+    # Save World Config by sampling from generator
+    world_generator = get_world_generator(args.n, args.t)
+    world_config, *_ = world_generator(genome, [-1, -1, -1, -1])
 
     if args.no_stop:
-        sample_worlds[0].stop_at = None
+        world_config.stop_at = None
     else:
-        sample_worlds[0].stop_at = args.t
+        world_config.stop_at = args.t
 
-    w = sim(world_config=sample_worlds[0], save_every_ith_frame=2, save_duration=1000)
-    try:
-        print(f"Final Circliness: {w.behavior[0].out_average()[1]}")
-    except:
-        pass
+    if args.positions:
+        import pandas as pd
+        fpath = args.positions
+
+        with open(fpath, 'rb') as f:
+            xlsx = f.read()
+        xlsx = pd.ExcelFile(BytesIO(xlsx))
+        sheets = xlsx.sheet_names
+
+        n_runs = len(sheets)
+
+        pinit = PredefinedInitialization()  # num_agents isn't used yet here
+
+        def setup_i(i):
+            pinit.set_states_from_xlsx(args.positions, sheet_number=i)
+            pinit.rescale(SCALE)
+            world_config.init_type = pinit
+            return world_config
+
+        fitnesses = [run(setup_i(i), gui) for i in range(n_runs)]
+        print("Circlinesses")
+        print(fitnesses)
+    else:
+        fitness = run(world_config, gui)
+        print(f"Circliness: {fitness}")
+
