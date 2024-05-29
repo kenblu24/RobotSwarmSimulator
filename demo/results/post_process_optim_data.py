@@ -2,6 +2,7 @@ import pandas as pd
 import argparse
 import os
 
+
 def pixel_per_s_to_meters_per_s(data):
     """
     Convert the normalized Pixels/s forward rate to m/s
@@ -9,6 +10,7 @@ def pixel_per_s_to_meters_per_s(data):
     data["forward_rate_0"] *= 0.1 * 15 * 0.01
     data["forward_rate_1"] *= 0.1 * 15 * 0.01
     return data
+
 
 def negate_fitness(data):
     """
@@ -19,37 +21,44 @@ def negate_fitness(data):
     data["fitness"] *= -1
     return data
 
+
 def sort_best(data):
     return data.sort_values(by="Circliness", ascending=False)
 
+
 def aggregate_fitness_to_vector(data):
     res = [[None, 0, repr([])]]
-    for i in range(100):
+    n_epochs = max(data['gen'])
+    for i in range(n_epochs):
         time = data.loc[data["gen"] == i].head(1)["time"].item()
         epoch = i + 1
         fitness = list(data.loc[data["gen"] == i]["Circliness"])
-        l = [time, epoch, repr(fitness)]
+        l = [time, epoch, repr(fitness)]  # noqa: E741
         res.append(l)
     return pd.DataFrame(res, columns=["time", "epoch", "fitness"])
+
 
 def csv_to_dataframe(path):
     return pd.read_csv(path)
 
+
 def convert_to_tsv(data, file_name="results.tsv"):
     data.to_csv(file_name, sep="\t", index=False)
 
+
 def convert_to_csv(data, file_name="results.csv"):
     data.to_csv(file_name, index=False)
+
 
 if __name__ == "__main__":
     """
     Example usage (from directory root)
     `python -m demo.results.post_process_optim_data --name "EXPERIMENT_NAME_HERE" --tsv`
-    
+
     Outputs 2 files to the experiment directory (name arg)
     - EXPER_NAME_best: The 10 best solutions found throughout evolution
     - EXPER_NAME_raw: Fitness distribution for each epoch of G.A.
-    
+
     The console will also print a command telling you how to see the best solution.
     """
     parser = argparse.ArgumentParser()
@@ -63,9 +72,9 @@ if __name__ == "__main__":
     genome_file = os.path.join(parent_dir, SUFFIX_CMAES)
 
     if not os.path.exists(parent_dir):
-        raise Exception(f"Could not find experiment at {parent_dir}. Is the directory path correct?")
+        raise Exception(f"Could not find experiment at {parent_dir}. Is the directory path correct?")  # noqa: EM102
     if not os.path.exists(genome_file):
-        raise Exception(f"Error: could not find CMAES results at the specified location. Was an experiment successfully run here?")
+        raise Exception(f"Error: could not find CMAES results at the specified location. Was an experiment successfully run here?")  # noqa: EM102, E501
 
     data = csv_to_dataframe(genome_file)
 

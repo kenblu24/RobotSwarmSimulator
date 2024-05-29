@@ -2,9 +2,10 @@
 Find the best Homogeneous Agents for Milling
 """
 from ctypes import ArgumentError
-import numpy as np
 from io import BytesIO
 import argparse
+import numpy as np
+from tqdm import tqdm
 from src.novel_swarms.optim.CMAES import CMAES
 from src.novel_swarms.world.initialization.PredefInit import PredefinedInitialization
 
@@ -26,7 +27,7 @@ def canon_to_metric(genome: tuple[float, float, float, float], scale=SCALE):
     return (v0, w0, v1, w1)
 
 
-def run(args, genome, callback=lambda x: x):
+def run(args, genome, callback=lambda x: x) -> float:
     from src.novel_swarms.world.simulate import main as sim
     from .milling_search import get_world_generator
 
@@ -138,10 +139,10 @@ if __name__ == "__main__":
                 return world_config
             return callback
 
-        def run_with_positions(i):
-            run(args, genome, callback=callback_factory(i))
+        def run_with_positions(i) -> float:
+            return run(args, genome, callback=callback_factory(i))
 
-        fitnesses = [run_with_positions(i) for i in range(n_runs)]
+        fitnesses = [run_with_positions(i) for i in tqdm(range(n_runs))]
         print("Circlinesses")
         print(fitnesses)
     else:
