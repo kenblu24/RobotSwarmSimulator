@@ -43,11 +43,14 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     neuro_tpc: int = 10
     controller: Controller | None = None
     neuro_track_all: bool = False
+    track_io: bool = False
     type: str = ""
 
     def __post_init__(self):
         if self.stop_at_goal is not False:
             raise NotImplementedError  # not tested
+
+        self.as_dict = self.asdict
 
     def asdict(self):
         for key, value in self.__dict__:

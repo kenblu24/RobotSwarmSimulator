@@ -4,6 +4,7 @@ import random
 import math
 import numpy as np
 from copy import deepcopy
+
 from .Agent import Agent
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
@@ -78,6 +79,9 @@ class MazeAgent(Agent):
         else:
             self.body_color = config.body_color
 
+        self.history = []
+        self.track_io = getattr(config, "track_io", False)
+
     def set_seed(self, seed):
         random.seed(seed)
 
@@ -101,6 +105,10 @@ class MazeAgent(Agent):
             # self.set_color_by_id(3)
         else:
             v, omega = self.controller.get_actions(self)
+
+        if self.track_io:
+            sensor_state = self.sensors.getState()
+            self.history.append((sensor_state, (v, omega)))
 
         # Define Idiosyncrasies that may occur in actuation/sensing
         idiosync_1 = self.i_1

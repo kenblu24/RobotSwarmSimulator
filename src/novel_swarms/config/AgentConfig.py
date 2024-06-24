@@ -270,6 +270,7 @@ class MazeAgentConfig:
         self.catastrophic_collisions = kwargs.get("catastrophic_collisions", False)
         self.trace_length = kwargs.get("trace_length", None)
         self.trace_color = kwargs.get("trace_color", None)
+        self.track_io = kwargs.get("track_io", False)
 
     def attach_world_config(self, world_config):
         self.world = world_config
