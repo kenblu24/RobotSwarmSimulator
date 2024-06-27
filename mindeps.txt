@@ -9,3 +9,4 @@ PyYAML~=6.0.1
 scipy~=1.13.0
 scikit-learn~=1.4.0  # used in 2 files
 thorpy~=2.1.7  # used in 1 file
+circle_fit~=0.2.1
