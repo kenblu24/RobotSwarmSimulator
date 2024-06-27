@@ -41,10 +41,5 @@ class RadialVarianceBehavior(AbstractBehavior):
         self.set_value(radial_variance * WEIGHT)
 
     def center_of_mass(self):
-        positions = [
-            [
-                agent.getPosition()[i] for agent in self.population
-            ] for i in range(len(self.population[0].getPosition()))
-        ]
-        center = np.array([np.average(pos) for pos in positions])
-        return center
+        positions = np.asarray([agent.getPosition() for agent in self.population])
+        return positions.mean(axis=0)
