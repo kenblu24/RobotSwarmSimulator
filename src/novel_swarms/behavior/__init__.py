@@ -10,7 +10,7 @@ from .DistanceToGoal import DistanceToGoal
 from .AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
 from .TotalCollisions import TotalCollisionsBehavior
 from .RadialVariance import RadialVarianceBehavior
-from .Circliness import Fatness, Fatness2, Tangentness, Circliness
+from .Circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
 
 __all__ = [
     "AbstractBehavior",
@@ -31,4 +31,5 @@ __all__ = [
     "Fatness2",
     "Tangentness",
     "Circliness",
+    "RoutRin",
 ]

@@ -117,3 +117,20 @@ class Circliness(RadialVarianceHelper):
         self.fatness.calculate()
 
         self.set_value(self._calculate())
+
+
+class RoutRin(RadialVarianceHelper):
+    @staticmethod
+    def distance(a, b):
+        return np.linalg.norm(a - b)
+
+    def _calculate(self):
+        # calculate average position of all agents
+        mu = self.center_of_mass()
+
+        # calculate distance of each agent to mu, save the largest and smallest
+        distances = [self.distance(agent.getPosition(), mu) for agent in self.population]
+        rin = np.min(distances)
+        rout = np.max(distances)
+
+        return rout - rin
