@@ -196,6 +196,6 @@ class MazeAgentCaspian(MazeAgent):
         self.set_color_by_id(sensor_detection_id)
 
         v, omega = self.run_processor(sensor_state)
-        v /= 0.151 / 10
+        v *= 10
         self.requested = v, omega
         return self.requested
