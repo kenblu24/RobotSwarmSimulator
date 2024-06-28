@@ -69,6 +69,8 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
 
 
 class MazeAgentCaspian(MazeAgent):
+    max_forward_speed = 0.2  # m/s
+    max_turning_speed = 2.0  # rad/s
 
     def __init__(self, config: MazeAgentConfig | None = None, name=None, network: dict[str, Any] | None = None) -> None:
         if config is None:
@@ -186,8 +188,8 @@ class MazeAgentCaspian(MazeAgent):
             return (wl, wr)
         """
         # three bins. One for +v, -v, omega.
-        v = 0.2 * (data[1] - data[0])
-        w = 2.0 * (data[3] - data[2])
+        v = max_forward_speed * (data[1] - data[0])
+        w = max_turning_speed * (data[3] - data[2])
         return v, w
 
     def get_actions(self) -> tuple[float, float]:
