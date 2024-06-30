@@ -16,14 +16,12 @@ sensors:
       bias: 0
       store_history: false
       seed: 10
-controller:
-  - 0
-  - 0
-  - 0
-  - 0
+controller: "self"
 agent_radius: 0.5
 stop_at_goal: false
 dt: 0.13
+scale_forward_speed: 0.2  # m/s
+scale_turning_rates: 2.0  # m/s
 body_color:
   - 255
   - 0
