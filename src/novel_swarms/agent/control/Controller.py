@@ -30,6 +30,8 @@ class Controller:
         # case 3: Agent has or inherits a "get_action" method with no additional arguments
         elif controller == "self":
             self.type = ControllerType.inherit_agent
+        elif controller is None:
+            self.type = None
         # Neither --> Error
         else:
             raise Exception("The input value of controller to class Controller must be a callable, list, or 'self'!")
@@ -43,8 +45,10 @@ class Controller:
             return e1, e2
         elif self.type == ControllerType.inherit_agent:
             return agent.get_actions()
-        else:
+        elif self.type == ControllerType.method_based:
             return self.controller_as_method(agent)
+        else:
+            return
 
     @override
     def __str__(self):
@@ -52,8 +56,10 @@ class Controller:
             return ""
         elif self.type == ControllerType.inherit_agent:
             return "get_actions() on Agent"
-        else:
+        elif self.type == ControllerType.method_based:
             return repr(self.controller_as_method)
+        else:
+            return repr(self.type)
 
     @staticmethod
     def homogeneous_from_genome(genome):

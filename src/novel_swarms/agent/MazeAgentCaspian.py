@@ -44,6 +44,8 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     controller: Controller | None = None
     neuro_track_all: bool = False
     track_io: bool = False
+    scale_forward_speed: float = 0.2  # m/s forward speed factor
+    scale_turning_rates: float = 2.0  # rad/s turning rate factor
     type: str = ""
 
     def __post_init__(self):
@@ -77,6 +79,9 @@ class MazeAgentCaspian(MazeAgent):
             config = MazeAgentCaspianConfig()
 
         super().__init__(config=config, name=name)
+
+        self.scale_v = config.scale_forward_speed  # m/s
+        self.scale_w = config.scale_turning_rates  # rad/s
 
         self.network = network if network is not None else config.network
 
@@ -188,8 +193,8 @@ class MazeAgentCaspian(MazeAgent):
             return (wl, wr)
         """
         # three bins. One for +v, -v, omega.
-        v = max_forward_speed * (data[1] - data[0])
-        w = max_turning_speed * (data[3] - data[2])
+        v = self.scale_v * (data[1] - data[0])
+        w = self.scale_w * (data[3] - data[2])
         return v, w
 
     def get_actions(self) -> tuple[float, float]:

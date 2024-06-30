@@ -24,10 +24,10 @@ class MazeAgent(Agent):
 
     def __init__(self, config=None, name=None) -> None:
 
-        if isinstance(config.controller, list):
-            self.controller = Controller(config.controller)
-        else:
+        if hasattr(config.controller, 'get_actions'):
             self.controller = config.controller
+        else:
+            self.controller = Controller(config.controller)
 
         self.seed = config.seed
         if config.seed is not None:
