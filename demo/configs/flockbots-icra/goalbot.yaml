@@ -4,26 +4,24 @@ sensors:
   custom_state_decision: "Linear"
   sensors:
     - type: "BinaryFOVSensor"
-      theta: 0.2   # Vision Angle / 2 (Radians) (previously 0.3141595)
+      theta: 0.2   # Vision Angle / 2 (Radians)
       degrees: false
-      agent_sensing_range: 17 # In Body Lengths
+      agent_sensing_range: 2.55  # (meters). DOESN'T MATCH MILLING RANGE
       show: true
-      goal_sensing_range: 17
+      goal_sensing_range: 2.55
       use_goal_state: false
-      wall_sensing_range: 17
+      wall_sensing_range: 2.55
       fn: 0.10
       fp: 0.05
-      bias: 0 # Angle Bias for Sensor
+      bias: 0  # Angle Bias for Sensor
       store_history: false
       seed: 10
-controller:
-  - 0
-  - 0
-  - 0
-  - 0
-agent_radius: 0.5
+controller: "self"
+agent_radius: 0.075
 stop_at_goal: false
 dt: 0.13
+scale_forward_speed: 0.2  # m/s
+scale_turning_rates: 2.0  # m/s
 body_color:
   - 255
   - 0
