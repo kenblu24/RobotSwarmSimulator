@@ -16,11 +16,7 @@ sensors:
       bias: 0 # Angle Bias for Sensor
       store_history: false
       seed: 10
-controller:
-  - 0
-  - 0
-  - 0
-  - 0
+controller: "self"
 agent_radius: 0.5
 stop_at_goal: false
 dt: 0.13
