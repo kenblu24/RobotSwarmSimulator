@@ -39,7 +39,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     catastrophic_collisions: bool = False
     trace_length: tuple[int, int, int] | None = None
     trace_color: tuple[int, int, int] | None = None
-    network: neuro.json = None
+    network: dict = None
     neuro_tpc: int = 10
     controller: Controller | None = None
     neuro_track_all: bool = False
