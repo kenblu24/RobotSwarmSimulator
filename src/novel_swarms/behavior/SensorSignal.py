@@ -13,10 +13,6 @@ class SensorSignalBehavior(AbstractBehavior):
         self.show = show
         self.index = sensor_index
 
-
-    def attach_world(self, world):
-        self.world = world
-
     def out_average(self) -> Tuple:
         vals = np.array([0, 0])
         for a in self.world.population:

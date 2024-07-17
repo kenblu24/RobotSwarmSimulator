@@ -13,6 +13,7 @@ class DistanceToGoal(AbstractBehavior):
         self.goals = None
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
         self.goals = world.goals
 

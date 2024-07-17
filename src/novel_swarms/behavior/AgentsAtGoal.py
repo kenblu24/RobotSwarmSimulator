@@ -16,9 +16,9 @@ class AgentsAtGoal(AbstractBehavior):
         self.as_percent = as_percent
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
         self.goals = world.goals
-        self.world = world
 
     def calculate(self):
         if not self.goals or not self.population:

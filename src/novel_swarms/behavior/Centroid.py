@@ -21,9 +21,9 @@ class Centroid(AbstractBehavior):
         self.centroid = np.array([0.0, 0.0], dtype=np.float64)
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
         self.goals = world.goals
-        self.world = world
 
     def calculate(self):
         if not self.world:
