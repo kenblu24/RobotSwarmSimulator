@@ -10,6 +10,9 @@ class AbstractBehavior():
         self.history_size = history_size
         self.value_history = []
 
+    def attach_world(self, world):
+        self.world = world
+
     def set_value(self, value):
         # Keep Track of the [self.history_size] most recent values
         self.value_history.append(value)

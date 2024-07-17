@@ -14,6 +14,7 @@ class GeneElementDifference(AbstractBehavior):
         self.b = genome_b_index
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
 
     def calculate(self):

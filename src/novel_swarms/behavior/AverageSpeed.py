@@ -9,6 +9,7 @@ class AverageSpeedBehavior(AbstractBehavior):
         self.population = None
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
 
     def calculate(self):
