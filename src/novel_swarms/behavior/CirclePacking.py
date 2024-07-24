@@ -3,7 +3,7 @@ import math
 from .Circliness import RadialVarianceHelper
 import rss
 
-class FittingCircles(RadialVarianceHelper):
+class CirclePacking(RadialVarianceHelper):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -12,7 +12,7 @@ class FittingCircles(RadialVarianceHelper):
     # This function creates a metric for the agents to follow
     
     def _calculate(self):
-        world = self.world
+        world = self.world.config
         agent_radii = []
 
         positions = [agent.getPosition() for agent in self.population]
@@ -29,7 +29,7 @@ class FittingCircles(RadialVarianceHelper):
             distances.sort()
             
             # TODO: this is a bit of a hack, but it works
-            
+            # breakpoint()
             if (agent.getPosition()[0] < (world.w / 2) and agent.getPosition()[1] < (world.h / 2)): # bottom left
                 if(agent.getPosition()[0] < distances[0]):
                     agent_radii.append(agent.getPosition()[0])
@@ -62,11 +62,10 @@ class FittingCircles(RadialVarianceHelper):
                     agent_radii.append(world.h - agent.getPosition()[1])
                 else:
                     agent_radii.append(distances[0])
-        
+            
         agent_radii.sort()
         
-        
-        self.set_value(agent_radii[-1])
+        return agent_radii[0]
 
     @staticmethod
     def distance(a, b):
