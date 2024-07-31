@@ -1,6 +1,5 @@
 import numpy as np
 from .Circliness import RadialVarianceHelper
-import rss
 from random import sample
 
 class RandomBoxSampling(RadialVarianceHelper):
