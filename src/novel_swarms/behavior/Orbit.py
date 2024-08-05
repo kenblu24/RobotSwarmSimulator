@@ -77,8 +77,8 @@ class Fatness2(RadialVarianceHelper):
         
         
         # calculate distance of each agent to mu, save the largest and smallest
-        distances = [self.distance(agent.getPosition(), mu) for agent in self.population]
-        rmin = np.min(distances[1:]) #ignore the first agent (the center of mass) otherwise the rmin is always zero
+        distances = [self.distance(agent.getPosition(), mu) for agent in circling_agents]
+        rmin = np.min(distances)
         rmax = np.max(distances)
         
         # calculate Fatness but opposite (0 is fat, 1 is perfect circle formation)
@@ -119,17 +119,23 @@ class Tangentness(RadialVarianceHelper):
 
     def _calculate(self):
         # calculate average position of all agents
-        agents = self.population
-        
-        global agent1
-        agent1 = agents[0]
+
+
+        global center_agent
+        # finds the agent that is closest to the center of mass
+        center_agent = [agent for agent in self.population if Fatness2.distance(agent.getPosition(), self.center_of_mass()) == np.min([Fatness2.distance(agent.getPosition(), self.center_of_mass()) for agent in self.population])][0]
         
         global mu 
-        mu = agent1.getPosition()
+        mu = center_agent.getPosition()
         
-        n = len(self.population) - 1
+        global circling_agents
+        circling_agents = [agent for agent in self.population if agent != center_agent]
+
+        n = len(circling_agents)
         
         #TODO: Test if the circliness improves when iterating through an array that does not contain the "center of mass" (first) agent
         # calculate Tangentness
-        tan_inner = [self.tangentness_inner(agent, mu) for agent in self.population]
-        return np.sum(tan_inner[1:]) / n
+        tan_inner = [self.tangentness_inner(agent, mu) for agent in circling_agents]
+        return np.sum(tan_inner) / n
+    
+    
