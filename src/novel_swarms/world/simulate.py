@@ -16,10 +16,12 @@ def main(world_config, show_gui=True, gui=None, stop_detection=None, world_key_e
     # screen must be global so that other modules can access + draw to the window
     global screen
     gui_width = 200
+    gui_height = 200
     if gui:
         gui_width = gui.w
+        gui_height = gui.h
     if show_gui:
-        screen = pygame.display.set_mode((world_config.w + gui_width, world_config.h))
+        screen = pygame.display.set_mode((world_config.w + gui_width, world_config.h + gui_height), pygame.SCALED | pygame.RESIZABLE)
 
     # define a variable to control the main loop
     running = True
