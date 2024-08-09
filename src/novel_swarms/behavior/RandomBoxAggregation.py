@@ -2,6 +2,9 @@ import numpy as np
 from .Circliness import RadialVarianceHelper
 from random import sample
 
+# Makes the agents try to aggregate to a random box
+# the number of boxes is determined by the population size
+# the size of the boxes is determined by the world size and the population size
 class RandomBoxAggregation(RadialVarianceHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
