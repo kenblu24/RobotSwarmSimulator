@@ -16,15 +16,15 @@ from src.novel_swarms.agent.control.HomogeneousController import HomogeneousCont
 
 SCALE = 10
 
-MMS_MAX = 0.2  # max speed in mm/s
+MMS_MAX = 0.3  # max speed in mm/s
 BL = 0.151  # body length
 BLS_MAX = MMS_MAX / BL  # max speed in body lengths per second
 
 DECISION_VARS = CMAESVarSet(
     {
-        "forward_rate_0": [-(BLS_MAX * SCALE), BLS_MAX * SCALE],  # Body Lengths / second, will be converted to pixel values during search
+        "forward_rate_0": [-MMS_MAX, MMS_MAX],  # Body Lengths / second, will be converted to pixel values during search
         "turning_rate_0": [-2.0, 2.0],  # Radians / second
-        "forward_rate_1": [-(BLS_MAX * SCALE), BLS_MAX * SCALE],  # Body Lengths / second, will be converted to pixel values during search
+        "forward_rate_1": [-MMS_MAX, MMS_MAX],  # Body Lengths / second, will be converted to pixel values during search
         "turning_rate_1": [-2.0, 2.0],  # Radians / second
     }
 )
@@ -45,12 +45,12 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
     def gene_to_world(genome, hash_val):
 
-        goal_agent = AgentYAMLFactory.from_yaml("demo/configs/flockbots-icra-milling/flockbot.yaml")
+        goal_agent = AgentYAMLFactory.from_yaml("demo/configs/turbopi-milling/turbopi.yaml")
         goal_agent.controller = HomogeneousController(genome)
         goal_agent.seed = 0
         goal_agent.rescale(SCALE)
 
-        world = WorldYAMLFactory.from_yaml("demo/configs/flockbots-icra-milling/world.yaml")
+        world = WorldYAMLFactory.from_yaml("demo/configs/turbopi-milling/world.yaml")
         world.seed = 0
         world.behavior = [
             Circliness(avg_history_max=CIRCLINESS_HISTORY)
