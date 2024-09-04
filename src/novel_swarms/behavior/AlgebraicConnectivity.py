@@ -10,6 +10,7 @@ class AlgebraicConn(AbstractBehavior):
         self.r_disk_size = r_disk_size
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
 
     def getLapacianMatrix(self):

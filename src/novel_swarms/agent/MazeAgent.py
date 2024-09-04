@@ -1,4 +1,5 @@
-from typing import Tuple
+from typing import NamedTuple, Tuple
+from collections import namedtuple
 import pygame
 import random
 import math
@@ -17,6 +18,9 @@ from .control.Controller import Controller
 #     from ..config.AgentConfig import MazeAgentConfig
 # except ImportError:
 #     pass
+
+SPA = namedtuple("SPA", ['state', 'perception', 'action'])
+State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
 
 class MazeAgent(Agent):
@@ -108,7 +112,11 @@ class MazeAgent(Agent):
 
         if self.track_io:
             sensor_state = self.sensors.getState()
-            self.history.append((sensor_state, (v, omega)))
+            self.history.append(SPA(
+                State(self.x_pos, self.y_pos, self.angle),
+                sensor_state,
+                (v, omega),
+            ))
 
         # Define Idiosyncrasies that may occur in actuation/sensing
         idiosync_1 = self.i_1

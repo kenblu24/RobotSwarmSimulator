@@ -11,6 +11,7 @@ class RadialVarianceBehavior(AbstractBehavior):
         self.regularize = regularize
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
         self.world_radius = world.config.radius
 

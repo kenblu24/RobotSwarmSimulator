@@ -13,6 +13,7 @@ class SensorRotation(AbstractBehavior):
         self.i = sensor_index
 
     def attach_world(self, world):
+        super().attach_world(world)
         self.population = world.population
 
     def calculate(self):
