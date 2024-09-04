@@ -74,8 +74,8 @@ if __name__ == "__main__":
 
     parser.add_argument("--name", type=str, help="Name of the experiment", default=None)
     parser.add_argument("--root", type=str, help="Experiment folder root", default=None)
-    parser.add_argument("--n", type=int, default=10, help="Number of agents")
-    parser.add_argument("--t", type=int, default=1000, help="Environment Horizon")
+    parser.add_argument("-n", type=int, default=10, help="Number of agents")
+    parser.add_argument("-t", type=int, default=1000, help="Environment Horizon")
     parser.add_argument("--processes", type=int, default=1, help="Number of running concurrent processes")
     parser.add_argument("--iters", type=int, default=None, help="Number of Evolutions to consider")
     parser.add_argument("--pop-size", type=int, default=15, help="The size of each generation's population")
