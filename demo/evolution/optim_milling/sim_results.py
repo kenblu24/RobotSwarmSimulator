@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         if args.discrete_bins:
             increment = 1 / (int(args.discrete_bins) - 1)
-            genome = [CMAES.round_to_nearest(x, increment=increment) for x in genome]
+            genome = CMAES.round_to_nearest(genome, increment=increment)
 
         genome = DECISION_VARS.from_unit_to_scaled(genome)
 
