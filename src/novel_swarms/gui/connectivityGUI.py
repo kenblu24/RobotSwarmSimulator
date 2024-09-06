@@ -32,7 +32,8 @@ class AgentConnectivityGUI(AbstractGUI):
     def set_time(self, time_steps):
         self.time = time_steps
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         super().draw(screen)
         self.text_baseline = 10
         if pygame.font:

@@ -40,6 +40,6 @@ class Centroid(AbstractBehavior):
 
         self.set_value(self.centroid)
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         for centroid in self.value_history:
             pygame.draw.circle(screen, (255, 0, 255), centroid, 5, width=0)

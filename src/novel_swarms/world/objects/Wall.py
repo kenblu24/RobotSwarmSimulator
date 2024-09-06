@@ -12,7 +12,8 @@ class Wall(WorldObject):
         self.angle = angle
         self.color = color
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         pygame.draw.rect(screen, self.color, pygame.Rect(self.x, self.y, self.w, self.h))
 
     def get_sensing_segments(self):

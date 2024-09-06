@@ -21,7 +21,8 @@ class GrowthRegion(WorldObject):
                 self.points[i] += ((self.points[i] - self.centroid) / np.linalg.norm(self.points[i] - self.centroid)) * self.step_size
                 # print(f"After: {self.points[i]}")
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         pygame.draw.polygon(screen, (200, 0, 0), self.points, width=0)
 
     def point_inside(self, point):

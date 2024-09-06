@@ -29,7 +29,8 @@ class EvolutionGUI(AbstractGUI):
     def set_elapsed_time(self, time):
         self.generation_time = time
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         super().draw(screen)
         self.text_baseline = 10
         if pygame.font:

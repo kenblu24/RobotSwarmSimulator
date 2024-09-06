@@ -14,7 +14,7 @@ from src.novel_swarms.behavior import Circliness
 from src.novel_swarms.agent.control.HomogeneousController import HomogeneousController
 # from src.novel_swarms.world.simulate import main as sim
 
-SCALE = 10
+SCALE = 1
 
 MMS_MAX = 0.3  # max speed in mm/s
 BL = 0.151  # body length

@@ -14,7 +14,9 @@ class ClusterPoint:
         self.genome = genome
         self.is_highlighted = False
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
+        # TODO: Implement offset/zoom
         filled = 0 if self.is_highlighted else 1
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius, width=filled)
 

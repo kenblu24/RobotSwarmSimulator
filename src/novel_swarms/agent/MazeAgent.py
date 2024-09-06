@@ -124,7 +124,7 @@ class MazeAgent(Agent):
 
         self.dx = v * math.cos(self.angle) * idiosync_1
         self.dy = v * math.sin(self.angle) * idiosync_1
-        dw = omega * idiosync_2
+        self.dtheta = omega * idiosync_2
 
         old_x_pos = self.x_pos
         old_y_pos = self.y_pos
@@ -139,7 +139,7 @@ class MazeAgent(Agent):
             self.x_pos += self.dx * self.dt
             self.y_pos += self.dy * self.dt
 
-        self.angle += dw * self.dt
+        self.angle += self.dtheta * self.dt
 
         self.collision_flag = False
         if check_for_world_boundaries is not None:
@@ -158,22 +158,24 @@ class MazeAgent(Agent):
             if sensor.goal_detected:
                 self.goal_seen = True
 
-    def draw(self, screen) -> None:
-        super().draw(screen)
+    def draw(self, screen, offset=((0, 0), 1.0)) -> None:
+        pan, zoom = np.asarray(offset[0]), offset[1]
+        super().draw(screen, offset)
         for sensor in self.sensors:
-            sensor.draw(screen)
+            sensor.draw(screen, offset)
 
         # Draw Cell Membrane
         filled = 0 if (self.is_highlighted or self.stopped_duration or self.body_filled) else 1
-        color = self.body_color if not self.stopped_duration else (255,255,51)
-        pygame.draw.circle(screen, color, (self.x_pos, self.y_pos), self.radius, width=filled)
+        color = self.body_color if not self.stopped_duration else (255, 255, 51)
+        pos = np.asarray(self.getPosition()) * zoom + pan
+        pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)
 
         # "Front" direction vector
-        head = self.getFrontalPoint()
-        tail = self.getPosition()
-        vec = [head[0] - tail[0], head[1] - tail[1]]
+        head = np.asarray(self.getFrontalPoint()) * zoom + pan
+        tail = pos
+        vec = head - tail
         mag = self.radius * 2
-        vec_with_magnitude = ((vec[0] * mag) + tail[0], (vec[1] * mag) + tail[1])
+        vec_with_magnitude = tail + vec * mag
         pygame.draw.line(screen, (255, 255, 255), tail, vec_with_magnitude)
 
 

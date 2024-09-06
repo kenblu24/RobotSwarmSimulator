@@ -2,23 +2,30 @@ import time
 
 
 class Timer:
-    def __init__(self, name):
+    def __init__(self, name=''):
+        self.restart()
         self.name = name
-        self.start = time.time()
         self.stop = None
-        self.duration = 0
 
-    def stop_the_clock(self):
+    def stop(self):
         self.stop = time.time()
         return self.check_watch()
 
-    def check_watch(self, p=True):
+    def restart(self):
+        self.start = time.time()
+
+    @property
+    def elapsed(self):
         if self.stop is not None:
-            self.duration = self.stop - self.start
+            return self.stop - self.start
         else:
-            self.duration = time.time() - self.start
+            return time.time() - self.start
 
-        if p:
-            print(f"{self.name} : {self.duration}s")
+    def __call__(self):
+        return self.elapsed
 
-        return self.duration
+    def __str__(self):
+        return f"{self.name} : {self.elapsed}s"
+
+    def __repr__(self):
+        return f"<Timer{' ' if self.name else ''}{self.name}: start={self.start}, {f'stop={self.stop}, ' if self.stop is not None else ''}elapsed={self.elapsed}s>"

@@ -2,7 +2,19 @@ import pygame
 from ..agent.DiffDriveAgent import DifferentialDriveAgent
 from .abstractGUI import AbstractGUI
 from ..world.World import World
+from functools import cache
 import numpy as np
+from importlib import resources
+from . import fonts
+
+
+PI = np.pi
+font_dir = resources.files(fonts)
+
+
+@cache
+def get_font(font_name, size):
+    return pygame.font.Font(font_dir / font_name, size)
 
 
 class DifferentialDriveGUI(AbstractGUI):
@@ -16,6 +28,9 @@ class DifferentialDriveGUI(AbstractGUI):
     def __init__(self, x=0, y=0, w=0, h=0):
         super().__init__(x=x, y=y, w=w, h=h)
         self.time: int = 0
+        self.fps = None
+        self.speed = None
+        self.position = "absolute"
 
     def set_selected(self, agent: DifferentialDriveAgent):
         super().set_selected(agent)
@@ -31,24 +46,35 @@ class DifferentialDriveGUI(AbstractGUI):
     def set_time(self, time_steps):
         self.time = time_steps
 
-    def draw(self, screen):
-        super().draw(screen)
+    def draw(self, screen, zoom=1.0):
+        # super().draw(screen)
+        if self.position == "sidebar_right":
+            self.x = screen.get_width() - self.w
+            self.y = 0
+            self.h = screen.get_height()
         self.text_baseline = 10
         if pygame.font:
             if self.title:
                 self.appendTextToGUI(screen, self.title, size=20)
             if self.subtitle:
                 self.appendTextToGUI(screen, self.subtitle, size=18)
-
-            self.appendTextToGUI(screen, f"Timesteps: {self.time}")
+            timing = f"Timesteps:{self.time: >6}"
+            timing += f"  e/FPS:{int(self.fps[1]): >3}/{int(self.fps[0]):03}" if self.fps else ""
+            timing += f"  {self.speed}" if self.speed else ""
+            self.appendTextToGUI(screen, timing)  # type: ignore[reportAttributeAccessIssue]
             if self.selected:
-                a = self.selected
+                a: DifferentialDriveAgent = self.selected
+                heading = a.get_heading() % (2 * PI) / 2 / PI * 360
                 self.appendTextToGUI(screen, f"Current Agent: {a.name}")
                 self.appendTextToGUI(screen, f"")
-                self.appendTextToGUI(screen, f"x: {a.get_x_pos()}")
-                self.appendTextToGUI(screen, f"y: {a.get_y_pos()}")
-                self.appendTextToGUI(screen, f"dx: {a.dx}")
-                self.appendTextToGUI(screen, f"dy: {a.dy}")
+                self.appendTextToGUI(screen, f"x: {round(a.get_x_pos(), 12)}")
+                self.appendTextToGUI(screen, f"y: {round(a.get_y_pos(), 12)}")
+                self.appendTextToGUI(screen, f"θ: {round(heading, 12): >16}")
+                self.appendTextToGUI(screen, f"dx: {round(a.dx, 12)}")
+                self.appendTextToGUI(screen, f"dy: {round(a.dy, 12)}")
+                self.appendTextToGUI(screen, f"dt: {round(a.dt, 12)}")
+                self.appendTextToGUI(screen, f"|v| (m/s): {round(np.linalg.norm(a.getVelocity()) / a.dt, 12)}")
+                self.appendTextToGUI(screen, f"ω (rad/s): {round(a.dtheta, 12)}")
                 self.appendTextToGUI(screen, f"sense-state: {a.get_sensors().getState()}")
                 if hasattr(a, "i_1") and hasattr(a, "i_2"):
                     self.appendTextToGUI(screen, f"Idio_1: {a.i_1}")
@@ -57,34 +83,40 @@ class DifferentialDriveGUI(AbstractGUI):
                 if hasattr(a, "controller"):
                     self.appendTextToGUI(screen, f"controller: {a.controller}")
                     self.appendTextToGUI(screen, f"")
-                self.appendTextToGUI(screen, f"θ: {a.angle % (2 * np.pi)}")
                 if hasattr(a, "agent_in_sight") and a.agent_in_sight is not None:
                     self.appendTextToGUI(screen, f"sees: {a.agent_in_sight.name}")
+                try:
+                    v, w = a.requested
+                except AttributeError:
+                    pass
+                else:
+                    self.appendTextToGUI(screen, f"ego v   (m/s): {round(v, 12)}")
+                    self.appendTextToGUI(screen, f"ego v (bodylen): {round(v / (a.radius * 2), 12)}")
+                    self.appendTextToGUI(screen, f"ego ω (rad/s): {round(w, 12)}")
             else:
                 self.appendTextToGUI(screen, "Current Agent: None")
                 self.appendTextToGUI(screen, "")
-                self.appendTextToGUI(screen, "Behavior", size=18)
+                self.appendTextToGUI(screen, "Behavior", size=16)
                 for b in self.world.behavior:
-                    out = b.out_average()
+                    out = b.out_current()
                     b.draw(screen)
                     try:
                         self.appendTextToGUI(screen, "{} : {:0.3f}".format(out[0], out[1]))
-                    except ValueError as e:
+                    except ValueError:
                         pass
-                    except Exception as e:
+                    except Exception:
                         self.appendTextToGUI(screen, "{} : {}".format(out[0], out[1]))
-
         else:
             print("NO FONT")
 
-    def appendTextToGUI(self, screen, text, x=None, y=None, color=(255, 255, 255), aliasing=True, size=16):
+    def appendTextToGUI(self, screen, text, x=None, y=None, color=(255, 255, 255), aliasing=True, size=14):
 
-        if not x:
-            x = self.x + 10
-        if not y:
+        if x is None:
+            x = self.x + size - 2
+        if y is None:
             y = self.text_baseline
 
-        font = pygame.font.Font(None, size)
+        font = get_font("JetBrainsMono-SemiBold.ttf", size)
         text = font.render(text, aliasing, color)
         textpos = (x, y)
         screen.blit(text, textpos)

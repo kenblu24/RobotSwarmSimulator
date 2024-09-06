@@ -7,7 +7,7 @@ class AbstractGoal:
     def __init__(self):
         pass
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         pass
 
     def agent_achieved_goal(self, agent):
@@ -22,7 +22,8 @@ class AreaGoal(AbstractGoal):
         self.remove_at = remove_agents_at_goal
         self.agents_seen = set()
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         pygame.draw.rect(screen, self.color, self.rect, width=0)
 
     def agent_achieved_goal(self, agent):
@@ -46,7 +47,7 @@ class CylinderGoal(AbstractGoal):
         self.agents_seen = set()
         self.range = range
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         # Draw Inclusive Range
         pygame.draw.circle(screen, (0, 50, 0), self.center, self.range, width=0)
         pygame.draw.circle(screen, self.color, self.center, self.r, width=0)

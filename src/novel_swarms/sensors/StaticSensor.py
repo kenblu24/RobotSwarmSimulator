@@ -9,5 +9,5 @@ class StaticSensor(AbstractSensor):
     def step(self, population):
         pass
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         pass

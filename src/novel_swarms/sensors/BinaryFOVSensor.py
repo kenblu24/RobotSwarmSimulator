@@ -220,8 +220,9 @@ class BinaryFOVSensor(AbstractSensor):
             else:
                 self.history.append(-1)
 
-    def draw(self, screen):
-        super(BinaryFOVSensor, self).draw(screen)
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        super(BinaryFOVSensor, self).draw(screen, offset)
+        pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
         if self.show:
             # Draw Sensory Vector (Vision Vector)
             sight_color = (255, 0, 0)
@@ -232,21 +233,20 @@ class BinaryFOVSensor(AbstractSensor):
 
             magnitude = self.r if self.parent.is_highlighted else self.parent.radius * 5
 
-            head = (self.parent.x_pos, self.parent.y_pos)
+            head = np.asarray(self.parent.getPosition()) * zoom + pan
             e_left, e_right = self.getSectorVectors()
+            e_left, e_right = np.asarray(e_left[:2]), np.asarray(e_right[:2])
 
-            tail_l = (self.parent.x_pos + (magnitude * e_left[0]),
-                    self.parent.y_pos + (magnitude * e_left[1]))
-
-            tail_r = (self.parent.x_pos + (magnitude * e_right[0]),
-                    self.parent.y_pos + (magnitude * e_right[1]))
+            tail_l = head + magnitude * e_left * zoom
+            tail_r = head + magnitude * e_right * zoom
 
             pygame.draw.line(screen, sight_color, head, tail_l)
             pygame.draw.line(screen, sight_color, head, tail_r)
             if self.parent.is_highlighted:
-                pygame.draw.circle(screen, sight_color, self.parent.getPosition(), self.r, 3)
+                width = max(1, round(0.01 * zoom))
+                pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 if self.wall_sensing_range:
-                    pygame.draw.circle(screen, (150, 150, 150), self.parent.getPosition(), self.wall_sensing_range, 3)
+                    pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
 
     def circle_interesect_sensing_cone(self, u, r):
         e_left, e_right = self.getSectorVectors()

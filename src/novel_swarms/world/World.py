@@ -19,14 +19,14 @@ class World():
             self.meta = {}
         else:
             self.meta = metadata
-    
+
     def setup(self):
         pass
 
     def step(self):
         self.total_steps += 1
 
-    def draw(self, screen):
+    def draw(self, screen, offset=None):
         pass
 
     def handle_key_press(self, event):
