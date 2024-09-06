@@ -202,13 +202,12 @@ def main(
         # Calculate Steps - Stop if we reach desired frame
         for _ in range(steps_per_frame):
 
-            if stop_detection is not None and stop_detection(world):
+            if callable(stop_detection) and stop_detection(world):
                 running = False
                 return world
 
             if total_allowed_steps is not None:
-                # noinspection PyTypeChecker
-                if steps_taken > total_allowed_steps:
+                if total_allowed_steps > 0 and steps_taken > total_allowed_steps:
                     running = False
                     return world
 
