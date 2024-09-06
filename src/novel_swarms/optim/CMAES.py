@@ -44,6 +44,7 @@ class CMAES:
         experiment=None,
         round_to_every=None,
         eval_is_deterministic=False,
+        use_tqdm=False,
     ):
         genome_size = len(dvars)
         self.f = f
@@ -64,6 +65,7 @@ class CMAES:
         self.round_to_every = round_to_every
         self.seed = 1
         self.cache_answers = eval_is_deterministic
+        self.use_tqdm = use_tqdm
 
         # Data collection
         if self.experiment is not None:
@@ -91,6 +93,10 @@ class CMAES:
             "tolfunhist": 0,
         }
 
+    @staticmethod
+    def round_to_nearest(a, increment):
+        return [round(round(a_i / increment) * increment, 2) for a_i in a]
+
     def minimize(self):
         self.es = es = cma.CMAEvolutionStrategy(self.x0, self.s0, self.opts)
         while not es.stop():
@@ -106,8 +112,8 @@ class CMAES:
 
                 self.generation += 1
                 if self.show_steps:
-                    sim(world_config=self.g_to_w(self.dvars.from_unit_to_scaled(es.best.x), es.best.x)[0], show_gui=True, stop_detection=self.w_stop_method,
-                        step_size=10)
+                    sim(world_config=self.g_to_w(self.dvars.from_unit_to_scaled(es.best.x), es.best.x)[0],
+                        show_gui=True, stop_detection=self.w_stop_method, step_size=10)
                 if self.max_iters and self.generation > self.max_iters:
                     break
             except KeyboardInterrupt:
@@ -116,35 +122,18 @@ class CMAES:
         es.result_pretty()
         return es.result, es
 
-    @staticmethod
-    def round_to_nearest(a, increment):
-        return [round(round(a_i / increment) * increment, 2) for a_i in a]
-
     def sweep_parameters(self, divisions: list[int]):
         if len(divisions) != len(self.x0):
             raise Exception(f"Divisions should be of size {len(self.x0)}. Not {len(divisions)}")  # noqa: EM102
-        spaces = []
-        for _i, d in enumerate(divisions):
-            spaces.append(np.linspace(0, 1, d))
-        grid = np.meshgrid(*spaces)
-        points = np.array(grid).reshape((len(divisions), -1)).T
-        parameters = [self.dvars.from_unit_to_scaled(p) for p in points]
-        processor = MultiWorldSimulation(pool_size=self.n_processes, single_step=False, with_gui=False)
+        spaces = [np.linspace(0, 1, d) for d in divisions]
+        grid = np.asarray(np.meshgrid(*spaces))
+        points = grid.reshape((len(divisions), -1)).T
+        print(f"Grid Shape: {grid.shape}")
+        print(f"{len(points)} test points")
 
-        configs = [self.g_to_w(parameters[i], parameters[i]) for i in range(len(parameters))]
-        ret = processor.execute(configs, world_stop_condition=self.w_stop_method, batched=True)
+        self.ask_for_genomes(points)
 
-        for i, world_set in enumerate(ret):
-            _key = world_set[0].meta["hash"]
-            fitness = self.f(world_set)
-            behavior = self.average_behaviors(world_set)
-            self.solution_set[_key] = fitness
-            if self.experiment is not None:
-                self.history.append(self.hist_point(self.generation, i, fitness, *parameters[i], *behavior))
-
-        if self.experiment is not None:
-            df = pd.DataFrame(self.history)
-            df.to_csv(self.exp_path / GENOMES_NAME, index=False)
+        self.write_genomes()
 
     def ask_for_genomes(self, parameters):
         normalized = parameters
@@ -158,7 +147,8 @@ class CMAES:
         batched_worlds = isinstance(configs[0], list)
 
         # Blocking MultiProcess Execution
-        ret = processor.execute(configs, world_stop_condition=self.w_stop_method, batched=batched_worlds)
+        ret = processor.execute(configs, world_stop_condition=self.w_stop_method,
+                                batched=batched_worlds, use_tqdm=self.use_tqdm)
         for i, world_set in enumerate(ret):
             key = world_set[0].meta["hash"] if batched_worlds else world_set.meta["hash"]
             fitness = self.f(world_set)

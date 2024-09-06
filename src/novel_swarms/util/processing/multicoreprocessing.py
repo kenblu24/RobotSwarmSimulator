@@ -1,5 +1,8 @@
+from functools import partial
 import warnings
 from multiprocessing import Pool
+from tqdm.contrib.concurrent import process_map
+
 from ...world.simulate import main as sim
 
 
@@ -27,15 +30,24 @@ class MultiWorldSimulation:
         self.with_gui = with_gui
         self.pool_size = pool_size
 
-    def execute(self, world_setup: list, world_stop_condition=None, batched=False):
+    def execute(self, world_setup: list, world_stop_condition=None, batched=False, use_tqdm=False):
 
         if not world_setup:
             raise Exception("No world_setup list provided to execute.")
 
         ret = []
         if not self.single_step:
-            with Pool(self.pool_size) as pool:
-                ret = pool.starmap(simulate_batch if batched else simulate, zip(world_setup, [world_stop_condition for _ in world_setup]))
+            bundles = world_setup
+            fn = simulate_batch if batched else simulate
+            fn = partial(fn, terminate_function=world_stop_condition)
+            if use_tqdm is True:
+                ret = process_map(fn, bundles)
+            elif use_tqdm:
+                ret = process_map(fn, bundles, tqdm_class=use_tqdm)
+            else:
+                ret = list(map(fn, bundles))
+            # with Pool(self.pool_size) as pool:
+            #     ret = pool.starmap(fn, bundles)
         else:
             for w in world_setup:
                 if batched:
