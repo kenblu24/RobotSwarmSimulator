@@ -58,11 +58,13 @@ class MazeAgent(Agent):
         self.dt = config.dt
         self.is_highlighted = False
         self.agent_in_sight = None
-        self.idiosyncrasies = config.idiosyncrasies
-        I1_MEAN, I1_SD = 0.93, 0.08
-        I2_MEAN, I2_SD = 0.95, 0.06
-        self.i_1 = np.random.normal(I1_MEAN, I1_SD) if self.idiosyncrasies else 1.0
-        self.i_2 = np.random.normal(I2_MEAN, I2_SD) if self.idiosyncrasies else 1.0
+        if config.idiosyncrasies:
+            idiosync = config.idiosyncrasies
+            self.idiosyncrasies = [np.random.normal(mean, sd) for mean, sd in zip(idiosync['mean'], idiosync['sd'])]
+        else:
+            self.idiosyncrasies = [1.0, 1.0]
+        # I1_MEAN, I1_SD = 0.93, 0.08
+        # I2_MEAN, I2_SD = 0.95, 0.06
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
         self.dead = False
@@ -119,12 +121,9 @@ class MazeAgent(Agent):
             ))
 
         # Define Idiosyncrasies that may occur in actuation/sensing
-        idiosync_1 = self.i_1
-        idiosync_2 = self.i_2
-
-        self.dx = v * math.cos(self.angle) * idiosync_1
-        self.dy = v * math.sin(self.angle) * idiosync_1
-        self.dtheta = omega * idiosync_2
+        self.dx = v * math.cos(self.angle) * self.idiosyncrasies[0]
+        self.dy = v * math.sin(self.angle) * self.idiosyncrasies[1]
+        self.dtheta = omega * self.idiosyncrasies[-1]
 
         old_x_pos = self.x_pos
         old_y_pos = self.y_pos
