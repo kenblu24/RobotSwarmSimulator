@@ -1,5 +1,6 @@
 import pygame
 from ..agent.DiffDriveAgent import DifferentialDriveAgent
+from ..agent.MazeAgent import MazeAgent
 from .abstractGUI import AbstractGUI
 from ..world.World import World
 from functools import cache
@@ -63,7 +64,7 @@ class DifferentialDriveGUI(AbstractGUI):
             timing += f"  {self.speed}" if self.speed else ""
             self.appendTextToGUI(screen, timing)  # type: ignore[reportAttributeAccessIssue]
             if self.selected:
-                a: DifferentialDriveAgent = self.selected
+                a: MazeAgent = self.selected
                 heading = a.get_heading() % (2 * PI) / 2 / PI * 360
                 self.appendTextToGUI(screen, f"Current Agent: {a.name}")
                 self.appendTextToGUI(screen, f"")
@@ -83,16 +84,17 @@ class DifferentialDriveGUI(AbstractGUI):
                 if hasattr(a, "controller"):
                     self.appendTextToGUI(screen, f"controller: {a.controller}")
                     self.appendTextToGUI(screen, f"")
-                if hasattr(a, "agent_in_sight") and a.agent_in_sight is not None:
-                    self.appendTextToGUI(screen, f"sees: {a.agent_in_sight.name}")
+                if hasattr(a, "agent_in_sight"):
+                    agent_seen = getattr(a.agent_in_sight, "name", '')
+                    self.appendTextToGUI(screen, f"sees: {agent_seen}")
                 try:
                     v, w = a.requested
                 except AttributeError:
                     pass
                 else:
-                    self.appendTextToGUI(screen, f"ego v   (m/s): {round(v, 12)}")
+                    self.appendTextToGUI(screen, f"ego v     (m/s): {round(v, 12)}")
                     self.appendTextToGUI(screen, f"ego v (bodylen): {round(v / (a.radius * 2), 12)}")
-                    self.appendTextToGUI(screen, f"ego ω (rad/s): {round(w, 12)}")
+                    self.appendTextToGUI(screen, f"ego ω   (rad/s): {round(w, 12)}")
             else:
                 self.appendTextToGUI(screen, "Current Agent: None")
                 self.appendTextToGUI(screen, "")

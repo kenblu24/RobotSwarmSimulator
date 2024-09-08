@@ -32,6 +32,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     dt: float = 1.0
     sensors: SensorSet | None = None
     idiosyncrasies: Any = False
+    delay: str | int | float = 0
     stop_on_collision: bool = False
     stop_at_goal: bool = False
     body_color: tuple[int, int, int] = (255, 255, 255)

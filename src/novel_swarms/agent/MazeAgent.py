@@ -11,6 +11,7 @@ from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
 from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
+from ..util import statistics_tools as st
 from .control.Controller import Controller
 
 # # typing
@@ -65,6 +66,8 @@ class MazeAgent(Agent):
             self.idiosyncrasies = [1.0, 1.0]
         # I1_MEAN, I1_SD = 0.93, 0.08
         # I2_MEAN, I2_SD = 0.95, 0.06
+        self.delay_1 = st.Delay(delay=config.delay)
+        self.delay_2 = st.Delay(delay=config.delay)
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
         self.dead = False
@@ -119,6 +122,9 @@ class MazeAgent(Agent):
                 sensor_state,
                 (v, omega),
             ))
+
+        v = self.delay_1(v)
+        omega = self.delay_2(omega)
 
         # Define Idiosyncrasies that may occur in actuation/sensing
         self.dx = v * math.cos(self.angle) * self.idiosyncrasies[0]
