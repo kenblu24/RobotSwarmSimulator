@@ -206,10 +206,12 @@ def main(
                 running = False
                 return world
 
-            if total_allowed_steps is not None:
-                if total_allowed_steps > 0 and steps_taken > total_allowed_steps:
+            try:
+                if total_allowed_steps >= 0 and steps_taken > total_allowed_steps:
                     running = False
                     return world
+            except TypeError:
+                pass
 
             world.step()
 

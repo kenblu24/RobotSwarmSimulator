@@ -100,7 +100,7 @@ if __name__ == "__main__":
     if args.discrete_bins is not None:
         round_vars_to_nearest = 1 / (int(args.discrete_bins) - 1)
 
-    sample_worlds[0].save_yaml(exp)
+    sample_worlds[0].save_yaml(exp.path / "env.yaml")
 
     cmaes = CMAES(
         fitness,
