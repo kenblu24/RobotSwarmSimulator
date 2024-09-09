@@ -39,7 +39,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
             "dmin": [0] * 4,
             "dmax": [1] * 4,
             "divisor": neuro_tpc,
-            "named_decoders": {"r": {"rate": {"discrete": False}}},
+            "named_decoders": {"r": {"rate": {"discrete": True}}},
             "use_decoders": ["r"] * 4
         }
         encoder = neuro.EncoderArray(encoder_params)
@@ -85,7 +85,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
             self.neuron_counts = self.processor.neuron_counts()
         data = self.decoder.get_data_from_processor(self.processor)
         # three bins. One for +v, -v, omega.
-        v = self.scale_v * (data[1] - data[0])
-        w = self.scale_w * (data[3] - data[2])
+        v = 0.157030957542 * data[1] - 0.141815737164 * data[0]
+        w = 0.866455820451 * data[3] - 1.336446211942 * data[2]
         return v, w
         # return (0.08, 0.4) if not observation else (0.18, 0.0)  # CMA best controller
