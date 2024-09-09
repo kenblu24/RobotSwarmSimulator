@@ -1,4 +1,4 @@
-from typing import Any, override
+from functools import cache
 # import pygame
 import random
 import math
@@ -11,6 +11,8 @@ from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
 
 # typing
+from typing import Any, override
+
 from ..config.WorldConfig import RectangularWorldConfig
 from ..sensors.SensorSet import SensorSet
 from ..world.World import World
@@ -53,15 +55,27 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
         if self.stop_at_goal is not False:
             raise NotImplementedError  # not tested
 
-        self.as_dict = self.asdict
+    def as_dict(self):
+        return self.asdict()
+
+    def as_config_dict(self):
+        return self.asdict()
 
     def asdict(self):
-        for key, value in self.__dict__:
-            if callable(value.asdict):
+        return dict(self.as_generator())
+
+    def __badvars__(self):
+        return ["world", "world_config"]
+
+    def as_generator(self):
+        for key, value in self.__dict__.items():
+            if any(key == bad for bad in self.__badvars__()):
+                continue
+            if hasattr(value, "asdict"):
                 yield key, value.asdict()
-            elif callable(value.as_dict):
+            elif hasattr(value, "as_dict"):
                 yield key, value.as_dict()
-            elif callable(value.as_config_dict):
+            elif hasattr(value, "as_config_dict"):
                 yield key, value.as_config_dict()
             else:
                 yield key, value
