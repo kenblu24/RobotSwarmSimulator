@@ -43,7 +43,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     trace_length: tuple[int, int, int] | None = None
     trace_color: tuple[int, int, int] | None = None
     network: dict = None
-    neuro_tpc: int = 10
+    neuro_tpc: int | None = 10
     controller: Controller | None = None
     neuro_track_all: bool = False
     track_io: bool = False
@@ -98,7 +98,7 @@ class MazeAgentCaspian(MazeAgent):
         self.scale_v = config.scale_forward_speed  # m/s
         self.scale_w = config.scale_turning_rates  # rad/s
 
-        self.network = network if network is not None else config.network
+        self.network: neuro.Network = network if network is not None else config.network
 
         # for tracking neuron activity
         self.neuron_counts = None
@@ -106,8 +106,15 @@ class MazeAgentCaspian(MazeAgent):
         self.neuro_track_all = config.neuro_track_all
 
         # how many ticks the neuromorphic processor should run for
-        self.neuro_tpc = config.neuro_tpc
-
+        if config.neuro_tpc is None:
+            try:
+                app_params = self.network.get_data("application")
+                self.neuro_tpc = app_params["encoder_ticks"]
+            except RuntimeError as err:
+                raise RuntimeError("Could not find application parameters in network and no neuro_tpc specified.") from err
+        else:
+            self.neuro_tpc = config.neuro_tpc
+        # now that we have the ticks per processor cycle, we can setup encoders & decoders
         self.setup_encoders()
 
         self.processor_params = self.network.get_data("processor")
@@ -123,7 +130,7 @@ class MazeAgentCaspian(MazeAgent):
         self.processor: caspian.Processor
 
     @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
-    def get_default_encoders(neuro_tpc):
+    def get_default_encoders(neuro_tpc=1):
         encoder_params = {
             "dmin": [0] * 5,  # two bins for each binary input + random
             "dmax": [1] * 5,

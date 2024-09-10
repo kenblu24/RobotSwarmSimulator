@@ -26,7 +26,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
 
     @override
     @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
-    def get_default_encoders(neuro_tpc):
+    def get_default_encoders(neuro_tpc=1):
         encoder_params = {
             "dmin": [0] * 2,  # two bins for each binary input + random
             "dmax": [1] * 2,
