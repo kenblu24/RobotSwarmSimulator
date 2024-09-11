@@ -90,8 +90,8 @@ class MillingAgentCaspian(MazeAgentCaspian):
         # three bins. One for +v, -v, omega.
         # these values were taken from an average of speeds/turning rates
         # from measurements of Turbopis 1, 2, 3, 4 @ (100, 90, +-0.5)
-        v_mapping = [0.0, 0.337063867,]
-        w_mapping = [0.0, 0.497794697,]
+        v_mapping = [0.0, 0.276,]
+        w_mapping = [0.0, 0.602,]
         v = v_mapping[data[1]] - v_mapping[data[0]]
         w = w_mapping[data[3]] - w_mapping[data[2]]
         return v, w
