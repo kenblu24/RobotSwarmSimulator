@@ -264,6 +264,7 @@ class MazeAgentConfig:
         self.sensors = kwargs.get("sensors", None)
         self.idiosyncrasies = kwargs.get("idiosyncrasies", False)
         self.delay = kwargs.get("delay", 0)
+        self.sensing_avg = kwargs.get("sensing_avg", 1)
         self.stop_on_collision = kwargs.get("stop_on_collide", False)
         self.stop_at_goal = kwargs.get("stop_at_goal", True)
         self.body_color = kwargs.get("body_color", (255, 255, 255))
