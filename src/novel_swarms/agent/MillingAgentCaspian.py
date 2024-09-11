@@ -11,7 +11,7 @@ import caspian
 
 @dataclass
 class MillingAgentCaspianConfig(MazeAgentCaspianConfig):
-    neuro_tpc: int | None = 1
+    neuro_tpc: int | None = 10
 
     @override
     def create(self, name=None):
@@ -39,7 +39,7 @@ class MillingAgentCaspian(MazeAgentCaspian):
         decoder_params = {
             # see notes near where decoder is used
             "dmin": [0] * 4,
-            "dmax": [1] * 4,
+            "dmax": [2] * 4,
             "divisor": neuro_tpc,
             "named_decoders": {"r": {"rate": {"discrete": False}}},
             "use_decoders": ["r"] * 4
@@ -90,8 +90,8 @@ class MillingAgentCaspian(MazeAgentCaspian):
         # three bins. One for +v, -v, omega.
         # these values were taken from an average of speeds/turning rates
         # from measurements of Turbopis 1, 2, 3, 4 @ (100, 90, +-0.5)
-        v_mapping = [0.0, 0.276,]
-        w_mapping = [0.0, 0.602,]
+        v_mapping = [0.0, 0.2, 0.2]
+        w_mapping = [0.0, 1.2, 2.0]
         v = v_mapping[data[1]] - v_mapping[data[0]]
         w = w_mapping[data[3]] - w_mapping[data[2]]
         return v, w
