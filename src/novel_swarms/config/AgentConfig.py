@@ -1,11 +1,66 @@
 import random
 import os
 from pygame import math
+from dataclasses import dataclass, fields
 
 from .WorldConfig import RectangularWorldConfig
 from ..sensors.SensorSet import SensorSet
 from ..sensors.SensorFactory import SensorFactory
 from ..agent.MazeAgent import MazeAgent
+
+# typing
+from typing import Any, override
+
+from ..world.World import World
+from ..agent.control.Controller import Controller
+
+
+def filter_unexpected_fields(cls):
+    original_init = cls.__init__
+
+    def new_init(self, *args, **kwargs):
+        expected_fields = {field.name for field in fields(cls)}
+        cleaned_kwargs = {key: value for key, value in kwargs.items() if key in expected_fields}
+        unexpected_kwargs = {key: value for key, value in kwargs.items() if key not in expected_fields}
+        for key, value in unexpected_kwargs.items():
+            setattr(self, key, value)
+        original_init(self, *args, **cleaned_kwargs)
+
+    cls.__init__ = new_init
+    return cls
+
+
+@dataclass
+class BaseAgentConfig:
+
+    def __post_init__(self):
+        if self.stop_at_goal is not False:
+            raise NotImplementedError  # not tested
+
+    def as_dict(self):
+        return self.asdict()
+
+    def as_config_dict(self):
+        return self.asdict()
+
+    def asdict(self):
+        return dict(self.as_generator())
+
+    def __badvars__(self):
+        return []
+
+    def as_generator(self):
+        for key, value in self.__dict__.items():
+            if any(key == bad for bad in self.__badvars__()):
+                continue
+            if hasattr(value, "asdict"):
+                yield key, value.asdict()
+            elif hasattr(value, "as_dict"):
+                yield key, value.as_dict()
+            elif hasattr(value, "as_config_dict"):
+                yield key, value.as_config_dict()
+            else:
+                yield key, value
 
 
 class DiffDriveAgentConfig:
@@ -251,50 +306,43 @@ class LevyAgentConfig:
         self.unicycle_config.rescale(zoom)
 
 
-class MazeAgentConfig:
-    def __init__(self, **kwargs):
-        self.x = kwargs.get("x", None)
-        self.y = kwargs.get("y", None)
-        self.angle = kwargs.get("angle", None)
-        self.world = kwargs.get("world_config", None)
-        self.seed = kwargs.get("seed", None)
-        self.dt = kwargs.get("dt", 1.0)
-        self.agent_radius = kwargs.get("agent_radius", 5)
-        self.controller = kwargs.get("controller", None)
-        self.sensors = kwargs.get("sensors", None)
-        self.idiosyncrasies = kwargs.get("idiosyncrasies", False)
-        self.delay = kwargs.get("delay", 0)
-        self.sensing_avg = kwargs.get("sensing_avg", 1)
-        self.stop_on_collision = kwargs.get("stop_on_collide", False)
-        self.stop_at_goal = kwargs.get("stop_at_goal", True)
-        self.body_color = kwargs.get("body_color", (255, 255, 255))
-        self.body_filled = kwargs.get("body_filled", False)
-        self.catastrophic_collisions = kwargs.get("catastrophic_collisions", False)
-        self.trace_length = kwargs.get("trace_length", None)
-        self.trace_color = kwargs.get("trace_color", None)
-        self.track_io = kwargs.get("track_io", False)
+@filter_unexpected_fields
+@dataclass
+class MazeAgentConfig(BaseAgentConfig):
+    x: float | None = None
+    y: float | None = None
+    angle: float | None = None
+    world: World | None = None
+    world_config: RectangularWorldConfig | None = None
+    seed: Any = None
+    agent_radius: float = 5
+    dt: float = 1.0
+    sensors: SensorSet | None = None
+    idiosyncrasies: Any = False
+    delay: str | int | float = 0
+    sensing_avg: int = 1
+    stop_on_collision: bool = False
+    stop_at_goal: bool = False
+    body_color: tuple[int, int, int] = (255, 255, 255)
+    body_filled: bool = False
+    catastrophic_collisions: bool = False
+    trace_length: tuple[int, int, int] | None = None
+    trace_color: tuple[int, int, int] | None = None
+    controller: Controller | None = None
+    track_io: bool = False
+    type: str = ""
+
+    def __post_init__(self):
+        super().__post_init__()
+        if self.stop_at_goal is not False:
+            raise NotImplementedError  # not tested
+
+    @override
+    def __badvars__(self):
+        return super().__badvars__() + ["world", "world_config"]
 
     def attach_world_config(self, world_config):
         self.world = world_config
-
-    def as_dict(self):
-        return {
-            "type": "MazeAgentConfig",
-            "x": self.x,
-            "y": self.y,
-            "angle": self.angle,
-            "seed": self.seed,
-            "dt": self.dt,
-            "agent_radius": self.agent_radius,
-            "body_color": list(self.body_color),
-            "body_filled": self.body_filled,
-            "controller": self.controller,
-            "sensors": self.sensors.as_config_dict(),
-            "idiosyncrasies": self.idiosyncrasies,
-            "stop_on_collision": self.stop_on_collision,
-            "stop_at_goal": self.stop_at_goal,
-            "catastrophic_collisions": self.catastrophic_collisions
-        }
 
     @staticmethod
     def from_dict(d):
@@ -304,7 +352,7 @@ class MazeAgentConfig:
 
     def rescale(self, zoom):
         self.agent_radius *= zoom
-        if hasattr(self, "sensors"):
+        if self.sensors is not None:
             for s in self.sensors:
                 s.r *= zoom
                 s.goal_sensing_range *= zoom
