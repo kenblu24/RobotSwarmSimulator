@@ -74,6 +74,7 @@ def main(
     def draw():
         if gui and screen:
             gui.set_time(steps_taken)
+            gui.sim_paused = paused
             screen.fill(world_config.background_color)
             if draw_world:
                 world.draw(screen)

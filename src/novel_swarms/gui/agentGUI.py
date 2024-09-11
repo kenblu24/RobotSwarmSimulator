@@ -25,6 +25,7 @@ class DifferentialDriveGUI(AbstractGUI):
     subtitle = None
     selected = None
     text_baseline = 10
+    sim_paused = False
 
     def __init__(self, x=0, y=0, w=0, h=0):
         super().__init__(x=x, y=y, w=w, h=h)
