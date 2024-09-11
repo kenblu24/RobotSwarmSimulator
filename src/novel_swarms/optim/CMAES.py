@@ -38,13 +38,13 @@ class CMAES:
         pop_size=10,
         max_iters=None,
         target=0.0,
-        num_processes=1,
+        num_processes=None,
         stop_detection_method=None,
         show_each_step=False,
         experiment=None,
         round_to_every=None,
         eval_is_deterministic=False,
-        use_tqdm=False,
+        use_tqdm=True,
     ):
         genome_size = len(dvars)
         self.f = f
@@ -66,6 +66,7 @@ class CMAES:
         self.seed = 1
         self.cache_answers = eval_is_deterministic
         self.use_tqdm = use_tqdm
+        self.hide_tqdm = True
 
         # Data collection
         if self.experiment is not None:
@@ -142,13 +143,13 @@ class CMAES:
         if self.dvars:
             parameters = [self.dvars.from_unit_to_scaled(p) for p in parameters]
         configs = [self.g_to_w(genome, norm) for genome, norm in zip(parameters, normalized)]
-        processor = MultiWorldSimulation(pool_size=self.n_processes, single_step=False, with_gui=False)
+        processor = MultiWorldSimulation(pool_size=self.n_processes, single_step=False, with_gui=False,
+            use_tqdm=self.use_tqdm, hide_tqdm=self.hide_tqdm)
 
         batched_worlds = isinstance(configs[0], list)
 
         # Blocking MultiProcess Execution
-        ret = processor.execute(configs, world_stop_condition=self.w_stop_method,
-                                batched=batched_worlds, use_tqdm=self.use_tqdm)
+        ret = processor.execute(configs, world_stop_condition=self.w_stop_method, batched=batched_worlds)
         for i, world_set in enumerate(ret):
             key = world_set[0].meta["hash"] if batched_worlds else world_set.meta["hash"]
             fitness = self.f(world_set)

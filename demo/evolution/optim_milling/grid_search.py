@@ -51,7 +51,6 @@ if __name__ == "__main__":
         target=PERFECT_CIRCLE_SCORE,
         experiment=exp,
         pop_size=0,
-        use_tqdm=True,
     )
 
     cmaes.sweep_parameters(args.dimension)
