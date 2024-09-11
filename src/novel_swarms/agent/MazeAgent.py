@@ -68,8 +68,10 @@ class MazeAgent(Agent):
         # I2_MEAN, I2_SD = 0.95, 0.06
         self.delay_1 = st.Delay(delay=config.delay)
         self.delay_2 = st.Delay(delay=config.delay)
+        self.sensing_avg = st.Average(config.sensing_avg)
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
+        self.iD = 0
         self.dead = False
         self.goal_seen = False
         self.stop_at_goal = config.stop_at_goal
@@ -127,9 +129,13 @@ class MazeAgent(Agent):
         omega = self.delay_2(omega)
 
         # Define Idiosyncrasies that may occur in actuation/sensing
-        self.dx = v * math.cos(self.angle) * self.idiosyncrasies[0]
-        self.dy = v * math.sin(self.angle) * self.idiosyncrasies[1]
-        self.dtheta = omega * self.idiosyncrasies[-1]
+        # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
+        self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
+        dtheta2 = self.dtheta / 2
+        self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
+        s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
+        self.dx = s * math.cos(self.angle + dtheta2) * self.idiosyncrasies[0]
+        self.dy = s * math.sin(self.angle + dtheta2) * self.idiosyncrasies[1]
 
         old_x_pos = self.x_pos
         old_y_pos = self.y_pos
@@ -141,10 +147,10 @@ class MazeAgent(Agent):
                 self.body_color = (200, 200, 200)
                 return
         else:
-            self.x_pos += self.dx * self.dt
-            self.y_pos += self.dy * self.dt
+            self.x_pos += self.dx
+            self.y_pos += self.dy
 
-        self.angle += self.dtheta * self.dt
+        self.angle += self.dtheta
 
         self.collision_flag = False
         if check_for_world_boundaries is not None:

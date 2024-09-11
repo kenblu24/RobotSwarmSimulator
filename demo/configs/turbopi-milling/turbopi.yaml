@@ -11,8 +11,8 @@ sensors:
       goal_sensing_range: 1.0
       use_goal_state: true
       wall_sensing_range: 1.0
-      fn: 0.10  # 0.10
-      fp: 0.05  # 0.05
+      # fn: 0.10  # 0.10
+      # fp: 0.05  # 0.05
       bias: 0
       store_history: false
       seed: 10
@@ -20,16 +20,17 @@ controller: "self"
 agent_radius: 0.1
 stop_at_goal: false
 dt: 0.025
-delay: 15
-idiosyncrasies:
-  mean:
-    - 0.9
-    - 0.9
-    - 0.95
-  sd:
-    - 0.1
-    - 0.1
-    - 0.06
+# sensing_avg: 10
+# delay: 15
+# idiosyncrasies:
+#   mean:
+#     - 0.9
+#     - 0.9
+#     - 0.95
+#   sd:
+#     - 0.1
+#     - 0.1
+#     - 0.06
 scale_forward_speed: 0.2  # m/s
 scale_turning_rates: 2.0  # m/s
 body_color:
