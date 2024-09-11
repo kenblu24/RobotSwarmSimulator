@@ -100,10 +100,10 @@ class RectangularWorldConfig:
             "init_type": self.init_type.as_dict()
         }
 
-    def save_yaml(self, path=None):
+    def save_yaml(self, path):
         import yaml
         with open(path, "w") as f:
-            yaml.dump(data, f)
+            yaml.dump(self.as_dict, f)
 
     @staticmethod
     def from_dict(d):
