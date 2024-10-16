@@ -13,6 +13,8 @@ class HomogeneousController(Controller):
         """
         sigma = agent.goal_seen  # Whether the goal has been detected previously by this agent
         gamma = agent.agent_in_sight is not None  # Whether the agent detects another agent
+        if hasattr(agent, "sensing_avg"):
+            gamma = agent.sensing_avg(gamma)
         wall_detected = not gamma and agent.sensors.sensors[0].current_state == 1
 
         u_1, u_2 = 0.0, 0.0  # Set these by default

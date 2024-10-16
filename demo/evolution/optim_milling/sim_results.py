@@ -13,17 +13,17 @@ from .milling_search import DECISION_VARS, SCALE, BL
 # from .milling_search import fitness
 
 
-def metric_to_canon(genome: tuple[float, float, float, float], scale=SCALE):
+def metric_to_canon(genome: tuple[float, float, float, float], body_length, scale=SCALE):
     v0, w0, v1, w1 = genome
-    v0 *= scale / BL
-    v1 *= scale / BL
+    v0 *= scale / body_length
+    v1 *= scale / body_length
     return (v0, w0, v1, w1)
 
 
-def canon_to_metric(genome: tuple[float, float, float, float], scale=SCALE):
+def canon_to_metric(genome: tuple[float, float, float, float], body_length, scale=SCALE):
     v0, w0, v1, w1 = genome
-    v0 /= scale / BL
-    v1 /= scale / BL
+    v0 /= scale / body_length
+    v1 /= scale / body_length
     return (v0, w0, v1, w1)
 
 
@@ -59,63 +59,65 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--n", type=int, default=10, help="Number of agents")
-    parser.add_argument("--t", type=int, default=1000, help="Environment Horizon")
-    parser.add_argument("--no-stop", action="store_true", help="Whether to stop at T limit or not")
+    parser.add_argument("-n", type=int, default=10, help="Number of agents")
+    parser.add_argument("-t", type=int, default=1000, help="Environment Horizon")
+    parser.add_argument("--no-stop", action="store_true", help="If specified, the simulation will not terminate at T timesteps")
     parser.add_argument("--print", action="store_true")
     parser.add_argument("--nogui", action="store_true")
-    parser.add_argument("--discrete-bins", default=None, help="How many bins to discretize the decision variables into")
-    parser.add_argument('--positions', default=None,
-                             help="file containing agent positions")
+    parser.add_argument("--discrete-bins", help="How many bins to discretize the decision variables into")
+    parser.add_argument('--positions', help="file containing agent positions")
+    parser.add_argument("-b", "--bodylength", type=float, help="body length value")
     genome_parser = parser.add_mutually_exclusive_group(required=True)
     genome_parser.add_argument(
         "--genome",
         type=float,
-        help="meters/second genome",
+        help="meters/second genome (4 floats expected: v0, w0, v1, w1)",
         default=None,
         nargs=4,
     )
     genome_parser.add_argument(
         "--normalized_genome",
         type=float,
-        help="Genome values (4 floats expected between [0, 1])",
+        help="Normalized genome values (4 floats expected between [0, 1]: v0, w0, v1, w1)",
         default=None,
         nargs=4,
     )
     genome_parser.add_argument(
-        "--metric_genome",
+        "--bodylength_genome",
         type=float,
-        help="Genome values (4 floats expected between [0, 1])",
+        help="Genome values (4 floats expected: v0, w0, v1, w1)",
         default=None,
-        nargs=4,
+        nargs=5,
     )
 
     args = parser.parse_args()
+
+    bl = args.bodylength
 
     if args.normalized_genome:
         genome = args.normalized_genome
 
         if args.discrete_bins:
             increment = 1 / (int(args.discrete_bins) - 1)
-            genome = [CMAES.round_to_nearest(x, increment=increment) for x in genome]
+            genome = CMAES.round_to_nearest(genome, increment=increment)
 
-        genome = DECISION_VARS.from_normalized_to_scaled(genome)
+        genome = DECISION_VARS.from_unit_to_scaled(genome)
 
-    elif args.metric_genome:
-        genome = metric_to_canon(args.metric_genome)
-
-    else:
+    elif args.genome:
         genome = args.genome
+
+    elif args.bodylength_genome:
+        genome = canon_to_metric(args.genome, bl)
 
     if args.discrete_bins and not args.normalized_genome:
         raise ArgumentError(args.discrete_bins, "Discrete binning can only be used with --normalized_genome")
 
     if args.print:
-        metric_genome = canon_to_metric(genome)
-        m = metric_genome
         g = genome
-        print(f"v0   (m/s):\t{m[0]:>16.12f}\tv1   (m/s):\t{m[2]:>16.12f}")
-        print(f"v0 (canon):\t{g[0]:>16.12f}\tv1 (canon):\t{g[2]:>16.12f}")
+        print(f"v0   (m/s):\t{g[0]:>16.12f}\tv1   (m/s):\t{g[2]:>16.12f}")
+        if bl is not None:
+            c = metric_to_canon(g, bl)
+            print(f"v0 (canon):\t{c[0]:>16.12f}\tv1 (canon):\t{c[2]:>16.12f}")
         print(f"w0 (rad/s):\t{g[1]:>16.12f}\tw1 (rad/s):\t{g[3]:>16.12f}")
 
     if args.positions:

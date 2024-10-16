@@ -1,4 +1,4 @@
-from typing import Any, override
+from functools import cache
 # import pygame
 import random
 import math
@@ -11,6 +11,8 @@ from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
 
 # typing
+from typing import Any, override
+
 from ..config.WorldConfig import RectangularWorldConfig
 from ..sensors.SensorSet import SensorSet
 from ..world.World import World
@@ -32,6 +34,8 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     dt: float = 1.0
     sensors: SensorSet | None = None
     idiosyncrasies: Any = False
+    delay: str | int | float = 0
+    sensing_avg: int = 1
     stop_on_collision: bool = False
     stop_at_goal: bool = False
     body_color: tuple[int, int, int] = (255, 255, 255)
@@ -40,7 +44,7 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
     trace_length: tuple[int, int, int] | None = None
     trace_color: tuple[int, int, int] | None = None
     network: dict = None
-    neuro_tpc: int = 10
+    neuro_tpc: int | None = 10
     controller: Controller | None = None
     neuro_track_all: bool = False
     track_io: bool = False
@@ -52,15 +56,27 @@ class MazeAgentCaspianConfig(MazeAgentConfig):
         if self.stop_at_goal is not False:
             raise NotImplementedError  # not tested
 
-        self.as_dict = self.asdict
+    def as_dict(self):
+        return self.asdict()
+
+    def as_config_dict(self):
+        return self.asdict()
 
     def asdict(self):
-        for key, value in self.__dict__:
-            if callable(value.asdict):
+        return dict(self.as_generator())
+
+    def __badvars__(self):
+        return ["world", "world_config"]
+
+    def as_generator(self):
+        for key, value in self.__dict__.items():
+            if any(key == bad for bad in self.__badvars__()):
+                continue
+            if hasattr(value, "asdict"):
                 yield key, value.asdict()
-            elif callable(value.as_dict):
+            elif hasattr(value, "as_dict"):
                 yield key, value.as_dict()
-            elif callable(value.as_config_dict):
+            elif hasattr(value, "as_config_dict"):
                 yield key, value.as_config_dict()
             else:
                 yield key, value
@@ -83,7 +99,7 @@ class MazeAgentCaspian(MazeAgent):
         self.scale_v = config.scale_forward_speed  # m/s
         self.scale_w = config.scale_turning_rates  # rad/s
 
-        self.network = network if network is not None else config.network
+        self.network: neuro.Network = network if network is not None else config.network
 
         # for tracking neuron activity
         self.neuron_counts = None
@@ -91,8 +107,15 @@ class MazeAgentCaspian(MazeAgent):
         self.neuro_track_all = config.neuro_track_all
 
         # how many ticks the neuromorphic processor should run for
-        self.neuro_tpc = config.neuro_tpc
-
+        if config.neuro_tpc is None:
+            try:
+                app_params = self.network.get_data("application")
+                self.neuro_tpc = app_params["encoder_ticks"]
+            except RuntimeError as err:
+                raise RuntimeError("Could not find application parameters in network and no neuro_tpc specified.") from err
+        else:
+            self.neuro_tpc = config.neuro_tpc
+        # now that we have the ticks per processor cycle, we can setup encoders & decoders
         self.setup_encoders()
 
         self.processor_params = self.network.get_data("processor")
@@ -108,7 +131,7 @@ class MazeAgentCaspian(MazeAgent):
         self.processor: caspian.Processor
 
     @staticmethod  # to get encoder structure/#neurons for external network generation (EONS)
-    def get_default_encoders(neuro_tpc):
+    def get_default_encoders(neuro_tpc=1):
         encoder_params = {
             "dmin": [0] * 5,  # two bins for each binary input + random
             "dmax": [1] * 5,
@@ -203,6 +226,5 @@ class MazeAgentCaspian(MazeAgent):
         self.set_color_by_id(sensor_detection_id)
 
         v, omega = self.run_processor(sensor_state)
-        v *= 10
         self.requested = v, omega
         return self.requested

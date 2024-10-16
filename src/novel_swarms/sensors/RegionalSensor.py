@@ -29,18 +29,20 @@ class RegionalSensor(AbstractSensor):
         super(RegionalSensor, self).step(world=world)
         self.checkForLOSCollisions(world=world)
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         if not self.show:
             return
-        super(RegionalSensor, self).draw(screen)
+        super(RegionalSensor, self).draw(screen, zoom)
 
         # Draw Sensory Vector (Vision Vector)
         sight_color = (255, 0, 0)
         if self.current_state == 1:
             sight_color = (0, 255, 0)
 
-        r = self.parent.radius + 2.0
-        pygame.draw.circle(screen, sight_color, (self.parent.x_pos, self.parent.y_pos), r, width=1)
+        width = max(1, round(zoom))
+        r = self.parent.radius * zoom + width * 2
+        pos = np.asarray(self.parent.getPosition()) * zoom
+        pygame.draw.circle(screen, sight_color, (*pos,), r, width=width)
 
     def getLOSVector(self) -> List:
         head = self.parent.getPosition()

@@ -19,8 +19,8 @@ class BinaryLOSSensor(AbstractSensor):
         sensor_position = self.parent.getPosition()
 
         # Equations taken from Dunn's 3D Math Primer for Graphics, section A.12
-        p_0 = np.array(sensor_position)
-        d = np.array(self.getLOSVector())
+        p_0 = np.asarray(sensor_position)
+        d = np.asarray(self.getLOSVector())
         d_hat = d / np.linalg.norm(d)
 
         # Check seen agent from last frame first, to avoid expensive computation
@@ -47,7 +47,7 @@ class BinaryLOSSensor(AbstractSensor):
         if agent == self.parent:
             return False
 
-        c = np.array(agent.getPosition())
+        c = np.asarray(agent.getPosition())
         e = c - p_0
         a = np.dot(e, d_hat)
         if a < 0:
@@ -67,27 +67,25 @@ class BinaryLOSSensor(AbstractSensor):
         super(BinaryLOSSensor, self).step(world=world)
         self.checkForLOSCollisions(world=world)
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset
+        pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
         if not self.show:
             return
-        super(BinaryLOSSensor, self).draw(screen)
+        super(BinaryLOSSensor, self).draw(screen, zoom)
 
         # Draw Sensory Vector (Vision Vector)
         sight_color = (255, 0, 0)
         if self.current_state == 1:
             sight_color = (0, 255, 0)
 
-        magnitude = self.parent.radius * (20 if self.parent.is_highlighted else 1)
+        magnitude = self.parent.radius * (20 if self.parent.is_highlighted else 1) * zoom
         magnitude *= 5 if self.angle is None else 3
 
-        head = (self.parent.x_pos, self.parent.y_pos)
-
-        if self.angle is None:
-            tail = (self.parent.x_pos + (magnitude * math.cos(self.parent.angle)),
-                    self.parent.y_pos + (magnitude * math.sin(self.parent.angle)))
-        else:
-            tail = (self.parent.x_pos + (magnitude * math.cos(self.angle + self.parent.angle)),
-                    self.parent.y_pos + (magnitude * math.sin(self.angle + self.parent.angle)))
+        head = np.asarray(self.parent.getPosition()) * zoom
+        angle = self.parent.angle if self.angle is None else self.parent.angle + self.angle
+        uv = np.array((math.cos(angle), math.sin(angle))) * magnitude
+        tail = head + uv
 
         pygame.draw.line(screen, sight_color, head, tail, width=self.width)
 

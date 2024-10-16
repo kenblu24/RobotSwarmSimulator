@@ -32,7 +32,8 @@ class PersistentHomology(AbstractBehavior):
             print(f"Persistent Homology Error: {e}")
             self.set_value(np.nan)
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         if self.draw_cycles:
             cocycles = self.rips_data["cocycles"]
             color = (255, 0, 255) if self.dims == 0 else (255, 0, 0)

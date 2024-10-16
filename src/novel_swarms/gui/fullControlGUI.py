@@ -76,7 +76,7 @@ class FullControlGUI(AbstractGUI):
 
         for button in some_buttons:
             button.set_font_size(12)
-       
+
         self.box = tp.Box(some_buttons)
         self.box.sort_children("grid", nx=3, ny=1)
         # self.box.sort_children(margins=(40,40)) #use large margin so we can test negative resize easily
@@ -84,8 +84,9 @@ class FullControlGUI(AbstractGUI):
         self.box.center_on(self.rec)
         self.box_updater = self.box.get_updater()
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         super().draw(screen)
         self.box_updater.update(events=self.events, mouse_rel=self.mouse_rel)
-    
-        
+
+

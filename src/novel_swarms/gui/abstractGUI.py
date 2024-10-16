@@ -15,8 +15,9 @@ class AbstractGUI:
         #print("Attaching New Agent")
         pass
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, color=(10,10,10), rect=Rect((self.x, self.y),(self.w, self.h)))
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        pass
+        # pygame.draw.rect(screen, color=(10,10,10), rect=Rect((self.x, self.y),(self.w, self.h)))
 
     def recieve_events(self, events):
         pass

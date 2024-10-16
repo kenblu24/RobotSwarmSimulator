@@ -1,4 +1,5 @@
-from typing import Tuple
+from typing import NamedTuple, Tuple
+from collections import namedtuple
 import pygame
 import random
 import math
@@ -10,6 +11,7 @@ from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
 from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
+from ..util import statistics_tools as st
 from .control.Controller import Controller
 
 # # typing
@@ -17,6 +19,9 @@ from .control.Controller import Controller
 #     from ..config.AgentConfig import MazeAgentConfig
 # except ImportError:
 #     pass
+
+SPA = namedtuple("SPA", ['state', 'perception', 'action'])
+State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
 
 class MazeAgent(Agent):
@@ -54,13 +59,19 @@ class MazeAgent(Agent):
         self.dt = config.dt
         self.is_highlighted = False
         self.agent_in_sight = None
-        self.idiosyncrasies = config.idiosyncrasies
-        I1_MEAN, I1_SD = 0.93, 0.08
-        I2_MEAN, I2_SD = 0.95, 0.06
-        self.i_1 = np.random.normal(I1_MEAN, I1_SD) if self.idiosyncrasies else 1.0
-        self.i_2 = np.random.normal(I2_MEAN, I2_SD) if self.idiosyncrasies else 1.0
+        if config.idiosyncrasies:
+            idiosync = config.idiosyncrasies
+            self.idiosyncrasies = [np.random.normal(mean, sd) for mean, sd in zip(idiosync['mean'], idiosync['sd'])]
+        else:
+            self.idiosyncrasies = [1.0, 1.0]
+        # I1_MEAN, I1_SD = 0.93, 0.08
+        # I2_MEAN, I2_SD = 0.95, 0.06
+        self.delay_1 = st.Delay(delay=config.delay)
+        self.delay_2 = st.Delay(delay=config.delay)
+        self.sensing_avg = st.Average(config.sensing_avg)
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
+        self.iD = 0
         self.dead = False
         self.goal_seen = False
         self.stop_at_goal = config.stop_at_goal
@@ -108,15 +119,23 @@ class MazeAgent(Agent):
 
         if self.track_io:
             sensor_state = self.sensors.getState()
-            self.history.append((sensor_state, (v, omega)))
+            self.history.append(SPA(
+                State(self.x_pos, self.y_pos, self.angle),
+                sensor_state,
+                (v, omega),
+            ))
+
+        v = self.delay_1(v)
+        omega = self.delay_2(omega)
 
         # Define Idiosyncrasies that may occur in actuation/sensing
-        idiosync_1 = self.i_1
-        idiosync_2 = self.i_2
-
-        self.dx = v * math.cos(self.angle) * idiosync_1
-        self.dy = v * math.sin(self.angle) * idiosync_1
-        dw = omega * idiosync_2
+        # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
+        self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
+        dtheta2 = self.dtheta / 2
+        self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
+        s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
+        self.dx = s * math.cos(self.angle + dtheta2) * self.idiosyncrasies[0]
+        self.dy = s * math.sin(self.angle + dtheta2) * self.idiosyncrasies[1]
 
         old_x_pos = self.x_pos
         old_y_pos = self.y_pos
@@ -128,10 +147,10 @@ class MazeAgent(Agent):
                 self.body_color = (200, 200, 200)
                 return
         else:
-            self.x_pos += self.dx * self.dt
-            self.y_pos += self.dy * self.dt
+            self.x_pos += self.dx
+            self.y_pos += self.dy
 
-        self.angle += dw * self.dt
+        self.angle += self.dtheta
 
         self.collision_flag = False
         if check_for_world_boundaries is not None:
@@ -150,22 +169,24 @@ class MazeAgent(Agent):
             if sensor.goal_detected:
                 self.goal_seen = True
 
-    def draw(self, screen) -> None:
-        super().draw(screen)
+    def draw(self, screen, offset=((0, 0), 1.0)) -> None:
+        pan, zoom = np.asarray(offset[0]), offset[1]
+        super().draw(screen, offset)
         for sensor in self.sensors:
-            sensor.draw(screen)
+            sensor.draw(screen, offset)
 
         # Draw Cell Membrane
         filled = 0 if (self.is_highlighted or self.stopped_duration or self.body_filled) else 1
-        color = self.body_color if not self.stopped_duration else (255,255,51)
-        pygame.draw.circle(screen, color, (self.x_pos, self.y_pos), self.radius, width=filled)
+        color = self.body_color if not self.stopped_duration else (255, 255, 51)
+        pos = np.asarray(self.getPosition()) * zoom + pan
+        pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)
 
         # "Front" direction vector
-        head = self.getFrontalPoint()
-        tail = self.getPosition()
-        vec = [head[0] - tail[0], head[1] - tail[1]]
+        head = np.asarray(self.getFrontalPoint()) * zoom + pan
+        tail = pos
+        vec = head - tail
         mag = self.radius * 2
-        vec_with_magnitude = ((vec[0] * mag) + tail[0], (vec[1] * mag) + tail[1])
+        vec_with_magnitude = tail + vec * mag
         pygame.draw.line(screen, (255, 255, 255), tail, vec_with_magnitude)
 
 

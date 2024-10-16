@@ -14,17 +14,17 @@ from src.novel_swarms.behavior import Circliness
 from src.novel_swarms.agent.control.HomogeneousController import HomogeneousController
 # from src.novel_swarms.world.simulate import main as sim
 
-SCALE = 10
+SCALE = 1
 
-MMS_MAX = 0.2  # max speed in mm/s
+MS_MAX = 0.2  # max speed in m/s
 BL = 0.151  # body length
-BLS_MAX = MMS_MAX / BL  # max speed in body lengths per second
+BLS_MAX = MS_MAX / BL  # max speed in body lengths per second
 
 DECISION_VARS = CMAESVarSet(
     {
-        "forward_rate_0": [-(BLS_MAX * SCALE), BLS_MAX * SCALE],  # Body Lengths / second, will be converted to pixel values during search
+        "forward_rate_0": [-MS_MAX, MS_MAX],  # Body Lengths / second, will be converted to pixel values during search
         "turning_rate_0": [-2.0, 2.0],  # Radians / second
-        "forward_rate_1": [-(BLS_MAX * SCALE), BLS_MAX * SCALE],  # Body Lengths / second, will be converted to pixel values during search
+        "forward_rate_1": [-MS_MAX, MS_MAX],  # Body Lengths / second, will be converted to pixel values during search
         "turning_rate_1": [-2.0, 2.0],  # Radians / second
     }
 )
@@ -45,13 +45,13 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
     def gene_to_world(genome, hash_val):
 
-        goal_agent = AgentYAMLFactory.from_yaml("demo/configs/flockbots-icra-milling/flockbot.yaml")
+        goal_agent = AgentYAMLFactory.from_yaml("demo/configs/turbopi-milling/turbopi.yaml")
         goal_agent.controller = HomogeneousController(genome)
-        goal_agent.seed = 0
+        # goal_agent.seed = 0
         goal_agent.rescale(SCALE)
 
-        world = WorldYAMLFactory.from_yaml("demo/configs/flockbots-icra-milling/world.yaml")
-        world.seed = 0
+        world = WorldYAMLFactory.from_yaml("demo/configs/turbopi-milling/world.yaml")
+        # world.seed = 0
         world.behavior = [
             Circliness(avg_history_max=CIRCLINESS_HISTORY)
         ]
@@ -74,9 +74,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--name", type=str, help="Name of the experiment", default=None)
     parser.add_argument("--root", type=str, help="Experiment folder root", default=None)
-    parser.add_argument("--n", type=int, default=10, help="Number of agents")
-    parser.add_argument("--t", type=int, default=1000, help="Environment Horizon")
-    parser.add_argument("--processes", type=int, default=1, help="Number of running concurrent processes")
+    parser.add_argument("-n", type=int, default=10, help="Number of agents")
+    parser.add_argument("-t", type=int, default=1000, help="Environment Horizon")
+    parser.add_argument("--processes", type=int, default=None, help="Number of running concurrent processes")
     parser.add_argument("--iters", type=int, default=None, help="Number of Evolutions to consider")
     parser.add_argument("--pop-size", type=int, default=15, help="The size of each generation's population")
     parser.add_argument("--discrete-bins", default=None, help="How many bins to discretize the decision variables into")
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     if args.discrete_bins is not None:
         round_vars_to_nearest = 1 / (int(args.discrete_bins) - 1)
 
-    sample_worlds[0].save_yaml(exp)
+    sample_worlds[0].save_yaml(exp.path / "env.yaml")
 
     cmaes = CMAES(
         fitness,
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         experiment=exp,
         max_iters=args.iters,
         pop_size=args.pop_size,
-        round_to_every=round_vars_to_nearest
+        round_to_every=round_vars_to_nearest,
     )
 
     cmaes.minimize()

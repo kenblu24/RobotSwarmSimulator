@@ -37,7 +37,7 @@ class ConvexHull(AbstractBehavior):
 
         self.set_value(self.polygon.area())
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         if not self.polygon:
             return
         self.polygon.draw(screen, color=(0, 255, 0), width=4)
@@ -93,7 +93,7 @@ class InverseConvexHull(AbstractBehavior):
 
         self.set_value(self.polygon.area())
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         if not self.polygon:
             return
         self.polygon.draw(screen, color=(255, 0, 0), width=4)

@@ -3,7 +3,7 @@ class WorldObject:
         self.world = world
         self.detectable = detectable
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         pass
 
     def step(self):

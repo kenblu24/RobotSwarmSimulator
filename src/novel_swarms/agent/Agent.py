@@ -11,6 +11,7 @@ class Agent:
         self.name = name
         self.dy = 0
         self.dx = 0
+        self.dtheta = 0
         self.angle = angle
         self.sensors = sensors
         self.collision_flag = False
@@ -24,7 +25,8 @@ class Agent:
     def step(self, check_for_world_boundaries=None) -> None:
         pass
 
-    def draw(self, screen) -> None:
+    def draw(self, screen, offset=((0, 0), 1.0)) -> None:
+        # TODO: Implement offset/zoom
         pass
 
     def get_sensors(self):

@@ -21,10 +21,10 @@ class RectangularWorldConfig:
             self.agent_init = kwargs.get("agent_initialization")
             if len(self.agent_init) != n_agents:
                 raise Exception(f"Length of Predefined Starting Locations ({len(self.agent_init)}) must equal number of agents ({n_agents})")
-        
+
         elif init_type is None:
             init_type = RectRandomInitialization(num_agents=n_agents, bb=((0, 0), size))
-        
+
         self.init_type = init_type
         self.behavior = behavior
         self.w = size[0]
@@ -100,11 +100,10 @@ class RectangularWorldConfig:
             "init_type": self.init_type.as_dict()
         }
 
-    def save_yaml(self, experiment):
+    def save_yaml(self, path):
         import yaml
-        path = os.path.join(experiment.root(), "env.yaml")
-        with open(path, "w") as out_file:
-            yaml.dump(self.as_dict(), out_file)
+        with open(path, "w") as f:
+            yaml.dump(self.as_dict, f)
 
     @staticmethod
     def from_dict(d):

@@ -22,7 +22,10 @@ class AbstractBehavior():
         self.current_value = value
 
     def out_current(self) -> Tuple:
-        return (self.name, self.value_history[-1])
+        try:
+            return (self.name, self.value_history[-1])
+        except IndexError:
+            return (self.name, None)
 
     def out_average(self) -> Tuple:
         return (self.name, average(self.value_history))
@@ -31,7 +34,7 @@ class AbstractBehavior():
         self.current_value = 0
         self.value_history = []
 
-    def draw(self, screen):
+    def draw(self, screen, zoom=1.0):
         pass
 
     def as_config_dict(self):

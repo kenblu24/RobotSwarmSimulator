@@ -59,7 +59,8 @@ class ControllerGUI(AbstractGUI):
         for i in range(len(self.world.population)):
             self.world.population[i].controller[self.selected_c] = v
 
-    def draw(self, screen):
+    def draw(self, screen, offset=((0, 0), 1.0)):
+        # TODO: Implement offset/zoom
         super().draw(screen)
         self.text_baseline = 10
         c = self.world.population[0].controller

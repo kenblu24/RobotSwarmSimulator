@@ -2,6 +2,7 @@ import math
 import random
 import numpy as np
 from typing import List, Tuple
+import pygame
 import pygame.draw
 from ..agent.Agent import Agent
 from ..agent.DiffDriveAgent import DifferentialDriveAgent
@@ -14,6 +15,9 @@ from ..util.timer import Timer
 from ..util.collider.AABB import AABB
 from .goals.Goal import CylinderGoal
 from .objects.Wall import Wall
+
+
+min_zoom = 0.0001
 
 
 def distance(pointA, pointB) -> float:
@@ -33,6 +37,10 @@ class RectangularWorld(World):
         self.objects = config.objects
         self.goals = config.goals
         self.seed = config.seed
+        self.zoom = 1.0
+        self._original_zoom = 1.0
+        self.pos = np.array([0.0, 0.0])
+        self._mouse_dragging_last_pos = np.array([0.0, 0.0])
 
         self.selected = None
         self.highlighted_set = []
@@ -71,7 +79,7 @@ class RectangularWorld(World):
         # Iniitalize the Agents
         if config.init_type:
             config.init_type.set_to_world(self)
-       
+
         else:  # TODO: Deprecate defined_start
             if config.defined_start:
                 for i in range(len(config.agent_init)):
@@ -134,26 +142,31 @@ class RectangularWorld(World):
             behavior.calculate()
         # behavior_timer.check_watch()
 
-    def draw(self, screen):
+    def draw(self, screen, offset=None):
         """
         Cycle through the entire population and draw the agents. Draw Environment Walls if needed.
         """
+        if offset is None:
+            offset = (self.pos, self.zoom)
+        pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]
         if self.config.show_walls:
-            p = self.config.padding
-            w = self.config.w
-            h = self.config.h
-            pygame.draw.rect(screen, (200, 200, 200), pygame.Rect((p, p), (w - (2 * p), h - (2 * p))), 1)
+            p = self.config.padding * zoom
+            size = np.array((self.config.w, self.config.h)) * zoom
+            pad = np.array((p, p))
+            a = pan + pad  # upper left corner
+            b = pan + size - pad * 2
+            pygame.draw.rect(screen, (200, 200, 200), pygame.Rect(a, b), 1)
 
         for world_obj in self.objects:
-            world_obj.draw(screen)
+            world_obj.draw(screen, offset)
 
         for world_goal in self.goals:
-            world_goal.draw(screen)
+            world_goal.draw(screen, offset)
 
         for agent in self.population:
             if not issubclass(type(agent), Agent):
                 raise Exception("Agents must be subtype of Agent, not {}".format(type(agent)))
-            agent.draw(screen)
+            agent.draw(screen, offset)
 
     def getNeighborsWithinDistance(self, center: Tuple, r, excluded=None) -> List:
         """
@@ -168,8 +181,11 @@ class RectangularWorld(World):
                     filtered_agents.append(agent)
         return filtered_agents
 
-    def onClick(self, pos) -> None:
-        neighborhood = self.getNeighborsWithinDistance(pos, self.population[0].radius)
+    def onClick(self, event) -> None:
+        viewport_pos = np.asarray(event.pos)
+        pos = (viewport_pos - self.pos) / self.zoom
+        d = self.population[0].radius * 1.1
+        neighborhood = self.getNeighborsWithinDistance(pos, d)
 
         # Remove Highlights from all agents
         if self.selected is not None:
@@ -185,6 +201,49 @@ class RectangularWorld(World):
         if self.gui is not None:
             self.gui.set_selected(neighborhood[0])
             neighborhood[0].is_highlighted = True
+
+    def onZoom(self, mouse_event, scroll_event):
+        if not (mouse_event.type == pygame.MOUSEBUTTONUP and scroll_event.type == pygame.MOUSEWHEEL):
+            raise TypeError("Expected a mouse button up and scroll event.")
+
+        pos = np.asarray(mouse_event.pos)
+        v = scroll_event.precise_y
+        self.do_zoom(pos, v)
+
+    def do_zoom(self, point, v):
+        v *= 0.4
+        old_zoom = self.zoom
+        self.zoom = self.zoom * (2 ** v)
+        self.zoom = max(self.zoom, min_zoom)
+        # print(f"zoom: {round(old_zoom, 6): >10f} --> {round(self.zoom, 6): >10f}")
+        point = point.astype(np.float64)
+        center_px = np.array([self.config.w, self.config.h]) / 2
+        point -= center_px
+        self.pos = (self.pos - point) * self.zoom / old_zoom + point
+
+    def zoom_reset(self):
+        self.zoom = self.original_zoom
+        self.pos = np.array([0.0, 0.0])
+
+    @property
+    def original_zoom(self):
+        return self._original_zoom
+
+    @original_zoom.setter
+    def original_zoom(self, value):
+        self._original_zoom = value
+        self.zoom = value
+
+    def handle_middle_mouse_events(self, events):
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self._mouse_dragging_last_pos = np.asarray(event.pos)
+
+    def handle_middle_mouse_held(self, pos):
+        pos = np.asarray(pos)
+        delta = pos - self._mouse_dragging_last_pos
+        self.pos += delta
+        self._mouse_dragging_last_pos = pos
 
     def withinWorldBoundaries(self, agent: DifferentialDriveAgent):
         """
