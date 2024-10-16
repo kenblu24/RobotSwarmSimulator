@@ -3,74 +3,41 @@ import math
 from .RadialVariance import RadialVarianceBehavior
 import rss
 
+
 class DistanceSizeRatio(RadialVarianceBehavior):
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = self.__class__.__name__
 
     # This function creates a metric for the agents to follow
-    
+
     def _calculate(self, world):
-        
         agent_radii = []
 
-        positions = [agent.getPosition() for agent in self.population]
+        positions = [np.asarray(agent.getPosition()) for agent in self.population]
 
-        for agent in self.population:
-            distances = []
-            
-            for position in positions:
-                distance = distance(agent.getPosition(), position)
-                
-                if (distance != 0):
-                    distances.append(distance)
-            
-            distances.sort()
-            
-            # TODO: this is a bit of a hack, but it works
-            
-            if (agent.getPosition()[0] < (world.w / 2) and agent.getPosition()[1] < (world.h / 2)): # bottom left
-                if(agent.getPosition()[0] < distances[0]):
-                    agent_radii.append(agent.getPosition()[0])
-                elif(agent.getPosition()[1] < distances[0]):
-                    agent_radii.append(agent.getPosition()[1])
-                else:
-                    agent_radii.append(distances[0])
-                
+        for pos in positions:
+            distances = [self.distance(pos, other_pos) for other_pos in positions if other_pos != pos]
 
-            elif (agent.getPosition()[0] > (world.w / 2) and agent.getPosition()[1] < (world.h / 2)): # bottom right
-                if(world.w - agent.getPosition()[0] < distances[0]):
-                    agent_radii.append(world.w - agent.getPosition()[0])
-                elif(agent.getPosition()[1] < distances[0]):
-                    agent_radii.append(agent.getPosition()[1])
-                else:
-                    agent_radii.append(distances[0])
+            # distance to nearest wall
+            # https://gamedev.stackexchange.com/questions/44483/how-do-i-calculate-distance-between-a-point-and-an-axis-aligned-rectangle
+            # clamp point to within rectangle, then calculate distance
+            # slightly less optimized but MILES more readable
+            w, h, wd = world.w, world.h, np.asarray(world.config.size)
+            x, y = pos
+            is_inside_world = (pos >= np.zeros(2)).all() and (pos <= wd).all()
+            if is_inside_world:
+                nearest_wall_point = np.array((np.clip(x, 0, w), np.clip (x, 0, y)))
+                distance_to_wall = self.distance(pos, nearest_wall_point)
+                smallest_distance = min(distance_to_wall, *distances)
+            else:
+                smallest_distance = min(distances)
 
-            elif (agent.getPosition()[0] < (world.w / 2) and agent.getPosition()[1] > (world.h / 2)): # top left
-                if(agent.getPosition()[0] < distances[0]):
-                    agent_radii.append(agent.getPosition()[0])
-                elif(world.h - agent.getPosition()[1] < distances[0]):
-                    agent_radii.append(world.h - agent.getPosition()[1])
-                else:
-                    agent_radii.append(distances[0])
-            
-            elif (agent.getPosition()[0] > (world.w / 2) and agent.getPosition()[1] > (world.h / 2)): # top right
-                if(world.w - agent.getPosition()[0] < distances[0]):
-                    agent_radii.append(world.w - agent.getPosition()[0])
-                elif(world.h - agent.getPosition()[1] < distances[0]):
-                    agent_radii.append(world.h - agent.getPosition()[1])
-                else:
-                    agent_radii.append(distances[0])
-                
-        
+            agent_radii.append(smallest_distance)
+
         agent_radii.sort()
-        
-        
+
         self.set_value(agent_radii[0] / agent_radii[-1])
 
     def distance(a, b):
         return np.linalg.norm(a - b)
-    
-
- 
