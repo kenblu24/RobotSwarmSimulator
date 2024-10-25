@@ -92,9 +92,10 @@ class MillingAgentCaspian(MazeAgentCaspian):
         # from measurements of Turbopis 1, 2, 3, 4 @ (100, 90, +-0.5)
         v_mapping = [0.0, 0.276,]
         w_mapping = [0.0, 0.602,]
-        # v = v_mapping[data[1]] - v_mapping[data[0]]
-        v = v_mapping[1]
+        v = v_mapping[data[1]] - v_mapping[data[0]]
         w = w_mapping[data[3]] - w_mapping[data[2]]
+        if v == 0.0:
+            v = v_mapping[1] * self.rng.choice([-1, 1])
         if w == 0.0:
             w = w_mapping[1] * self.rng.choice([-1, 1])
         return v, w
