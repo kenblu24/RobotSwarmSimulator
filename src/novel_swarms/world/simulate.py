@@ -34,7 +34,7 @@ def main(
         gui_width = gui.w
     if show_gui:
         dims = (world_config.w * viewport_zoom + gui_width, world_config.h * viewport_zoom)
-        screen = pygame.display.set_mode(dims)
+        screen = pygame.display.set_mode(dims, pygame.RESIZABLE)
 
     # define a variable to control the main loop
     running = True
