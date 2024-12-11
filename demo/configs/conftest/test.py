@@ -3,7 +3,7 @@ Find the best Homogeneous Agents for Milling
 """
 # import numpy as np
 import argparse
-from novel_swarms.config.AgentConfig import AgentYAMLFactory
+# from novel_swarms.config.AgentConfig import AgentYAMLFactory
 # from novel_swarms.config.WorldConfig import WorldYAMLFactory
 from novel_swarms.world.RectangularWorld import RectangularWorldConfig
 # from novel_swarms.world.initialization.FixedInit import FixedInitialization
@@ -47,6 +47,11 @@ def fitness(world_set):
 def get_world_generator(n_agents, horizon, round_genome=False):
 
     def gene_to_world(genome, hash_val):
+        from novel_swarms.config import register_agent_type, store
+        from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
+
+        register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
+
 
         # goal_agent = AgentYAMLFactory.from_yaml("./turbopi.yaml")
         # goal_agent.controller = HomogeneousController(genome)
@@ -54,6 +59,7 @@ def get_world_generator(n_agents, horizon, round_genome=False):
         # goal_agent.rescale(SCALE)
 
         world = RectangularWorldConfig.from_yaml("./world.yaml")
+
         # world.seed = 0
         world.behavior = [
             # Circliness(avg_history_max=CIRCLINESS_HISTORY)

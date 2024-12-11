@@ -7,12 +7,13 @@ import pygame
 import pygame.draw
 
 from ..agent.Agent import Agent
-from ..agent.DiffDriveAgent import DifferentialDriveAgent
-from .. agent.HumanAgent import HumanDrivenAgent
+# from ..agent.DiffDriveAgent import DifferentialDriveAgent
+# from .. agent.HumanAgent import HumanDrivenAgent
 # from ..config.WorldConfig import RectangularWorldConfig
-from ..agent.AgentFactory import AgentFactory
-from ..config.HeterogenSwarmConfig import HeterogeneousSwarmConfig
+# from ..agent.AgentFactory import AgentFactory
+# from ..config.HeterogenSwarmConfig import HeterogeneousSwarmConfig
 from .World import World, AbstractWorldConfig
+from ..config import associated_type, filter_unexpected_fields
 from ..util.timer import Timer
 from ..util.collider.AABB import AABB
 from .goals.Goal import CylinderGoal
@@ -26,10 +27,11 @@ min_zoom = 0.0001
 
 distance = math.dist
 
-
+@associated_type("RectangularWorld")
+@filter_unexpected_fields
 @dataclass
 class RectangularWorldConfig(AbstractWorldConfig):
-    size: tuple[float, float] | np.ndarray = None
+    size: tuple[float, float] | np.ndarray = (5, 5)
     # n_agents: int = 10
     # init_type = None
     # defined_start = False
@@ -41,6 +43,7 @@ class RectangularWorldConfig(AbstractWorldConfig):
     detectable_walls: bool = False
 
     def factor_zoom(self, zoom):
+        print("RectangularWorld Factor_Zoom called", zoom, self.size)
         self.size = np.asarray(self.size) * zoom
         self.size *= zoom
         for goal in self.goals:
@@ -86,9 +89,6 @@ class RectangularWorld(World):
         #     ]
         self.population = []
 
-        print(self.config.as_dict())
-        breakpoint()
-
         # Attach Walls to sensors
         # TODO: Better software engineering here
         # if config.detectable_walls:
@@ -101,7 +101,7 @@ class RectangularWorld(World):
         #         Wall(self, self.padding + self.config.h + 1, self.padding - 1, 1, self.config.h),
         #     ]
 
-        ac = config.agentConfig
+        # ac = config.agentConfig
 
         # # Iniitalize the Agents
         # if config.init_type:
@@ -272,7 +272,7 @@ class RectangularWorld(World):
         self.pos += delta
         self._mouse_dragging_last_pos = pos
 
-    def withinWorldBoundaries(self, agent: DifferentialDriveAgent):
+    def withinWorldBoundaries(self, agent: Agent):
         """
         Set agent position with respect to the world's boundaries and the bounding box of the agent
         """
@@ -307,7 +307,7 @@ class RectangularWorld(World):
                     agent.set_x_pos(agent.get_x_pos() + correction[0])
                     agent.set_y_pos(agent.get_y_pos() + correction[1])
 
-    def handleWallCollisions(self, agent: DifferentialDriveAgent):
+    def handleWallCollisions(self, agent: Agent):
         # Check for distances between the agent and the line segments
         in_collision = False
         for obj in self.objects:
@@ -354,7 +354,7 @@ class RectangularWorld(World):
 
         return in_collision
 
-    def preventAgentCollisions(self, agent: DifferentialDriveAgent, forward_freeze=False) -> None:
+    def preventAgentCollisions(self, agent: Agent, forward_freeze=False) -> None:
         agent_center = agent.getPosition()
         minimum_distance = agent.radius * 2
         target_distance = minimum_distance + 0.001
@@ -490,12 +490,12 @@ class RectangularWorld(World):
                 self.highlighted_set.append(self.selected)
             if event.key == pygame.K_h:
                 i = self.population.index(self.selected)
-                new_human = HumanDrivenAgent(self.selected.config)
-                new_human.x_pos = self.selected.x_pos
-                new_human.y_pos = self.selected.y_pos
-                new_human.angle = self.selected.angle
-                self.population[i] = new_human
-                self.human_controlled.append(new_human)
+                # new_human = HumanDrivenAgent(self.selected.config)
+                # new_human.x_pos = self.selected.x_pos
+                # new_human.y_pos = self.selected.y_pos
+                # new_human.angle = self.selected.angle
+                # self.population[i] = new_human
+                # self.human_controlled.append(new_human)
 
         if event.key == pygame.K_c:
             for agent in self.highlighted_set:
@@ -503,7 +503,7 @@ class RectangularWorld(World):
                 agent.body_color = agent.config.body_color
             for agent in self.human_controlled:
                 i = self.population.index(agent)
-                new_bot = DifferentialDriveAgent(agent.config)
+                new_bot = Agent(agent.config)
                 new_bot.x_pos = agent.get_x_pos()
                 new_bot.y_pos = agent.get_y_pos()
                 new_bot.angle = agent.angle

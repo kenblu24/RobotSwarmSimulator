@@ -306,62 +306,6 @@ class LevyAgentConfig:
         self.unicycle_config.rescale(zoom)
 
 
-@filter_unexpected_fields
-@dataclass
-class MazeAgentConfig(BaseAgentConfig):
-    x: float | None = None
-    y: float | None = None
-    angle: float | None = None
-    world: World | None = None
-    world_config: RectangularWorldConfig | None = None
-    seed: Any = None
-    agent_radius: float = 5
-    dt: float = 1.0
-    sensors: SensorSet | None = None
-    idiosyncrasies: Any = False
-    delay: str | int | float = 0
-    sensing_avg: int = 1
-    stop_on_collision: bool = False
-    stop_at_goal: bool = False
-    body_color: tuple[int, int, int] = (255, 255, 255)
-    body_filled: bool = False
-    catastrophic_collisions: bool = False
-    trace_length: tuple[int, int, int] | None = None
-    trace_color: tuple[int, int, int] | None = None
-    controller: Controller | None = None
-    track_io: bool = False
-    type: str = ""
-
-    def __post_init__(self):
-        super().__post_init__()
-        if self.stop_at_goal is not False:
-            raise NotImplementedError  # not tested
-
-    @override
-    def __badvars__(self):
-        return super().__badvars__() + ["world", "world_config"]
-
-    def attach_world_config(self, world_config):
-        self.world = world_config
-
-    @staticmethod
-    def from_dict(d):
-        if isinstance(d["sensors"], dict):
-            d["sensors"] = SensorFactory.create(d["sensors"])
-        return MazeAgentConfig(**d)
-
-    def rescale(self, zoom):
-        self.agent_radius *= zoom
-        if self.sensors is not None:
-            for s in self.sensors:
-                s.r *= zoom
-                s.goal_sensing_range *= zoom
-                s.wall_sensing_range *= zoom
-
-    def create(self, **kwargs):
-        return MazeAgent(config=self, **kwargs)
-
-
 class ModeSwitchingAgentConfig():
     def __init__(self,
                  configs=None,
@@ -385,51 +329,7 @@ class ModeSwitchingAgentConfig():
         raise NotImplementedError
 
 
-class StaticAgentConfig:
-    def __init__(self,
-                 x=None,
-                 y=None,
-                 angle=None,
-                 world_config: RectangularWorldConfig = None,
-                 seed=None,
-                 agent_radius=5,
-                 dt=1.0,
-                 body_color=(255, 255, 255),
-                 body_filled=False
-                 ):
-        self.x = x
-        self.y = y
-        self.angle = angle
-        self.world = world_config
-        self.seed = seed
-        self.dt = dt
-        self.agent_radius = agent_radius
-        self.body_color = body_color
-        self.body_filled = body_filled
 
-    def attach_world_config(self, world_config):
-        self.world = world_config
-
-    def as_dict(self):
-        return {
-            "type": "StaticAgentConfig",
-            "x": self.x,
-            "y": self.y,
-            "angle": self.angle,
-            "seed": self.seed,
-            "dt": self.dt,
-            "agent_radius": self.agent_radius,
-            "body_color": list(self.body_color),
-            "body_filled": self.body_filled
-        }
-
-    @staticmethod
-    def from_dict(d):
-        ret = StaticAgentConfig()
-        for k, v in d.items():
-            if k != "type":
-                setattr(ret, k, v)
-        return ret
 
 
 class AgentConfigFactory:

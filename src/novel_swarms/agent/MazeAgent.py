@@ -1,20 +1,26 @@
-from typing import NamedTuple, Tuple
-from collections import namedtuple
-import pygame
-import random
 import math
-import numpy as np
+import random
 from copy import deepcopy
+from typing import NamedTuple
+from dataclasses import dataclass, field
+from collections import namedtuple
 
-from .Agent import Agent
+import pygame
+import numpy as np
+
+from ..config import filter_unexpected_fields, associated_type
+from .StaticAgent import StaticAgent, StaticAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
 from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
 from ..util import statistics_tools as st
 from .control.Controller import Controller
+from ..world.RectangularWorld import RectangularWorldConfig
 
 # # typing
+from typing import Any, override
+from ..world.World import World
 # try:
 #     from ..config.AgentConfig import MazeAgentConfig
 # except ImportError:
@@ -24,36 +30,78 @@ SPA = namedtuple("SPA", ['state', 'perception', 'action'])
 State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
 
-class MazeAgent(Agent):
+@associated_type("MazeAgent")
+@filter_unexpected_fields
+@dataclass
+class MazeAgentConfig(StaticAgentConfig):
+    world: World | None = None
+    world_config: RectangularWorldConfig | None = None
+    seed: Any = None
+    dt: float = 1.0
+    sensors: list[Any] = field(default_factory=list)
+    controller: Any = None
+    # sensors: SensorSet | None = None
+    idiosyncrasies: Any = False
+    delay: str | int | float = 0
+    sensing_avg: int = 1
+    stop_on_collision: bool = False
+    stop_at_goal: bool = False
+    body_color: tuple[int, int, int] = (255, 255, 255)
+    body_filled: bool = False
+    catastrophic_collisions: bool = False
+    trace_length: tuple[int, int, int] | None = None
+    trace_color: tuple[int, int, int] | None = None
+    controller: Controller | None = None
+    track_io: bool = False
+    type: str = ""
+
+    def __post_init__(self):
+        # super().__post_init__()
+        if self.stop_at_goal is not False:
+            raise NotImplementedError  # not tested
+
+    @override
+    def __badvars__(self):
+        return super().__badvars__() + ["world", "world_config"]
+
+    def attach_world_config(self, world_config):
+        self.world = world_config
+
+    @staticmethod
+    def from_dict(d):
+        # if isinstance(d["sensors"], dict):
+        #     d["sensors"] = SensorFactory.create(d["sensors"])
+        return MazeAgentConfig(**d)
+
+    def rescale(self, zoom):
+        self.agent_radius *= zoom
+        if self.sensors is not None:
+            for s in self.sensors:
+                s.r *= zoom
+                s.goal_sensing_range *= zoom
+                s.wall_sensing_range *= zoom
+
+    def create(self, **kwargs):
+        return MazeAgent(config=self, **kwargs)
+
+
+class MazeAgent(StaticAgent):
     SEED = -1
 
-    def __init__(self, config=None, name=None) -> None:
+    def __init__(self, config: MazeAgentConfig, name=None, initialize=True) -> None:
 
-        if hasattr(config.controller, 'get_actions'):
-            self.controller = config.controller
-        else:
-            self.controller = Controller(config.controller)
+        # if hasattr(config.controller, 'get_actions'):
+        #     self.controller = config.controller
+        # else:
+        #     self.controller = Controller(config.controller)
 
         self.seed = config.seed
         if config.seed is not None:
             self.set_seed(config.seed)
 
-        if config.x is None:
-            self.x_pos = random.randint(round(0 + config.agent_radius), round(config.world.w - config.agent_radius))
-        else:
-            self.x_pos = config.x
+        super().__init__(config, name=name, initialize=False)
 
-        if config.y is None:
-            self.y_pos = random.randint(round(0 + config.agent_radius), round(config.world.h - config.agent_radius))
-        else:
-            self.y_pos = config.y
-
-        super().__init__(self.x_pos, self.y_pos, name=name)
-
-        if config.angle is None:
-            self.angle = random.random() * math.pi * 2
-        else:
-            self.angle = config.angle
+        self.controller = Controller('self')  # use own controller unless config specifies otherwise
 
         self.radius = config.agent_radius
         self.dt = config.dt
@@ -77,12 +125,12 @@ class MazeAgent(Agent):
         self.stop_at_goal = config.stop_at_goal
         self.config = config
 
-        self.sensors = deepcopy(config.sensors)
-        for sensor in self.sensors:
-            if isinstance(sensor, GenomeBinarySensor):
-                sensor.augment_from_genome(config.controller)
+        # self.sensors = deepcopy(config.sensors)
+        # for sensor in self.sensors:
+        #     if isinstance(sensor, GenomeBinarySensor):
+        #         sensor.augment_from_genome(config.controller)
 
-        self.attach_agent_to_sensors()
+        # self.attach_agent_to_sensors()
 
         self.body_filled = config.body_filled
         if config.body_color == "Random":
@@ -93,9 +141,14 @@ class MazeAgent(Agent):
         self.history = []
         self.track_io = getattr(config, "track_io", False)
 
+        if initialize:
+            self.setup_controller_from_config()
+            self.setup_sensors_from_config()
+
     def set_seed(self, seed):
         random.seed(seed)
 
+    @override
     def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
 
         if world is None:
@@ -134,11 +187,11 @@ class MazeAgent(Agent):
         dtheta2 = self.dtheta / 2
         self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
         s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
-        self.dx = s * math.cos(self.angle + dtheta2) * self.idiosyncrasies[0]
-        self.dy = s * math.sin(self.angle + dtheta2) * self.idiosyncrasies[1]
+        dx = math.cos(self.angle + dtheta2)  # * self.idiosyncrasies[0]
+        dy = math.sin(self.angle + dtheta2)  # * self.idiosyncrasies[1]
+        dpos = s * np.array((dx, dy), dtype='float64') * self.idiosyncrasies
 
-        old_x_pos = self.x_pos
-        old_y_pos = self.y_pos
+        old_pos = self.pos.copy()
 
         if self.stopped_duration > 0:
             self.stopped_duration -= 1
@@ -147,8 +200,7 @@ class MazeAgent(Agent):
                 self.body_color = (200, 200, 200)
                 return
         else:
-            self.x_pos += self.dx
-            self.y_pos += self.dy
+            self.pos += dpos
 
         self.angle += self.dtheta
 
@@ -160,8 +212,7 @@ class MazeAgent(Agent):
 
         # Calculate the 'real' dx, dy after collisions have been calculated.
         # This is what we use for velocity in our equations
-        self.dx = self.x_pos - old_x_pos
-        self.dy = self.y_pos - old_y_pos
+        self.dpos = self.pos - old_pos
         # timer = timer.check_watch()
 
         for sensor in self.sensors:
@@ -169,26 +220,12 @@ class MazeAgent(Agent):
             if sensor.goal_detected:
                 self.goal_seen = True
 
+    @override
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
         pan, zoom = np.asarray(offset[0]), offset[1]
         super().draw(screen, offset)
         for sensor in self.sensors:
             sensor.draw(screen, offset)
-
-        # Draw Cell Membrane
-        filled = 0 if (self.is_highlighted or self.stopped_duration or self.body_filled) else 1
-        color = self.body_color if not self.stopped_duration else (255, 255, 51)
-        pos = np.asarray(self.getPosition()) * zoom + pan
-        pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)
-
-        # "Front" direction vector
-        head = np.asarray(self.getFrontalPoint()) * zoom + pan
-        tail = pos
-        vec = head - tail
-        mag = self.radius * 2
-        vec_with_magnitude = tail + vec * mag
-        pygame.draw.line(screen, (255, 255, 255), tail, vec_with_magnitude)
-
 
     # def interpretSensors(self) -> Tuple:
     #     """
@@ -217,7 +254,7 @@ class MazeAgent(Agent):
 
     def get_random_color(self):
         rand_color = [255, 255, 255]
-        while sum(rand_color) > 245*3:
+        while sum(rand_color) > 245 * 3:
             rand_color = np.random.choice(256, 3)
         return rand_color
 
@@ -235,10 +272,9 @@ class MazeAgent(Agent):
                 if self.get_aabb().intersects(agent.get_aabb()):
                     self.collision_flag = True
                     self.get_aabb().toggle_intersection()
-                    correction = collider.collision_then_correction(agent.build_collider())
+                    correction = np.asarray(collider.collision_then_correction(agent.build_collider()), dtype='float64')
                     if correction is not None:
-                        self.x_pos += correction[0]
-                        self.y_pos += correction[1]
+                        self.pos += correction
                         if self.catastrophic_collisions:
                             self.dead = True
                             self.body_color = (200, 200, 200)
@@ -247,23 +283,8 @@ class MazeAgent(Agent):
                         collisions = True
                         break
 
-
-
     def build_collider(self):
-        return CircularCollider(self.x_pos, self.y_pos, self.radius)
+        return CircularCollider(*self.pos, self.radius)
 
     def debug_draw(self, screen):
         self.get_aabb().draw(screen)
-
-    def get_aabb(self):
-        """
-        Return the Bounding Box of the agent
-        """
-        top_left = (self.x_pos - self.radius, self.y_pos - self.radius)
-        bottom_right = (self.x_pos + self.radius, self.y_pos + self.radius)
-        return AABB(top_left, bottom_right)
-
-
-
-    def __str__(self) -> str:
-        return "(x: {}, y: {}, r: {}, θ: {})".format(self.x_pos, self.y_pos, self.radius, self.angle)

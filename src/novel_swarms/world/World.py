@@ -1,13 +1,24 @@
+import os
+
 import pygame
+import numpy as np
 
 from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
-import numpy as np
+from ..config import store, filter_unexpected_fields
 
 import inspect
 from dataclasses import dataclass, field, asdict, replace
 from collections.abc import Callable
 
+
+_ERRMSG_MISSING_ASSOCIATED_TYPE = """
+Expected this config to have an associated_type field.
+Use @novel_swarms.config.associated_type(ClassNameHere) on the config dataclass.
+"""
+
+
+@filter_unexpected_fields
 @dataclass
 class AbstractWorldConfig:
     size: tuple[float, ...] | np.ndarray = (0, 0)
@@ -34,10 +45,7 @@ class AbstractWorldConfig:
 
     @classmethod
     def from_dict(cls, env):
-        return cls(**{
-            k: v for k, v in env.items()
-            if k in inspect.signature(cls).parameters
-        })
+        return cls(**env)
 
     @classmethod
     def from_yaml(cls, path):
@@ -87,18 +95,54 @@ class World:
     def __init__(self, config):
         self.config = config
         config = replace(config)
-        self.population = config.agents
-        self.spawners = config.spawners
-        self.behavior = config.behavior
-        self.objects = config.objects
+        self.population = []
+        self.spawners = []
+        self.behavior = []
+        self.objects = []
         self.goals = config.goals
         self.seed = config.seed
         self.meta = config.metadata
         self.gui = None
         self.total_steps = 0
+        self.initialized = False
 
     def setup(self):
-        pass
+        # create agents, spawners, behaviors, objects, goals
+        if self.initialized:
+            return
+        self.initialized = True
+
+        # create agents
+        for agent_config in self.config.agents:
+            # get the type name
+            if isinstance(agent_config, dict):  # if it's a config dict (i.e. from yaml) then the key is 'type'
+                agent_config = agent_config.copy()
+                associated_type = agent_config.pop("type", None)
+                if associated_type is None:
+                    raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
+            else:  # if it's a config object (i.e. from dataclasses) then the key is the associated_type field
+                associated_type = agent_config.associated_type
+
+            # get the agent class and config class
+            if associated_type not in store.agent_types:
+                raise Exception(f"Unknown agent type: {associated_type}")
+            type_entry = store.agent_types[associated_type]
+            if not (isinstance(type_entry, (list, tuple)) and len(type_entry) == 2):
+                raise TypeError(f"Registered agent type {associated_type} should be tuple: (AgentClass, AgentConfigClass)")
+            agent_class, agent_config_class = type_entry
+
+            # if it's a config dict (i.e. from yaml) then convert it to a config object
+            if isinstance(agent_config, dict):
+                agent_config = agent_config_class.from_dict(agent_config)
+
+            # create the agent
+            self.population.append(agent_class.from_config(agent_config))
+
+        # self.spawners = config.spawners
+        # self.behavior = config.behavior
+        # self.objects = config.objects
+        # self.goals = config.goals
+        # self.seed = config.seed
 
     def step(self):
         self.total_steps += 1
@@ -120,6 +164,10 @@ class World:
 
     def as_config_dict(self):
         pass
+
+    @classmethod
+    def from_config(cls, c):
+        return cls(c)
 
     def evaluate(self, steps: int, output_capture: OutputTensorConfig = None, screen=None):
         frame_markers = []
@@ -172,3 +220,28 @@ class World:
 
         return output
 
+
+def World_from_config(config: dict):
+    world_types = store.world_types
+
+    if isinstance(config, dict):
+        if not config.get("associated_type", None):
+            raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
+        if config["associated_type"] in world_types:
+            world_cls = world_types[config["type"]]
+        else:
+            raise Exception(f"Unknown world type: {config['associated_type']}")
+    else:
+        if not hasattr(config, "associated_type"):
+            raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
+        if config.associated_type not in world_types:
+            raise Exception(f"Unknown world type: {config.associated_type}")
+        world_cls = world_types[config.associated_type]
+    if isinstance(world_cls, (list, tuple)):
+        world_cls, _config_cls = world_cls
+    if hasattr(world_cls, "from_config"):
+        return world_cls.from_config(config)
+    else:
+        if not isinstance(config, dict):
+            config = config.as_dict()
+        return world_cls.from_dict(config)

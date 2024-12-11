@@ -1,6 +1,7 @@
 import pygame
 from ..gui.agentGUI import DifferentialDriveGUI
-from .WorldFactory import WorldFactory
+from .World import World_from_config
+from ..config import initialize_natives
 from ..util.timer import Timer
 
 screen = None
@@ -43,8 +44,10 @@ def main(
     draw_world = True
 
     # Create the simulation world
-    world = WorldFactory.create(world_config)
+
+    world = World_from_config(world_config)
     world.original_zoom = viewport_zoom
+    world.setup()
 
     # Attach any subscribers to the world
     world_subscribers = []
