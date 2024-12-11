@@ -1,0 +1,20 @@
+---
+type: "RectangularWorld"
+size:  # in meters
+  - 8
+  - 8
+n_agents: 10
+init_type:
+  type: "RectRandomInit"  # A starting region where agents will spawn at t=0
+  bb:
+    - - 3.4 # X (m) Upper Left Bounding Box Corner
+      - 3.4 # Y
+    - - 4.6 # X (m) Lower Right Bounding Box Corner
+      - 4.6 # Y
+  seed: 2023 # ADD SEED HERE TO ENSURE SAME INITIALIZATION EVERY TIME
+padding: 0
+collide_walls: false  # Use No Environment Walls for this problem
+show_walls: false  # Hide Default Walls,
+metadata:
+  hash: _hash
+stop_at: 1000000 # Upper Simulation Limit (timesteps)

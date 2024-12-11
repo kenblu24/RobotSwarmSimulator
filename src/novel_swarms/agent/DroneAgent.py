@@ -18,15 +18,15 @@ class DroneAgent(Agent):
     def __init__(self, config: DroneAgentConfig, name=None):
         self.controller = config.controller
 
-        if config.x is None:
-            self.x_pos = random.randint(0 + config.agent_radius, config.world.w - config.agent_radius)
-        else:
-            self.x_pos = config.x
+        # if config.x is None:
+        #     self.x_pos = random.randint(0 + config.agent_radius, config.world.w - config.agent_radius)
+        # else:
+        self.x_pos = config.x
 
-        if config.y is None:
-            self.y_pos = random.randint(0 + config.agent_radius, config.world.h - config.agent_radius)
-        else:
-            self.y_pos = config.y
+        # if config.y is None:
+        #     self.y_pos = random.randint(0 + config.agent_radius, config.world.h - config.agent_radius)
+        # else:
+        self.y_pos = config.y
 
         super().__init__(self.x_pos, self.y_pos, name="None")
 

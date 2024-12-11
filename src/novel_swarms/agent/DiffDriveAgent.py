@@ -23,15 +23,15 @@ class DifferentialDriveAgent(Agent):
         if config.seed is not None:
             self.seed(config.seed)
 
-        if config.x is None:
-            self.set_x_pos(random.randint(0 + config.agent_radius, config.world.w - config.agent_radius))
-        else:
-            self.set_x_pos(config.x)
+        # if config.x is None:
+        #     self.set_x_pos(random.randint(0 + config.agent_radius, config.world.w - config.agent_radius))
+        # else:
+        self.set_x_pos(config.x)
 
-        if config.y is None:
-            self.set_y_pos(random.randint(0 + config.agent_radius, config.world.h - config.agent_radius))
-        else:
-            self.set_y_pos(config.y)
+        # if config.y is None:
+        #     self.set_y_pos(random.randint(0 + config.agent_radius, config.world.h - config.agent_radius))
+        # else:
+        self.set_y_pos(config.y)
 
         super().__init__(self.x_pos, self.y_pos, name="None")
 

@@ -4,21 +4,98 @@ from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
 import numpy as np
 
-class World():
+import inspect
+from dataclasses import dataclass, field, asdict, replace
+from collections.abc import Callable
 
-    def __init__(self, w=100, h=100, metadata=None):
-        self.population = []
-        self.behavior = []
-        self.objects = []  # A list of obstacles or other objects that belong to the world
-        self.goals = []  # A set of goal markers in a world
+@dataclass
+class AbstractWorldConfig:
+    size: tuple[float, ...] | np.ndarray = (0, 0)
+    behavior: list | dict = field(default_factory=list)
+    agents: list | dict = field(default_factory=list)
+    spawners: list | dict = field(default_factory=list)
+    objects: list | dict = field(default_factory=list)
+    goals: list | dict = field(default_factory=list)
+    stop_at: int | Callable | None = None
+    background_color: tuple[int, int, int] = (0, 0, 0)
+    seed: int | None = None
+    metadata: dict = field(default_factory=dict)
+
+    @property
+    def radius(self):
+        self.size = np.asarray(self.size)
+        return np.linalg.norm(self.size / 2)
+
+    def as_dict(self):
+        return self.asdict()
+
+    def asdict(self):
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, env):
+        return cls(**{
+            k: v for k, v in env.items()
+            if k in inspect.signature(cls).parameters
+        })
+
+    @classmethod
+    def from_yaml(cls, path):
+        import yaml
+        with open(path, "r") as f:
+            return cls.from_dict(yaml.safe_load(f))
+
+    def save_yaml(self, path):
+        import yaml
+        with open(path, "w") as f:
+            yaml.dump(self.as_dict(), f)
+
+    def addAgentConfig(self, agent_config):
+        self.agentConfig = agent_config
+        if self.agentConfig:
+            self.agentConfig.attach_world_config(self.shallow_copy())
+
+    # def shallow_copy(self):
+    #     return RectangularWorldConfig(
+    #         size=self.size,
+    #         n_agents=self.population_size,
+    #         seed=self.seed,
+    #         init_type=self.init_type.getShallowCopy(),
+    #         padding=self.padding,
+    #         goals=self.goals,
+    #         objects=self.objects
+    #     )
+
+    # def getDeepCopy(self):
+    #     return self.from_dict(self.as_dict())
+
+    # def set_attributes(self, dictionary):
+    #     for key in dictionary:
+    #         setattr(self, key, dictionary[key])
+
+    # def factor_zoom(self, zoom):
+    #     self.size = np.asarray(self.size) * zoom
+    #     self.size *= zoom
+    #     for goal in self.goals:
+    #         goal.center[0] *= zoom
+    #         goal.center[1] *= zoom
+    #         goal.r *= zoom
+    #         goal.range *= zoom
+    #     # self.init_type.rescale(zoom)
+
+class World:
+    def __init__(self, config):
+        self.config = config
+        config = replace(config)
+        self.population = config.agents
+        self.spawners = config.spawners
+        self.behavior = config.behavior
+        self.objects = config.objects
+        self.goals = config.goals
+        self.seed = config.seed
+        self.meta = config.metadata
         self.gui = None
-        self.bounded_height = h
-        self.bounded_width = w
         self.total_steps = 0
-        if metadata is None:
-            self.meta = {}
-        else:
-            self.meta = metadata
 
     def setup(self):
         pass
@@ -37,6 +114,9 @@ class World():
 
     def as_dict(self):
         pass
+
+    def asdict(self):
+        return self.as_dict()
 
     def as_config_dict(self):
         pass
