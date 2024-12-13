@@ -1,5 +1,5 @@
 from io import BytesIO
-from .AbstractInit import AbstractInitialization
+from .Spawner import AbstractInitialization
 
 # typing
 from typing import override

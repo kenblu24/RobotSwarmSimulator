@@ -3,6 +3,8 @@ import numpy as np
 
 
 class AbstractSensor:
+    config_vars = ['static_position', 'n_possible_states', 'draw']
+
     def __init__(self, parent, static_position=None, n_possible_states=0, draw=True):
         """
         Initialize the abstract class.
@@ -27,3 +29,12 @@ class AbstractSensor:
 
     def draw(self, screen, offset=((0, 0), 1.0)):
         pass
+
+    def get_state(self):
+        return self.current_state
+
+    def state_pretty(self):
+        return str(self.get_state())
+
+    def as_config_dict(self):
+        return {k: self.__dict__[k] for k in self.config_vars}

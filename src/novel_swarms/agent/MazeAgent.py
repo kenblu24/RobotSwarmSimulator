@@ -31,14 +31,12 @@ State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
 
 @associated_type("MazeAgent")
-@filter_unexpected_fields
-@dataclass
 class MazeAgentConfig(StaticAgentConfig):
     world: World | None = None
     world_config: RectangularWorldConfig | None = None
     seed: Any = None
     dt: float = 1.0
-    sensors: list[Any] = field(default_factory=list)
+    sensors: list = field(default_factory=list)
     controller: Any = None
     # sensors: SensorSet | None = None
     idiosyncrasies: Any = False
@@ -88,7 +86,7 @@ class MazeAgentConfig(StaticAgentConfig):
 class MazeAgent(StaticAgent):
     SEED = -1
 
-    def __init__(self, config: MazeAgentConfig, name=None, initialize=True) -> None:
+    def __init__(self, config: MazeAgentConfig, world, name=None, initialize=True) -> None:
 
         # if hasattr(config.controller, 'get_actions'):
         #     self.controller = config.controller
@@ -99,9 +97,7 @@ class MazeAgent(StaticAgent):
         if config.seed is not None:
             self.set_seed(config.seed)
 
-        super().__init__(config, name=name, initialize=False)
-
-        self.controller = Controller('self')  # use own controller unless config specifies otherwise
+        super().__init__(config, world, name=name, initialize=False)
 
         self.radius = config.agent_radius
         self.dt = config.dt
@@ -187,9 +183,7 @@ class MazeAgent(StaticAgent):
         dtheta2 = self.dtheta / 2
         self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
         s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
-        dx = math.cos(self.angle + dtheta2)  # * self.idiosyncrasies[0]
-        dy = math.sin(self.angle + dtheta2)  # * self.idiosyncrasies[1]
-        dpos = s * np.array((dx, dy), dtype='float64') * self.idiosyncrasies
+        delta = s * self.orientation_uvec(offset=dtheta2) * self.idiosyncrasies
 
         old_pos = self.pos.copy()
 
@@ -200,7 +194,7 @@ class MazeAgent(StaticAgent):
                 self.body_color = (200, 200, 200)
                 return
         else:
-            self.pos += dpos
+            self.pos += delta
 
         self.angle += self.dtheta
 
@@ -259,32 +253,31 @@ class MazeAgent(StaticAgent):
         return rand_color
 
     def handle_collisions(self, world):
-        collisions = True
-        attempts = 0
-        while collisions and attempts < 10:
-            collisions = False
-            attempts += 1
-            collider = self.build_collider()
-            agent_set = world.getAgentsMatchingYRange(self.get_aabb())
-            for agent in agent_set:
-                if agent.name == self.name:
+        max_attempts = 10
+        self.collision_flag = False
+        for _ in range(max_attempts):
+            candidates = [other for other in world.population if self != other
+                               and self.get_aabb().intersects_bb(other.get_aabb())]
+            collided = []
+            if not candidates:
+                break
+            for other in candidates:
+                collider = self.build_collider()
+                other_collider = other.build_collider()
+                correction = collider.correction(other_collider)
+                if np.isnan(correction).any():
                     continue
-                if self.get_aabb().intersects(agent.get_aabb()):
-                    self.collision_flag = True
-                    self.get_aabb().toggle_intersection()
-                    correction = np.asarray(collider.collision_then_correction(agent.build_collider()), dtype='float64')
-                    if correction is not None:
-                        self.pos += correction
-                        if self.catastrophic_collisions:
-                            self.dead = True
-                            self.body_color = (200, 200, 200)
-                            agent.dead = True
-                            agent.body_color = (200, 200, 200)
-                        collisions = True
-                        break
+                collided.append(other)
+                self.collision_flag = True
+                self.pos += correction
+                if self.catastrophic_collisions:
+                    self.dead = True
+                    self.body_color = (200, 200, 200)
+                    other.dead = True
+                    other.body_color = (200, 200, 200)
+            if not collided:
+                break
 
-    def build_collider(self):
-        return CircularCollider(*self.pos, self.radius)
-
-    def debug_draw(self, screen):
-        self.get_aabb().draw(screen)
+            if self.DEBUG:
+                world.draw(world._screen_cache)
+                pygame.display.flip()

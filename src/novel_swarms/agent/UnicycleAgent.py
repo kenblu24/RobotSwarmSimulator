@@ -152,7 +152,7 @@ class UnicycleAgent(Agent):
                     continue
                 if self.aabb.intersects(agent.get_aabb()):
                     self.get_aabb().toggle_intersection()
-                    correction = self.collider.collision_then_correction(agent.build_collider())
+                    correction = self.collider.correction(agent.build_collider())
                     if correction is not None:
                         collisions = True
                         if np.linalg.norm(correction) == 0:

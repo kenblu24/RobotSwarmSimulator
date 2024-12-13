@@ -31,9 +31,9 @@ def filter_unexpected_fields(cls):
         expected_fields = {field.name for field in fields(cls)}
         cleaned_kwargs = {key: value for key, value in kwargs.items() if key in expected_fields}
         unexpected_kwargs = {key: value for key, value in kwargs.items() if key not in expected_fields}
+        original_init(self, *args, **cleaned_kwargs)
         for key, value in unexpected_kwargs.items():
             setattr(self, key, value)
-        original_init(self, *args, **cleaned_kwargs)
 
     cls.__init__ = new_init
     return cls
@@ -43,7 +43,7 @@ class LazyKnownModules:
     def __init__(self):
         self._world_types = {}
         self._agent_types = {}
-        self._sensor_types = {}
+        self._dictlike_types = {}
         self._controllers = {}
         self._behaviors = {}
         self.initialized_natives = False
@@ -59,19 +59,13 @@ class LazyKnownModules:
         return self._agent_types
 
     @property
-    def sensor_types(self):
+    def dictlike_types(self):
         self.initialize_natives()
-        return self._sensor_types
+        return self._dictlike_types
 
-    @property
-    def controllers(self):
-        self.initialize_natives()
-        return self._controllers
-
-    @property
-    def behaviors(self):
-        self.initialize_natives()
-        return self._behaviors
+    def add_dictlike_namespace(self, key: str):
+        if key not in self._dictlike_types:
+            self._dictlike_types[key] = {}
 
     def initialize_natives(self):
         if self.initialized_natives:
@@ -86,7 +80,7 @@ class LazyKnownModules:
     def add_native_world_types(self):
         from ..world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 
-        self._world_types["RectangularWorld"] = (RectangularWorld, RectangularWorldConfig)
+        self._world_types['RectangularWorld'] = (RectangularWorld, RectangularWorldConfig)
 
     def add_native_sensors(self):
         from ..sensors.BinaryFOVSensor import BinaryFOVSensor
@@ -95,20 +89,36 @@ class LazyKnownModules:
         from ..sensors.RegionalSensor import RegionalSensor
         from ..sensors.StaticSensor import StaticSensor
 
-        self._sensor_types["BinaryFOVSensor"] = BinaryFOVSensor
-        self._sensor_types["BinaryLOSSensor"] = BinaryLOSSensor
-        self._sensor_types["GenomeBinarySensor"] = GenomeBinarySensor
-        self._sensor_types["RegionalSensor"] = RegionalSensor
-        self._sensor_types["StaticSensor"] = StaticSensor
+        self.add_dictlike_namespace('sensors')
+
+        self._dictlike_types['sensors']['BinaryFOVSensor'] = BinaryFOVSensor
+        self._dictlike_types['sensors']['BinaryLOSSensor'] = BinaryLOSSensor
+        self._dictlike_types['sensors']['GenomeBinarySensor'] = GenomeBinarySensor
+        self._dictlike_types['sensors']['RegionalSensor'] = RegionalSensor
+        self._dictlike_types['sensors']['StaticSensor'] = StaticSensor
 
     def add_native_controllers(self):
         from ..agent.control.Controller import Controller
         from ..agent.control.StaticController import StaticController
+        from ..agent.control.BinaryController import BinaryController
+        from ..agent.control.AgentMethodController import AgentMethodController
         from ..agent.control.HomogeneousController import HomogeneousController
 
-        self._controllers["Controller"] = Controller
-        self._controllers["StaticController"] = StaticController
-        self._controllers["HomogeneousController"] = HomogeneousController
+        self.add_dictlike_namespace('controller')
+
+        self._dictlike_types['controller']['Controller'] = Controller
+        self._dictlike_types['controller']['StaticController'] = StaticController
+        self._dictlike_types['controller']['BinaryController'] = BinaryController
+        self._dictlike_types['controller']['AgentMethodController'] = AgentMethodController
+        self._dictlike_types['controller']['HomogeneousController'] = HomogeneousController
+
+    def add_native_behaviors(self):
+        from .. import behavior
+
+        self.add_dictlike_namespace('behaviors')
+
+        native_behaviors = {name: getattr(behavior, name) for name in behavior.__all__}
+        self._dictlike_types['behaviors'].update(native_behaviors)
 
     def add_native_agent_types(self):
         from ..agent.DiffDriveAgent import DifferentialDriveAgent, DiffDriveAgentConfig
@@ -118,18 +128,12 @@ class LazyKnownModules:
         from ..agent.MazeAgentCaspian import MazeAgentCaspian, MazeAgentCaspianConfig
         from ..agent.MillingAgentCaspian import MillingAgentCaspian, MillingAgentCaspianConfig
 
-        self._agent_types["MazeAgent"] = (MazeAgent, MazeAgentConfig)
-        self._agent_types["MazeAgentCaspian"] = (MazeAgentCaspian, MazeAgentCaspianConfig)
-        self._agent_types["MillingAgentCaspian"] = (MillingAgentCaspian, MillingAgentCaspianConfig)
-        self._agent_types["DiffDriveAgent"] = (DifferentialDriveAgent, DiffDriveAgentConfig)
-        # self._agent_types["HumanDrivenAgent"] = (HumanDrivenAgent, HumanDrivenAgentConfig)
-        self._agent_types["StaticAgent"] = (StaticAgent, StaticAgentConfig)
-
-    def add_native_behaviors(self):
-        from .. import behavior
-
-        native_behaviors = {name: getattr(behavior, name) for name in behavior.__all__}
-        self._behaviors.update(native_behaviors)
+        self._agent_types['MazeAgent'] = (MazeAgent, MazeAgentConfig)
+        self._agent_types['MazeAgentCaspian'] = (MazeAgentCaspian, MazeAgentCaspianConfig)
+        self._agent_types['MillingAgentCaspian'] = (MillingAgentCaspian, MillingAgentCaspianConfig)
+        self._agent_types['DiffDriveAgent'] = (DifferentialDriveAgent, DiffDriveAgentConfig)
+        # self._agent_types['HumanDrivenAgent'] = (HumanDrivenAgent, HumanDrivenAgentConfig)
+        self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)
 
 
 store = LazyKnownModules()
@@ -143,16 +147,32 @@ def register_agent_type(name: str, agent_type, agent_config=None):
     store.agent_types[name] = (agent_type, agent_config)
 
 
-def register_sensor_type(name: str, sensor_type, sensor_config=None):
-    store.sensor_types[name] = (sensor_type, sensor_config)
+def register_dictlike_namespace(key: str):
+    store.add_dictlike_namespace(key)
 
 
-def register_controller_type(name: str, controller_type, controller_config=None):
-    store.controllers[name] = controller_type
+def register_dictlike_type(key: str, name: str, cls):
+    store.add_dictlike_namespace(key)
+    store.dictlike_types[key][name] = cls
 
 
-def register_behavior(name: str, behavior_class):
-    store.behaviors[name] = behavior_class
+def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) -> tuple[object, dict]:
+    if key not in store.dictlike_types:
+        msg = f"Object namespace is unknown to init system: {key}"
+        raise KeyError(msg)
+    if not (isinstance(config, dict) and 'type' in config):
+        if raise_errors:
+            msg = f"Config dict in namespace '{key}' is missing the 'type'"
+            raise KeyError(msg)
+        else:
+            return
+    if copy:
+        config = config.copy()
+    cls_name = config.pop('type')
+    if cls_name not in store.dictlike_types[key]:
+        msg = f"Class is unknown to init system: {cls_name}"
+        raise KeyError(msg)
+    return store.dictlike_types[key][cls_name], config
 
 
 def initialize_natives():

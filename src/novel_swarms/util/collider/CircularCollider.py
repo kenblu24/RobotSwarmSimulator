@@ -18,11 +18,11 @@ class CircularCollider:
     def flag_collision(self):
         self.collision_flag = True
 
-    def collision_then_correction(self, other):
+    def correction(self, other):
         dist_between_radii = self.dist(other)
         dist_difference = (self.r + other.r) - dist_between_radii
         if dist_difference < 0:
-            return None
+            return np.empty(self.v.shape) * np.nan
         correction_vector = ((other.v - self.v) / (dist_between_radii + 0.001)) * (dist_difference + 0.01)
         return -correction_vector
 

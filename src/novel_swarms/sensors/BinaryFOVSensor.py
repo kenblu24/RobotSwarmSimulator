@@ -8,26 +8,32 @@ from ..world.goals.Goal import CylinderGoal
 
 
 class BinaryFOVSensor(AbstractSensor):
+    config_vars = AbstractSensor.config_vars + [
+        'theta', 'distance', 'degrees', 'bias', 'false_positive', 'false_negative',
+        'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
+        'store_history', 'detect_goal_with_added_state', 'show'
+    ]
 
-    def __init__(self,
-                 parent=None,
-                 theta=10,
-                 distance=100,
-                 degrees=False,
-                 bias=0.0,
-                 false_positive=0.0,
-                 false_negative=0.0,
-                 walls=None,
-                 goal_sensing_range=10,
-                 wall_sensing_range=10,
-                 time_step_between_sensing=1,
-                 store_history=False,
-                 detect_goal_with_added_state=False,
-                 show=True,
-                 seed=None
-                 ):
-        super(BinaryFOVSensor, self).__init__(parent=parent)
-        self.current_state = 0
+    def __init__(
+        self,
+        parent=None,
+        theta=10,
+        distance=100,
+        degrees=False,
+        bias=0.0,
+        false_positive=0.0,
+        false_negative=0.0,
+        walls=None,
+        goal_sensing_range=10,
+        wall_sensing_range=10,
+        time_step_between_sensing=1,
+        invert=False,
+        store_history=False,
+        detect_goal_with_added_state=False,
+        show=True,
+        seed=None
+    ):
+        super().__init__(parent=parent)
         self.angle = 0
         self.theta = theta
         self.bias = bias
@@ -42,6 +48,7 @@ class BinaryFOVSensor(AbstractSensor):
         self.use_goal_state = detect_goal_with_added_state
         self.goal_sensing_range = goal_sensing_range
         self.show = show
+        self.invert = invert
         self.goal_detected = False
 
         if degrees:
@@ -186,15 +193,16 @@ class BinaryFOVSensor(AbstractSensor):
         return rot
 
     def determineState(self, real_value, agent, world=None):
+        invert = self.invert
         if real_value:
             # Consider Reporting False Negative
             if np.random.random_sample() < self.fn:
                 self.parent.agent_in_sight = None
-                self.current_state = 0
+                self.current_state = 1 if invert else 0
                 self.detection_id = 0
             else:
                 self.parent.agent_in_sight = agent
-                self.current_state = 1
+                self.current_state = 0 if invert else 1
                 if agent:
                     self.detection_id = agent.detection_id
 
@@ -203,10 +211,10 @@ class BinaryFOVSensor(AbstractSensor):
             if np.random.random_sample() < self.fp:
                 self.parent.agent_in_sight = None
                 self.detection_id = 0
-                self.current_state = 1
+                self.current_state = 0 if invert else 1
             else:
                 self.parent.agent_in_sight = None
-                self.current_state = 0
+                self.current_state = 1 if invert else 0
                 self.detection_id = 0
 
     def step(self, world, only_check_goals=False):
@@ -296,8 +304,11 @@ class BinaryFOVSensor(AbstractSensor):
     def getFrontalPoint(self):
         if self.angle is None:
             return self.parent.getFrontalPoint()
-        return self.parent.x_pos + math.cos(self.angle + self.parent.angle), self.parent.y_pos + math.sin(
-            self.angle + self.parent.angle)
+
+        return self.parent.pos + [
+            math.cos(self.angle + self.parent.angle),
+            math.sin(self.angle + self.parent.angle)
+        ]
 
     def getBiasedSightAngle(self):
         bias_transform = np.array([

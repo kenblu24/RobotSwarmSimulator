@@ -5,17 +5,20 @@ shared_controllers = {}
 
 
 class StaticController(Controller):
-    def __init__(self, output=(0, 0)):
+    def __init__(self, parent, output=(0, 0)):
         self.list_based = False
         self.output = output
         self.controller_as_method = self.control_method
-        super().__init__(self.control_method)
+        super().__init__(parent, self.control_method)
 
     def control_method(self, *args, **kwargs):
         """
         An example of a "from scratch" controller that you can code with any information contained within the agent class
         """
         return self.output
+
+    def as_config_dict(self):
+        return {'output': self.output}
 
 
 def zero_controller(d: int = 2):

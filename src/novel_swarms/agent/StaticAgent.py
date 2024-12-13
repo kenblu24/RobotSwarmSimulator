@@ -1,7 +1,6 @@
-from typing import Tuple
+from functools import lru_cache
+
 import pygame
-import random
-import math
 import numpy as np
 from dataclasses import dataclass
 from ..config import filter_unexpected_fields, associated_type
@@ -18,8 +17,6 @@ from ..world.RectangularWorld import RectangularWorldConfig
 
 
 @associated_type("StaticAgent")
-@filter_unexpected_fields
-@dataclass
 class StaticAgentConfig(BaseAgentConfig):
     seed: int | None = None
     world_config: RectangularWorldConfig | None = None
@@ -35,8 +32,8 @@ class StaticAgentConfig(BaseAgentConfig):
 class StaticAgent(Agent):
     DEBUG = True
 
-    def __init__(self, config: StaticAgentConfig, name=None, initialize=True) -> None:
-        super().__init__(config, name, initialize=False)
+    def __init__(self, config: StaticAgentConfig, world, name=None, initialize=True) -> None:
+        super().__init__(config, world, name, initialize=False)
 
         if config.seed is not None:
             self.seed = config.seed
@@ -75,22 +72,22 @@ class StaticAgent(Agent):
         vec_with_magnitude = tail + vec * mag
         pygame.draw.line(screen, (255, 255, 255), tail, vec_with_magnitude)
         if self.DEBUG:
-            self.debug_draw(screen)
+            self.debug_draw(screen, offset)
 
     def build_collider(self):
-        return CircularCollider(self.x_pos, self.y_pos, self.radius)
+        return CircularCollider(*self.pos, self.radius)
 
-    def debug_draw(self, screen):
-        self.get_aabb().draw(screen)
+    def debug_draw(self, screen, offset):
+        self.get_aabb().draw(screen, offset)
 
-    def get_aabb(self):
+    def get_aabb(self) -> AABB:
         """
         Return the Bounding Box of the agent
         """
         x, y = self.pos
         top_left = (x - self.radius, y - self.radius)
         bottom_right = (x + self.radius, y + self.radius)
-        return AABB(top_left, bottom_right)
+        return AABB((top_left, bottom_right))
 
     def __str__(self) -> str:
         x, y = self.pos

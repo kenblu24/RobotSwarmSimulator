@@ -1,13 +1,21 @@
 """
-Find the best Homogeneous Agents for Milling
+test world startup
 """
-# import numpy as np
+
 import argparse
+from ctypes import ArgumentError
+from io import BytesIO
+
+import numpy as np
+from tqdm import tqdm
+
 # from novel_swarms.config.AgentConfig import AgentYAMLFactory
 # from novel_swarms.config.WorldConfig import WorldYAMLFactory
 from novel_swarms.world.RectangularWorld import RectangularWorldConfig
+
 # from novel_swarms.world.initialization.FixedInit import FixedInitialization
 from novel_swarms.behavior import Circliness
+
 # from novel_swarms.agent.control.Controller import Controller
 from novel_swarms.agent.control.HomogeneousController import HomogeneousController
 # from novel_swarms.world.simulate import main as sim
@@ -15,16 +23,7 @@ from novel_swarms.agent.control.HomogeneousController import HomogeneousControll
 # from .milling_search import DECISION_VARS, SCALE, BL
 # from .milling_search import fitness
 
-
-"""
-Find the best Homogeneous Agents for Milling
-"""
-from ctypes import ArgumentError
-from io import BytesIO
-import argparse
-import numpy as np
-from tqdm import tqdm
-from novel_swarms.world.initialization.PredefInit import PredefinedInitialization
+# from novel_swarms.world.initialization.PredefInit import PredefinedInitialization
 
 SCALE = 1
 
@@ -45,13 +44,11 @@ def fitness(world_set):
 
 
 def get_world_generator(n_agents, horizon, round_genome=False):
-
     def gene_to_world(genome, hash_val):
         from novel_swarms.config import register_agent_type, store
         from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
 
         register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
-
 
         # goal_agent = AgentYAMLFactory.from_yaml("./turbopi.yaml")
         # goal_agent.controller = HomogeneousController(genome)
@@ -70,7 +67,7 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         world.factor_zoom(zoom=SCALE)
         # world.addAgentConfig(goal_agent)
-        world.metadata = {'hash': hash(tuple(list(hash_val)))}
+        world.metadata = {"hash": hash(tuple(list(hash_val)))}
         worlds = [world]
 
         return worlds
@@ -130,7 +127,7 @@ if __name__ == "__main__":
     parser.add_argument("--print", action="store_true")
     parser.add_argument("--nogui", action="store_true")
     parser.add_argument("--discrete-bins", help="How many bins to discretize the decision variables into")
-    parser.add_argument('--positions', help="file containing agent positions")
+    parser.add_argument("--positions", help="file containing agent positions")
     parser.add_argument("-b", "--bodylength", type=float, help="body length value")
     genome_parser = parser.add_mutually_exclusive_group(required=True)
     genome_parser.add_argument(
@@ -171,23 +168,25 @@ if __name__ == "__main__":
 
     if args.positions:
         import pandas as pd
+
         fpath = args.positions
 
-        with open(fpath, 'rb') as f:
+        with open(fpath, "rb") as f:
             xlsx = f.read()
         xlsx = pd.ExcelFile(BytesIO(xlsx))
         sheets = xlsx.sheet_names
 
         n_runs = len(sheets)
 
-        pinit = PredefinedInitialization()  # num_agents isn't used yet here
+        # pinit = PredefinedInitialization()  # num_agents isn't used yet here
 
         def callback_factory(i):
             def callback(world_config):
-                pinit.set_states_from_xlsx(args.positions, sheet_number=i)
-                pinit.rescale(SCALE)
-                world_config.init_type = pinit
+                # pinit.set_states_from_xlsx(args.positions, sheet_number=i)
+                # pinit.rescale(SCALE)
+                # world_config.init_type = pinit
                 return world_config
+
             return callback
 
         def run_with_positions(i) -> float:
@@ -201,8 +200,7 @@ if __name__ == "__main__":
         print(f"Circliness: {fitness}")
 
 
-
-
 """
-Exact Icra Command: python -m demo.evolution.optim_milling.milling_search --name "test_mill_optim" --n 10 --t 1000 --processes 15 --pop-size 15 --iters 100
+Exact Icra Command:
+python -m demo.evolution.optim_milling.milling_search --name "test_mill_optim" --n 10 --t 1000 --processes 15 --pop-size 15 --iters 100
 """

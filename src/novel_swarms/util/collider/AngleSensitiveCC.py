@@ -14,12 +14,12 @@ class AngleSensitiveCC(CircularCollider):
         self.v_f = np.array([0, 0])
         self.v_c = np.array([0, 0])
 
-    def collision_then_correction(self, other):
+    def correction(self, other):
         fp_x, fp_y = self.get_frontal_point()
         self.v_f = np.array([fp_x, fp_y])
         self.v_to_o = other.v - self.v
 
-        ret = super().collision_then_correction(other)
+        ret = super().correction(other)
         self.within_range = False
         if ret is None:
             return None

@@ -1,5 +1,5 @@
 import numpy as np
-from .AbstractInit import AbstractInitialization
+from .Spawner import AbstractInitialization
 
 
 class FixedInitialization(AbstractInitialization):

@@ -7,6 +7,7 @@ import pygame
 import pygame.draw
 
 from ..agent.Agent import Agent
+
 # from ..agent.DiffDriveAgent import DifferentialDriveAgent
 # from .. agent.HumanAgent import HumanDrivenAgent
 # from ..config.WorldConfig import RectangularWorldConfig
@@ -26,6 +27,7 @@ from typing import List, Tuple
 min_zoom = 0.0001
 
 distance = math.dist
+
 
 @associated_type("RectangularWorld")
 @filter_unexpected_fields
@@ -66,6 +68,7 @@ class RectangularWorld(World):
         self.zoom = 1.0
         self._original_zoom = 1.0
         self.pos = np.array([0.0, 0.0])
+        self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
 
         self.selected = None
@@ -151,20 +154,21 @@ class RectangularWorld(World):
         Cycle through the entire population and take one step. Calculate Behavior if needed.
         """
         super().step()
-        agent_step_timer = Timer("Population Step")
+        # agent_step_timer = Timer("Population Step")
         for agent in self.population:
             if not issubclass(type(agent), Agent):
-                raise Exception("Agents must be subtype of Agent, not {}".format(type(agent)))
+                msg = f"Agents must be subtype of Agent, not {type(agent)}"
+                raise Exception(msg)
 
             agent.step(
                 check_for_world_boundaries=self.withinWorldBoundaries if self.config.collide_walls else None,
                 check_for_agent_collisions=self.preventAgentCollisions,
-                world=self
+                world=self,
             )
             self.handleGoalCollisions(agent)
         # agent_step_timer.check_watch()
 
-        behavior_timer = Timer("Behavior Calculation Step")
+        # behavior_timer = Timer("Behavior Calculation Step")
         for behavior in self.behavior:
             behavior.calculate()
         # behavior_timer.check_watch()
@@ -173,9 +177,11 @@ class RectangularWorld(World):
         """
         Cycle through the entire population and draw the agents. Draw Environment Walls if needed.
         """
+        if not self._screen_cache and screen:
+            self._screen_cache = screen
         if offset is None:
             offset = (self.pos, self.zoom)
-        pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]
+        # pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]
         # if self.config.show_walls:
         #     p = self.config.padding * zoom
         #     size = np.asarray(self.config.size) * zoom
@@ -191,8 +197,6 @@ class RectangularWorld(World):
             world_goal.draw(screen, offset)
 
         for agent in self.population:
-            if not issubclass(type(agent), Agent):
-                raise Exception("Agents must be subtype of Agent, not {}".format(type(agent)))
             agent.draw(screen, offset)
 
     def getNeighborsWithinDistance(self, center: Tuple, r, excluded=None) -> List:
@@ -202,7 +206,8 @@ class RectangularWorld(World):
         filtered_agents = []
         for agent in self.population:
             if not issubclass(type(agent), Agent):
-                raise Exception("Agents must be subtype of Agent, not {}".format(type(agent)))
+                msg = f"Agents must be subtype of Agent, not {type(agent)}"
+                raise Exception(msg)
             if distance(center, (agent.get_x_pos(), agent.get_y_pos())) < r:
                 if agent != excluded:
                     filtered_agents.append(agent)
@@ -240,7 +245,7 @@ class RectangularWorld(World):
     def do_zoom(self, point, v):
         v *= 0.4
         old_zoom = self.zoom
-        self.zoom = self.zoom * (2 ** v)
+        self.zoom = self.zoom * (2**v)
         self.zoom = max(self.zoom, min_zoom)
         # print(f"zoom: {round(old_zoom, 6): >10f} --> {round(self.zoom, 6): >10f}")
         point = point.astype(np.float64)
@@ -251,6 +256,12 @@ class RectangularWorld(World):
     def zoom_reset(self):
         self.zoom = self.original_zoom
         self.pos = np.array([0.0, 0.0])
+
+    def on_mouse(self, pos):
+        viewport_pos = self.mouse_position = np.asarray(pos)
+        pos = (viewport_pos - self.pos) / self.zoom
+        if self.gui:
+            self.gui.set_mouse_world_coordinates(pos)
 
     @property
     def original_zoom(self):
@@ -355,25 +366,22 @@ class RectangularWorld(World):
         return in_collision
 
     def preventAgentCollisions(self, agent: Agent, forward_freeze=False) -> None:
-        agent_center = agent.getPosition()
+        agent.pos = agent.getPosition()
         minimum_distance = agent.radius * 2
         target_distance = minimum_distance + 0.001
 
-        neighborhood = self.getNeighborsWithinDistance(agent_center, minimum_distance, excluded=agent)
-        if len(neighborhood) == 0:
-            return
+        # neighborhood = self.getNeighborsWithinDistance(agent_center, minimum_distance, excluded=agent)
+        # if len(neighborhood) == 0:
+        #     return
 
-        remaining_attempts = 10
-        while len(neighborhood) > 0 and remaining_attempts > 0:
-
+        for _ in range(10):  # limit attempts
+            collided_agents = [other for other in self.population if agent != other
+                               and agent.get_aabb().intersects_bb(other.get_aabb())]
+            if not collided_agents:
+                break
             # Check ALL Bagged agents for collisions
-            for i in range(len(neighborhood)):
-                colliding_agent = neighborhood[i]
-
-                if not agent.get_aabb().intersects(colliding_agent.get_aabb()):
-                    continue
-
-                center_distance = distance(agent_center, colliding_agent.getPosition())
+            for other in collided_agents:
+                center_distance = distance(agent.pos, other.getPosition())
                 if center_distance > minimum_distance:
                     # colliding_agent.collision_flag = False
                     continue
@@ -382,53 +390,44 @@ class RectangularWorld(World):
                     agent.stopped_duration = 3
 
                 agent.collision_flag = True
-                colliding_agent.collision_flag = True
-                if colliding_agent.detection_id == 2:
+                other.collision_flag = True
+                if other.detection_id == 2:
                     agent.detection_id = 2
 
-                # print(f"Overlap. A: {agent_center}, B: {colliding_agent.getPosition()}")
+                # print(f"Overlap. A: {agent.pos}, B: {colliding_agent.pos}")
                 distance_needed = target_distance - center_distance
-                a_to_b = colliding_agent.getPosition() - agent_center
-                b_to_a = agent_center - colliding_agent.getPosition()
+                # a_to_b = other.pos - agent.pos
+                b_to_a = agent.pos - other.pos
 
                 # Check to see if the collision takes place in the forward facing direction
-                if forward_freeze and self.collision_forward(agent, colliding_agent):
+                if forward_freeze and self.collision_forward(agent, other):
                     continue
 
                 # If distance super close to 0, we have a problem. Add noise.
                 SIGNIFICANCE = 0.0001
                 if b_to_a[0] < SIGNIFICANCE and b_to_a[1] < SIGNIFICANCE:
-                    MAGNITUDE = 0.001
-                    direction = 1
-                    if random.random() > 0.5:
-                        direction = -1
-                    agent.set_x_pos(agent.get_x_pos() + (random.random() * direction * MAGNITUDE))
+                    MAGNITUDE = (0.001, 0.001)
+                    # direction = 1
+                    # if random.random() > 0.5:
+                    #     direction = -1
+                    # agent.set_x_pos(agent.get_x_pos() + (random.random() * direction * MAGNITUDE))
 
-                    direction = 1
-                    if random.random() > 0.5:
-                        direction = -1
-                    agent.set_y_pos(agent.get_y_pos() + (random.random() * direction * MAGNITUDE))
+                    # direction = 1
+                    # if random.random() > 0.5:
+                    #     direction = -1
+                    # agent.set_y_pos(agent.get_y_pos() + (random.random() * direction * MAGNITUDE))
+                    agent.pos += self.rng.uniform(-MAGNITUDE, MAGNITUDE)
 
-                    agent_center = agent.getPosition()
-                    center_distance = distance(agent_center, colliding_agent.getPosition())
+                    center_distance = distance(agent.pos, other.pos)
                     distance_needed = target_distance - center_distance
-                    b_to_a = agent_center - colliding_agent.getPosition()
+                    b_to_a = agent.pos - other.pos
 
                 pushback = (b_to_a / np.linalg.norm(b_to_a)) * distance_needed
 
-                # print(base, a_to_b, theta)
-                delta_x = pushback[0]
-                delta_y = pushback[1]
-
-                if math.isnan(delta_x) or math.isnan(delta_y):
+                if pushback.isnan().any():
                     break
 
-                agent.set_x_pos(agent.get_x_pos() + delta_x)
-                agent.set_y_pos(agent.get_y_pos() + delta_y)
-                agent_center = agent.getPosition()
-
-            neighborhood = self.getNeighborsWithinDistance(agent_center, minimum_distance, excluded=agent)
-            remaining_attempts -= 1
+                agent.pos += pushback
 
     def getAgentsMatchingYRange(self, bb: AABB):
         ret = []
@@ -517,4 +516,3 @@ class RectangularWorld(World):
 
     def as_config_dict(self):
         return self.config.as_dict()
-

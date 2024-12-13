@@ -4,9 +4,10 @@ from collections.abc import Callable
 
 import numpy as np
 
-from novel_swarms.world.initialization.FixedInit import FixedInitialization
-from novel_swarms.world.initialization.AbstractInit import AbstractInitialization
-from novel_swarms.world.initialization.RandomInit import RectRandomInitialization
+# from novel_swarms.world.initialization.FixedInit import FixedInitialization
+# from novel_swarms.world.initialization.AbstractInit import AbstractInitialization
+# from novel_swarms.world.initialization.RandomInit import RectRandomInitialization
+
 
 @dataclass
 class RectangularWorldConfig:
@@ -36,10 +37,7 @@ class RectangularWorldConfig:
 
     @classmethod
     def from_dict(cls, env):
-        return cls(**{
-            k: v for k, v in env.items()
-            if k in inspect.signature(cls).parameters
-        })
+        return cls(**{k: v for k, v in env.items() if k in inspect.signature(cls).parameters})
 
     # def __init__(self, **kwargs):
 
@@ -53,7 +51,6 @@ class RectangularWorldConfig:
 
     #     # elif init_type is None:
     #     #     init_type = RectRandomInitialization(num_agents=n_agents, bb=((0, 0), size))
-
 
     #     if self.agentConfig:
     #         self.agentConfig.attach_world_config(self.shallow_copy())
@@ -71,7 +68,7 @@ class RectangularWorldConfig:
             init_type=self.init_type.getShallowCopy(),
             padding=self.padding,
             goals=self.goals,
-            objects=self.objects
+            objects=self.objects,
         )
 
     def getDeepCopy(self):
@@ -113,6 +110,7 @@ class RectangularWorldConfig:
 
     def save_yaml(self, path):
         import yaml
+
         with open(path, "w") as f:
             yaml.dump(self.as_dict, f)
 
@@ -146,6 +144,7 @@ class WorldYAMLFactory:
     @staticmethod
     def from_yaml(file_name):
         import yaml
+
         config = None
         with open(file_name, "r") as stream:
             config = yaml.safe_load(stream)
@@ -155,6 +154,7 @@ class WorldYAMLFactory:
             init_type = config["init_type"]["type"]
             if init_type == "RectRandomInit":
                 from novel_swarms.world.initialization.RandomInit import RectRandomInitialization
+
                 if "num_agents" not in config["init_type"]:
                     config["init_type"]["num_agents"] = int(config["n_agents"])
                 config["init_type"] = RectRandomInitialization(**config["init_type"])

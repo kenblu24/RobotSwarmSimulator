@@ -189,6 +189,7 @@ def main(
             if steps_per_frame >= 1:
                 gui.speed = f"{steps_per_frame}x"
             gui.fps = (clock.get_fps(), eclock.get_fps())
+            world.on_mouse(pygame.mouse.get_pos())
 
         skip = False
         if slowdown_level > 0:

@@ -1,34 +1,65 @@
+from itertools import product
+from functools import cached_property
+
 import pygame
+import numpy as np
+
 
 class AABB:
-    def __init__(self, p1, p2):
-        self.x_min = min(p1[0], p2[0])
-        self.x_max = max(p1[0], p2[0])
-        self.y_min = min(p1[1], p2[1])
-        self.y_max = max(p1[1], p2[1])
-        self.in_intersection = False
+    def __init__(self, p):
+        p = np.asarray(p, dtype=np.float64)
+        self._min = p.min(axis=0)
+        self._max = p.max(axis=0)
+        self._cs = np.array((self._min, self._max))
+        self._axs = self._cs.T  # of shape [X, Y, ...]
+        self._size = self._max - self._min
+        self.is_intersected = False
 
-    def intersects(self, other) -> bool:
-        return self.in_x_range(other) and self.in_x_range(other)
+    def is_point_inside(self, p):
+        return all(p >= self._min) and all(p <= self._max)
 
-    def in_y_range(self, other) -> bool:
-        y_range = min(self.y_max, other.y_max) - max(self.y_min, other.y_min)
-        return y_range > 0
+    def intersects_bb(self, other) -> bool:
+        # TODO: Check if this works in 3D
+        cleared = (
+            any(other._min > self._max) or
+            any(other._max < self._min)
+        )
+        return not cleared
 
-    def in_x_range(self, other) -> bool:
-        x_range = min(self.x_max, other.x_max) - max(self.x_min, other.x_min)
-        return x_range > 0
+    @cached_property
+    def corners(self):
+        # return the vertices of the bounding box.
+        # for points/box with N dimensions, 2 ** N vertices (of size N) are returned.
+        # i.e. 2D box, a list of 4 tuples of length 2. 3D box: a list of 8 tuples of length 3.
+        return np.array([np.array([j[i] for i, j in zip(idx, self._axs)])  # choose the min or max value for each dimension
+                for idx in product([0, 1], repeat=len(self._min))])  # each possible combination of min, max
 
+    @cached_property
     def width(self):
-        return self.x_max - self.x_min
+        return self._max[0] - self._min[0]
 
+    @cached_property
     def height(self):
-        return self.y_max - self.y_min
+        return self._max[1] - self._min[1]
 
     def toggle_intersection(self):
-        self.in_intersection = True
+        self.is_intersected = True
 
-    def draw(self, screen, color=(0, 255, 0)):
-        if self.in_intersection:
-            color = (255, 255, 0)
-        pygame.draw.rect(screen, color, pygame.Rect(self.x_min, self.y_min, self.width(), self.height()), 1)
+    def __repr__(self):
+        return f"AABB({self._min}, {self._max})"
+
+    @classmethod
+    def from_wh(cls, p, size):
+        p = np.asarray(p, dtype=np.float64)
+        size = np.asarray(size, dtype=np.float64)
+        return cls([p, p + size])
+
+    def draw(self, screen, offset=((0, 0), 1.0), color=(255, 255, 0)):
+        pan, zoom = np.asarray(offset[0]), offset[1]
+        if self.is_intersected:
+            color = (0, 255, 0)
+        if len(self._min) != 2:
+            raise NotImplementedError("AABB.draw() only supports 2D")
+        pos = self._min * zoom + pan
+        size = self._size * zoom
+        pygame.draw.rect(screen, color, pygame.Rect(*pos, *size), 1)

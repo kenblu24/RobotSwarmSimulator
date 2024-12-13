@@ -171,7 +171,7 @@ class DroneAgent(Agent):
                     continue
                 if self.aabb.intersects(agent.get_aabb()):
                     self.get_aabb().toggle_intersection()
-                    correction = collider.collision_then_correction(agent.build_collider())
+                    correction = collider.correction(agent.build_collider())
                     if correction is not None:
                         self.x_pos += correction[0]
                         self.y_pos += correction[1]

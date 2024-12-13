@@ -33,6 +33,7 @@ class DifferentialDriveGUI(AbstractGUI):
         self.fps = None
         self.speed = None
         self.position = "absolute"
+        self.mouse_pos = (0, 0)
 
     def set_selected(self, agent: DifferentialDriveAgent):
         super().set_selected(agent)
@@ -47,6 +48,9 @@ class DifferentialDriveGUI(AbstractGUI):
 
     def set_time(self, time_steps):
         self.time = time_steps
+
+    def set_mouse_world_coordinates(self, pos):
+        self.mouse_pos = pos
 
     def draw(self, screen, zoom=1.0):
         # super().draw(screen)
@@ -63,11 +67,15 @@ class DifferentialDriveGUI(AbstractGUI):
             timing = f"Timesteps:{self.time: >6}"
             timing += f"  e/FPS:{int(self.fps[1]): >3}/{int(self.fps[0]):03}" if self.fps else ""
             timing += f"  {self.speed}" if self.speed else ""
+            mx, my = self.mouse_pos
+            mx, my = round(mx, 4), round(my, 4)
             self.appendTextToGUI(screen, timing)  # type: ignore[reportAttributeAccessIssue]
             if self.selected:
                 a: MazeAgent = self.selected
                 heading = a.get_heading() % (2 * PI) / 2 / PI * 360
                 dx, dy = a.dpos
+                self.appendTextToGUI(screen, f"cursor: {mx: >8}, {my: >8}")
+                self.appendTextToGUI(screen, f"")
                 self.appendTextToGUI(screen, f"Current Agent: {a.name}")
                 self.appendTextToGUI(screen, f"")
                 self.appendTextToGUI(screen, f"x: {round(a.get_x_pos(), 12): > }")
@@ -79,7 +87,11 @@ class DifferentialDriveGUI(AbstractGUI):
                 self.appendTextToGUI(screen, f"dt: {round(a.dt, 12): > }")
                 self.appendTextToGUI(screen, f"|v| (m/s): {round(np.linalg.norm(a.getVelocity()) / a.dt, 12): > }")
                 self.appendTextToGUI(screen, f"ω (rad/s): {round(a.dtheta / a.dt, 12): > }")
-                self.appendTextToGUI(screen, f"sense-state: {[sensor.getState() for sensor in a.get_sensors()]}")
+                self.appendTextToGUI(screen, f"sensors: {[sensor.state_pretty() for sensor in a.sensors[:7]]}")
+                for i, sensor in enumerate(a.sensors[:7]):
+                    name = sensor.__class__.__name__.removesuffix('Sensor')
+                    s = f"{i}: {name} -> {sensor.state_pretty()}"
+                    self.appendTextToGUI(screen, '  ' + s)
                 if hasattr(a, "i_1") and hasattr(a, "i_2"):
                     self.appendTextToGUI(screen, f"Idio_1: {a.i_1}")
                     self.appendTextToGUI(screen, f"Idio_2: {a.i_2}")
@@ -99,7 +111,8 @@ class DifferentialDriveGUI(AbstractGUI):
                     self.appendTextToGUI(screen, f"ego v (bodylen): {round(v / (a.radius * 2), 12)}")
                     self.appendTextToGUI(screen, f"ego ω   (rad/s): {round(w, 12)}")
             else:
-                self.appendTextToGUI(screen, "Current Agent: None")
+                self.appendTextToGUI(screen, f"cursor: {mx: >8}, {my: >8}")
+                self.appendTextToGUI(screen, "")
                 self.appendTextToGUI(screen, "")
                 self.appendTextToGUI(screen, "Behavior", size=16)
                 for b in self.world.behavior:

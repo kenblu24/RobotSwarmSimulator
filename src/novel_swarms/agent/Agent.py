@@ -2,21 +2,23 @@ import math
 from dataclasses import dataclass, field
 import numpy as np
 
-from ..config import store, filter_unexpected_fields
+from ..config import get_class_from_dict, filter_unexpected_fields
 from ..agent.control.StaticController import zero_controller
 
 # typing
 from typing import Any
+from ..util.collider.AABB import AABB
 
 
 @filter_unexpected_fields
 @dataclass
 class BaseAgentConfig:
-    position: tuple[float, ...] | np.ndarray = (0, 0),
-    angle: float | Any = 0.,
-    name: str | Any = None,
-    controller: Any = None,
-    sensors: list[Any] = field(default_factory=list),
+    position: tuple[float, ...] | np.ndarray = (0, 0)
+    angle: float | Any = 0.
+    name: str | Any = None
+    controller: Any = None
+    grounded: bool = False
+    sensors: list = field(default_factory=list)
 
     # def __post_init__(self):
     #     if self.stop_at_goal is not False:
@@ -54,7 +56,8 @@ class BaseAgentConfig:
 
 class Agent:
 
-    def __init__(self, config, name=None, group=0, initialize=True) -> None:
+    def __init__(self, config, world, name=None, group=0, initialize=True) -> None:
+        self.marked_for_deletion = False
         self.config = config
         self.pos = np.asarray(config.position)
         self.name = name or config.name
@@ -69,29 +72,24 @@ class Agent:
         self.detection_id = 0
         self.aabb = None
         self.group = group
+        self.world = world
+        self.grounded = config.grounded
 
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
 
     def setup_controller_from_config(self):
-        if not (isinstance(self.config.controller, dict) and "type" in self.config.controller):
+        res = get_class_from_dict('controller', self.config.controller, raise_errors=False)
+        if not res:
             return
-        controller_config = self.config.controller.copy()
-        controller_type = controller_config.pop("type")
-        if controller_type not in store.controllers:
-            raise Exception(f"Unknown controller type: {controller_type}")
-        self.controller = store.controllers[controller_type](**controller_config)
+        controller_cls, controller_config = res
+        self.controller = controller_cls(parent=self, **controller_config)
 
     def setup_sensors_from_config(self):
         for sensor_config in self.config.sensors:
-            if not (isinstance(self.config.sensor, dict) and "type" in self.config.sensor):
-                raise TypeError(f"Expected a sensor config dict, got {sensor_config}")
-            sensor_config = self.config.sensor.copy()
-            sensor_type = sensor_config.pop("type")
-            if sensor_type not in store.sensor_types:
-                raise Exception(f"Unknown sensor type: {sensor_type}")
-            self.sensors.append(store.sensors[sensor_type](**sensor_config))
+            sensor_cls, sensor_config = get_class_from_dict('sensors', sensor_config)
+            self.sensors.append(sensor_cls(parent=self, **sensor_config))
 
     def step(self, check_for_world_boundaries=None) -> None:
         self.pos = np.asarray(self.pos, dtype='float64')
@@ -109,17 +107,23 @@ class Agent:
     def getVelocity(self):
         return np.asarray(self.dpos, dtype='float64')
 
-    def getFrontalPoint(self) -> tuple:
+    def orientation_uvec(self, offset=0):
+        return np.array([
+            math.cos(self.angle + offset),
+            math.sin(self.angle + offset)
+        ], dtype=np.float64)
+
+    def getFrontalPoint(self, offset=0) -> tuple:
         """
         Returns the location on the circumference that represents the "front" of the robot
         """
-        return self.get_x_pos() + math.cos(self.get_heading()), self.get_y_pos() + math.sin(self.get_heading())
+        return self.pos + self.orientation_uvec(offset)
 
     def attach_agent_to_sensors(self):
         for sensor in self.sensors:
             sensor.parent = self
 
-    def get_aabb(self):
+    def get_aabb(self) -> AABB:
         pass
 
     def get_x_pos(self):
@@ -163,5 +167,5 @@ class Agent:
         self.set_heading(vec[2])
 
     @classmethod
-    def from_config(cls, config):
-        return cls(config)
+    def from_config(cls, config, world):
+        return cls(config, world)

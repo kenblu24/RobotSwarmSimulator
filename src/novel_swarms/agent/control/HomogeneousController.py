@@ -1,11 +1,11 @@
 from .Controller import Controller
 
 class HomogeneousController(Controller):
-    def __init__(self, genome):
+    def __init__(self, parent, genome):
         self.list_based = False
-        self.genome = genome
         self.controller_as_method = self.control_method
-        super().__init__(self.control_method)
+        self.genome = genome
+        super().__init__(parent, self.control_method)
 
     def control_method(self, agent):
         """
@@ -26,3 +26,6 @@ class HomogeneousController(Controller):
         else:
             u_1, u_2 = 0.0, 0.0  # u_1 in pixels/second (see b2p func), u_2 in rad/s
         return u_1, u_2
+
+    def as_config_dict(self):
+        return {'genome': self.genome}

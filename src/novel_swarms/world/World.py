@@ -5,7 +5,7 @@ import numpy as np
 
 from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
-from ..config import store, filter_unexpected_fields
+from ..config import store, filter_unexpected_fields, get_class_from_dict
 
 import inspect
 from dataclasses import dataclass, field, asdict, replace
@@ -50,18 +50,20 @@ class AbstractWorldConfig:
     @classmethod
     def from_yaml(cls, path):
         import yaml
+
         with open(path, "r") as f:
             return cls.from_dict(yaml.safe_load(f))
 
     def save_yaml(self, path):
         import yaml
+
         with open(path, "w") as f:
             yaml.dump(self.as_dict(), f)
 
-    def addAgentConfig(self, agent_config):
-        self.agentConfig = agent_config
-        if self.agentConfig:
-            self.agentConfig.attach_world_config(self.shallow_copy())
+    # def addAgentConfig(self, agent_config):
+    #     self.agentConfig = agent_config
+    #     if self.agentConfig:
+    #         self.agentConfig.attach_world_config(self.shallow_copy())
 
     # def shallow_copy(self):
     #     return RectangularWorldConfig(
@@ -91,6 +93,7 @@ class AbstractWorldConfig:
     #         goal.range *= zoom
     #     # self.init_type.rescale(zoom)
 
+
 class World:
     def __init__(self, config):
         self.config = config
@@ -101,10 +104,12 @@ class World:
         self.objects = []
         self.goals = config.goals
         self.seed = config.seed
+        self.rng = np.random.default_rng(self.seed)
         self.meta = config.metadata
         self.gui = None
         self.total_steps = 0
         self.initialized = False
+        self._screen_cache = None
 
     def setup(self):
         # create agents, spawners, behaviors, objects, goals
@@ -116,7 +121,7 @@ class World:
         for agent_config in self.config.agents:
             # get the type name
             if isinstance(agent_config, dict):  # if it's a config dict (i.e. from yaml) then the key is 'type'
-                agent_config = agent_config.copy()
+                # agent_config = agent_config.copy()
                 associated_type = agent_config.pop("type", None)
                 if associated_type is None:
                     raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
@@ -125,10 +130,12 @@ class World:
 
             # get the agent class and config class
             if associated_type not in store.agent_types:
-                raise Exception(f"Unknown agent type: {associated_type}")
+                msg = f"Unknown agent type: {associated_type}"
+                raise Exception(msg)
             type_entry = store.agent_types[associated_type]
             if not (isinstance(type_entry, (list, tuple)) and len(type_entry) == 2):
-                raise TypeError(f"Registered agent type {associated_type} should be tuple: (AgentClass, AgentConfigClass)")
+                msg = f"Registered agent type {associated_type} should be tuple: (AgentClass, AgentConfigClass)"
+                raise TypeError(msg)
             agent_class, agent_config_class = type_entry
 
             # if it's a config dict (i.e. from yaml) then convert it to a config object
@@ -136,9 +143,10 @@ class World:
                 agent_config = agent_config_class.from_dict(agent_config)
 
             # create the agent
-            self.population.append(agent_class.from_config(agent_config))
+            self.population.append(agent_class.from_config(agent_config, self))
 
-        # self.spawners = config.spawners
+        for spawner in self.config.spawners:
+            spawner_class = get_class_from_dict(spawner)
         # self.behavior = config.behavior
         # self.objects = config.objects
         # self.goals = config.goals
@@ -175,7 +183,9 @@ class World:
         screen = None
         if output_capture is not None:
             if output_capture.total_frames * output_capture.step > steps:
-                raise Exception("Error: You have indicated an output capture that is larger than the lifespan of the simulation.")
+                raise Exception(
+                    "Error: You have indicated an output capture that is larger than the lifespan of the simulation."
+                )
             start = steps - (output_capture.total_frames * output_capture.step)
 
             if output_capture.timeless:
@@ -184,7 +194,6 @@ class World:
                 frame_markers = [(start + (output_capture.step * i)) - 1 for i in range(output_capture.total_frames)]
 
             screen = output_capture.screen
-
         for step in range(steps):
             self.step()
 
@@ -230,12 +239,14 @@ def World_from_config(config: dict):
         if config["associated_type"] in world_types:
             world_cls = world_types[config["type"]]
         else:
-            raise Exception(f"Unknown world type: {config['associated_type']}")
+            msg = f"Unknown world type: {config['associated_type']}"
+            raise Exception(msg)
     else:
         if not hasattr(config, "associated_type"):
             raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
         if config.associated_type not in world_types:
-            raise Exception(f"Unknown world type: {config.associated_type}")
+            msg = f"Unknown world type: {config.associated_type}"
+            raise Exception(msg)
         world_cls = world_types[config.associated_type]
     if isinstance(world_cls, (list, tuple)):
         world_cls, _config_cls = world_cls
