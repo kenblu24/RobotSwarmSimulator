@@ -252,10 +252,9 @@ class MazeAgent(StaticAgent):
             rand_color = np.random.choice(256, 3)
         return rand_color
 
-    def handle_collisions(self, world):
-        max_attempts = 10
+    def handle_collisions(self, world, max_attempts=10, nudge_amount=1.0):
         self.collision_flag = False
-        for _ in range(max_attempts):
+        for _i in range(max_attempts):
             candidates = [other for other in world.population if self != other
                                and self.get_aabb().intersects_bb(other.get_aabb())]
             collided = []
@@ -264,20 +263,26 @@ class MazeAgent(StaticAgent):
             for other in candidates:
                 collider = self.build_collider()
                 other_collider = other.build_collider()
-                correction = collider.correction(other_collider)
+                correction = collider.correction(other_collider) * nudge_amount
                 if np.isnan(correction).any():
                     continue
                 collided.append(other)
                 self.collision_flag = True
                 self.pos += correction
+
                 if self.catastrophic_collisions:
                     self.dead = True
                     self.body_color = (200, 200, 200)
                     other.dead = True
                     other.body_color = (200, 200, 200)
-            if not collided:
-                break
 
-            if self.DEBUG:
+            if not collided:
+                return
+            if self.DEBUG and world._screen_cache:
                 world.draw(world._screen_cache)
                 pygame.display.flip()
+            if self.DEBUG:
+                print(_i)
+        else:
+            return True
+

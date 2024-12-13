@@ -37,6 +37,10 @@ class StaticAgent(Agent):
 
         if config.seed is not None:
             self.seed = config.seed
+            self.rng = np.random.default_rng(self.seed)
+        else:
+            self.seed = np.random.randint(0, 90000)
+            self.rng = np.random.default_rng(self.seed)
 
         self.radius = config.agent_radius
         self.dt = config.dt
@@ -75,7 +79,7 @@ class StaticAgent(Agent):
             self.debug_draw(screen, offset)
 
     def build_collider(self):
-        return CircularCollider(*self.pos, self.radius)
+        return CircularCollider(*self.pos, self.radius, self.rng)
 
     def debug_draw(self, screen, offset):
         self.get_aabb().draw(screen, offset)

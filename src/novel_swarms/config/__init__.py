@@ -76,6 +76,7 @@ class LazyKnownModules:
         self.add_native_sensors()
         self.add_native_controllers()
         self.add_native_behaviors()
+        self.add_native_spawners()
 
     def add_native_world_types(self):
         from ..world.RectangularWorld import RectangularWorld, RectangularWorldConfig
@@ -135,6 +136,13 @@ class LazyKnownModules:
         # self._agent_types['HumanDrivenAgent'] = (HumanDrivenAgent, HumanDrivenAgentConfig)
         self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)
 
+    def add_native_spawners(self):
+        from ..world.spawners.UniformSpawner import UniformAgentSpawner
+
+        self.add_dictlike_namespace('spawners')
+
+        self._dictlike_types['spawners']['UniformAgentSpawner'] = UniformAgentSpawner
+
 
 store = LazyKnownModules()
 
@@ -154,6 +162,33 @@ def register_dictlike_namespace(key: str):
 def register_dictlike_type(key: str, name: str, cls):
     store.add_dictlike_namespace(key)
     store.dictlike_types[key][name] = cls
+
+
+def get_agent_class(config):
+    # get the type name
+    if isinstance(config, dict):  # if it's a config dict (i.e. from yaml) then the key is 'type'
+        # agent_config = agent_config.copy()
+        associated_type = config.pop("type", None)
+        if associated_type is None:
+            raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
+    else:  # if it's a config object (i.e. from dataclasses) then the key is the associated_type field
+        associated_type = config.associated_type
+
+    # get the agent class and config class
+    if associated_type not in store.agent_types:
+        msg = f"Unknown agent type: {associated_type}"
+        raise Exception(msg)
+    type_entry = store.agent_types[associated_type]
+    if not (isinstance(type_entry, (list, tuple)) and len(type_entry) == 2):
+        msg = f"Registered agent type {associated_type} should be tuple: (AgentClass, AgentConfigClass)"
+        raise TypeError(msg)
+    agent_class, agent_config_class = type_entry
+
+    # if it's a config dict (i.e. from yaml) then convert it to a config object
+    if isinstance(config, dict):
+        config = agent_config_class.from_dict(config)
+
+    return agent_class, config
 
 
 def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) -> tuple[object, dict]:

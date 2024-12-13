@@ -1,7 +1,10 @@
-from .Spawner import Spawner
+
 import numpy as np
 import copy
 from functools import lru_cache
+
+from .Spawner import Spawner
+from ...config import get_agent_class
 
 from ..World import World
 
@@ -13,7 +16,7 @@ class UniformAgentSpawner(Spawner):
     def __init__(
         self,
         world,
-        n=0,
+        n=1,
         agent=None,
         avoid_overlap=False,
         area=None,
@@ -24,11 +27,22 @@ class UniformAgentSpawner(Spawner):
         super().__init__(world, **kwargs)
         self.oneshot = oneshot
         self.n_objects = n
-        self.example = agent
         self.avoid_overlap = avoid_overlap
         self.area = area
         self.type = 'agent'
         self.seed = seed
+
+        self.agent_class, self.agent_config = get_agent_class(agent)
+
+
+    def make_agent(self, pos, angle, name=None):
+        config = copy.deepcopy(self.agent_config)
+        config.position = pos
+        config.angle = angle
+        if name is not None:
+            config.name = name
+
+        return self.agent_class.from_config(config, self.world)
 
     def step(self):
         if self.mark_for_deletion:
@@ -36,10 +50,15 @@ class UniformAgentSpawner(Spawner):
         super().step()
         if self.spawned < self.n_objects:
             if self.oneshot:
-                self.do_spawn()
+                for i in range(self.spawned, self.n_objects):
+                    self.do_spawn(str(i))
+            self.mark_for_deletion = True
 
-    def do_spawn(self):
-        pass
+    def do_spawn(self, name=None):
+        agent = self.make_agent([6, 6], 0, name)
+        self.world.population.append(agent)
+        agent.handle_collisions(self.world, max_attempts=5, nudge_amount=0.4)
+        agent.handle_collisions(self.world, max_attempts=10, nudge_amount=1.0)
 
     def _calculate_positions(self):
         """
@@ -56,7 +75,7 @@ class UniformAgentSpawner(Spawner):
         self.bb[1][1] *= zoom_factor
         self._calculate_positions()
 
-    def random_vec(self, bounding_set: Iterable[Tuple], n:int=1, round_to:int=5):
+    def random_vec(self, bounding_set, n:int=1, round_to:int=5):
         """
         Retrieve n random vectors bounded between specified values.
 

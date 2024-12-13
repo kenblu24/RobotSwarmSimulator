@@ -5,7 +5,7 @@ import numpy as np
 
 from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
-from ..config import store, filter_unexpected_fields, get_class_from_dict
+from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class
 
 import inspect
 from dataclasses import dataclass, field, asdict, replace
@@ -119,34 +119,17 @@ class World:
 
         # create agents
         for agent_config in self.config.agents:
-            # get the type name
-            if isinstance(agent_config, dict):  # if it's a config dict (i.e. from yaml) then the key is 'type'
-                # agent_config = agent_config.copy()
-                associated_type = agent_config.pop("type", None)
-                if associated_type is None:
-                    raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
-            else:  # if it's a config object (i.e. from dataclasses) then the key is the associated_type field
-                associated_type = agent_config.associated_type
-
-            # get the agent class and config class
-            if associated_type not in store.agent_types:
-                msg = f"Unknown agent type: {associated_type}"
-                raise Exception(msg)
-            type_entry = store.agent_types[associated_type]
-            if not (isinstance(type_entry, (list, tuple)) and len(type_entry) == 2):
-                msg = f"Registered agent type {associated_type} should be tuple: (AgentClass, AgentConfigClass)"
-                raise TypeError(msg)
-            agent_class, agent_config_class = type_entry
-
-            # if it's a config dict (i.e. from yaml) then convert it to a config object
-            if isinstance(agent_config, dict):
-                agent_config = agent_config_class.from_dict(agent_config)
+            agent_class, agent_config = get_agent_class(agent_config)
 
             # create the agent
             self.population.append(agent_class.from_config(agent_config, self))
 
-        for spawner in self.config.spawners:
-            spawner_class = get_class_from_dict(spawner)
+        for spawner_config in self.config.spawners:
+            spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
+
+            self.spawners.append(spawner_class(self, **spawner_config))
+
+
         # self.behavior = config.behavior
         # self.objects = config.objects
         # self.goals = config.goals

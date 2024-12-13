@@ -59,7 +59,7 @@ class Agent:
     def __init__(self, config, world, name=None, group=0, initialize=True) -> None:
         self.marked_for_deletion = False
         self.config = config
-        self.pos = np.asarray(config.position)
+        self.pos = np.asarray(config.position, dtype=np.float64)
         self.name = name or config.name
         self.dpos = np.zeros(len(self.pos))
         self.angle = config.angle

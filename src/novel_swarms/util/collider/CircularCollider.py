@@ -2,11 +2,15 @@ import pygame
 import numpy as np
 
 class CircularCollider:
-    def __init__(self, x, y, r):
+    infinitesmimal = 0.0001
+    shake_amount = 0.001
+
+    def __init__(self, x, y, r, rng=np.random.default_rng(0)):
         self.x = x
         self.y = y
         self.r = r
         self.v = np.array([x, y])
+        self.rng = rng
         self.collision_flag = False
 
     def update(self, x, y, r):
@@ -19,11 +23,16 @@ class CircularCollider:
         self.collision_flag = True
 
     def correction(self, other):
+        shape = self.v.shape
+        correction_vector = np.zeros(shape)
         dist_between_radii = self.dist(other)
         dist_difference = (self.r + other.r) - dist_between_radii
         if dist_difference < 0:
-            return np.empty(self.v.shape) * np.nan
-        correction_vector = ((other.v - self.v) / (dist_between_radii + 0.001)) * (dist_difference + 0.01)
+            return np.empty(shape) * np.nan
+        elif dist_between_radii < self.infinitesmimal:
+            amount = np.ones(shape) * self.shake_amount
+            correction_vector += self.rng.uniform(-amount, amount)
+        correction_vector += ((other.v - self.v) / (dist_between_radii + 0.001)) * (dist_difference + self.infinitesmimal)
         return -correction_vector
 
     def dist(self, other):

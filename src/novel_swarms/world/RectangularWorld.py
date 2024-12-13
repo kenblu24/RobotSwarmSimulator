@@ -155,6 +155,11 @@ class RectangularWorld(World):
         """
         super().step()
         # agent_step_timer = Timer("Population Step")
+
+        self.spawners = [s for s in self.spawners if not s.mark_for_deletion]
+        for spawner in self.spawners:
+            spawner.step()
+
         for agent in self.population:
             if not issubclass(type(agent), Agent):
                 msg = f"Agents must be subtype of Agent, not {type(agent)}"
@@ -424,7 +429,7 @@ class RectangularWorld(World):
 
                 pushback = (b_to_a / np.linalg.norm(b_to_a)) * distance_needed
 
-                if pushback.isnan().any():
+                if np.isnan(pushback).any():
                     break
 
                 agent.pos += pushback

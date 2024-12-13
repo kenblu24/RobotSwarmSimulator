@@ -14,7 +14,13 @@ size:  # in meters
 #   seed: 2023 # ADD SEED HERE TO ENSURE SAME INITIALIZATION EVERY TIME
 # spawners:
 #   - type: "UniformRectangularAgentSpawner"
-
+spawners:
+  - type: "UniformAgentSpawner"
+    oneshot: true
+    n: 10
+    agent:
+      type: MazeAgent
+      agent_radius: 0.15
 agents:
   - type: MazeAgent
     position: [4, 4]
