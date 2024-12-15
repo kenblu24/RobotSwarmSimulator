@@ -137,10 +137,12 @@ class LazyKnownModules:
         self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)
 
     def add_native_spawners(self):
-        from ..world.spawners.UniformSpawner import UniformAgentSpawner
+        from ..world.spawners.AgentSpawner import AgentSpawner, UniformAgentSpawner, PointAgentSpawner
 
         self.add_dictlike_namespace('spawners')
 
+        self._dictlike_types['spawners']['AgentSpawner'] = AgentSpawner
+        self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['UniformAgentSpawner'] = UniformAgentSpawner
 
 
@@ -162,6 +164,12 @@ def register_dictlike_namespace(key: str):
 def register_dictlike_type(key: str, name: str, cls):
     store.add_dictlike_namespace(key)
     store.dictlike_types[key][name] = cls
+
+
+_ERRMSG_MISSING_ASSOCIATED_TYPE = """
+Expected this config to have an associated_type field.
+Use @novel_swarms.config.associated_type(ClassNameHere) on the config dataclass.
+"""
 
 
 def get_agent_class(config):

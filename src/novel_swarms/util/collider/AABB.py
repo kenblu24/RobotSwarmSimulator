@@ -3,11 +3,15 @@ from functools import cached_property
 
 import pygame
 import numpy as np
+from shapely.coordinates import get_coordinates
+from shapely.geometry.base import BaseGeometry
 
 
 class AABB:
     def __init__(self, p):
         p = np.asarray(p, dtype=np.float64)
+        if p.ndim == 1:
+            p = p.reshape(len(p) // 2, 2)
         self._min = p.min(axis=0)
         self._max = p.max(axis=0)
         self._cs = np.array((self._min, self._max))
@@ -63,3 +67,22 @@ class AABB:
         pos = self._min * zoom + pan
         size = self._size * zoom
         pygame.draw.rect(screen, color, pygame.Rect(*pos, *size), 1)
+
+    def is_mungible(self, points, tolerance=0.001):
+        if isinstance(points, (np.ndarray, list, tuple)):
+            points = np.asarray(points, dtype=np.float64)
+        elif isinstance(points, BaseGeometry):
+            points = np.asarray(get_coordinates(points), dtype=np.float64)
+        else:
+            return
+        if points.shape != (4, 2):
+            return False
+        points = points.tolist()
+        for corner in self.corners:
+            for point in points:
+                if np.linalg.norm(point - corner) < tolerance:
+                    points.remove(point)
+                    break
+            else:
+                return False
+        return not points  # points is empty if each point can be assigned to a corner

@@ -31,6 +31,8 @@ State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
 
 @associated_type("MazeAgent")
+@filter_unexpected_fields
+@dataclass
 class MazeAgentConfig(StaticAgentConfig):
     world: World | None = None
     world_config: RectangularWorldConfig | None = None
@@ -252,7 +254,7 @@ class MazeAgent(StaticAgent):
             rand_color = np.random.choice(256, 3)
         return rand_color
 
-    def handle_collisions(self, world, max_attempts=10, nudge_amount=1.0):
+    def handle_collisions(self, world, max_attempts=10, nudge_amount=1.0, rng=None):
         self.collision_flag = False
         for _i in range(max_attempts):
             candidates = [other for other in world.population if self != other
@@ -263,7 +265,7 @@ class MazeAgent(StaticAgent):
             for other in candidates:
                 collider = self.build_collider()
                 other_collider = other.build_collider()
-                correction = collider.correction(other_collider) * nudge_amount
+                correction = collider.correction(other_collider, rng=rng) * nudge_amount
                 if np.isnan(correction).any():
                     continue
                 collided.append(other)
@@ -281,8 +283,7 @@ class MazeAgent(StaticAgent):
             if self.DEBUG and world._screen_cache:
                 world.draw(world._screen_cache)
                 pygame.display.flip()
-            if self.DEBUG:
-                print(_i)
+
         else:
             return True
 

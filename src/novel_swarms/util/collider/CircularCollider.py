@@ -5,12 +5,11 @@ class CircularCollider:
     infinitesmimal = 0.0001
     shake_amount = 0.001
 
-    def __init__(self, x, y, r, rng=np.random.default_rng(0)):
+    def __init__(self, x, y, r):
         self.x = x
         self.y = y
         self.r = r
         self.v = np.array([x, y])
-        self.rng = rng
         self.collision_flag = False
 
     def update(self, x, y, r):
@@ -22,7 +21,9 @@ class CircularCollider:
     def flag_collision(self):
         self.collision_flag = True
 
-    def correction(self, other):
+    def correction(self, other, rng=None):
+        if rng is None:
+            rng = np.random.default_rng(0)
         shape = self.v.shape
         correction_vector = np.zeros(shape)
         dist_between_radii = self.dist(other)
@@ -31,7 +32,7 @@ class CircularCollider:
             return np.empty(shape) * np.nan
         elif dist_between_radii < self.infinitesmimal:
             amount = np.ones(shape) * self.shake_amount
-            correction_vector += self.rng.uniform(-amount, amount)
+            correction_vector += rng.uniform(-amount, amount)
         correction_vector += ((other.v - self.v) / (dist_between_radii + 0.001)) * (dist_difference + self.infinitesmimal)
         return -correction_vector
 

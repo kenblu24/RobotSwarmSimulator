@@ -12,12 +12,11 @@ size:  # in meters
 #     - - 4.6 # X (m) Lower Right Bounding Box Corner
 #       - 4.6 # Y
 #   seed: 2023 # ADD SEED HERE TO ENSURE SAME INITIALIZATION EVERY TIME
-# spawners:
-#   - type: "UniformRectangularAgentSpawner"
 spawners:
   - type: "UniformAgentSpawner"
     oneshot: true
-    n: 10
+    n: 30
+    region: [[3, 3], [3, 6], [6, 6], [6, 3]]
     agent:
       type: MazeAgent
       agent_radius: 0.15
@@ -48,10 +47,13 @@ agents:
     #   a: [0.001, 0.001]
     #   b: [0.001, -0.001]
     angle: 3.9269908169872415480783042290994
-  - type: StaticAgent
-    position: [3, 3]
-    agent_radius: 0.5
-    # angle: PI
+  # - type: StaticAgent
+  #   # position: [3, 3]
+  #   position: [0, 0]
+  #   # agent_radius: 0.5
+  #   # points: [[-0.1, 0], [0.1, 0], [-0.1, 0.1], [0.1, 0.1]]
+  #   points: [[3, 3], [3, 6], [6, 6], [6, 3]]
+  #   # angle: PI
 padding: 0
 collide_walls: false  # Use No Environment Walls for this problem
 show_walls: false  # Hide Default Walls,

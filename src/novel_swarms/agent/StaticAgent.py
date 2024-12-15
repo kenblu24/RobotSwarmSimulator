@@ -1,8 +1,11 @@
-from functools import lru_cache
+from functools import lru_cache, cached_property
 
 import pygame
 import numpy as np
-from dataclasses import dataclass
+from shapely.geometry import Polygon
+from shapely import transform, get_coordinates
+
+from dataclasses import dataclass, field
 from ..config import filter_unexpected_fields, associated_type
 from copy import deepcopy
 from .Agent import Agent, BaseAgentConfig
@@ -17,20 +20,23 @@ from ..world.RectangularWorld import RectangularWorldConfig
 
 
 @associated_type("StaticAgent")
+@filter_unexpected_fields
+@dataclass
 class StaticAgentConfig(BaseAgentConfig):
     seed: int | None = None
     world_config: RectangularWorldConfig | None = None
-    agent_radius: float = 5
+    agent_radius: float = 0.
     dt: float = 1.0
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
+    points: list[tuple[float, float]] | np.ndarray = field(default_factory=list)
 
     def attach_world_config(self, world_config):
         self.world = world_config
 
 
 class StaticAgent(Agent):
-    DEBUG = True
+    DEBUG = False
 
     def __init__(self, config: StaticAgentConfig, world, name=None, initialize=True) -> None:
         super().__init__(config, world, name, initialize=False)
@@ -42,7 +48,8 @@ class StaticAgent(Agent):
             self.seed = np.random.randint(0, 90000)
             self.rng = np.random.default_rng(self.seed)
 
-        self.radius = config.agent_radius
+        self.points = np.asarray(config.points, dtype=np.float64)
+        self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
         self.dt = config.dt
         self.is_highlighted = False
         self.agent_in_sight = None
@@ -57,6 +64,27 @@ class StaticAgent(Agent):
     def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
         super().step()
 
+    @property
+    def is_poly(self):
+        return self.points.any()
+
+    def rotmat2d(self, offset=0):
+        angle = self.angle + offset
+        return np.array([[np.cos(angle), -np.sin(angle)],
+                         [np.sin(angle), np.cos(angle)]], dtype=np.float64)
+
+    def rotmat3d(self, offset=None):
+        angle = self.angle if offset is None else (self.angle + offset)
+        return np.array([
+            [np.cos(angle), -np.sin(angle), 0],
+            [np.sin(angle), np.cos(angle), 0],
+            [0, 0, 1]
+        ], dtype=np.float64)
+
+    @property
+    def poly_rotated(self):
+        return self.points @ self.rotmat2d()
+
     @override
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
         pan, zoom = np.asarray(offset[0]), offset[1]
@@ -66,7 +94,11 @@ class StaticAgent(Agent):
         filled = 0 if (self.is_highlighted or self.stopped_duration or self.body_filled) else 1
         color = self.body_color if not self.stopped_duration else (255, 255, 51)
         pos = np.asarray(self.getPosition()) * zoom + pan
-        pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)  # pyright: ignore[reportArgumentType]
+
+        if self.is_poly:
+            pygame.draw.polygon(screen, color, self.poly_rotated * zoom + pos, width=filled)
+        else:
+            pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)  # pyright: ignore[reportArgumentType]
 
         # "Front" direction vector
         head = np.asarray(self.getFrontalPoint()) * zoom + pan
@@ -79,7 +111,7 @@ class StaticAgent(Agent):
             self.debug_draw(screen, offset)
 
     def build_collider(self):
-        return CircularCollider(*self.pos, self.radius, self.rng)
+        return CircularCollider(*self.pos, self.radius)
 
     def debug_draw(self, screen, offset):
         self.get_aabb().draw(screen, offset)
@@ -88,10 +120,16 @@ class StaticAgent(Agent):
         """
         Return the Bounding Box of the agent
         """
+        if self.is_poly:
+            return AABB(self.poly_rotated + self.pos)
         x, y = self.pos
         top_left = (x - self.radius, y - self.radius)
         bottom_right = (x + self.radius, y + self.radius)
         return AABB((top_left, bottom_right))
+
+    def get_simple_poly_radius(self):
+        if self.is_poly:
+            return max(np.linalg.norm(p) for p in self.points)
 
     def __str__(self) -> str:
         x, y = self.pos

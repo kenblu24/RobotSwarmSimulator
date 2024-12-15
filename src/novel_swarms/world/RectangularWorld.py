@@ -182,8 +182,6 @@ class RectangularWorld(World):
         """
         Cycle through the entire population and draw the agents. Draw Environment Walls if needed.
         """
-        if not self._screen_cache and screen:
-            self._screen_cache = screen
         if offset is None:
             offset = (self.pos, self.zoom)
         # pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]

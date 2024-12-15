@@ -5,17 +5,11 @@ import numpy as np
 
 from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
-from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class
+from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class, _ERRMSG_MISSING_ASSOCIATED_TYPE
 
 import inspect
 from dataclasses import dataclass, field, asdict, replace
 from collections.abc import Callable
-
-
-_ERRMSG_MISSING_ASSOCIATED_TYPE = """
-Expected this config to have an associated_type field.
-Use @novel_swarms.config.associated_type(ClassNameHere) on the config dataclass.
-"""
 
 
 @filter_unexpected_fields

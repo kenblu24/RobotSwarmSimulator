@@ -47,6 +47,7 @@ def main(
 
     world = World_from_config(world_config)
     world.original_zoom = viewport_zoom
+    world._screen_cache = screen if screen else None
     world.setup()
 
     # Attach any subscribers to the world
