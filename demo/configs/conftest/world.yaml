@@ -13,19 +13,29 @@ size:  # in meters
 #       - 4.6 # Y
 #   seed: 2023 # ADD SEED HERE TO ENSURE SAME INITIALIZATION EVERY TIME
 spawners:
-  - type: "UniformAgentSpawner"
+  # - type: UniformAgentSpawner
+  #   oneshot: true
+  #   n: 30
+  #   region: [[3, 3], [3, 6], [6, 6], [6, 3]]
+  #   facing: towards
+  #   agent:
+  #     type: MazeAgent
+  #     agent_radius: 0.15
+  - type: PointAgentSpawner
     oneshot: true
-    n: 30
-    region: [[3, 3], [3, 6], [6, 6], [6, 3]]
+    n: 8
+    facing: away
+    avoid_overlap: true
     agent:
       type: MazeAgent
       agent_radius: 0.15
+      position: [8, 8]
 agents:
   - type: MazeAgent
     position: [4, 4]
     agent_radius: 0.15
     sensors:
-      - type: "BinaryFOVSensor"
+      - type: BinaryFOVSensor
         theta: 0.45  # Vision Angle / 2 (Radians)
         degrees: false
         distance: 1.0  # meters. previously 2.55
@@ -38,8 +48,8 @@ agents:
         bias: 0
         store_history: false
         seed: 10
-    controller:
-      type: "StaticController"
+    controller:  # this is not a list (don't use the '-' character)
+    - type: StaticController
       output: [0.001, 0]
     # controller: {type: AgentMethodController}
     # controller:

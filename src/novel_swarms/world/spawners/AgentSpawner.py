@@ -7,6 +7,9 @@ from .Spawner import Spawner
 from ...util.collider.AABB import AABB
 from ...config import get_agent_class
 
+# typing:
+from ...agent.StaticAgent import StaticAgent, StaticAgentConfig
+
 
 def AgentSpawner(*args, **kwargs):
     # suss out the type of spawner
@@ -33,6 +36,8 @@ class PointAgentSpawner(Spawner):
         if isinstance(facing, str):
             if facing.lower() == 'random':
                 self.facing = [0, np.pi]
+            elif facing.lower() in ['towards', 'away']:
+                self.facing = facing.lower()
             else:
                 msg = f"Invalid option for key 'facing' in spawner config: {facing}"
                 raise ValueError(msg)
@@ -42,18 +47,19 @@ class PointAgentSpawner(Spawner):
         if seed is None:
             self.seed = np.random.randint(0, 90000)
             self.rng = np.random.default_rng(self.seed)
-            print(self.seed)
         else:
             self.seed = seed
             self.rng = np.random.default_rng(self.seed)
 
         self.agent_class, self.agent_config = get_agent_class(agent)
+        self.agent_class: StaticAgent
+        self.agent_config: StaticAgentConfig
 
     def generate_config(self, name=None):
         config = copy.deepcopy(self.agent_config)
 
         # modify agent config
-        if self.facing is not None:
+        if isinstance(self.facing, (list, tuple, np.ndarray)):
             config.angle = self.rng.uniform(*self.facing)
         if name is not None:
             config.name = name
@@ -76,6 +82,22 @@ class PointAgentSpawner(Spawner):
             self.mark_for_deletion = True
         # self.world.draw(self.world._screen_cache)
 
+    @staticmethod
+    def angle_between(a, b):
+        b, a = np.asarray(b, dtype=np.float64).reshape(2), np.asarray(a, dtype=np.float64).reshape(2)
+        vec = b - a
+        return np.arctan2(*reversed(vec))
+
+    def set_angle_post_spawn(self, agent):
+        d = np.linalg.norm(agent.pos - self.agent_config.position)
+        if d < 0.000_001:
+            return
+        if isinstance(self.facing, str):
+            if self.facing == 'towards':
+                agent.angle = self.angle_between(agent.pos, self.agent_config.position)
+            elif self.facing == 'away':
+                agent.angle = self.angle_between(self.agent_config.position, agent.pos)
+
     def do_spawn(self, name=None):
         config = self.generate_config(name)
         agent = self.make_agent(config)
@@ -83,6 +105,8 @@ class PointAgentSpawner(Spawner):
         if self.avoid_overlap:
             agent.handle_collisions(self.world, max_attempts=5, nudge_amount=0.4, rng=self.rng)
             agent.handle_collisions(self.world, max_attempts=10, nudge_amount=1.0, rng=self.rng)
+
+        self.set_angle_post_spawn(agent)
 
 
 class UniformAgentSpawner(PointAgentSpawner):
@@ -122,6 +146,13 @@ class UniformAgentSpawner(PointAgentSpawner):
         from pointpats.random import poisson
         np.random.seed(self.rng.integers(0, 90000))
         return poisson(self.poly, size=n)
+
+    def set_angle_post_spawn(self, agent):
+        if isinstance(self.facing, str):
+            if self.facing == 'towards':
+                agent.angle = self.angle_between(agent.pos, self.poly.centroid.xy)
+            elif self.facing == 'away':
+                agent.angle = self.angle_between(self.poly.centroid.xy, agent.pos)
 
     def generate_config(self, name=None):
         config = super().generate_config(name)
