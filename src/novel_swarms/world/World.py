@@ -43,10 +43,10 @@ class AbstractWorldConfig:
 
     @classmethod
     def from_yaml(cls, path):
-        import yaml
+        from ..util import yaml
 
         with open(path, "r") as f:
-            return cls.from_dict(yaml.safe_load(f))
+            return cls.from_dict(yaml.load(f))
 
     def save_yaml(self, path):
         import yaml

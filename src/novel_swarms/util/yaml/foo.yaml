@@ -1,0 +1,6 @@
+---
+type: agent
+name: agent1
+sensors:
+  - heck
+...

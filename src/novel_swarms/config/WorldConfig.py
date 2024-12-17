@@ -143,11 +143,11 @@ class RectangularWorldConfig:
 class WorldYAMLFactory:
     @staticmethod
     def from_yaml(file_name):
-        import yaml
+        from ..util.yaml import load
 
         config = None
-        with open(file_name, "r") as stream:
-            config = yaml.safe_load(stream)
+        with open(file_name, "r") as f:
+            config = load(f)
 
         w_type = config["type"]
         if w_type == "RectangularWorld":

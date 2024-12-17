@@ -56,7 +56,7 @@ agents:
     #   type: BinaryController
     #   a: [0.001, 0.001]
     #   b: [0.001, -0.001]
-    angle: 3.9269908169872415480783042290994
+    angle: !np -radians(90)
   # - type: StaticAgent
   #   # position: [3, 3]
   #   position: [0, 0]
