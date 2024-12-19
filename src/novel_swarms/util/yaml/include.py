@@ -4,6 +4,10 @@ import json
 import yaml
 from typing import Any, IO
 
+# se: https://stackoverflow.com/questions/528281/how-can-i-include-a-yaml-file-inside-another
+# metaclass example: https://gist.github.com/joshbode/569627ced3076931b02f?permalink_comment_id=2309157#gistcomment-2309157
+# possibly helpful: https://matthewpburruss.com/post/yaml/
+
 
 class IncludeLoader(yaml.SafeLoader):
     """YAML Loader with `!include` constructor."""

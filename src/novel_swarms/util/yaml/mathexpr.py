@@ -1,5 +1,20 @@
-import numexpr
+"""
+Handle !np yaml tag. Allows for evaluation of simple math/numpy expressions.
 
+Examples:
+
+```
+0: !np [radians(90 + 45), pi / 2, 3.14]  -> [-2.356194490192345, 1.5707963267948966, 3.14]
+1: !np complex('2+2j')  -> (2+2j)
+2: !np array(list(range(10)), dtype=float)  -> array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+```
+
+WARNING: This code is not safe for arbitrary code execution as it uses eval().
+Do not use untrusted .yaml files.
+While the functionality has been limited to expressions, eval() is still dangerous.
+Assignments and named expressions (walrus) and lambdas are disallowed to prevent
+the user from breaking things too much.
+"""
 import yaml
 import ast
 import numpy
