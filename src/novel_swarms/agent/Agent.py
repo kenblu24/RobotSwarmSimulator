@@ -18,7 +18,9 @@ class BaseAgentConfig:
     name: str | Any = None
     controller: Any = None
     grounded: bool = False
+    collides: bool | int = False
     sensors: list = field(default_factory=list)
+    team: str | None = None
 
     # def __post_init__(self):
     #     if self.stop_at_goal is not False:
@@ -67,6 +69,7 @@ class Agent:
         self.sensors = []
         self.controller = zero_controller(2)
         self.collision_flag = False
+        self.collides = config.collides
         self.stop_on_collision = False
         self.stopped_duration = 0
         self.detection_id = 0
@@ -74,6 +77,7 @@ class Agent:
         self.group = group
         self.world = world
         self.grounded = config.grounded
+        self.team = config.team
 
         if initialize:
             self.setup_controller_from_config()

@@ -20,6 +20,13 @@ class StaticController(Controller):
     def as_config_dict(self):
         return {'output': self.output}
 
+    def __str__(self):
+        body = '\n'.join([f'  u_{i}: {x: >8.4f}' for i, x in enumerate(self.output)])
+        return 'StaticController:\n' + body
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.output}"
+
 
 def zero_controller(d: int = 2):
     if shared_controllers.get("zero_controller", None) is None:

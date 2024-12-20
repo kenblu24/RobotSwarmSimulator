@@ -49,7 +49,7 @@ agents:
         store_history: false
         seed: 10
     controller:  # this is not a list (don't use the '-' character)
-    - type: StaticController
+      type: StaticController
       output: [0.001, 0]
     # controller: {type: AgentMethodController}
     # controller:

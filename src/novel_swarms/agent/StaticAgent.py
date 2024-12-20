@@ -29,6 +29,7 @@ class StaticAgentConfig(BaseAgentConfig):
     dt: float = 1.0
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
+    collides: bool | int = True
     points: list[tuple[float, float]] | np.ndarray = field(default_factory=list)
 
     def attach_world_config(self, world_config):
@@ -55,6 +56,8 @@ class StaticAgent(Agent):
         self.agent_in_sight = None
         self.body_filled = config.body_filled
         self.body_color = config.body_color
+        self.rotmat = self.rotmat2d()
+        self.aabb = self.make_aabb()
 
         if initialize:
             self.setup_controller_from_config()
@@ -63,6 +66,9 @@ class StaticAgent(Agent):
     @override
     def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
         super().step()
+
+        self.rotmat = self.rotmat2d()
+        self.aabb = self.make_aabb()
 
     @property
     def is_poly(self):
@@ -116,7 +122,7 @@ class StaticAgent(Agent):
     def debug_draw(self, screen, offset):
         self.get_aabb().draw(screen, offset)
 
-    def get_aabb(self) -> AABB:
+    def make_aabb(self) -> AABB:
         """
         Return the Bounding Box of the agent
         """

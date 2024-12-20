@@ -1,4 +1,6 @@
-# from . import pid
+import bisect
+
+from . import pid
 
 # from typing import override
 
@@ -204,9 +206,26 @@ class AverageCustom(Average):
         return tuple(averages)
 
 
-# class PID(pid.PID):
-#     def __call__(self, error, scaler=1):
-#         return super().get_pid(error, scaler)
+class Remap():
+    def __init__(self, in_points, out_points):
+        # sort by in_points
+        combined = sorted(zip(in_points, out_points), key=lambda x: x[0])
+        self.in_points, self.out_points = zip(*combined)
+
+    def __call__(self, x):
+        if x in self.in_points:
+            return self.out_points[self.in_points.index(x)]
+
+        i1 = bisect.bisect_left(self.in_points, x)
+        if i1 < 0:
+            i0, i1 = 0, 1
+        elif i1 >= len(self.out_points):
+            i1 -= 1
+            i0 = i1 - 1
+        else:
+            i0 = i1 - 1
+        inp, outp = self.in_points, self.out_points
+        return fmap(x, inp[i0], inp[i1], outp[i0], outp[i1])
 
 
 # returns list as cumulative, starting at element s onwards

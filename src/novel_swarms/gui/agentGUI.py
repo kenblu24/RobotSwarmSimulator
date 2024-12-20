@@ -97,7 +97,10 @@ class DifferentialDriveGUI(AbstractGUI):
                     self.appendTextToGUI(screen, f"Idio_2: {a.i_2}")
                 self.appendTextToGUI(screen, f"")
                 if hasattr(a, "controller"):
-                    self.appendTextToGUI(screen, f"controller: {a.controller}")
+                    lines = str(a.controller).split('\n')
+                    self.appendTextToGUI(screen, f"controller: {lines[0]}")
+                    for line in lines[1:]:
+                        self.appendTextToGUI(screen, line)
                     self.appendTextToGUI(screen, f"")
                 if hasattr(a, "agent_in_sight"):
                     agent_seen = getattr(a.agent_in_sight, "name", '')
