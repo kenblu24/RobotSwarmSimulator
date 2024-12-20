@@ -34,7 +34,7 @@ allowed_numpy_names = [
 ]
 builtins_dict = vars(builtins)
 allowed_builtins = {name: builtins_dict[name] for name in allowed_builtins_names}
-allowed_math = {k: vars(numpy)[k] for k in allowed_numpy_names}
+allowed_math = {k: vars(numpy)[k] for k in allowed_numpy_names if k in vars(numpy)}
 
 eval_globals = {'__builtins__': allowed_builtins}
 eval_names = allowed_math
