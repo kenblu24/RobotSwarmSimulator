@@ -116,15 +116,21 @@ class StaticAgent(Agent):
         else:
             pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)  # pyright: ignore[reportArgumentType]
 
+        self.draw_direction(screen, offset)
+
+        if self.DEBUG:
+            self.debug_draw(screen, offset)
+
+    def draw_direction(self, screen, offset=((0, 0), 1.0)):
+        pan, zoom = np.asarray(offset[0]), offset[1]
         # "Front" direction vector
+        pos = np.asarray(self.getPosition()) * zoom + pan
         head = np.asarray(self.getFrontalPoint()) * zoom + pan
         tail = pos
         vec = head - tail
         mag = self.radius * 2
         vec_with_magnitude = tail + vec * mag
         pygame.draw.line(screen, (255, 255, 255), tail, vec_with_magnitude)
-        if self.DEBUG:
-            self.debug_draw(screen, offset)
 
     def build_collider(self):
         return CircularCollider(*self.pos, self.radius)

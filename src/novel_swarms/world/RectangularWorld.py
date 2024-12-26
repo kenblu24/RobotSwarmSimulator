@@ -95,11 +95,17 @@ class RectangularWorld(World):
             if 'from_svg' not in entry:
                 continue
             if isinstance((svg:=entry['from_svg']), str):
-                paths = SVG(svg).get_polygons()
-                paths += SVG(svg).get_rects()
+                svg = SVG(svg)
+                paths = svg.get_polygons()
+                paths += svg.get_rects()
                 for path in paths:
                     points = np.asarray(path, dtype=np.float64)
                     agent_config = StaticObjectConfig(points=points)
+                    self.objects.append(StaticObject(agent_config, self))
+                circles = svg.get_circles()
+                for circle in circles:
+                    x, y, r = circle
+                    agent_config = StaticObjectConfig(position=np.array([x, y]), radius=r)
                     self.objects.append(StaticObject(agent_config, self))
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")

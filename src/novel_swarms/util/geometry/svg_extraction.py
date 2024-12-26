@@ -107,6 +107,16 @@ class SVG:
             rects.append(points)
         return rects
 
+    def get_circles(self):
+        circles = []
+        elements = self.root.findall('.//{http://www.w3.org/2000/svg}circle')
+        for elem in elements:
+            x = float(elem.attrib['cx'])
+            y = float(elem.attrib['cy'])
+            r = float(elem.attrib['r'])
+            circles.append((x, y, r))
+        return circles
+
     # def get_path_collection(self):
     #     path_elems = self.root.findall('.//{http://www.w3.org/2000/svg}path')
 
