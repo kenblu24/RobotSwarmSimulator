@@ -103,19 +103,20 @@ class BinaryFOVSensor(AbstractSensor):
                         consideration_set.append((d_to_inter, None))
 
         # Detect for World Objects
-        for world_obj in world.objects:
-            if not world_obj.detectable:
-                continue
-            l = [sensor_origin, sensor_origin + (e_left[:2] * self.wall_sensing_range)]
-            r = [sensor_origin, sensor_origin + (e_right[:2] * self.wall_sensing_range)]
-            for segment in world_obj.get_sensing_segments():
-                if self.lines_segments_intersect(segment, l):
-                    d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, l)) - np.array(sensor_origin))
-                    consideration_set.append((d_to_inter, None))
+        # TODO: use this again
+        # for world_obj in world.objects:
+        #     if not world_obj.detectable:
+        #         continue
+        #     l = [sensor_origin, sensor_origin + (e_left[:2] * self.wall_sensing_range)]
+        #     r = [sensor_origin, sensor_origin + (e_right[:2] * self.wall_sensing_range)]
+        #     for segment in world_obj.get_sensing_segments():
+        #         if self.lines_segments_intersect(segment, l):
+        #             d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, l)) - np.array(sensor_origin))
+        #             consideration_set.append((d_to_inter, None))
 
-                if self.lines_segments_intersect(segment, r):
-                    d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
-                    consideration_set.append((d_to_inter, None))
+        #         if self.lines_segments_intersect(segment, r):
+        #             d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
+        #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
         for agent in bag:
             u = agent.getPosition() - sensor_origin

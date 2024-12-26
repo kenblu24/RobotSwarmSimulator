@@ -30,14 +30,14 @@ class StaticAgentConfig(BaseAgentConfig):
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
     collides: bool | int = True
-    points: list[tuple[float, float]] | np.ndarray = field(default_factory=list)
+    points: list[tuple[float, float]] | np.ndarray | str = field(default_factory=list)
 
     def attach_world_config(self, world_config):
         self.world = world_config
 
 
 class StaticAgent(Agent):
-    DEBUG = False
+    DEBUG = True
 
     def __init__(self, config: StaticAgentConfig, world, name=None, initialize=True) -> None:
         super().__init__(config, world, name, initialize=False)
@@ -49,7 +49,17 @@ class StaticAgent(Agent):
             self.seed = np.random.randint(0, 90000)
             self.rng = np.random.default_rng(self.seed)
 
-        self.points = np.asarray(config.points, dtype=np.float64)
+        if isinstance(config.points, str):
+            from ..util.geometry.svg_extraction import SVG
+            paths = SVG(config.points).get_polygons()
+            if not paths:
+                raise Exception("No polygons found in SVG.")
+            elif len(paths) == 1:
+                self.points = np.asarray(paths[0], dtype=np.float64)
+            else:
+                raise Exception("Multiple polygons found in SVG.")
+        else:
+            self.points = np.asarray(config.points, dtype=np.float64)
         self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
         self.dt = config.dt
         self.is_highlighted = False
@@ -120,7 +130,7 @@ class StaticAgent(Agent):
         return CircularCollider(*self.pos, self.radius)
 
     def debug_draw(self, screen, offset):
-        self.get_aabb().draw(screen, offset)
+        self.make_aabb().draw(screen, offset)
 
     def make_aabb(self) -> AABB:
         """

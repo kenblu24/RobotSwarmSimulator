@@ -136,6 +136,9 @@ class LazyKnownModules:
         # self._agent_types['HumanDrivenAgent'] = (HumanDrivenAgent, HumanDrivenAgentConfig)
         self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)
 
+        from ..world.objects.StaticObject import StaticObject, StaticObjectConfig
+        self._agent_types['StaticObject'] = (StaticObject, StaticObjectConfig)
+
     def add_native_spawners(self):
         from ..world.spawners.AgentSpawner import AgentSpawner, UniformAgentSpawner, PointAgentSpawner
 

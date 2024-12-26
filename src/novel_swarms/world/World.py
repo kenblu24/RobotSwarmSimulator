@@ -26,6 +26,12 @@ class AbstractWorldConfig:
     seed: int | None = None
     metadata: dict = field(default_factory=dict)
 
+    def __post_init__(self):
+        if self.agents is None:
+            self.agents = []
+        if self.spawners is None:
+            self.spawners = []
+
     @property
     def radius(self):
         self.size = np.asarray(self.size)

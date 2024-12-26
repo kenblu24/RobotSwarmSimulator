@@ -1,4 +1,7 @@
 import math
+
+from ..config import store
+from ..util.geometry.svg_extraction import SVG
 import random
 from dataclasses import dataclass
 
@@ -82,67 +85,24 @@ class RectangularWorld(World):
 
         # self.heterogeneous = False
 
-        # if isinstance(config.agentConfig, HeterogeneousSwarmConfig):
-        #     self.population = config.agentConfig.build_agent_population()
-        #     self.heterogeneous = True
-
-        # else:
-        #     self.population = [
-        #         config.agentConfig.create(name=f"{i}") for i in range(int(self.population_size))
-        #     ]
         self.population = []
 
-        # Attach Walls to sensors
-        # TODO: Better software engineering here
-        # if config.detectable_walls:
-        #     from ..sensors.BinaryFOVSensor import BinaryFOVSensor
-
-        #     self.objects += [
-        #         Wall(self, self.padding - 1, self.padding - 1, 1, self.config.h),
-        #         Wall(self, self.padding - 1, self.padding - 1, self.config.w, 1),
-        #         Wall(self, self.padding - 1, self.padding + self.config.h + 1, self.config.w, 1),
-        #         Wall(self, self.padding + self.config.h + 1, self.padding - 1, 1, self.config.h),
-        #     ]
-
-        # ac = config.agentConfig
-
-        # # Iniitalize the Agents
-        # if config.init_type:
-        #     config.init_type.set_to_world(self)
-
-        # else:  # TODO: Deprecate defined_start
-        #     if config.defined_start:
-        #         for i in range(len(config.agent_init)):
-        #             init = config.agent_init[i]
-        #             noise_x = ((np.random.random() * 2) - 1) * 20
-        #             noise_y = ((np.random.random() * 2) - 1) * 20
-        #             noise_theta = ((np.random.random() * 2) - 1) * (np.pi / 8)
-        #             # noise_x = 0
-        #             # noise_y = 0
-        #             # noise_theta = 0
-        #             self.population[i].set_x_pos(init[0] + noise_x)
-        #             self.population[i].set_y_pos(init[1] + noise_y)
-        #             if len(init) > 2:
-        #                 self.population[i].angle = init[2] + noise_theta
-
-        #     elif self.heterogeneous:
-        #         for agent in self.population:
-        #             agent.set_x_pos(random.uniform(math.floor(0 + agent.radius), math.floor(self.bounded_width - agent.radius)))
-        #             agent.set_y_pos(random.uniform(math.ceil(0 + agent.radius), math.floor(self.bounded_height - agent.radius)))
-        #             agent.angle = random.random() * 2 * math.pi
-
-        #     elif ac.x is None and config.seed is not None:
-        #         for agent in self.population:
-        #             agent.set_x_pos(random.uniform(0 + ac.agent_radius, ac.world.w - ac.agent_radius))
-        #             agent.set_y_pos(random.uniform(0 + ac.agent_radius, ac.world.h - ac.agent_radius))
-        #             agent.angle = random.random() * 2 * math.pi
-
-        for i in range(len(self.objects)):
-            self.objects[i].world = self
-
-        # Assign Agents Identifiers
-        for i, agent in enumerate(self.population):
-            agent.set_name(str(i))
+        StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
+        for entry in config.objects:
+            if not isinstance(entry, dict):
+                continue
+            # check if entry contains a "from_svg" key with a string value
+            if 'from_svg' not in entry:
+                continue
+            if isinstance((svg:=entry['from_svg']), str):
+                paths = SVG(svg).get_polygons()
+                paths += SVG(svg).get_rects()
+                for path in paths:
+                    points = np.asarray(path, dtype=np.float64)
+                    agent_config = StaticObjectConfig(points=points)
+                    self.objects.append(StaticObject(agent_config, self))
+            else:
+                raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
         self.behavior = config.behavior
         for b in self.behavior:
