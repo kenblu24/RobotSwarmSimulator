@@ -81,7 +81,10 @@ class DifferentialDriveGUI(AbstractGUI):
                 self.appendTextToGUI(screen, f"x: {round(a.get_x_pos(), 12): > }")
                 self.appendTextToGUI(screen, f"y: {round(a.get_y_pos(), 12): > }")
                 self.appendTextToGUI(screen, f"θ: {round(heading, 12): > 16}")
-                self.appendTextToGUI(screen, f"D: {round(a.iD, 12): > }")
+                if hasattr(a, "iD"):
+                    self.appendTextToGUI(screen, f"D: {round(a.iD, 12): > }")
+                else:
+                    self.appendTextToGUI(screen, f"")
                 self.appendTextToGUI(screen, f"dx: {round(dx, 12): > }")
                 self.appendTextToGUI(screen, f"dy: {round(dy, 12): > }")
                 self.appendTextToGUI(screen, f"dt: {round(a.dt, 12): > }")

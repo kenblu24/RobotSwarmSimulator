@@ -1,6 +1,6 @@
 import pygame
 import numpy as np
-from ...util.collider.CircularCollider import CircularCollider
+from ...util.collider.Collider import CircularCollider
 
 
 class AbstractGoal:

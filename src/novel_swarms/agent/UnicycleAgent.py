@@ -8,7 +8,7 @@ from copy import deepcopy
 from .Agent import Agent
 from ..config.AgentConfig import UnicycleAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor, GenomeFOVSensor
-from ..util.collider.CircularCollider import CircularCollider
+from ..util.collider.Collider import CircularCollider
 from ..util.timer import Timer
 from ..util.collider.AABB import AABB
 from ..util.collider.AngleSensitiveCC import AngleSensitiveCC

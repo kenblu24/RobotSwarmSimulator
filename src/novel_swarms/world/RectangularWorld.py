@@ -1,7 +1,8 @@
 import math
+from functools import partial
 
 from ..config import store
-from ..util.geometry.svg_extraction import SVG
+from ..util.geometry.svg_extraction import SVG, remove_classes, first_match
 import random
 from dataclasses import dataclass
 
@@ -26,10 +27,28 @@ from .objects.Wall import Wall
 # typing
 from typing import List, Tuple
 
+COLLISION_CLASSES = ['nocollide', 'collide']
 
 min_zoom = 0.0001
 
 distance = math.dist
+
+
+remove_special_classes = partial(remove_classes, classes=COLLISION_CLASSES + ['Layer_1'])
+
+
+def get_collision_config(collides: bool | str | None):
+    if collides is None:
+        return {}
+    if isinstance(collides, str):
+        match collides:
+            case 'collide':
+                collides = True
+            case 'nocollide':
+                collides = False
+            case _:
+                raise ValueError(f"Unknown collision value: {collides}")
+    return {'collides': collides}
 
 
 @associated_type("RectangularWorld")
@@ -37,15 +56,10 @@ distance = math.dist
 @dataclass
 class RectangularWorldConfig(AbstractWorldConfig):
     size: tuple[float, float] | np.ndarray = (5, 5)
-    # n_agents: int = 10
-    # init_type = None
-    # defined_start = False
-    # population_size = None
-    # padding: float = 0
-    # agentConfig = None
     show_walls: bool = True
     collide_walls: bool = True
     detectable_walls: bool = False
+    time_step: float = 1 / 60
 
     def factor_zoom(self, zoom):
         print("RectangularWorld Factor_Zoom called", zoom, self.size)
@@ -73,6 +87,7 @@ class RectangularWorld(World):
         self.pos = np.array([0.0, 0.0])
         self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
+        self.dt = config.time_step
 
         self.selected = None
         self.highlighted_set = []
@@ -98,14 +113,20 @@ class RectangularWorld(World):
                 svg = SVG(svg)
                 paths = svg.get_polygons()
                 paths += svg.get_rects()
-                for path in paths:
+                # create StaticObject for each polygon/rect/circle
+                for path, classes in paths:
                     points = np.asarray(path, dtype=np.float64)
-                    agent_config = StaticObjectConfig(points=points)
+                    collides = get_collision_config(first_match(classes, COLLISION_CLASSES))
+                    classes = ' '.join(remove_special_classes(classes))
+                    agent_config = StaticObjectConfig(points=points, team=classes, **collides)
                     self.objects.append(StaticObject(agent_config, self))
                 circles = svg.get_circles()
-                for circle in circles:
+                for circle, classes in circles:
                     x, y, r = circle
-                    agent_config = StaticObjectConfig(position=np.array([x, y]), radius=r)
+                    collides = get_collision_config(first_match(classes, COLLISION_CLASSES))
+                    classes = ' '.join(remove_special_classes(classes))
+                    agent_config = StaticObjectConfig(position=np.array([x, y]), agent_radius=r,
+                                                      team=classes, **collides)
                     self.objects.append(StaticObject(agent_config, self))
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")

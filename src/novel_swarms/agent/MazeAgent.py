@@ -12,7 +12,6 @@ from ..config import filter_unexpected_fields, associated_type
 from .StaticAgent import StaticAgent, StaticAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
-from ..util.collider.CircularCollider import CircularCollider
 from ..util.timer import Timer
 from ..util import statistics_tools as st
 from .control.Controller import Controller
@@ -37,7 +36,6 @@ class MazeAgentConfig(StaticAgentConfig):
     world: World | None = None
     world_config: RectangularWorldConfig | None = None
     seed: Any = None
-    dt: float = 1.0
     sensors: list = field(default_factory=list)
     controller: Any = None
     # sensors: SensorSet | None = None
@@ -102,7 +100,6 @@ class MazeAgent(StaticAgent):
         super().__init__(config, world, name=name, initialize=False)
 
         self.radius = config.agent_radius
-        self.dt = config.dt
         self.is_highlighted = False
         self.agent_in_sight = None
         if config.idiosyncrasies:

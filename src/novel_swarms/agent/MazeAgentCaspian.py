@@ -6,7 +6,7 @@ import numpy as np
 from dataclasses import dataclass
 from .MazeAgent import MazeAgent, MazeAgentConfig
 from ..util.collider.AABB import AABB
-from ..util.collider.CircularCollider import CircularCollider
+from ..util.collider.Collider import CircularCollider
 from ..util.timer import Timer
 
 # typing

@@ -1,7 +1,7 @@
 import pygame
 import numpy as np
 import math
-from .CircularCollider import CircularCollider
+from .Collider import CircularCollider
 
 class AngleSensitiveCC(CircularCollider):
     def __init__(self, x, y, r, theta, action, sensitivity=30):

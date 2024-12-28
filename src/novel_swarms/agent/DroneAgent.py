@@ -8,7 +8,7 @@ from ..agent.Agent import Agent
 from ..config.AgentConfig import DroneAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
-from ..util.collider.CircularCollider import CircularCollider
+from ..util.collider.Collider import CircularCollider
 
 
 class DroneAgent(Agent):

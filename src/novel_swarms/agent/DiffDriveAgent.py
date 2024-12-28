@@ -8,7 +8,7 @@ from .Agent import Agent
 from ..config.AgentConfig import DiffDriveAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
-from ..util.collider.CircularCollider import CircularCollider
+from ..util.collider.Collider import CircularCollider
 from ..util.timer import Timer
 
 class DifferentialDriveAgent(Agent):

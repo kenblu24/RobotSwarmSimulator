@@ -1,13 +1,13 @@
 import re
 from itertools import batched
-import xml.etree.ElementTree as etree
+import xml.dom.minidom as pydom
 
 import numpy as np
 from math import radians
 
+SVG_NS = 'http://www.w3.org/2000/svg'
 
 IDENTITY = np.identity(4)
-
 
 RE_TRANSLATE = re.compile(r'translate\s*\(\s*(?P<x>[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?P<y>(?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)?\s*\)')
 RE_SCALE = re.compile(r'scale\s*\(\s*(?P<x>[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?P<y>(?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)?\s*\)')
@@ -76,45 +76,74 @@ def apply_transform(points, transform):
     return new[:, :dim]
 
 
+def get_parents_layernames(elem):
+    parents = []
+    elem = elem.parentNode
+    while elem is not None:
+        if elem.nodeName == 'g':
+            if elem.hasAttribute('data-name'):
+                parents.append(elem.attributes['data-name'].value)
+            elif elem.hasAttribute('id'):
+                parents.append(elem.attributes['id'].value)
+        elem = elem.parentNode
+    return parents
+
+
+def remove_classes(names: list[str] | str, classes: list[str]):
+    if isinstance(names, str):
+        names = names.split(' ')
+        return ' '.join([name for name in names if name not in classes])
+    return [name for name in names if name not in classes]
+
+
+def first_match(names: list[str], classes: list[str]):
+    for name in names:
+        if name in classes:
+            return name
+
+
 class SVG:
     def __init__(self, svg_content: str):
-        self.root = etree.fromstring(svg_content)
+        self.dom = pydom.parseString(svg_content)
 
     # def get_paths(self):
     #     path_elems = self.root.findall('.//{http://www.w3.org/2000/svg}path')
     #     return [parse_path(elem.attrib['d']) for elem in path_elems]
 
     def get_polygons(self):
-        polys = self.root.findall('.//{http://www.w3.org/2000/svg}polygon')
-        poly_points = [elem.attrib['points'] for elem in polys]
+        polys = self.dom.getElementsByTagNameNS(SVG_NS, 'polygon')
+        poly_points = [elem.attributes['points'].value for elem in polys]
         poly_points = [points.split() for points in poly_points]  # split space-separated numbers
         poly_points = [[float(point) for point in points] for points in poly_points]  # convert to floats
         coords = [list(batched(points, 2)) for points in poly_points]  # group into coordinate pairs
-        return coords
+        parents = [get_parents_layernames(elem) for elem in polys]
+        return list(zip(coords, parents))  # returns [] if no polygons found
 
     def get_rects(self):
         rects = []
-        elements = self.root.findall('.//{http://www.w3.org/2000/svg}rect')
+        elements = self.dom.getElementsByTagNameNS(SVG_NS, 'rect')
         for elem in elements:
-            x = float(elem.attrib['x'])
-            y = float(elem.attrib['y'])
-            width = float(elem.attrib['width'])
-            height = float(elem.attrib['height'])
+            attr = elem.attributes
+            x = float(attr['x'].value)
+            y = float(attr['y'].value)
+            width = float(attr['width'].value)
+            height = float(attr['height'].value)
             points = rect_from_wh(x, y, width, height)
-            if 'transform' in elem.attrib:
-                transform = get_transform(elem.attrib['transform'])
+            if 'transform' in attr:
+                transform = get_transform(attr['transform'].value)
                 points = apply_transform(points, transform)
-            rects.append(points)
+            parents = get_parents_layernames(elem)
+            rects.append((points, parents))
         return rects
 
     def get_circles(self):
         circles = []
-        elements = self.root.findall('.//{http://www.w3.org/2000/svg}circle')
+        elements = self.dom.getElementsByTagNameNS(SVG_NS, 'circle')
         for elem in elements:
-            x = float(elem.attrib['cx'])
-            y = float(elem.attrib['cy'])
-            r = float(elem.attrib['r'])
-            circles.append((x, y, r))
+            x = float(elem.attributes['cx'].value)
+            y = float(elem.attributes['cy'].value)
+            r = float(elem.attributes['r'].value)
+            circles.append(((x, y, r), get_parents_layernames(elem)))
         return circles
 
     # def get_path_collection(self):

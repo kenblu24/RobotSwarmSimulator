@@ -9,10 +9,8 @@ from dataclasses import dataclass, field
 from ..config import filter_unexpected_fields, associated_type
 from copy import deepcopy
 from .Agent import Agent, BaseAgentConfig
-from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
-from ..util.collider.CircularCollider import CircularCollider
-from ..util.timer import Timer
+from ..util.collider.Collider import CircularCollider, PolyCollider
 
 # typing
 from typing import override
@@ -26,11 +24,11 @@ class StaticAgentConfig(BaseAgentConfig):
     seed: int | None = None
     world_config: RectangularWorldConfig | None = None
     agent_radius: float = 0.
-    dt: float = 1.0
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
     collides: bool | int = True
     points: list[tuple[float, float]] | np.ndarray | str = field(default_factory=list)
+    anchor_point: None | tuple[float, float] | str = None
 
     def attach_world_config(self, world_config):
         self.world = world_config
@@ -49,19 +47,45 @@ class StaticAgent(Agent):
             self.seed = np.random.randint(0, 90000)
             self.rng = np.random.default_rng(self.seed)
 
+        # set hull shape -> self.points from config (if any)
         if isinstance(config.points, str):
+            # assume string is from an SVG file
+            # attempt to extract a single polygon to use as agent hull
             from ..util.geometry.svg_extraction import SVG
-            paths = SVG(config.points).get_polygons()
-            if not paths:
+            polys = SVG(config.points).get_polygons()
+            if not polys:
                 raise Exception("No polygons found in SVG.")
-            elif len(paths) == 1:
-                self.points = np.asarray(paths[0], dtype=np.float64)
+            elif len(polys) == 1:
+                points, _classes = polys[0]
+                self.points = np.asarray(points, dtype=np.float64)
             else:
                 raise Exception("Multiple polygons found in SVG.")
         else:
-            self.points = np.asarray(config.points, dtype=np.float64)
+            self.points = np.asarray(config.points, dtype=np.float64)  # is empty array if unspecified
+
+        # handle points_shift option
+        self.shift = np.zeros(2)
+        if self.points.any():
+            if isinstance(config.anchor_point, str):
+                if 'center' in config.anchor_point:
+                    aabb = self.make_aabb()
+                    wh = np.array([aabb.width, aabb.height], dtype=float)
+                    self.shift = -wh / 2 - aabb._min
+                    self.points += self.shift
+                elif 'centroid' in config.anchor_point:
+                    poly = Polygon(self.points)
+                    self.shift = -get_coordinates(poly.centroid).reshape(2)
+                    self.points += self.shift
+                if 'inplace' in config.anchor_point:
+                    self.pos -= self.shift
+            elif isinstance(config.anchor_point, (tuple, list, np.ndarray)):
+                self.shift = np.asarray(config.anchor_point, dtype=np.float64)
+                self.points += self.shift
+            elif config.anchor_point is not None:
+                raise ValueError(f"Unknown points_shift type: {config.anchor_point}")
+
         self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
-        self.dt = config.dt
+        self.dt = world.dt
         self.is_highlighted = False
         self.agent_in_sight = None
         self.body_filled = config.body_filled
@@ -133,6 +157,8 @@ class StaticAgent(Agent):
         pygame.draw.line(screen, (255, 255, 255), tail, vec_with_magnitude)
 
     def build_collider(self):
+        if self.is_poly:
+            return PolyCollider(self.poly_rotated + self.pos)
         return CircularCollider(*self.pos, self.radius)
 
     def debug_draw(self, screen, offset):
