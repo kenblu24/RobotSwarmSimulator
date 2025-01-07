@@ -84,7 +84,7 @@ class Agent:
             self.setup_sensors_from_config()
 
     def setup_controller_from_config(self):
-        res = get_class_from_dict('controller', self.config.controller, raise_errors=False)
+        res = get_class_from_dict('controller', self.config.controller)
         if not res:
             return
         controller_cls, controller_config = res

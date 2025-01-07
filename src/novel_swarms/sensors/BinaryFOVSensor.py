@@ -50,6 +50,7 @@ class BinaryFOVSensor(AbstractSensor):
         self.show = show
         self.invert = invert
         self.goal_detected = False
+        self.detection_id = 0
 
         if degrees:
             self.theta = np.deg2rad(self.theta)

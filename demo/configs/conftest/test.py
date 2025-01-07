@@ -17,7 +17,7 @@ from novel_swarms.world.RectangularWorld import RectangularWorldConfig
 from novel_swarms.behavior import Circliness
 
 # from novel_swarms.agent.control.Controller import Controller
-from novel_swarms.agent.control.HomogeneousController import HomogeneousController
+# from novel_swarms.agent.control.HomogeneousController import HomogeneousController
 # from novel_swarms.world.simulate import main as sim
 
 # from .milling_search import DECISION_VARS, SCALE, BL
@@ -45,10 +45,10 @@ def fitness(world_set):
 
 def get_world_generator(n_agents, horizon, round_genome=False):
     def gene_to_world(genome, hash_val):
-        from novel_swarms.config import register_agent_type, store
-        from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
+        # from novel_swarms.config import register_agent_type, store
+        # from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
 
-        register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
+        # register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
 
         # goal_agent = AgentYAMLFactory.from_yaml("./turbopi.yaml")
         # goal_agent.controller = HomogeneousController(genome)
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     parser.add_argument("--discrete-bins", help="How many bins to discretize the decision variables into")
     parser.add_argument("--positions", help="file containing agent positions")
     parser.add_argument("-b", "--bodylength", type=float, help="body length value")
-    genome_parser = parser.add_mutually_exclusive_group(required=True)
+    genome_parser = parser.add_mutually_exclusive_group(required=False)
     genome_parser.add_argument(
         "--genome",
         type=float,
@@ -154,6 +154,8 @@ if __name__ == "__main__":
 
     elif args.bodylength_genome:
         genome = canon_to_metric(args.genome, bl)
+    else:
+        genome = [0.0798, 0.4, 0.1755, 0.0]
 
     if args.discrete_bins and not args.normalized_genome:
         raise ArgumentError(args.discrete_bins, "Discrete binning can only be used with --normalized_genome")

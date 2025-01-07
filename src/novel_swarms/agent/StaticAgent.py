@@ -22,7 +22,7 @@ from ..world.RectangularWorld import RectangularWorldConfig
 @dataclass
 class StaticAgentConfig(BaseAgentConfig):
     seed: int | None = None
-    world_config: RectangularWorldConfig | None = None
+    # world_config: RectangularWorldConfig | None = None
     agent_radius: float = 0.
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False

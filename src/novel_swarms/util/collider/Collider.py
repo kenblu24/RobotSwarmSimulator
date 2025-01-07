@@ -52,14 +52,14 @@ class CircularCollider(Collider):
     def vs_circle(self, other):
         shape = self.c.shape
         correction_vector = np.zeros(shape)
-        dist_between_radii = np.linalg.norm(other.v - self.c)
+        dist_between_radii = np.linalg.norm(other.c - self.c)
         dist_difference = (self.r + other.r) - dist_between_radii
         if dist_difference < 0:
             return np.empty(shape) * np.nan
         elif dist_between_radii < self.infinitesmimal:
             amount = np.ones(shape) * self.shake_amount
             correction_vector += rng.uniform(-amount, amount)
-        correction_vector += ((other.v - self.c) / (dist_between_radii + 0.001)) * (dist_difference + self.infinitesmimal)
+        correction_vector += ((other.c - self.c) / (dist_between_radii + 0.001)) * (dist_difference + self.infinitesmimal)
         return -correction_vector
 
     def vs_convex(self, other):

@@ -33,8 +33,8 @@ State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 @filter_unexpected_fields
 @dataclass
 class MazeAgentConfig(StaticAgentConfig):
-    world: World | None = None
-    world_config: RectangularWorldConfig | None = None
+    # world: World | None = None
+    # world_config: RectangularWorldConfig | None = None
     seed: Any = None
     sensors: list = field(default_factory=list)
     controller: Any = None
@@ -65,11 +65,11 @@ class MazeAgentConfig(StaticAgentConfig):
     def attach_world_config(self, world_config):
         self.world = world_config
 
-    @staticmethod
-    def from_dict(d):
-        # if isinstance(d["sensors"], dict):
-        #     d["sensors"] = SensorFactory.create(d["sensors"])
-        return MazeAgentConfig(**d)
+    # @staticmethod
+    # def from_dict(d):
+    #     # if isinstance(d["sensors"], dict):
+    #     #     d["sensors"] = SensorFactory.create(d["sensors"])
+    #     return MazeAgentConfig(**d)
 
     def rescale(self, zoom):
         self.agent_radius *= zoom
