@@ -277,7 +277,7 @@ class RectangularWorld(World):
         """
         Set agent position with respect to the world's boundaries and the bounding box of the agent
         """
-        padding = self.padding
+        # padding = self.padding
 
         old_x, old_y = agent.get_x_pos(), agent.get_y_pos()
 
