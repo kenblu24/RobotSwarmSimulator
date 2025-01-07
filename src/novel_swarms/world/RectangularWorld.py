@@ -430,6 +430,10 @@ class RectangularWorld(World):
         behavior = np.array([s.out_average()[1] for s in self.behavior])
         return behavior
 
+    @property
+    def behavior_dict(self):
+        return {s.name: s for s in self.behavior}
+
     def removeAgent(self, agent):
         agent.deleted = True
         self.population.remove(agent)

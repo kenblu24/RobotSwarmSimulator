@@ -11,6 +11,8 @@ import caspian
 
 @dataclass
 class MillingAgentCaspianConfig(MazeAgentCaspianConfig):
+    neuro_tpc: int | None = 1
+
     @override
     def create(self, name=None):
         return MillingAgentCaspian(self, name)
@@ -84,8 +86,17 @@ class MillingAgentCaspian(MazeAgentCaspian):
         if self.neuro_track_all:
             self.neuron_counts = self.processor.neuron_counts()
         data = self.decoder.get_data_from_processor(self.processor)
+        data = [int(round(x)) for x in data]
         # three bins. One for +v, -v, omega.
-        v = self.scale_v * (data[1] - data[0])
-        w = self.scale_w * (data[3] - data[2])
+        # these values were taken from an average of speeds/turning rates
+        # from measurements of Turbopis 1, 2, 3, 4 @ (100, 90, +-0.5)
+        v_mapping = [0.0, 0.276,]
+        w_mapping = [0.0, 0.602,]
+        v = v_mapping[data[1]] - v_mapping[data[0]]
+        w = w_mapping[data[3]] - w_mapping[data[2]]
+        if v == 0.0:
+            v = v_mapping[1] * self.rng.choice([-1, 1])
+        if w == 0.0:
+            w = w_mapping[1] * self.rng.choice([-1, 1])
         return v, w
         # return (0.08, 0.4) if not observation else (0.18, 0.0)  # CMA best controller
