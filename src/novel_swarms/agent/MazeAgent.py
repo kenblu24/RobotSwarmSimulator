@@ -35,7 +35,6 @@ State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 class MazeAgentConfig(StaticAgentConfig):
     # world: World | None = None
     # world_config: RectangularWorldConfig | None = None
-    seed: Any = None
     sensors: list = field(default_factory=list)
     controller: Any = None
     # sensors: SensorSet | None = None
@@ -93,10 +92,6 @@ class MazeAgent(StaticAgent):
         # else:
         #     self.controller = Controller(config.controller)
 
-        self.seed = config.seed
-        if config.seed is not None:
-            self.set_seed(config.seed)
-
         super().__init__(config, world, name=name, initialize=False)
 
         self.radius = config.agent_radius
@@ -139,9 +134,6 @@ class MazeAgent(StaticAgent):
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
-
-    def set_seed(self, seed):
-        random.seed(seed)
 
     @override
     def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
@@ -252,6 +244,8 @@ class MazeAgent(StaticAgent):
         return rand_color
 
     def handle_collisions(self, world, max_attempts=10, nudge_amount=1.0, rng=None, refresh=False):
+        if rng is None:
+            rng = self.rng
         self.collision_flag = False
         for _i in range(max_attempts):
             if refresh:

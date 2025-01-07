@@ -14,14 +14,14 @@ from ..util.collider.Collider import CircularCollider, PolyCollider
 
 # typing
 from typing import override
-from ..world.RectangularWorld import RectangularWorldConfig
+from ..world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 
 
 @associated_type("StaticAgent")
 @filter_unexpected_fields
 @dataclass
 class StaticAgentConfig(BaseAgentConfig):
-    seed: int | None = None
+    seed: int | None | str = 'unspecified'
     # world_config: RectangularWorldConfig | None = None
     agent_radius: float = 0.
     body_color: tuple[int, int, int] = (255, 255, 255)
@@ -37,15 +37,13 @@ class StaticAgentConfig(BaseAgentConfig):
 class StaticAgent(Agent):
     DEBUG = True
 
-    def __init__(self, config: StaticAgentConfig, world, name=None, initialize=True) -> None:
+    def __init__(self, config: StaticAgentConfig, world: RectangularWorld, name=None, initialize=True) -> None:
         super().__init__(config, world, name, initialize=False)
 
-        if config.seed is not None:
-            self.seed = config.seed
-            self.rng = np.random.default_rng(self.seed)
+        if config.seed == 'unspecified':
+            self.set_seed(int(world.rng.integers(0, 2**31)))
         else:
-            self.seed = np.random.randint(0, 90000)
-            self.rng = np.random.default_rng(self.seed)
+            self.set_seed(config.seed)
 
         # set hull shape -> self.points from config (if any)
         if isinstance(config.points, str):
@@ -103,6 +101,11 @@ class StaticAgent(Agent):
 
         self.rotmat = self.rotmat2d()
         self.aabb = self.make_aabb()
+
+    def set_seed(self, seed):
+        self.seed = int(np.random.randint(0, 2**31)) if seed is None else seed
+        self.rng = np.random.default_rng(self.seed)
+        return self.seed
 
     @property
     def is_poly(self):

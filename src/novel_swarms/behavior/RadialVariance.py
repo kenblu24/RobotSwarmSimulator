@@ -4,6 +4,8 @@ from .AbstractBehavior import AbstractBehavior
 
 
 class RadialVarianceBehavior(AbstractBehavior):
+    __badvars__ = AbstractBehavior.__badvars__ + ['population']  # references to population may cause pickling errors
+
     def __init__(self, history=100, regularize=True):
         super().__init__(name="Radial_Variance", history_size=history)
         self.population = None

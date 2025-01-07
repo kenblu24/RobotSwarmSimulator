@@ -1,5 +1,5 @@
+import copyreg
 import numpy as np
-import math
 from .RadialVariance import RadialVarianceBehavior
 
 
@@ -63,9 +63,9 @@ class Tangentness(RadialVarianceHelper):
         # dnorm = np.linalg.norm(d)
         # d = np.zeros(2) if dnorm == 0 else d / np.linalg.norm(d)
         d_x, d_y = d
-        beta = math.atan2(d_y, d_x)
+        beta = np.arctan2(d_y, d_x)
         alpha = theta - beta
-        return abs(math.cos(alpha))
+        return abs(np.cos(alpha))
 
     def _calculate(self):
         # calculate average position of all agents

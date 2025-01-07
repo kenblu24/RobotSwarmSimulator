@@ -44,12 +44,12 @@ class CircularCollider(Collider):
             rng = np.random.default_rng(0)
 
         if isinstance(other, CircularCollider):
-            return self.vs_circle(other)
+            return self.vs_circle(other, rng)
         elif isinstance(other, PolyCollider):
-            return self.vs_convex(other)
+            return self.vs_convex(other, rng)
         return np.empty(2) * np.nan
 
-    def vs_circle(self, other):
+    def vs_circle(self, other, rng):
         shape = self.c.shape
         correction_vector = np.zeros(shape)
         dist_between_radii = np.linalg.norm(other.c - self.c)
@@ -58,11 +58,11 @@ class CircularCollider(Collider):
             return np.empty(shape) * np.nan
         elif dist_between_radii < self.infinitesmimal:
             amount = np.ones(shape) * self.shake_amount
-            correction_vector += rng.uniform(-amount, amount)
+            correction_vector += rng.uniform(-amount, amount, rng)
         correction_vector += ((other.c - self.c) / (dist_between_radii + 0.001)) * (dist_difference + self.infinitesmimal)
         return -correction_vector
 
-    def vs_convex(self, other):
+    def vs_convex(self, other, rng):
         shape = self.c.shape
         correction_vector = np.zeros(shape)
         self2 = sg.Point(self.c).buffer(self.r)

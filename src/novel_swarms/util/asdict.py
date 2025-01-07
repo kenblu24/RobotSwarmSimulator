@@ -82,5 +82,6 @@ def _asdict_inner(obj, dict_factory):
     else:
         try:
             return copy.deepcopy(obj)
-        except TypeError:
-            return "__UNPICKLEABLE__"
+        except TypeError as err:
+            # return "__UNPICKLEABLE__: " + str(err)
+            return copy.copy(obj)

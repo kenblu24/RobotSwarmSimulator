@@ -104,13 +104,19 @@ class World:
         self.behavior = []
         self.objects = []
         self.goals = config.goals
-        self.seed = config.seed
-        self.rng = np.random.default_rng(self.seed)
         self.meta = config.metadata
         self.gui = None
         self.total_steps = 0
         self.initialized = False
         self._screen_cache = None
+        self.seed = config.seed
+        self.set_seed(self.seed)
+        self.rng: np.random.Generator
+
+    def set_seed(self, seed):
+        self.seed = np.random.randint(0, 2**31) if seed is None else seed
+        self.rng = np.random.default_rng(self.seed)
+        return self.seed
 
     def setup(self):
         # create agents, spawners, behaviors, objects, goals

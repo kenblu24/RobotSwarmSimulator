@@ -3,6 +3,7 @@ from typing import Tuple
 from numpy import average
 
 class AbstractBehavior():
+    __badvars__ = ['world']  # variables that should not be pickled
 
     def __init__(self, name: str, history_size=100):
         self.name = name
@@ -42,3 +43,10 @@ class AbstractBehavior():
 
     def calculate(self):
         pass
+
+    # prevent pickling errors
+    def __getstate__(self):
+        d = self.__dict__.copy()
+        for k in self.__badvars__:
+            d.pop(k, None)
+        return d

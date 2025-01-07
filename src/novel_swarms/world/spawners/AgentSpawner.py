@@ -24,11 +24,11 @@ class PointAgentSpawner(Spawner):
         agent=None,
         facing=None,
         avoid_overlap=False,
-        seed=None,
+        seed='unspecified',
         oneshot=False,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(world, seed, **kwargs)
         self.type = 'agent'
         self.oneshot = oneshot
         self.n_objects = n
@@ -43,13 +43,6 @@ class PointAgentSpawner(Spawner):
                 raise ValueError(msg)
         else:
             self.facing = facing
-
-        if seed is None:
-            self.seed = np.random.randint(0, 90000)
-            self.rng = np.random.default_rng(self.seed)
-        else:
-            self.seed = seed
-            self.rng = np.random.default_rng(self.seed)
 
         self.agent_class, self.agent_config = get_agent_class(agent)
         self.agent_class: StaticAgent
@@ -117,7 +110,7 @@ class UniformAgentSpawner(PointAgentSpawner):
         agent=None,
         facing=None,
         avoid_overlap=False,
-        seed=None,
+        seed='unspecified',
         oneshot=False,
         region=None,
         holes=None,
@@ -138,7 +131,7 @@ class UniformAgentSpawner(PointAgentSpawner):
         if self.is_aabb:
             self.poly = Polygon(self.aabb.corners)
         else:
-            import pointpats.random
+            import pointpats.random  # preload pointpats (loads slowly)
 
     def generate_points_in_polygon(self, n: int):
         if self.is_aabb:
