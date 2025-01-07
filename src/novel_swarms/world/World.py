@@ -8,7 +8,8 @@ from ..config.OutputTensorConfig import OutputTensorConfig
 from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class, _ERRMSG_MISSING_ASSOCIATED_TYPE
 
 import inspect
-from dataclasses import dataclass, field, asdict, replace
+from dataclasses import dataclass, field, replace
+from ..util.asdict import asdict
 from collections.abc import Callable
 
 
