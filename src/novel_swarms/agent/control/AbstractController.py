@@ -9,8 +9,9 @@ class AbstractController:
     Given agent observations, return agent actions
     """
 
-    def __init__(self, parent):  # type:ignore[reportMissingSuperCall]
+    def __init__(self, parent, agent=None):  # type:ignore[reportMissingSuperCall]
         self.parent = parent
+        self.agent = self.parent if agent is None else agent
 
     def get_actions(self, agent):
         pass
