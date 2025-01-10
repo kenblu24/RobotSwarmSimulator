@@ -14,7 +14,7 @@ class RegionalSensor(AbstractSensor):
         self.i = world_object_index
 
     def checkForLOSCollisions(self, world) -> None:
-        sensor_position = self.parent.getPosition()
+        sensor_position = self.agent.getPosition()
 
         # Check if agent is directly in region
         if world.objects[self.i].point_inside(sensor_position):
@@ -40,19 +40,19 @@ class RegionalSensor(AbstractSensor):
             sight_color = (0, 255, 0)
 
         width = max(1, round(zoom))
-        r = self.parent.radius * zoom + width * 2
-        pos = np.asarray(self.parent.getPosition()) * zoom
+        r = self.agent.radius * zoom + width * 2
+        pos = np.asarray(self.agent.getPosition()) * zoom
         pygame.draw.circle(screen, sight_color, (*pos,), r, width=width)
 
     def getLOSVector(self) -> List:
-        head = self.parent.getPosition()
+        head = self.agent.getPosition()
         tail = self.getFrontalPoint()
         return [tail[0] - head[0], tail[1] - head[1]]
 
     def getFrontalPoint(self):
         if self.angle is None:
-            return self.parent.getFrontalPoint()
-        return self.parent.x_pos + math.cos(self.angle + self.parent.angle), self.parent.y_pos + math.sin(self.angle + self.parent.angle)
+            return self.agent.getFrontalPoint()
+        return self.agent.x_pos + math.cos(self.angle + self.agent.angle), self.agent.y_pos + math.sin(self.angle + self.agent.angle)
 
     def add_to_history(self, value):
         if len(self.history) > self.hist_len:
