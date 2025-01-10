@@ -50,7 +50,6 @@ class MazeAgentConfig(StaticAgentConfig):
     trace_color: tuple[int, int, int] | None = None
     controller: Controller | None = None
     track_io: bool = False
-    type: str = ""
 
     def __post_init__(self):
         # super().__post_init__()
@@ -158,9 +157,9 @@ class MazeAgent(StaticAgent):
             v, omega = self.controller.get_actions(self)
 
         if self.track_io:
-            sensor_state = self.sensors.getState()
+            sensor_state = self.sensors[0].current_state
             self.history.append(SPA(
-                State(self.x_pos, self.y_pos, self.angle),
+                State(*self.pos, self.angle),
                 sensor_state,
                 (v, omega),
             ))

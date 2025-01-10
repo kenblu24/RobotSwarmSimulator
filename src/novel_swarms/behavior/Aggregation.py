@@ -1,7 +1,6 @@
 import numpy as np
 import math
 from .Circliness import RadialVarianceHelper
-import rss
 
 
 class Aggregation(RadialVarianceHelper):

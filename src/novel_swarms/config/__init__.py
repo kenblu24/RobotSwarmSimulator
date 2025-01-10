@@ -206,12 +206,16 @@ def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) ->
     if key not in store.dictlike_types:
         msg = f"Object namespace is unknown to init system: {key}"
         raise KeyError(msg)
-    if not (isinstance(config, dict) and 'type' in config):
-        if raise_errors:
-            msg = f"Config dict in namespace '{key}' is missing the 'type'"
+    try:
+        if not isinstance(config, dict):
+            msg = f"Expected config entry for namespace '{key}' to be a dict, not {type(config).__name__}"
+            raise TypeError(msg)
+        elif 'type' not in config:
+            msg = f"Config dict in namespace '{key}' is missing the 'type' key"
             raise KeyError(msg)
-        else:
-            return
+    except KeyError:
+        if raise_errors:
+            raise
     if copy:
         config = config.copy()
     cls_name = config.pop('type')

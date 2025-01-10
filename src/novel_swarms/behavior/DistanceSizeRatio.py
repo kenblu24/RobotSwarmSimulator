@@ -1,7 +1,6 @@
 import numpy as np
 import math
 from .RadialVariance import RadialVarianceBehavior
-import rss
 
 
 class DistanceSizeRatio(RadialVarianceBehavior):
