@@ -36,7 +36,7 @@ class GeneticEvolutionConfig:
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.world_config = world_config
-        self.behavior_config = phenotype_config
+        self.metrics_config = phenotype_config
         self.k = k_nn
         self.lifespan = simulation_lifespan
         self.display_novelty = display_novelty

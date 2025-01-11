@@ -8,13 +8,13 @@ from typing import List
 
 import pygame.draw
 
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 from ..agent.MazeAgent import MazeAgent
 from ..util.geometry.Point import Point
 from ..util.geometry.ConvexHull import ConvexHull as CH
 from ..util.geometry.Polygon import Polygon
 
-class Centroid(AbstractBehavior):
+class Centroid(AbstractMetric):
     def __init__(self, name="Centroid", history=100):
         super().__init__(name=name, history_size=history)
         self.population = None

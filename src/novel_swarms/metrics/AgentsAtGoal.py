@@ -4,10 +4,10 @@ import copy
 import numpy as np
 from typing import List
 import warnings
-from .AbstractBehavior import AbstractBehavior
-from ..agent.MazeAgent import MazeAgent
+from .AbstractMetric import AbstractMetric
 
-class AgentsAtGoal(AbstractBehavior):
+
+class AgentsAtGoal(AbstractMetric):
     def __init__(self, name="Goal_Agents", history=100, as_percent=False):
         super().__init__(name=name, history_size=history)
         self.population = None

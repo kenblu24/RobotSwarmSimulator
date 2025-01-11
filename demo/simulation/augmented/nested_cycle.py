@@ -6,11 +6,11 @@ are not included in your commits, you may directly edit and run this file.
 
 """
 from src.novel_swarms.world.simulate import main as simulate
-from src.novel_swarms.behavior.AngularMomentum import AngularMomentumBehavior
-from src.novel_swarms.behavior.AverageSpeed import AverageSpeedBehavior
-from src.novel_swarms.behavior.GroupRotationBehavior import GroupRotationBehavior
-from src.novel_swarms.behavior.RadialVariance import RadialVarianceBehavior
-from src.novel_swarms.behavior.ScatterBehavior import ScatterBehavior
+from src.novel_swarms.metrics.AngularMomentum import AngularMomentumBehavior
+from src.novel_swarms.metrics.AverageSpeed import AverageSpeedBehavior
+from src.novel_swarms.metrics.GroupRotationBehavior import GroupRotationBehavior
+from src.novel_swarms.metrics.RadialVariance import RadialVarianceMetric
+from src.novel_swarms.metrics.ScatterBehavior import ScatterBehavior
 from src.novel_swarms.sensors.BinaryLOSSensor import BinaryLOSSensor
 from src.novel_swarms.sensors.GenomeDependentSensor import GenomeBinarySensor
 from src.novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     behavior = [
         AverageSpeedBehavior(),
         AngularMomentumBehavior(),
-        RadialVarianceBehavior(),
+        RadialVarianceMetric(),
         ScatterBehavior(),
         GroupRotationBehavior(),
     ]

@@ -11,7 +11,7 @@ from src.novel_swarms.results.Experiment import Experiment
 from src.novel_swarms.config.AgentConfig import AgentYAMLFactory
 from src.novel_swarms.config.WorldConfig import WorldYAMLFactory
 from src.novel_swarms.world.initialization.FixedInit import FixedInitialization
-from src.novel_swarms.behavior import *
+from src.novel_swarms.metrics import *
 from src.novel_swarms.agent.control.Controller import Controller
 from src.novel_swarms.agent.control.HomogeneousController import HomogeneousController
 from src.novel_swarms.world.simulate import main as sim
@@ -36,7 +36,7 @@ PERFECT_SCORE = -1.0
 def FITNESS(world_set):
     total = 0
     for w in world_set:
-        total -= w.behavior[0].out_average()[1]
+        total -= w.metrics[0].out_average()[1]
     avg = total / len(world_set)
     return avg
 
@@ -62,7 +62,7 @@ def get_world_generator(n_agents, horizon, init=None, walls=True):
 
         world = WorldYAMLFactory.from_yaml("demo/configs/flockbots-icra/world.yaml")
         world.seed = 0
-        world.behavior = [
+        world.metrics = [
             AgentsAtGoal(as_percent=True, history=1),
             PercentageAtGoal(0.5),
             PercentageAtGoal(0.8),
@@ -99,7 +99,7 @@ def get_world_generator(n_agents, horizon, init=None, walls=True):
                 world_config.init_type = FixedInitialization(file)
                 world_config.init_type.rescale(SCALE)
                 world_config.population_size = n_agents
-                world_config.behavior = [
+                world_config.metrics = [
                     AgentsAtGoal(as_percent=True, history=1),
                     PercentageAtGoal(0.5),
                     PercentageAtGoal(0.8),

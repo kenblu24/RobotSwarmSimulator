@@ -121,7 +121,7 @@ class DifferentialDriveGUI(AbstractGUI):
                 self.appendTextToGUI(screen, "")
                 self.appendTextToGUI(screen, "")
                 self.appendTextToGUI(screen, "Behavior", size=16)
-                for b in self.world.behavior:
+                for b in self.world.metrics:
                     out = b.out_current()
                     b.draw(screen)
                     try:

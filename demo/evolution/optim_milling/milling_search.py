@@ -9,7 +9,7 @@ from src.novel_swarms.results.Experiment import Experiment
 from src.novel_swarms.config.AgentConfig import AgentYAMLFactory
 from src.novel_swarms.config.WorldConfig import WorldYAMLFactory
 # from src.novel_swarms.world.initialization.FixedInit import FixedInitialization
-from src.novel_swarms.behavior import Circliness
+from src.novel_swarms.metrics import Circliness
 # from src.novel_swarms.agent.control.Controller import Controller
 from src.novel_swarms.agent.control.HomogeneousController import HomogeneousController
 # from src.novel_swarms.world.simulate import main as sim
@@ -36,7 +36,7 @@ CIRCLINESS_HISTORY = 450
 def fitness(world_set):
     total = 0
     for w in world_set:
-        total += w.behavior[0].out_average()[1]
+        total += w.metrics[0].out_average()[1]
     avg = total / len(world_set)
     return -avg
 
@@ -52,7 +52,7 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         world = WorldYAMLFactory.from_yaml("demo/configs/turbopi-milling/world.yaml")
         # world.seed = 0
-        world.behavior = [
+        world.metrics = [
             Circliness(avg_history_max=CIRCLINESS_HISTORY)
         ]
         world.population_size = n_agents

@@ -242,7 +242,7 @@ def example_A():
         from ..behavior.AngularMomentum import AngularMomentumBehavior
         from ..behavior.AverageSpeed import AverageSpeedBehavior
         from ..behavior.GroupRotationBehavior import GroupRotationBehavior
-        from ..behavior.RadialVariance import RadialVarianceBehavior
+        from ..behavior.RadialVariance import RadialVarianceMetric
         from ..behavior.ScatterBehavior import ScatterBehavior
         from ..sensors.BinaryLOSSensor import BinaryLOSSensor
         from ..sensors.SensorSet import SensorSet
@@ -261,7 +261,7 @@ def example_A():
         behavior = [
             AverageSpeedBehavior(),
             AngularMomentumBehavior(),
-            RadialVarianceBehavior(),
+            RadialVarianceMetric(),
             ScatterBehavior(),
             GroupRotationBehavior(),
         ]
@@ -313,7 +313,7 @@ def example_B():
         from ..behavior.AngularMomentum import AngularMomentumBehavior
         from ..behavior.AverageSpeed import AverageSpeedBehavior
         from ..behavior.GroupRotationBehavior import GroupRotationBehavior
-        from ..behavior.RadialVariance import RadialVarianceBehavior
+        from ..behavior.RadialVariance import RadialVarianceMetric
         from ..behavior.ScatterBehavior import ScatterBehavior
         from ..sensors.BinaryLOSSensor import BinaryLOSSensor
         from ..sensors.SensorSet import SensorSet
@@ -334,7 +334,7 @@ def example_B():
             behavior = [
                 AverageSpeedBehavior(),
                 AngularMomentumBehavior(),
-                RadialVarianceBehavior(),
+                RadialVarianceMetric(),
                 ScatterBehavior(),
                 GroupRotationBehavior(),
             ]

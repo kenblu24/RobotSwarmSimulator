@@ -1,9 +1,9 @@
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 
 
-class TotalCollisionsBehavior(AbstractBehavior):
+class TotalCollisionsBehavior(AbstractMetric):
     def __init__(self, history=1):
         super().__init__(name="Total_Collisions", history_size=history)
         self.population = None

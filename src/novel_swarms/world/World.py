@@ -12,12 +12,16 @@ from dataclasses import dataclass, field, replace
 from ..util.asdict import asdict
 from collections.abc import Callable
 
+from ..agent.Agent import Agent
+from .spawners.Spawner import Spawner
+from ..metrics import AbstractMetric
+
 
 @filter_unexpected_fields
 @dataclass
 class AbstractWorldConfig:
     size: tuple[float, ...] | np.ndarray = (0, 0)
-    behavior: list | dict = field(default_factory=list)
+    metrics: list | dict = field(default_factory=list)
     agents: list | dict = field(default_factory=list)
     spawners: list | dict = field(default_factory=list)
     objects: list | dict = field(default_factory=list)
@@ -101,7 +105,7 @@ class World:
         config = replace(config)
         self.population = []
         self.spawners = []
-        self.behavior = []
+        self.metrics = []
         self.objects = []
         self.goals = config.goals
         self.meta = config.metadata
@@ -126,18 +130,27 @@ class World:
 
         # create agents
         for agent_config in self.config.agents:
-            agent_class, agent_config = get_agent_class(agent_config)
-
-            # create the agent
-            self.population.append(agent_class.from_config(agent_config, self))
+            if isinstance(agent_config, Agent):  # if it's already an agent, just add it
+                self.population.append(agent_config)
+            else:  # otherwise, it's a config dict. find the class specified and create the agent
+                agent_class, agent_config = get_agent_class(agent_config)
+                self.population.append(agent_class.from_config(agent_config, self))
 
         for spawner_config in self.config.spawners:
-            spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
+            if isinstance(spawner_config, Spawner):  # if it's already a spawner, just add it
+                self.spawners.append(spawner_config)
+            else:  # otherwise, it's a config dict. find the class specified and create the spawner
+                spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
+                self.spawners.append(spawner_class(self, **spawner_config))
 
-            self.spawners.append(spawner_class(self, **spawner_config))
+        for metric_config in self.config.metrics:
+            if isinstance(metric_config, AbstractMetric):  # if it's already a behavior, just add it
+                self.metrics.append(metric_config)
+            else:  # otherwise, it's a config dict. find the class specified and create the behavior
+                behavior_class, metric_config = get_class_from_dict('metrics', metric_config)
+                self.metrics.append(behavior_class(self, **metric_config))
 
-
-        # self.behavior = config.behavior
+        # self.metrics = config.metrics
         # self.objects = config.objects
         # self.goals = config.goals
         # self.seed = config.seed

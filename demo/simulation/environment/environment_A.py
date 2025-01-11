@@ -2,7 +2,7 @@ from src.novel_swarms.sensors.AbstractSensor import AbstractSensor
 from src.novel_swarms.sensors.GenomeDependentSensor import GenomeBinarySensor
 from src.novel_swarms.sensors.StaticSensor import StaticSensor
 from src.novel_swarms.world.simulate import main as simulate
-from src.novel_swarms.behavior.DistanceToGoal import DistanceToGoal
+from src.novel_swarms.metrics.DistanceToGoal import DistanceToGoal
 from src.novel_swarms.sensors.BinaryLOSSensor import BinaryLOSSensor
 from src.novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
 from src.novel_swarms.sensors.SensorSet import SensorSet

@@ -14,7 +14,7 @@ from tqdm import tqdm
 from novel_swarms.world.RectangularWorld import RectangularWorldConfig
 
 # from novel_swarms.world.initialization.FixedInit import FixedInitialization
-from novel_swarms.behavior import Circliness
+from novel_swarms.metrics import Circliness
 
 # from novel_swarms.agent.control.Controller import Controller
 # from novel_swarms.agent.control.HomogeneousController import HomogeneousController
@@ -38,7 +38,7 @@ CIRCLINESS_HISTORY = 450
 def fitness(world_set):
     total = 0
     for w in world_set:
-        total += w.behavior[0].out_average()[1]
+        total += w.metrics[0].out_average()[1]
     avg = total / len(world_set)
     return -avg
 
@@ -58,7 +58,7 @@ def get_world_generator(n_agents, horizon, round_genome=False):
         world = RectangularWorldConfig.from_yaml("./world.yaml")
 
         # world.seed = 0
-        world.behavior = [
+        world.metrics = [
             # Circliness(avg_history_max=CIRCLINESS_HISTORY)
         ]
         # world.population_size = n_agents
@@ -108,7 +108,7 @@ def run(args, genome, callback=lambda x: x) -> float:
 
     w = sim(world_config=world_config, save_every_ith_frame=2, save_duration=1000, show_gui=gui)
     try:
-        return w.behavior[0].out_average()[1]
+        return w.metrics[0].out_average()[1]
     except BaseException:
         pass
 

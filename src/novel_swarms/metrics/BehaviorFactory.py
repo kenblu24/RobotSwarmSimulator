@@ -1,18 +1,18 @@
-from ..behavior.AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
-from ..behavior.AverageSpeed import AverageSpeedBehavior
-from ..behavior.AlgebraicConnectivity import AlgebraicConn
-from ..behavior.ScatterBehavior import ScatterBehavior
-from ..behavior.DistanceToGoal import DistanceToGoal
-from ..behavior.TotalCollisions import TotalCollisionsBehavior
-from ..behavior.AngularMomentum import AngularMomentumBehavior
-from ..behavior.Centroid import Centroid
-from ..behavior.ConvexHull import ConvexHull
-from ..behavior.DistanceToGoal import DistanceToGoal
-from ..behavior.GroupRotationBehavior import GroupRotationBehavior
-from ..behavior.RadialVariance import RadialVarianceBehavior
-from ..behavior.SensorOffset import GeneElementDifference
-from ..behavior.SensorRotation import SensorRotation
-from ..behavior.SensorSignal import SensorSignalBehavior
+from ..metrics.AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
+from ..metrics.AverageSpeed import AverageSpeedBehavior
+from ..metrics.AlgebraicConnectivity import AlgebraicConn
+from ..metrics.ScatterBehavior import ScatterBehavior
+from ..metrics.DistanceToGoal import DistanceToGoal
+from ..metrics.TotalCollisions import TotalCollisionsBehavior
+from ..metrics.AngularMomentum import AngularMomentumBehavior
+from ..metrics.Centroid import Centroid
+from ..metrics.ConvexHull import ConvexHull
+from ..metrics.DistanceToGoal import DistanceToGoal
+from ..metrics.GroupRotationBehavior import GroupRotationBehavior
+from ..metrics.RadialVariance import RadialVarianceMetric
+from ..metrics.SensorOffset import GeneElementDifference
+from ..metrics.SensorRotation import SensorRotation
+from ..metrics.SensorSignal import SensorSignalBehavior
 
 class BehaviorFactory:
     @staticmethod
@@ -34,7 +34,7 @@ class BehaviorFactory:
         elif d["name"] == "Group_Rotation":
             return GroupRotationBehavior(history=d["history_size"])
         elif d["name"] == "Radial_Variance":
-            return RadialVarianceBehavior(history=d["history_size"])
+            return RadialVarianceMetric(history=d["history_size"])
         elif d["name"] == "Scatter":
             return ScatterBehavior(history=d["history_size"])
         # elif d["name"] == "Sensor_Offset":

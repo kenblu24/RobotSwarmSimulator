@@ -2,10 +2,10 @@ import math
 from typing import Tuple
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 import matplotlib.pyplot as plt
 
-class SensorSignalBehavior(AbstractBehavior):
+class SensorSignalBehavior(AbstractMetric):
 
     def __init__(self, history=100, show=True, sensor_index=0):
         super().__init__(name="SensorSignal", history_size=history)

@@ -16,7 +16,7 @@ FIXED_START_FILE = "demo/configs/flockbots-icra/init_translated.csv"
 def FITNESS(world_set):
     total = 0
     for w in world_set:
-        total -= w.behavior[0].out_average()[1]
+        total -= w.metrics[0].out_average()[1]
     avg = total / len(world_set)
     return avg
 

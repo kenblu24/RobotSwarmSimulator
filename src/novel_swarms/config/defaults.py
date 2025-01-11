@@ -1,8 +1,8 @@
-from ..behavior.AngularMomentum import AngularMomentumBehavior
-from ..behavior.AverageSpeed import AverageSpeedBehavior
-from ..behavior.GroupRotationBehavior import GroupRotationBehavior
-from ..behavior.RadialVariance import RadialVarianceBehavior
-from ..behavior.ScatterBehavior import ScatterBehavior
+from ..metrics.AngularMomentum import AngularMomentumBehavior
+from ..metrics.AverageSpeed import AverageSpeedBehavior
+from ..metrics.GroupRotationBehavior import GroupRotationBehavior
+from ..metrics.RadialVariance import RadialVarianceMetric
+from ..metrics.ScatterBehavior import ScatterBehavior
 from .AgentConfig import DiffDriveAgentConfig
 from .ResultsConfig import ResultsConfig
 from .WorldConfig import RectangularWorldConfig
@@ -32,7 +32,7 @@ class ConfigurationDefaults:
     BEHAVIOR_VECTOR = [
         AverageSpeedBehavior(),
         AngularMomentumBehavior(),
-        RadialVarianceBehavior(),
+        RadialVarianceMetric(),
         ScatterBehavior(),
         GroupRotationBehavior(),
     ]

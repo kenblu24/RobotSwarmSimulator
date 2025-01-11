@@ -46,7 +46,7 @@ def main(config: GeneticEvolutionConfig, output_config=None, heterogeneous=False
         lifespan=config.lifespan,
         k_neighbors=config.k,
         genome_builder=gene_builder,
-        behavior_config=config.behavior_config,
+        behavior_config=config.metrics_config,
         mutation_flip_chance=config.mutation_flip_chance,
         allow_external_archive=config.use_external_archive,
         genome_dependent_world=config.world_metadata,

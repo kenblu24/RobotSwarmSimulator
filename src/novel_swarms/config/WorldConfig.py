@@ -90,7 +90,7 @@ class RectangularWorldConfig:
 
     # def as_dict(self):
     #     return {
-    #         "behavior": [b.as_config_dict() for b in self.behavior],
+    #         "behavior": [b.as_config_dict() for b in self.metrics],
     #         "size": tuple(self.size),
     #         "population_size": self.population_size,
     #         "seed": self.seed,
@@ -118,7 +118,7 @@ class RectangularWorldConfig:
     # def from_dict(d):
     #     from ..world.objects.ObjectFactory import ObjectFactory
     #     from ..world.goals.GoalFactory import GoalFactory
-    #     from ..behavior.BehaviorFactory import BehaviorFactory
+    #     from ..metrics.BehaviorFactory import BehaviorFactory
     #     from ..config.AgentConfig import AgentConfigFactory
 
     #     objects, a_config, behavior = None, None, []

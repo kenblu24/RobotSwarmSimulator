@@ -1,9 +1,9 @@
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 
 
-class AlgebraicConn(AbstractBehavior):
+class AlgebraicConn(AbstractMetric):
     def __init__(self, history=100, r_disk_size=10):
         super().__init__(name="Alg_Connectivity", history_size=history)
         self.population = None

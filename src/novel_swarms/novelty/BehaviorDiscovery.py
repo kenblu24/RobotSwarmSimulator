@@ -20,7 +20,7 @@ class BehaviorDiscovery:
                  mutation_flip_chance = 0.2, allow_external_archive=False, genome_dependent_world=None, force_repeats=False,
                  seed=None):
         self.population = np.array([])
-        self.behavior = np.array([])
+        self.metrics = np.array([])
         self.scores = np.array([])
         self.lifespan = lifespan
         self.total_generations = generations
@@ -33,7 +33,7 @@ class BehaviorDiscovery:
         self.mutations = 0
         self.mutation_flip_chance = mutation_flip_chance
         self.world_config = world_config
-        self.behavior_config = behavior_config
+        self.metrics_config = behavior_config
         self.archive = NoveltyArchive()
         self.k = k_neighbors
         self.status = "Initializing"
@@ -68,7 +68,7 @@ class BehaviorDiscovery:
             self.gene_builder.fetch_random_genome() for j in range(self.population_size)
         ])
         self.scores = np.array([0.0 for i in range(self.population_size)])
-        self.behavior = np.array([[-1.0 for j in range(len(self.behavior_config))] for i in range(self.population_size)])
+        self.metrics = np.array([[-1.0 for j in range(len(self.metrics_config))] for i in range(self.population_size)])
 
     def runSinglePopulation(self, screen=None, i=0, save=True, genome=None, seed=None, output_config=None, heterogeneous=False):
         """
@@ -113,7 +113,7 @@ class BehaviorDiscovery:
                 # print(genome_index, behavior)
                 # print(f"Controller: {genome}")
                 if save:
-                    self.behavior[i] = behavior
+                    self.metrics[i] = behavior
                     self.archive.addToArchive(behavior, genome)
                     return output
 
@@ -125,7 +125,7 @@ class BehaviorDiscovery:
                 behavior = r
                 # print(f"We just utilized the archive: {rounded_genome}")
                 if save:
-                    self.behavior[i] = behavior
+                    self.metrics[i] = behavior
                     self.archive.addToArchive(behavior, genome)
                     return output
 
@@ -137,7 +137,7 @@ class BehaviorDiscovery:
         behavior = world.getBehaviorVector()
 
         if save:
-            self.behavior[i] = behavior
+            self.metrics[i] = behavior
             self.archive.addToArchive(behavior, genome)
             if self.allow_external_archive:
                 rounded_genome = self.round_genome(genome)
@@ -151,7 +151,7 @@ class BehaviorDiscovery:
     def evaluate(self):
         self.status = "Evaluate"
 
-        for i, behavior_vector in enumerate(self.behavior):
+        for i, behavior_vector in enumerate(self.metrics):
             novelty = self.archive.getNovelty(k=self.k, vec=behavior_vector)
             self.scores[i] = novelty
 

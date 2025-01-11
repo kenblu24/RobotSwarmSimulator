@@ -46,7 +46,7 @@ def run(args, genome, callback=lambda x: x) -> float:
 
     w = sim(world_config=world_config, save_every_ith_frame=2, save_duration=1000, show_gui=gui)
     try:
-        return w.behavior[0].out_average()[1]
+        return w.metrics[0].out_average()[1]
     except BaseException:
         pass
 

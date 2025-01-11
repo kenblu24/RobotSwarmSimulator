@@ -3,13 +3,13 @@ import math
 import copy
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 from ..agent.MazeAgent import MazeAgent
 from ..util.geometry.Point import Point
 from ..util.geometry.ConvexHull import ConvexHull as CH
 from ..util.geometry.Polygon import Polygon
 
-class ConvexHull(AbstractBehavior):
+class ConvexHull(AbstractMetric):
     def __init__(self, name="Convex_Hull_Area", history=100):
         super().__init__(name=name, history_size=history)
         self.population = None
@@ -43,7 +43,7 @@ class ConvexHull(AbstractBehavior):
         self.polygon.draw(screen, color=(0, 255, 0), width=4)
 
 
-class InverseConvexHull(AbstractBehavior):
+class InverseConvexHull(AbstractMetric):
     def __init__(self, name="Inverse_Hull_Area", history=100):
         super().__init__(name=name, history_size=history)
         self.population = None

@@ -27,7 +27,7 @@ from src.novel_swarms.world.subscribers.WorldSubscriber import WorldSubscriber
 from src.novel_swarms.world.simulate import main as simulator
 
 # Import the Behavior Measurements (Metrics) that can measure the agents over time
-from src.novel_swarms.behavior import *
+from src.novel_swarms.metrics import *
 
 # Import the custom Controller Class
 from src.novel_swarms.agent.control.Controller import Controller
@@ -93,7 +93,7 @@ def establish_goal_metrics():
 
 def establish_milling_metrics():
     # TODO: Update this value with Kevin's Formulation
-    # circliness = RadialVarianceBehavior()
+    # circliness = RadialVarianceMetric()
     # circliness = Circliness(history=450)
     circliness = Circliness(avg_history_max=450)
     return [circliness, TotalCollisionsBehavior()]
@@ -107,7 +107,7 @@ def configure_env(robot_config, num_agents=20, seed=None):
     world.addAgentConfig(robot_config)
     world.population_size = num_agents
     world.factor_zoom(SCALE)
-    world.behavior = establish_milling_metrics()
+    world.metrics = establish_milling_metrics()
     return world
 
 # Get a random controller
@@ -118,11 +118,11 @@ def get_random_controller():
     return controller
 
 # Create a Callback function that will be called at every .step() of the world
-# If interfacing is complex enough that is cannot be done in a callback func, use 
+# If interfacing is complex enough that is cannot be done in a callback func, use
 def callback(world, screen):
     """
     Read/Write from the world data
-    
+
     Params:
     - world: A World object (see src/novel_swarms/world/) that contains agent information. Can be modified in-place.
     - screen: A pygame screen object that allows for direct read/write of the pixel values in the window
@@ -148,7 +148,7 @@ def callback(world, screen):
 
 
 def stop_on_collision(world):
-    if world.behavior[1].out_average()[1] > 20:
+    if world.metrics[1].out_average()[1] > 20:
         return True
     return False
 

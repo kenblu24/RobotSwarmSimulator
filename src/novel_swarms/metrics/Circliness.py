@@ -1,9 +1,9 @@
 import copyreg
 import numpy as np
-from .RadialVariance import RadialVarianceBehavior
+from .RadialVariance import RadialVarianceMetric
 
 
-class RadialVarianceHelper(RadialVarianceBehavior):
+class RadialVarianceHelper(RadialVarianceMetric):
     def __init__(self, history=100, regularize=False, name=None):
         if regularize:
             raise NotImplementedError

@@ -1,9 +1,9 @@
 import numpy as np
 import math
-from .RadialVariance import RadialVarianceBehavior
+from .RadialVariance import RadialVarianceMetric
 
 
-class DistanceSizeRatio(RadialVarianceBehavior):
+class DistanceSizeRatio(RadialVarianceMetric):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = self.__class__.__name__

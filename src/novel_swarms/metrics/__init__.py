@@ -1,4 +1,4 @@
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 from .AverageSpeed import AverageSpeedBehavior
 from .SubGroupWrapper import SubGroupBehavior
 from .SensorOffset import GeneElementDifference
@@ -9,7 +9,7 @@ from .GroupRotationBehavior import GroupRotationBehavior
 from .DistanceToGoal import DistanceToGoal
 from .AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
 from .TotalCollisions import TotalCollisionsBehavior
-from .RadialVariance import RadialVarianceBehavior
+from .RadialVariance import RadialVarianceMetric
 from .Circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
 from .Aggregation import Aggregation
 from .BerlingerCircularity import (
@@ -25,7 +25,7 @@ from .BerlingerCircularity import (
 from .DistanceSizeRatio import DistanceSizeRatio
 
 __all__ = [
-    "AbstractBehavior",
+    "AbstractMetric",
     "AverageSpeedBehavior",
     "SubGroupBehavior",
     "GeneElementDifference",
@@ -38,7 +38,7 @@ __all__ = [
     "AgentsAtGoal",
     "Circliness",
     "TotalCollisionsBehavior",
-    "RadialVarianceBehavior",
+    "RadialVarianceMetric",
     "Fatness",
     "Fatness2",
     "Tangentness",

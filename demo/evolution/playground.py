@@ -8,11 +8,11 @@ from src.novel_swarms.config.defaults import ConfigurationDefaults
 from src.novel_swarms.novelty.GeneRule import GeneRule, GeneRuleContinuous
 from src.novel_swarms.novelty.evolve import main as evolve
 from src.novel_swarms.results.results import main as report
-from src.novel_swarms.behavior.AngularMomentum import AngularMomentumBehavior
-from src.novel_swarms.behavior.AverageSpeed import AverageSpeedBehavior
-from src.novel_swarms.behavior.GroupRotationBehavior import GroupRotationBehavior
-from src.novel_swarms.behavior.RadialVariance import RadialVarianceBehavior
-from src.novel_swarms.behavior.ScatterBehavior import ScatterBehavior
+from src.novel_swarms.metrics.AngularMomentum import AngularMomentumBehavior
+from src.novel_swarms.metrics.AverageSpeed import AverageSpeedBehavior
+from src.novel_swarms.metrics.GroupRotationBehavior import GroupRotationBehavior
+from src.novel_swarms.metrics.RadialVariance import RadialVarianceMetric
+from src.novel_swarms.metrics.ScatterBehavior import ScatterBehavior
 from src.novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
 from src.novel_swarms.sensors.BinaryLOSSensor import BinaryLOSSensor
 from src.novel_swarms.sensors.SensorSet import SensorSet
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     phenotype = [
         AverageSpeedBehavior(),
         AngularMomentumBehavior(),
-        RadialVarianceBehavior(),
+        RadialVarianceMetric(),
         ScatterBehavior(),
         GroupRotationBehavior(),
     ]

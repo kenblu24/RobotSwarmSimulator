@@ -131,11 +131,6 @@ class RectangularWorld(World):
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
-        self.behavior = config.behavior
-        for b in self.behavior:
-            b.reset()
-            b.attach_world(self)
-
     def step(self):
         """
         Cycle through the entire population and take one step. Calculate Behavior if needed.
@@ -161,8 +156,8 @@ class RectangularWorld(World):
         # agent_step_timer.check_watch()
 
         # behavior_timer = Timer("Behavior Calculation Step")
-        for behavior in self.behavior:
-            behavior.calculate()
+        for metric in self.metrics:
+            metric.calculate()
         # behavior_timer.check_watch()
 
     def draw(self, screen, offset=None):
@@ -427,12 +422,12 @@ class RectangularWorld(World):
         return ret
 
     def getBehaviorVector(self):
-        behavior = np.array([s.out_average()[1] for s in self.behavior])
+        behavior = np.array([s.out_average()[1] for s in self.metrics])
         return behavior
 
     @property
     def behavior_dict(self):
-        return {s.name: s for s in self.behavior}
+        return {s.name: s for s in self.metrics}
 
     def removeAgent(self, agent):
         agent.deleted = True

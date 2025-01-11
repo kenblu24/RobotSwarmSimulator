@@ -1,8 +1,8 @@
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 
-class GroupRotationBehavior(AbstractBehavior):
+class GroupRotationBehavior(AbstractMetric):
 
     def __init__(self, history=100):
         super().__init__(name = "Group_Rotation", history_size=history)
@@ -30,7 +30,7 @@ class GroupRotationBehavior(AbstractBehavior):
             momentum_list.append(momentum)
 
         normalized_momentum = sum(momentum_list) / n
-        self.set_value(normalized_momentum)    
+        self.set_value(normalized_momentum)
 
     def center_of_mass(self):
         positions = [

@@ -1,8 +1,8 @@
-from ..behavior.AbstractBehavior import AbstractBehavior
+from ..metrics.AbstractMetric import AbstractMetric
 from typing import Tuple
 
-class SubGroupBehavior(AbstractBehavior):
-    def __init__(self, wrapped_behavior: AbstractBehavior, subgroup=0):
+class SubGroupBehavior(AbstractMetric):
+    def __init__(self, wrapped_behavior: AbstractMetric, subgroup=0):
         super().__init__(name=f"{wrapped_behavior.name}_{subgroup}", history_size=wrapped_behavior.history_size)
         self.group=subgroup
         self.population=[]

@@ -75,7 +75,7 @@ class LazyKnownModules:
         self.add_native_agent_types()
         self.add_native_sensors()
         self.add_native_controllers()
-        self.add_native_behaviors()
+        self.add_native_metrics()
         self.add_native_spawners()
 
     def add_native_world_types(self):
@@ -113,13 +113,13 @@ class LazyKnownModules:
         self._dictlike_types['controller']['AgentMethodController'] = AgentMethodController
         self._dictlike_types['controller']['HomogeneousController'] = HomogeneousController
 
-    def add_native_behaviors(self):
-        from .. import behavior
+    def add_native_metrics(self):
+        from .. import metrics
 
-        self.add_dictlike_namespace('behaviors')
+        self.add_dictlike_namespace('metrics')
 
-        native_behaviors = {name: getattr(behavior, name) for name in behavior.__all__}
-        self._dictlike_types['behaviors'].update(native_behaviors)
+        native_metrics = {name: getattr(metrics, name) for name in metrics.__all__}
+        self._dictlike_types['metrics'].update(native_metrics)
 
     def add_native_agent_types(self):
         from ..agent.DiffDriveAgent import DifferentialDriveAgent, DiffDriveAgentConfig

@@ -1,8 +1,8 @@
-from novel_swarms.behavior.AngularMomentum import AngularMomentumBehavior
-from novel_swarms.behavior.AverageSpeed import AverageSpeedBehavior
-from novel_swarms.behavior.GroupRotationBehavior import GroupRotationBehavior
-from novel_swarms.behavior.RadialVariance import RadialVarianceBehavior
-from novel_swarms.behavior.ScatterBehavior import ScatterBehavior
+from novel_swarms.metrics.AngularMomentum import AngularMomentumBehavior
+from novel_swarms.metrics.AverageSpeed import AverageSpeedBehavior
+from novel_swarms.metrics.GroupRotationBehavior import GroupRotationBehavior
+from novel_swarms.metrics.RadialVariance import RadialVarianceMetric
+from novel_swarms.metrics.ScatterBehavior import ScatterBehavior
 from novel_swarms.config.AgentConfig import DiffDriveAgentConfig
 from novel_swarms.config.WorldConfig import RectangularWorldConfig
 from novel_swarms.sensors.BinaryLOSSensor import BinaryLOSSensor
@@ -55,7 +55,7 @@ def main():
         behavior = [
             AverageSpeedBehavior(),
             AngularMomentumBehavior(),
-            RadialVarianceBehavior(),
+            RadialVarianceMetric(),
             ScatterBehavior(),
             GroupRotationBehavior(),
         ]

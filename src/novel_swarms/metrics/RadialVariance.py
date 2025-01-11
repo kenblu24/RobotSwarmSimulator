@@ -1,10 +1,10 @@
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 
 
-class RadialVarianceBehavior(AbstractBehavior):
-    __badvars__ = AbstractBehavior.__badvars__ + ['population']  # references to population may cause pickling errors
+class RadialVarianceMetric(AbstractMetric):
+    __badvars__ = AbstractMetric.__badvars__ + ['population']  # references to population may cause pickling errors
 
     def __init__(self, history=100, regularize=True):
         super().__init__(name="Radial_Variance", history_size=history)

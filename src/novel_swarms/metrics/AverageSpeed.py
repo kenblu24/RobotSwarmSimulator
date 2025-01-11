@@ -1,9 +1,9 @@
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 
 
-class AverageSpeedBehavior(AbstractBehavior):
+class AverageSpeedBehavior(AbstractMetric):
     def __init__(self, history=100):
         super().__init__(name="Average_Speed", history_size=history)
         self.population = None

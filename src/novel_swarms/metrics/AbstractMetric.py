@@ -2,7 +2,8 @@ from typing import Tuple
 
 from numpy import average
 
-class AbstractBehavior():
+
+class AbstractMetric():
     __badvars__ = ['world']  # variables that should not be pickled
 
     def __init__(self, name: str, history_size=100):

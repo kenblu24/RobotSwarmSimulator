@@ -2,10 +2,10 @@ import math
 
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 from ..world.goals.Goal import CylinderGoal, AreaGoal
 
-class DistanceToGoal(AbstractBehavior):
+class DistanceToGoal(AbstractMetric):
 
     def __init__(self, history=100):
         super().__init__(name = "Goal_Dist", history_size=history)

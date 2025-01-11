@@ -1,9 +1,9 @@
 import numpy as np
 from typing import List
-from .AbstractBehavior import AbstractBehavior
+from .AbstractMetric import AbstractMetric
 
 
-class ScatterBehavior(AbstractBehavior):
+class ScatterBehavior(AbstractMetric):
     def __init__(self, history=100, regularize=True):
         super().__init__(name="Scatter", history_size=history)
         self.population = None
