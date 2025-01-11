@@ -5,6 +5,7 @@ import numpy as np
 from typing import List
 import warnings
 from .AbstractMetric import AbstractMetric
+# from ..agent.MazeAgent import MazeAgent
 
 
 class AgentsAtGoal(AbstractMetric):

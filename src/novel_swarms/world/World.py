@@ -14,7 +14,7 @@ from collections.abc import Callable
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
-from ..metrics import AbstractMetric
+from ..metrics.AbstractMetric import AbstractMetric
 
 
 @filter_unexpected_fields
@@ -144,11 +144,15 @@ class World:
                 self.spawners.append(spawner_class(self, **spawner_config))
 
         for metric_config in self.config.metrics:
-            if isinstance(metric_config, AbstractMetric):  # if it's already a behavior, just add it
+            if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
                 self.metrics.append(metric_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the behavior
-                behavior_class, metric_config = get_class_from_dict('metrics', metric_config)
-                self.metrics.append(behavior_class(self, **metric_config))
+            else:  # otherwise, it's a config dict. find the class specified and create the metric
+                metric_class, metric_config = get_class_from_dict('metrics', metric_config)
+                self.metrics.append(metric_class(self, **metric_config))
+
+        for b in self.metrics:
+            b.reset()
+            b.attach_world(self)
 
         # self.metrics = config.metrics
         # self.objects = config.objects

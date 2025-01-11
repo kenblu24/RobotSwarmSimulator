@@ -3,8 +3,13 @@ import numpy as np
 import math
 from .AbstractSensor import AbstractSensor
 from typing import List
-from ..world.World import World
 from ..world.goals.Goal import CylinderGoal
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..world.World import World
+else:
+    World = None
 
 
 class BinaryFOVSensor(AbstractSensor):
