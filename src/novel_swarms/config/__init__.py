@@ -126,12 +126,8 @@ class LazyKnownModules:
         # from ..agent.HumanAgent import HumanDrivenAgent, HumanDrivenAgentConfig
         from ..agent.StaticAgent import StaticAgent, StaticAgentConfig
         from ..agent.MazeAgent import MazeAgent, MazeAgentConfig
-        # from ..agent.MazeAgentCaspian import MazeAgentCaspian, MazeAgentCaspianConfig
-        # from ..agent.MillingAgentCaspian import MillingAgentCaspian, MillingAgentCaspianConfig
 
         self._agent_types['MazeAgent'] = (MazeAgent, MazeAgentConfig)
-        # self._agent_types['MazeAgentCaspian'] = (MazeAgentCaspian, MazeAgentCaspianConfig)
-        # self._agent_types['MillingAgentCaspian'] = (MillingAgentCaspian, MillingAgentCaspianConfig)
         self._agent_types['DiffDriveAgent'] = (DifferentialDriveAgent, DiffDriveAgentConfig)
         # self._agent_types['HumanDrivenAgent'] = (HumanDrivenAgent, HumanDrivenAgentConfig)
         self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)

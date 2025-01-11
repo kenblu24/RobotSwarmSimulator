@@ -7,7 +7,7 @@ TwoConstantOutputValues = tuple[ConstantOutputValues, ConstantOutputValues] | np
 
 
 class BinaryController(AbstractController):
-    def __init__(self, parent, agent=None, a: TwoConstantOutputValues | ConstantOutputValues, b: ConstantOutputValues | None = None, sensor_id=0, **kwargs):
+    def __init__(self, parent, a: TwoConstantOutputValues | ConstantOutputValues, b: ConstantOutputValues | None = None, agent=None,  sensor_id=0, **kwargs):
         super().__init__(parent, agent=agent, **kwargs)
         self.sensor_id = sensor_id  # use this to determine which sensor on the agent to use
 

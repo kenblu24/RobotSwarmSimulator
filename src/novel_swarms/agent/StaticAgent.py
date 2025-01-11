@@ -29,13 +29,14 @@ class StaticAgentConfig(BaseAgentConfig):
     collides: bool | int = True
     points: list[tuple[float, float]] | np.ndarray | str = field(default_factory=list)
     anchor_point: None | tuple[float, float] | str = None
+    debug: bool = False
 
     def attach_world_config(self, world_config):
         self.world = world_config
 
 
 class StaticAgent(Agent):
-    DEBUG = True
+    DEBUG = False
 
     def __init__(self, config: StaticAgentConfig, world: RectangularWorld, name=None, initialize=True) -> None:
         super().__init__(config, world, name, initialize=False)
@@ -88,6 +89,7 @@ class StaticAgent(Agent):
         self.agent_in_sight = None
         self.body_filled = config.body_filled
         self.body_color = config.body_color
+        self.debug = config.debug or self.DEBUG
         self.rotmat = self.rotmat2d()
         self.aabb = self.make_aabb()
 
@@ -145,7 +147,7 @@ class StaticAgent(Agent):
 
         self.draw_direction(screen, offset)
 
-        if self.DEBUG:
+        if self.debug:
             self.debug_draw(screen, offset)
 
     def draw_direction(self, screen, offset=((0, 0), 1.0)):

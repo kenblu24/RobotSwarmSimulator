@@ -18,6 +18,7 @@ spawners:
   #     controller:
   #       type: StaticController
   #       output: [0.01, 0]
+  #     debug: true
   # - type: PointAgentSpawner
   #   oneshot: true
   #   n: 10
@@ -27,6 +28,7 @@ spawners:
   #     type: MazeAgent
   #     agent_radius: 0.15
   #     position: [8, 8]
+  #     debug: true
 agents:
   - &agent1
     type: MazeAgent

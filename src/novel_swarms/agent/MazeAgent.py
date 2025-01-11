@@ -273,7 +273,7 @@ class MazeAgent(StaticAgent):
 
             if not collided:
                 return
-            if self.DEBUG and world._screen_cache:
+            if self.debug and world._screen_cache:
                 world.draw(world._screen_cache)
                 pygame.display.flip()
 

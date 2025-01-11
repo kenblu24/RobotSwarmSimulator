@@ -90,12 +90,12 @@ class Agent:
         if not res:
             return
         controller_cls, controller_config = res
-        self.controller = controller_cls(parent=self, **controller_config)
+        self.controller = controller_cls(agent=self, **controller_config)
 
     def setup_sensors_from_config(self):
         for sensor_config in self.config.sensors:
             sensor_cls, sensor_config = get_class_from_dict('sensors', sensor_config)
-            self.sensors.append(sensor_cls(parent=self, **sensor_config))
+            self.sensors.append(sensor_cls(agent=self, **sensor_config))
 
     def step(self, check_for_world_boundaries=None) -> None:
         self.pos = np.asarray(self.pos, dtype='float64')

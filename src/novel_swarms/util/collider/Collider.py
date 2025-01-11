@@ -58,7 +58,7 @@ class CircularCollider(Collider):
             return np.empty(shape) * np.nan
         elif dist_between_radii < self.infinitesmimal:
             amount = np.ones(shape) * self.shake_amount
-            correction_vector += rng.uniform(-amount, amount, rng)
+            correction_vector += rng.uniform(-amount, amount)
         correction_vector += ((other.c - self.c) / (dist_between_radii + 0.001)) * (dist_difference + self.infinitesmimal)
         return -correction_vector
 
