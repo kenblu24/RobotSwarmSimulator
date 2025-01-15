@@ -24,6 +24,10 @@ from novel_swarms.metrics import Circliness
 # from .milling_search import fitness
 
 # from novel_swarms.world.initialization.PredefInit import PredefinedInitialization
+from DonutSpawner import DonutAgentSpawner
+from novel_swarms.config import register_dictlike_type
+
+register_dictlike_type('spawners', "DonutAgentSpawner", DonutAgentSpawner)
 
 SCALE = 1
 

@@ -29,6 +29,16 @@ spawners:
   #     agent_radius: 0.15
   #     position: [8, 8]
   #     debug: true
+  - type: DonutAgentSpawner
+    oneshot: true
+    n: 30
+    facing: random
+    avoid_overlap: true
+    agent:
+      type: MazeAgent
+      agent_radius: 0.15
+      debug: true
+
 agents:
   - &agent1
     type: MazeAgent
