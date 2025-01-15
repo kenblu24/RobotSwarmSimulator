@@ -1,13 +1,13 @@
 cma~=3.3.0
 matplotlib  # ~=3.8.4
-numpy~=1.26.4
+# numpy~=1.26.4
 opencv-python~=4.9.0.80  # used in 1 file
 ripser~=0.6.4
-pillow~=10.3.0
-pygame-ce
-PyYAML~=6.0.1
-scipy~=1.13.0
-scikit-learn~=1.4.0  # used in 2 files
+pillow~=11.1.0
+pygame-ce~=2.5.2
+PyYAML>=6.0.1
+scipy~=1.15.0
+scikit-learn~=1.6.0  # used in 2 files
 thorpy~=2.1.7  # used in 1 file
 circle_fit~=0.2.1
 pointpats~=2.5.1
