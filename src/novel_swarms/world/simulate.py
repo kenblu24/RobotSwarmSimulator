@@ -8,6 +8,30 @@ screen = None
 FRAMERATE = 200
 
 
+def init(gui=True, raise_errors=False):
+    modules = [
+        # pygame.camera,
+        pygame.display,
+        pygame.font,
+        # pygame.midi,
+        # pygame.mixer,
+        pygame.joystick,
+        pygame.scrap,
+    ]
+    initialized_modules = []
+    errors = []
+    if gui:
+        for module in modules:
+            try:
+                module.init()
+                initialized_modules.append(module)
+            except pygame.error as err:
+                errors.append(err)
+                if raise_errors:
+                    raise
+    return initialized_modules, errors
+
+
 def main(
     world_config,
     show_gui=True,
@@ -25,7 +49,7 @@ def main(
 ):
     # initialize the pygame module
     if show_gui:
-        pygame.init()
+        init()
         pygame.display.set_caption("Swarm Simulation")
 
     # screen must be global so that other modules can access + draw to the window
