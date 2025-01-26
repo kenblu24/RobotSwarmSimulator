@@ -165,29 +165,30 @@ class World:
     def step(self):
         self.total_steps += 1
 
-        self.events = list(pygame.event.get())
-        for event in self.events:
-            if event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION, pygame.JOYBALLMOTION, pygame.JOYHATMOTION]:
-                if event.instance_id not in self.active_joysticks:
-                    joystick = self.joysticks[event.instance_id]
-                    self.active_joysticks[event.instance_id] = joystick
-                    joystick.rumble(0, 0.7, 500)
+        if self.gui:
+            self.events = list(pygame.event.get())
+            for event in self.events:
+                if event.type in [pygame.JOYBUTTONDOWN, pygame.JOYAXISMOTION, pygame.JOYBALLMOTION, pygame.JOYHATMOTION]:
+                    if event.instance_id not in self.active_joysticks:
+                        joystick = self.joysticks[event.instance_id]
+                        self.active_joysticks[event.instance_id] = joystick
+                        joystick.rumble(0, 0.7, 500)
 
-            if event.type == pygame.JOYBUTTONUP:
-                print("Joystick button released.")
+                if event.type == pygame.JOYBUTTONUP:
+                    print("Joystick button released.")
 
-            # Handle hotplugging
-            if event.type == pygame.JOYDEVICEADDED:
-                # This event will be generated when the program starts for every
-                # joystick, filling up the list without needing to create them manually.
-                joy = pygame.joystick.Joystick(event.device_index)
-                self.joysticks[joy.get_instance_id()] = joy
-                print(f"Joystick {joy.get_instance_id()} connencted")
+                # Handle hotplugging
+                if event.type == pygame.JOYDEVICEADDED:
+                    # This event will be generated when the program starts for every
+                    # joystick, filling up the list without needing to create them manually.
+                    joy = pygame.joystick.Joystick(event.device_index)
+                    self.joysticks[joy.get_instance_id()] = joy
+                    print(f"Joystick {joy.get_instance_id()} connencted")
 
-            if event.type == pygame.JOYDEVICEREMOVED:
-                del self.joysticks[event.instance_id]
-                del self.active_joysticks[event.instance_id]
-                print(f"Joystick {event.instance_id} disconnected")
+                if event.type == pygame.JOYDEVICEREMOVED:
+                    del self.joysticks[event.instance_id]
+                    del self.active_joysticks[event.instance_id]
+                    print(f"Joystick {event.instance_id} disconnected")
 
     def draw(self, screen, offset=None):
         pass
