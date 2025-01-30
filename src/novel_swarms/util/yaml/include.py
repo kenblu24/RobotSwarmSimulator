@@ -19,9 +19,9 @@ class IncludeLoader(yaml.SafeLoader):
         super().__init__(stream)
 
 
-def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
+def search_file(loader, path_str: str) -> pl.Path:
     """Include file referenced at node."""
-    node_path = pl.Path(loader.construct_scalar(node))
+    node_path = pl.Path(path_str)
 
     cwd = pl.Path.cwd()
     resolved = node_path.expanduser().resolve()
@@ -32,14 +32,18 @@ def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
     # 2. relative to yaml file
     # 3. relative to cwd
     if node_path.is_absolute() or not_cwd:
-        node_path = resolved
+        return resolved
     elif (path := loader.file_path.parent / node_path).exists():
-        node_path = path
+        return path
     elif (path := pl.Path.cwd() / node_path).exists():
-        node_path = path
+        return path
     else:
         msg = f"Could resolve path: {node_path}"
         raise FileNotFoundError(msg)
+
+
+def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
+    node_path = search_file(loader, loader.construct_scalar(node))
 
     ext = node_path.suffix
 
@@ -52,7 +56,13 @@ def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
             return ''.join(f.readlines())
 
 
+def construct_relative_path(loader: IncludeLoader, node: yaml.Node) -> Any:
+    node_path = search_file(loader, loader.construct_scalar(node))
+    return str(node_path.resolve().absolute())
+
+
 yaml.add_constructor('!include', construct_include, IncludeLoader)
+yaml.add_constructor('!relpath', construct_relative_path, IncludeLoader)
 
 
 if __name__ == '__main__':
