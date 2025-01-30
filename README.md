@@ -1,14 +1,18 @@
-# Novel Behavior Discovery in Computation Free Swarms
-Contributors: Connor Mattson, Jeremy Clark, Daniel S. Brown
+# Robot Swarm Simulator
+Contributors: Connor Mattson, Jeremy Clark, Daniel S. Brown, Kevin Zhu
 
 ## Required Software
-- Python >3.9 & Pip
-- External Python Packages as defined in [requirements.txt](requirements.txt) 
+- Python >3.11 & pip
+- External Python Packages as defined in [mindeps.txt](mindeps.txt) 
 
 ## Setup
 Install Python Packages
     
-    pip install -r requirements.txt
+    pip install -r mindeps.txt
+
+or, for faster install with uv (`pip install uv`), use
+
+    uv pip install -r mindeps.txt
 
 Test Simulation
 
