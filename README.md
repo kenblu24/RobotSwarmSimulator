@@ -6,13 +6,17 @@ Contributors: Connor Mattson, Jeremy Clark, Daniel S. Brown, Kevin Zhu
 - External Python Packages as defined in [mindeps.txt](mindeps.txt) 
 
 ## Setup
-Install Python Packages
+Install RSS with pip
     
-    pip install -r mindeps.txt
+    pip install --upgrade git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
 
-or, for faster install with uv (`pip install uv`), use
+or, for faster install with uv (`pip install uv`) and preface any pip commands with `uv`, i.e. `uv pip install...`
 
-    uv pip install -r mindeps.txt
+To install as editable:
+
+    git clone git@github.com:kenblu24/RobotSwarmSimulator.git
+    cd RobotSwarmSimulator
+    pip install -e .
 
 Test Simulation
 
