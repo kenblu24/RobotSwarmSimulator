@@ -205,11 +205,11 @@ class BinaryFOVSensor(AbstractSensor):
         if real_value:
             # Consider Reporting False Negative
             if np.random.random_sample() < self.fn:
-                self.agent.agent_in_sight = None
+                self.agent_in_sight = None
                 self.current_state = 1 if invert else 0
                 self.detection_id = 0
             else:
-                self.agent.agent_in_sight = agent
+                self.agent_in_sight = agent
                 self.current_state = 0 if invert else 1
                 if agent:
                     self.detection_id = agent.detection_id
@@ -217,11 +217,11 @@ class BinaryFOVSensor(AbstractSensor):
         else:
             # Consider Reporting False Positive
             if np.random.random_sample() < self.fp:
-                self.agent.agent_in_sight = None
+                self.agent_in_sight = None
                 self.detection_id = 0
                 self.current_state = 0 if invert else 1
             else:
-                self.agent.agent_in_sight = None
+                self.agent_in_sight = None
                 self.current_state = 1 if invert else 0
                 self.detection_id = 0
 

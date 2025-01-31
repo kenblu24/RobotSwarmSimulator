@@ -74,6 +74,9 @@ class DifferentialDriveGUI(AbstractGUI):
                 a: MazeAgent = self.selected
                 heading = a.get_heading() % (2 * PI) / 2 / PI * 360
                 dx, dy = a.dpos
+                name = a.name
+                if name is None:
+                    name = '<unnamed>'
                 self.appendTextToGUI(screen, f"cursor: {mx: >8}, {my: >8}")
                 self.appendTextToGUI(screen, f"")
                 self.appendTextToGUI(screen, f"Current Agent: {a.name}")
@@ -105,9 +108,11 @@ class DifferentialDriveGUI(AbstractGUI):
                     for line in lines[1:]:
                         self.appendTextToGUI(screen, line)
                     self.appendTextToGUI(screen, f"")
-                if hasattr(a, "agent_in_sight"):
-                    agent_seen = getattr(a.agent_in_sight, "name", '')
-                    self.appendTextToGUI(screen, f"sees: {agent_seen}")
+                try:
+                    seen = a.sensors[0].agent_in_sight.name
+                except (AttributeError, IndexError):
+                    seen = '?'
+                self.appendTextToGUI(screen, f"sees: {'<unnamed>' if seen is None else seen}")
                 try:
                     v, w = a.requested
                 except AttributeError:
