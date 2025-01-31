@@ -3,8 +3,8 @@ type: "RectangularWorld"
 size:  # in meters
   - 10
   - 10
-objects:
-  - from_svg: !include world.svg
+# objects:
+#   - from_svg: !include world.svg
 time_step: !np 1 / 40
 spawners:
   # - type: UniformAgentSpawner
@@ -29,6 +29,16 @@ spawners:
   #     agent_radius: 0.15
   #     position: [8, 8]
   #     debug: true
+
+  - type: PointAgentSpawner
+    oneshot: true
+    n: 6
+    facing: away
+    avoid_overlap: true
+    agent:
+      !include turbopi.yaml
+      # position: [8, 8]
+      # debug: true
 agents:
   - &agent1
     type: MazeAgent
@@ -65,7 +75,7 @@ agents:
     position: [0, 0]
     # agent_radius: 0.5
     # points: [[-0.1, 0], [0.1, 0], [-0.1, 0.1], [0.1, 0.1]]
-    points: !include rock.svg
+    # points: !include rock.svg
     anchor_point: centroid inplace
     # angle: PI
 padding: 0

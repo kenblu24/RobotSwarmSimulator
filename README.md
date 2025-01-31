@@ -10,7 +10,7 @@ Install RSS with pip
     
     pip install --upgrade git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
 
-or, for faster install with uv (`pip install uv`) and preface any pip commands with `uv`, i.e. `uv pip install...`
+or, for faster install with uv (`pip install uv`) preface any pip commands with `uv`, i.e. `uv pip install...`
 
 To install as editable:
 
