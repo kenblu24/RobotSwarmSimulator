@@ -9,7 +9,7 @@ from typing import Any, IO
 # possibly helpful: https://matthewpburruss.com/post/yaml/
 
 
-class IncludeLoader(yaml.SafeLoader):
+class IncludeLoader(yaml.FullLoader):
     """YAML Loader with `!include` constructor."""
 
     def __init__(self, stream: IO) -> None:

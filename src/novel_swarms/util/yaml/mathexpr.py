@@ -79,10 +79,10 @@ def construct_numexpr(loader: yaml.SafeLoader, node: yaml.Node) -> Any:
     return unwrap_node_recursive(loader, node)
 
 
-yaml.add_constructor('!np', construct_numexpr, yaml.SafeLoader)
-
 
 if __name__ == '__main__':
+    yaml.add_constructor('!np', construct_numexpr, yaml.SafeLoader)
+
     with open('src/novel_swarms/util/yaml/test.yaml') as f:
         d = yaml.load(f, yaml.SafeLoader)
     print(d)

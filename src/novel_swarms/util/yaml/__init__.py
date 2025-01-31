@@ -5,6 +5,8 @@ from .unknown import Tagged, construct_undefined, register_undefined
 
 from functools import partial
 
+yaml.add_constructor('!np', construct_numexpr, IncludeLoader)
+
 load = partial(yaml.load, Loader=IncludeLoader)
 
 
