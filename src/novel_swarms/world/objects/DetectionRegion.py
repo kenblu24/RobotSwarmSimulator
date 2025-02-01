@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
-from ...config import filter_unexpected_fields, associated_type
 
+import numpy as np
+
+from ...config import filter_unexpected_fields, associated_type
 from ...agent.StaticAgent import StaticAgent, StaticAgentConfig
 
 # typing
@@ -11,18 +13,20 @@ from typing import Any, override
 @filter_unexpected_fields
 @dataclass
 class DetectionRegionConfig(StaticAgentConfig):
-    collides: bool | int = False
+    collides: bool | int = True
     grounded: bool = True
 
 
 class DetectionRegion(StaticAgent):
     def __init__(self, config, world, name=None, initialize=True):
         super().__init__(config, world, name, initialize)
-        print("Hello")
 
     @override
     def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-        self.check_collisions()
+        world = world or self.world
+        self.check_collisions(world, self.rng, refresh=False)
+
+        self.body_color = (0, 250, 0) if self.collision_flag else (150, 150, 150)
 
     @override
     def draw_direction(self, screen, offset=((0, 0), 1.0)):
@@ -47,6 +51,3 @@ class DetectionRegion(StaticAgent):
                 continue
             self.collided.append(other)
             self.collision_flag = True
-
-
-            self.body_color = (200, 200, 200) if self.collision_flag else (0, 0, 0)

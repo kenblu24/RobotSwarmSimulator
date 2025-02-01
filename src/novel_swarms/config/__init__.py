@@ -122,6 +122,8 @@ class LazyKnownModules:
         self._dictlike_types['metrics'].update(native_metrics)
 
     def add_native_agent_types(self):
+
+        # actual agents
         from ..agent.DiffDriveAgent import DifferentialDriveAgent, DiffDriveAgentConfig
         # from ..agent.HumanAgent import HumanDrivenAgent, HumanDrivenAgentConfig
         from ..agent.StaticAgent import StaticAgent, StaticAgentConfig
@@ -132,8 +134,14 @@ class LazyKnownModules:
         # self._agent_types['HumanDrivenAgent'] = (HumanDrivenAgent, HumanDrivenAgentConfig)
         self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)
 
+        # world objects also use the agent creation system
         from ..world.objects.StaticObject import StaticObject, StaticObjectConfig
+        from ..world.objects.DetectionRegion import DetectionRegion, DetectionRegionConfig
+        # from ..world.objects.TriggerRegion import TriggerRegion, TriggerRegionConfig
+
         self._agent_types['StaticObject'] = (StaticObject, StaticObjectConfig)
+        self._agent_types['DetectionRegion'] = (DetectionRegion, DetectionRegionConfig)
+        # self._agent_types['TriggerRegion'] = (TriggerRegion, TriggerRegionConfig)
 
     def add_native_spawners(self):
         from ..world.spawners.AgentSpawner import AgentSpawner, UniformAgentSpawner, PointAgentSpawner

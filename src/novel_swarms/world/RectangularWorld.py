@@ -1,7 +1,7 @@
 import math
 from functools import partial
 
-from ..config import store
+from ..config import store, get_agent_class
 from ..util.geometry.svg_extraction import SVG, remove_classes, first_match
 import random
 from dataclasses import dataclass
@@ -106,10 +106,15 @@ class RectangularWorld(World):
         for entry in config.objects:
             if not isinstance(entry, dict):
                 continue
+            # check if entry contains a "type" key
+            if 'type' in entry:
+                if isinstance(entry, Agent):  # if it's already an agent, just add it
+                    self.objects.append(entry)
+                else:  # otherwise, it's a config dict. find the class specified and create the agent
+                    agent_class, agent_config = get_agent_class(entry)
+                    self.objects.append(agent_class.from_config(agent_config, self))
             # check if entry contains a "from_svg" key with a string value
-            if 'from_svg' not in entry:
-                continue
-            if isinstance((svg:=entry['from_svg']), str):
+            elif isinstance((svg:=entry.get('svg_to_static_objects', None)), str):
                 svg = SVG(svg)
                 paths = svg.get_polygons()
                 paths += svg.get_rects()
@@ -154,6 +159,9 @@ class RectangularWorld(World):
             )
             self.handleGoalCollisions(agent)
         # agent_step_timer.check_watch()
+
+        for obj in self.objects:
+            obj.step()
 
         # behavior_timer = Timer("Behavior Calculation Step")
         for metric in self.metrics:
