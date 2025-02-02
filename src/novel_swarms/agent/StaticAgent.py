@@ -136,14 +136,15 @@ class StaticAgent(Agent):
         super().draw(screen)
 
         # Draw Cell Membrane
-        filled = 0 if (self.is_highlighted or self.stopped_duration or self.body_filled) else 1
+        filled = False if (self.is_highlighted or self.stopped_duration or self.body_filled) else True
         color = self.body_color if not self.stopped_duration else (255, 255, 51)
         pos = np.asarray(self.getPosition()) * zoom + pan
+        width = int(filled)
 
         if self.is_poly:
-            pygame.draw.polygon(screen, color, self.poly_rotated * zoom + pos, width=filled)
+            pygame.draw.polygon(screen, color, self.poly_rotated * zoom + pos, width=width)
         else:
-            pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=filled)  # pyright: ignore[reportArgumentType]
+            pygame.draw.circle(screen, color, (*pos,), self.radius * zoom, width=width)  # pyright: ignore[reportArgumentType]
 
         self.draw_direction(screen, offset)
 

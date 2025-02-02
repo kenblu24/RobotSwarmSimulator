@@ -5,7 +5,9 @@ size:  # in meters
   - 10
 objects:
   - type: DetectionRegion
-#   - from_svg: !include world.svg
+    position: [0.2, 0.2]
+    agent_radius: 0.1
+  - svg_to_static_objects: !include world.svg
 time_step: !np 1 / 40
 spawners:
   - type: PointAgentSpawner
