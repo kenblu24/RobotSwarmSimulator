@@ -143,7 +143,7 @@ class RectangularWorldConfig:
 class WorldYAMLFactory:
     @staticmethod
     def from_yaml(file_name):
-        from ..util.yaml import load
+        from ..yaml import load
 
         config = None
         with open(file_name, "r") as f:

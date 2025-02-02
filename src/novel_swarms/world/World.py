@@ -54,7 +54,7 @@ class AbstractWorldConfig:
 
     @classmethod
     def from_yaml(cls, path):
-        from ..util import yaml
+        from .. import yaml
 
         with open(path, "r") as f:
             return cls.from_dict(yaml.load(f))
