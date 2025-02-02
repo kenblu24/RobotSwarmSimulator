@@ -10,7 +10,7 @@ from ctypes import ArgumentError
 import numpy as np
 from tqdm import tqdm
 
-from novel_swarms.util import yaml
+from novel_swarms import yaml
 from novel_swarms.config import get_agent_class
 from novel_swarms.agent.control.Controller import Controller
 from novel_swarms.world.spawners.AgentSpawner import UniformAgentSpawner
