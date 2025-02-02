@@ -1,10 +1,12 @@
 from enum import Enum
 from typing import override
 
+from .AbstractController import AbstractController
+
 ControllerType = Enum("ControllerType", ["method_based", "list_based", "inherit_agent"])
 
 
-class Controller:
+class Controller(AbstractController):
     """
     Given agent observations, return agent actions
     """

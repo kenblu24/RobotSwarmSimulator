@@ -2,27 +2,25 @@
 test world startup
 """
 
+import pathlib as pl
 import argparse
-from ctypes import ArgumentError
 from io import BytesIO
+from ctypes import ArgumentError
 
 import numpy as np
 from tqdm import tqdm
 
-# from novel_swarms.config.AgentConfig import AgentYAMLFactory
-# from novel_swarms.config.WorldConfig import WorldYAMLFactory
+from novel_swarms.util import yaml
+from novel_swarms.config import get_agent_class
+from novel_swarms.agent.control.Controller import Controller
+from novel_swarms.world.spawners.AgentSpawner import UniformAgentSpawner
 from novel_swarms.world.RectangularWorld import RectangularWorldConfig
 
-# from novel_swarms.world.initialization.FixedInit import FixedInitialization
 from novel_swarms.metrics import Circliness
 
-# from novel_swarms.agent.control.Controller import Controller
-# from novel_swarms.agent.control.HomogeneousController import HomogeneousController
 # from novel_swarms.world.simulate import main as sim
 
-# from .milling_search import DECISION_VARS, SCALE, BL
-# from .milling_search import fitness
-
+# from novel_swarms.world.initialization.FixedInit import FixedInitialization
 # from novel_swarms.world.initialization.PredefInit import PredefinedInitialization
 
 SCALE = 1
@@ -33,6 +31,8 @@ BLS_MAX = MS_MAX / BL  # max speed in body lengths per second
 
 PERFECT_CIRCLE_SCORE = -1.0
 CIRCLINESS_HISTORY = 450
+
+code_dir = pl.Path(__file__).parent.resolve()
 
 
 def fitness(world_set):
@@ -50,25 +50,40 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         # register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
 
-        # goal_agent = AgentYAMLFactory.from_yaml("./turbopi.yaml")
-        # goal_agent.controller = HomogeneousController(genome)
-        # # goal_agent.seed = 0
-        # goal_agent.rescale(SCALE)
+        # build agent config and inject controller
+        with open(code_dir / 'turbopi.yaml', 'r') as f:
+            agent_config = yaml.load(f)
+        _agent_cls, agent_config = get_agent_class(agent_config)
+        agent_config.controller = {"type": Controller, "controller": genome}
 
-        world = RectangularWorldConfig.from_yaml("./world.yaml")
+        # get world config from file
+        world_config = RectangularWorldConfig.from_yaml(code_dir / 'world.yaml')
 
+        # build spawner config and inject agent config
+        spawner_config = {
+            'type': UniformAgentSpawner,
+            'agent': agent_config,
+            'n': n_agents,
+            'avoid_overlap': True,
+            'facing': "away",
+            'oneshot': True,
+            'region': [[3, 3], [3, 6], [6, 6], [6, 3]],
+        }
+
+        # modify world config
         # world.seed = 0
-        world.metrics = [
+        world_config.metrics = [
             # Circliness(avg_history_max=CIRCLINESS_HISTORY)
         ]
         # world.population_size = n_agents
-        world.stop_at = horizon
-        world.detectable_walls = False
+        world_config.stop_at = horizon
+        world_config.detectable_walls = False
+        world_config.spawners.append(spawner_config)
 
-        world.factor_zoom(zoom=SCALE)
+        world_config.factor_zoom(zoom=SCALE)
         # world.addAgentConfig(goal_agent)
-        world.metadata = {"hash": hash(tuple(list(hash_val)))}
-        worlds = [world]
+        world_config.metadata = {"hash": hash(tuple(list(hash_val)))}
+        worlds = [world_config]
 
         return worlds
 
@@ -121,7 +136,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-n", type=int, default=10, help="Number of agents")
+    parser.add_argument("-n", type=int, default=0, help="Number of agents")
     parser.add_argument("-t", type=int, default=1000, help="Environment Horizon")
     parser.add_argument("--no-stop", action="store_true", help="If specified, the simulation will not terminate at T timesteps")
     parser.add_argument("--print", action="store_true")

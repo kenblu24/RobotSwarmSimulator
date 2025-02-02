@@ -198,7 +198,7 @@ def get_agent_class(config):
     return agent_class, config
 
 
-def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) -> tuple[object, dict]:
+def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) -> tuple[object, dict] | None:
     if key not in store.dictlike_types:
         msg = f"Object namespace is unknown to init system: {key}"
         raise KeyError(msg)
@@ -215,10 +215,17 @@ def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) ->
     if copy:
         config = config.copy()
     cls_name = config.pop('type')
-    if cls_name not in store.dictlike_types[key]:
-        msg = f"Class is unknown to init system: {cls_name}"
-        raise KeyError(msg)
-    return store.dictlike_types[key][cls_name], config
+
+    # if it's a string, then it's a class name
+    if isinstance(cls_name, str):
+        if cls_name not in store.dictlike_types[key]:
+            msg = f"Class is unknown to init system: {cls_name}"
+            raise KeyError(msg)
+        return store.dictlike_types[key][cls_name], config
+
+    # otherwise, assume it's a class
+    elif isinstance(cls_name, type):
+        return cls_name, config
 
 
 def initialize_natives():

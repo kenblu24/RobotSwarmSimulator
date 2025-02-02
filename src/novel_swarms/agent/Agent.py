@@ -1,9 +1,11 @@
 import math
+import copy
 from dataclasses import dataclass, field
+
 import numpy as np
 
-from ..config import get_class_from_dict, filter_unexpected_fields
 from ..agent.control.StaticController import zero_controller
+from ..config import get_class_from_dict, filter_unexpected_fields
 
 # typing
 from typing import Any
@@ -86,6 +88,15 @@ class Agent:
     def setup_controller_from_config(self):
         if not self.config.controller:
             return
+        # if it's already a controller, just add it
+        from ..agent.control.AbstractController import AbstractController
+        if isinstance(self.config.controller, AbstractController):
+            self.controller = copy.copy(self.config.controller)
+            return
+        # otherwise, it's a config dict. find the class specified and create the controller
+        if not isinstance(self.config.controller, dict):
+            msg = f'Tried to setup controller, but {repr(self.config.controller)} is not a dict or subclass of AbstractController'
+            raise Exception(msg)
         res = get_class_from_dict('controller', self.config.controller)
         if not res:
             return
@@ -93,7 +104,13 @@ class Agent:
         self.controller = controller_cls(agent=self, **controller_config)
 
     def setup_sensors_from_config(self):
+        from ..sensors.AbstractSensor import AbstractSensor
         for sensor_config in self.config.sensors:
+            # if it's already a sensor, just add it
+            if isinstance(sensor_config, AbstractSensor):
+                self.sensors.append(copy.copy(sensor_config))
+                continue
+            # otherwise, it's a config dict. find the class specified and create the sensor
             sensor_cls, sensor_config = get_class_from_dict('sensors', sensor_config)
             self.sensors.append(sensor_cls(agent=self, **sensor_config))
 
