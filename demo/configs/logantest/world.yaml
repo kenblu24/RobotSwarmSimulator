@@ -1,13 +1,15 @@
+# Units are MGS (Meters, Grams, Seconds) and radians unless otherwise specified
 ---
 type: "RectangularWorld"
-size:  # in meters
+size:  # in meters. 0, 0 is top left
   - 10
   - 10
 objects:
   - type: DetectionRegion
-    position: [0.2, 0.2]
+    position: [5, 5]
     agent_radius: 0.1
-  - svg_to_static_objects: !include world.svg
+    name: Goal
+  # - svg_to_static_objects: !include world.svg
 time_step: !np 1 / 40
 spawners:
   - type: PointAgentSpawner
@@ -38,7 +40,15 @@ spawners:
   #     agent_radius: 0.15
   #     position: [8, 8]
   #     debug: true
-# agents:
+agents:
+  # # if you want to use this agent type, make sure it's registered with novel_swarms.config.register_agent_type
+  # - type: RunnerAgent
+  #   position: [0, 0]
+  #   agent_radius: 0.15
+  #   sensors:
+  #     - type: RelativePositionSensor
+  #       distance: 1.0
+  #       show: true
 #   - &agent1
 #     type: MazeAgent
 #     position: [4, 10]

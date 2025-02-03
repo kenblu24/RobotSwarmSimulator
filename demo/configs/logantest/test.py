@@ -10,6 +10,8 @@ from ctypes import ArgumentError
 import numpy as np
 from tqdm import tqdm
 
+from copy import copy
+
 from novel_swarms import yaml
 from novel_swarms.config import get_agent_class
 from novel_swarms.agent.control.Controller import Controller
@@ -45,17 +47,42 @@ def fitness(world_set):
 
 def get_world_generator(n_agents, horizon, round_genome=False):
     def gene_to_world(genome, hash_val):
-        # from novel_swarms.config import register_agent_type, store
-        # from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
+        from novel_swarms.config import register_agent_type, register_dictlike_type
 
+        # I think you won't need to make your own agent type, but if you do, you can register it here
+        from RunnerAgent import RunnerAgent, RunnerAgentConfig
         # register agent types before building any configs
-        # register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
+        register_agent_type("RunnerAgent", RunnerAgent, RunnerAgentConfig)
 
-        # build agent config and inject controller
+        # from RelativePositionSensor import RelativePositionSensor
+        # register_dictlike_type('sensors', 'RelativePositionSensor', RelativePositionSensor)
+
+        # you can probably implement all the logic in the controller without needing to make a whole new agent type
+        from RunnerController import RunnerController
+        # register_dictlike_type('controller', 'RunnerController', RunnerController)  # for loading RunnerController from yaml
+
+        # load turbopi config
         with open(code_dir / 'turbopi.yaml', 'r') as f:
-            agent_config = yaml.load(f)
-        _agent_cls, agent_config = get_agent_class(agent_config)
-        agent_config.controller = {"type": Controller, "controller": genome}
+            turbopi_config = yaml.load(f)
+
+        # You can either start from a yaml config and modify it
+        _runner_cls, runner_config = get_agent_class(copy(turbopi_config))
+        runner_config.controller = {"type": 'RunnerController'}
+
+        # Or you can build it within python
+        runner_config = RunnerAgentConfig(
+            agent_radius=0.1,
+            position=(7, 1),  # x, y in meters where 0, 0 is the top left corner
+            name="i'm wearin Heelies",
+            team="attackers",
+            body_color=(255, 0, 0),
+            controller=RunnerController(),
+            body_filled=True,
+        )
+
+        # build defender agent config and inject controller
+        _defender_cls, defender_config = get_agent_class(copy(turbopi_config))
+        defender_config.controller = {"type": Controller, "controller": genome}
 
         # get world config from file
         world_config = RectangularWorldConfig.from_yaml(code_dir / 'world.yaml')
@@ -63,26 +90,25 @@ def get_world_generator(n_agents, horizon, round_genome=False):
         # build spawner config and inject agent config
         spawner_config = {
             'type': UniformAgentSpawner,
-            'agent': agent_config,
+            'agent': defender_config,
             'n': n_agents,
             'avoid_overlap': True,
             'facing': "away",
             'oneshot': True,
-            'region': [[3, 3], [3, 6], [6, 6], [6, 3]],
+            'region': [[4, 4], [4, 6], [6, 6], [6, 4]],
         }
 
-        # modify world config
+        # modify world config, overwriting defaults and whatever was in the yaml
         # world.seed = 0
         world_config.metrics = [
             # Circliness(avg_history_max=CIRCLINESS_HISTORY)
         ]
-        # world.population_size = n_agents
         world_config.stop_at = horizon
-        world_config.detectable_walls = False
+
+        # add our agents and spawners
+        world_config.agents.append(runner_config)
         world_config.spawners.append(spawner_config)
 
-        world_config.factor_zoom(zoom=SCALE)
-        # world.addAgentConfig(goal_agent)
         world_config.metadata = {"hash": hash(tuple(list(hash_val)))}
         worlds = [world_config]
 
@@ -122,7 +148,7 @@ def run(args, genome, callback=lambda x: x) -> float:
 
     world_config = callback(world_config)
 
-    w = sim(world_config=world_config, save_every_ith_frame=2, save_duration=1000, show_gui=gui)
+    w = sim(world_config=world_config, save_every_ith_frame=2, save_duration=1000, show_gui=gui, start_paused=args.start_paused)
     try:
         return w.metrics[0].out_average()[1]
     except BaseException:
@@ -132,14 +158,16 @@ def run(args, genome, callback=lambda x: x) -> float:
 if __name__ == "__main__":
     """
     Example usage:
-    `python -m demo.evolution.optim_milling.sim_results --v0 0.1531 --w0 0.3439 --v1 0.1485 --w1 0.1031 --n 10 --t 1000`
+    `python test.py --genome 0.2 0.1 0.2 -0.1  -n 6 -t 1000`
     """
 
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-n", type=int, default=0, help="Number of agents")
-    parser.add_argument("-t", type=int, default=1000, help="Environment Horizon")
+    parser.add_argument("-t", type=int, default=1000, help="The number of timesteps to run. Set to -1 to run forever.")
     parser.add_argument("--no-stop", action="store_true", help="If specified, the simulation will not terminate at T timesteps")
+    parser.add_argument('--start_paused', action='store_true',
+                           help="pass this to pause the simulation at startup. Press Space to unpause.")
     parser.add_argument("--print", action="store_true")
     parser.add_argument("--nogui", action="store_true")
     parser.add_argument("--discrete-bins", help="How many bins to discretize the decision variables into")
