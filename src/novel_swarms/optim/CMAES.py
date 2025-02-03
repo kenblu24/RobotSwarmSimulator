@@ -2,8 +2,8 @@ import os
 import time
 import inspect
 import cma
-import yaml
 import numpy as np
+from novel_swarms import yaml
 from .OptimVar import CMAESVarSet
 from ..util.processing.multicoreprocessing import MultiWorldSimulation
 from ..world.simulate import main as sim
