@@ -14,8 +14,8 @@ class AbstractSensor:
         if agent is not None and not issubclass(type(agent), Agent):
             raise Exception("The parent must be of type Agent")
 
-        self.agent = agent
-        self.parent = self.agent if parent is None else parent
+        self.parent = None
+        self.set_agent(agent, parent)
 
         self.show = draw
         self.static_position = np.asarray(static_position) if static_position is not None else None
@@ -44,3 +44,13 @@ class AbstractSensor:
 
     def as_config_dict(self):
         return {k: self.__dict__[k] for k in self.config_vars}
+
+    def set_parent(self, parent=None):
+        self.parent = self.agent if parent is None else parent
+
+    def set_agent(self, agent, parent=None):
+        self.agent = agent
+        if parent is not None:  # if user specifies a parent, use that
+            self.parent = parent
+        elif self.parent is None or parent is ...:
+            self.parent = agent

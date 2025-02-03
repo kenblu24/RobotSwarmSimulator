@@ -92,6 +92,8 @@ class Agent:
         from ..agent.control.AbstractController import AbstractController
         if isinstance(self.config.controller, AbstractController):
             self.controller = copy.copy(self.config.controller)
+            if self.controller.agent is None:
+                self.controller.set_agent(self)
             return
         if isinstance(self.config.controller, type):
             raise TypeError("Expected a config dict or AbstractController instance but got a class instead.")
@@ -110,7 +112,10 @@ class Agent:
         for sensor_config in self.config.sensors:
             # if it's already a sensor, just add it
             if isinstance(sensor_config, AbstractSensor):
-                self.sensors.append(copy.copy(sensor_config))
+                sensor = copy.copy(sensor_config)
+                self.sensors.append(sensor)
+                if sensor.agent is None:
+                    sensor.set_agent(self)
                 continue
             if isinstance(sensor_config, type):
                 raise TypeError("Expected a config dict or AbstractSensor instance but got a class instead.")
