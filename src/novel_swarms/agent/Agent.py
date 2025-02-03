@@ -93,6 +93,8 @@ class Agent:
         if isinstance(self.config.controller, AbstractController):
             self.controller = copy.copy(self.config.controller)
             return
+        if isinstance(self.config.controller, type):
+            raise TypeError("Expected a config dict or AbstractController instance but got a class instead.")
         # otherwise, it's a config dict. find the class specified and create the controller
         if not isinstance(self.config.controller, dict):
             msg = f'Tried to setup controller, but {repr(self.config.controller)} is not a dict or subclass of AbstractController'
@@ -110,6 +112,8 @@ class Agent:
             if isinstance(sensor_config, AbstractSensor):
                 self.sensors.append(copy.copy(sensor_config))
                 continue
+            if isinstance(sensor_config, type):
+                raise TypeError("Expected a config dict or AbstractSensor instance but got a class instead.")
             # otherwise, it's a config dict. find the class specified and create the sensor
             sensor_cls, sensor_config = get_class_from_dict('sensors', sensor_config)
             self.sensors.append(sensor_cls(agent=self, **sensor_config))
