@@ -21,11 +21,11 @@ from ..metrics.AbstractMetric import AbstractMetric
 @dataclass
 class AbstractWorldConfig:
     size: tuple[float, ...] | np.ndarray = (0, 0)
-    metrics: list | dict = field(default_factory=list)
-    agents: list | dict = field(default_factory=list)
-    spawners: list | dict = field(default_factory=list)
-    objects: list | dict = field(default_factory=list)
-    goals: list | dict = field(default_factory=list)
+    metrics: list = field(default_factory=list)
+    agents: list = field(default_factory=list)
+    spawners: list = field(default_factory=list)
+    objects: list = field(default_factory=list)
+    goals: list = field(default_factory=list)
     stop_at: int | Callable | None = None
     background_color: tuple[int, int, int] = (0, 0, 0)
     seed: int | None = None

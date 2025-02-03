@@ -3,7 +3,7 @@ import numpy as np
 
 
 class AbstractSensor:
-    config_vars = ['static_position', 'n_possible_states', 'draw']
+    config_vars = ['static_position', 'n_possible_states', 'show']
 
     def __init__(self, agent, parent=None, static_position=None, n_possible_states=0, draw=True):
         """
@@ -28,6 +28,10 @@ class AbstractSensor:
         if self.agent is None and self.static_position is None:
             raise Exception("Either a parent of type 'Agent' must be provided or a static position in the form (x, y)")
         pass
+
+    @property
+    def position(self):
+        return self.agent.position
 
     def draw(self, screen, offset=((0, 0), 1.0)):
         pass
