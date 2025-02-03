@@ -12,12 +12,12 @@ objects:
   # - svg_to_static_objects: !include world.svg
 time_step: !np 1 / 40
 spawners:
-  - type: PointAgentSpawner
-    oneshot: true
-    n: 6
-    facing: away
-    avoid_overlap: true
-    agent: !include turbopi.yaml
+  # - type: PointAgentSpawner
+  #   oneshot: true
+  #   n: 6
+  #   facing: away
+  #   avoid_overlap: true
+  #   agent: !include turbopi.yaml
   # - type: UniformAgentSpawner
   #   oneshot: true
   #   n: 30

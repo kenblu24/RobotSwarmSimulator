@@ -15,6 +15,7 @@ class RunnerAgentConfig(MazeAgentConfig):
 
 
 class RunnerAgent(MazeAgent):
-    @override
-    def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-        pass
+    # @override
+    # def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
+    #     pass
+    pass
