@@ -16,7 +16,7 @@ def represent_ndarray(dumper: yaml.Dumper, data: np.ndarray):
     flow_style = False if very_short_vector else True  # use block style for very short vectors
     array_node = dumper.represent_sequence('tag:yaml.org,2002:seq', data.tolist(), flow_style=flow_style)
     tag = "tag:yaml.org,2002:python/object/apply:"
-    function = np.ndarray
+    function = np.array
     function_name = f"{function.__module__}.{function.__name__}"
     value = {
         'kwargs': {
