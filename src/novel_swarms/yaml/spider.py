@@ -15,7 +15,8 @@ class Spider(ruamel.yaml.YAML):
 
         self.toplevel = toplevel or self
 
-
+        self.rel_paths = {}
+        self.included_yamls = {}
 
     @property
     def file_path(self) -> pl.Path:
@@ -23,23 +24,34 @@ class Spider(ruamel.yaml.YAML):
 
     @staticmethod
     def construct_include(constructor, node: ruamel.yaml.Node) -> Any:
-        assert constructor.loader is not None  # constructor's loader should have been set to self by loader
-        node_path = search_file(constructor.loader.file_path.parent, constructor.construct_scalar(node))
+        loader = constructor.loader
+        assert loader is not None  # constructor's loader should have been set to self by loader
+        node_path = search_file(loader.file_path.parent, constructor.construct_scalar(node))
 
+        if node_path in constructor.included_yamls:
+            return constructor.construct_scalar(node)
         ext = node_path.suffix
 
-        with open(node_path, 'r') as f:
-            if ext in ('.yaml', '.yml'):
-                return constructor.loader.load(f)
-            elif ext in ('.json', ):
-                return json.load(f)
-            else:
-                return ''.join(f.readlines())
+        if ext in ('.yaml', '.yml'):
+            with open(node_path, 'r') as f:
+                new_yaml = Spider(toplevel=loader.toplevel)
+                loader.included_yamls[node_path] = (new_yaml, loader.load(f))
+
+        return constructor.construct_scalar(node)
+
 
     @staticmethod
     def construct_relative_path(constructor, node: ruamel.yaml.Node) -> str:
-        assert constructor.loader is not None  # constructor's loader should have been set to self by loader
-        node_path = search_file(constructor.file_path.parent, constructor.loader.construct_scalar(node))
+        loader = constructor.loader
+        assert loader is not None  # constructor's loader should have been set to self by loader
+        node_path = search_file(constructor.file_path.parent, loader.construct_scalar(node))
+        return str(node_path.expanduser().resolve())
+
+    @staticmethod
+    def construct_moved_file(constructor, node: ruamel.yaml.Node) -> str:
+        loader = constructor.loader
+        assert loader is not None  # constructor's loader should have been set to self by loader
+        node_path = search_file(constructor.file_path.parent, loader.construct_scalar(node))
         return str(node_path.resolve().absolute())
 
 
