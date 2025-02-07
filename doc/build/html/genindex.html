@@ -1,0 +1,1576 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; RobotSwarmSimulator</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=c6e86fd7"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RobotSwarmSimulator</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.AbstractMetric.html#novel_swarms.metrics.AbstractMetric.__init__">__init__() (novel_swarms.metrics.AbstractMetric method)</a>
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.AgentsAtGoal.html#novel_swarms.metrics.AgentsAtGoal.__init__">(novel_swarms.metrics.AgentsAtGoal method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.Aggregation.html#novel_swarms.metrics.Aggregation.__init__">(novel_swarms.metrics.Aggregation method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.Circliness.html#novel_swarms.metrics.Circliness.__init__">(novel_swarms.metrics.Circliness method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.DistanceSizeRatio.html#novel_swarms.metrics.DistanceSizeRatio.__init__">(novel_swarms.metrics.DistanceSizeRatio method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.DistanceToGoal.html#novel_swarms.metrics.DistanceToGoal.__init__">(novel_swarms.metrics.DistanceToGoal method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.GroupRotationBehavior.html#novel_swarms.metrics.GroupRotationBehavior.__init__">(novel_swarms.metrics.GroupRotationBehavior method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.ScatterBehavior.html#novel_swarms.metrics.ScatterBehavior.__init__">(novel_swarms.metrics.ScatterBehavior method)</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.SensorRotation.html#novel_swarms.metrics.SensorRotation.__init__">(novel_swarms.metrics.SensorRotation method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.AbstractMetric.html#novel_swarms.metrics.AbstractMetric">AbstractMetric (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.AgentsAtGoal.html#novel_swarms.metrics.AgentsAtGoal">AgentsAtGoal (class in novel_swarms.metrics)</a>
+</li>
+      <li><a href="api/generated/novel_swarms.metrics.Aggregation.html#novel_swarms.metrics.Aggregation">Aggregation (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.Circliness.html#novel_swarms.metrics.Circliness">Circliness (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.DistanceSizeRatio.html#novel_swarms.metrics.DistanceSizeRatio">DistanceSizeRatio (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.DistanceToGoal.html#novel_swarms.metrics.DistanceToGoal">DistanceToGoal (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.GroupRotationBehavior.html#novel_swarms.metrics.GroupRotationBehavior">GroupRotationBehavior (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.html#module-novel_swarms">novel_swarms</a>, <a href="api/novel_swarms_module.html#module-novel_swarms">[1]</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.html#module-novel_swarms.agent">novel_swarms.agent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.Agent.html#module-novel_swarms.agent.Agent">novel_swarms.agent.Agent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.DiffDriveAgent.html#module-novel_swarms.agent.DiffDriveAgent">novel_swarms.agent.DiffDriveAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.DroneAgent.html#module-novel_swarms.agent.DroneAgent">novel_swarms.agent.DroneAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.HumanAgent.html#module-novel_swarms.agent.HumanAgent">novel_swarms.agent.HumanAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.LevyAgent.html#module-novel_swarms.agent.LevyAgent">novel_swarms.agent.LevyAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.MazeAgent.html#module-novel_swarms.agent.MazeAgent">novel_swarms.agent.MazeAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.ModeSwitchingAgent.html#module-novel_swarms.agent.ModeSwitchingAgent">novel_swarms.agent.ModeSwitchingAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.StaticAgent.html#module-novel_swarms.agent.StaticAgent">novel_swarms.agent.StaticAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.agent.UnicycleAgent.html#module-novel_swarms.agent.UnicycleAgent">novel_swarms.agent.UnicycleAgent</a>
+</li>
+        <li><a href="api/generated/novel_swarms.cache.html#module-novel_swarms.cache">novel_swarms.cache</a>
+</li>
+        <li><a href="api/generated/novel_swarms.cache.ExternalSimulationArchive.html#module-novel_swarms.cache.ExternalSimulationArchive">novel_swarms.cache.ExternalSimulationArchive</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.html#module-novel_swarms.config">novel_swarms.config</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.AgentConfig.html#module-novel_swarms.config.AgentConfig">novel_swarms.config.AgentConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.EvolutionaryConfig.html#module-novel_swarms.config.EvolutionaryConfig">novel_swarms.config.EvolutionaryConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.InitializationConfig.html#module-novel_swarms.config.InitializationConfig">novel_swarms.config.InitializationConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.ModeConfig.html#module-novel_swarms.config.ModeConfig">novel_swarms.config.ModeConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.OutputTensorConfig.html#module-novel_swarms.config.OutputTensorConfig">novel_swarms.config.OutputTensorConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.ResultsConfig.html#module-novel_swarms.config.ResultsConfig">novel_swarms.config.ResultsConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.config.WorldConfig.html#module-novel_swarms.config.WorldConfig">novel_swarms.config.WorldConfig</a>
+</li>
+        <li><a href="api/generated/novel_swarms.gui.html#module-novel_swarms.gui">novel_swarms.gui</a>
+</li>
+        <li><a href="api/generated/novel_swarms.gui.abstractGUI.html#module-novel_swarms.gui.abstractGUI">novel_swarms.gui.abstractGUI</a>
+</li>
+        <li><a href="api/generated/novel_swarms.gui.agentGUI.html#module-novel_swarms.gui.agentGUI">novel_swarms.gui.agentGUI</a>
+</li>
+        <li><a href="api/generated/novel_swarms.gui.connectivityGUI.html#module-novel_swarms.gui.connectivityGUI">novel_swarms.gui.connectivityGUI</a>
+</li>
+        <li><a href="api/generated/novel_swarms.gui.controllerGUI.html#module-novel_swarms.gui.controllerGUI">novel_swarms.gui.controllerGUI</a>
+</li>
+        <li><a href="api/generated/novel_swarms.gui.fullControlGUI.html#module-novel_swarms.gui.fullControlGUI">novel_swarms.gui.fullControlGUI</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.html#module-novel_swarms.metrics">novel_swarms.metrics</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.AlgebraicConnectivity.html#module-novel_swarms.metrics.AlgebraicConnectivity">novel_swarms.metrics.AlgebraicConnectivity</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.AngularMomentum.html#module-novel_swarms.metrics.AngularMomentum">novel_swarms.metrics.AngularMomentum</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.AverageSpeed.html#module-novel_swarms.metrics.AverageSpeed">novel_swarms.metrics.AverageSpeed</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.BehaviorFactory.html#module-novel_swarms.metrics.BehaviorFactory">novel_swarms.metrics.BehaviorFactory</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.BerlingerCircularity.html#module-novel_swarms.metrics.BerlingerCircularity">novel_swarms.metrics.BerlingerCircularity</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.Centroid.html#module-novel_swarms.metrics.Centroid">novel_swarms.metrics.Centroid</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.CirclePacking.html#module-novel_swarms.metrics.CirclePacking">novel_swarms.metrics.CirclePacking</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.ConvexHull.html#module-novel_swarms.metrics.ConvexHull">novel_swarms.metrics.ConvexHull</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.Orbit.html#module-novel_swarms.metrics.Orbit">novel_swarms.metrics.Orbit</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.PersistentHomology.html#module-novel_swarms.metrics.PersistentHomology">novel_swarms.metrics.PersistentHomology</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.RadialVariance.html#module-novel_swarms.metrics.RadialVariance">novel_swarms.metrics.RadialVariance</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.RandomBoxAggregation.html#module-novel_swarms.metrics.RandomBoxAggregation">novel_swarms.metrics.RandomBoxAggregation</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.RandomBoxSampling.html#module-novel_swarms.metrics.RandomBoxSampling">novel_swarms.metrics.RandomBoxSampling</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.SensorOffset.html#module-novel_swarms.metrics.SensorOffset">novel_swarms.metrics.SensorOffset</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.SensorSignal.html#module-novel_swarms.metrics.SensorSignal">novel_swarms.metrics.SensorSignal</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.SubGroupWrapper.html#module-novel_swarms.metrics.SubGroupWrapper">novel_swarms.metrics.SubGroupWrapper</a>
+</li>
+        <li><a href="api/generated/novel_swarms.metrics.TotalCollisions.html#module-novel_swarms.metrics.TotalCollisions">novel_swarms.metrics.TotalCollisions</a>
+</li>
+        <li><a href="api/generated/novel_swarms.novelty.html#module-novel_swarms.novelty">novel_swarms.novelty</a>
+</li>
+        <li><a href="api/generated/novel_swarms.novelty.GeneRule.html#module-novel_swarms.novelty.GeneRule">novel_swarms.novelty.GeneRule</a>
+</li>
+        <li><a href="api/generated/novel_swarms.novelty.NoveltyArchive.html#module-novel_swarms.novelty.NoveltyArchive">novel_swarms.novelty.NoveltyArchive</a>
+</li>
+        <li><a href="api/generated/novel_swarms.optim.html#module-novel_swarms.optim">novel_swarms.optim</a>
+</li>
+        <li><a href="api/generated/novel_swarms.optim.OptimVar.html#module-novel_swarms.optim.OptimVar">novel_swarms.optim.OptimVar</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.html#module-novel_swarms.results">novel_swarms.results</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.behavior_metrics.html#module-novel_swarms.results.behavior_metrics">novel_swarms.results.behavior_metrics</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.ClusterPoint.html#module-novel_swarms.results.ClusterPoint">novel_swarms.results.ClusterPoint</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.Experiment.html#module-novel_swarms.results.Experiment">novel_swarms.results.Experiment</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.scripts.html#module-novel_swarms.results.scripts">novel_swarms.results.scripts</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.scripts.domain_codomain.html#module-novel_swarms.results.scripts.domain_codomain">novel_swarms.results.scripts.domain_codomain</a>
+</li>
+        <li><a href="api/generated/novel_swarms.results.Trends.html#module-novel_swarms.results.Trends">novel_swarms.results.Trends</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.html#module-novel_swarms.sensors">novel_swarms.sensors</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.AbstractSensor.html#module-novel_swarms.sensors.AbstractSensor">novel_swarms.sensors.AbstractSensor</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.BinaryFOVSensor.html#module-novel_swarms.sensors.BinaryFOVSensor">novel_swarms.sensors.BinaryFOVSensor</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.BinaryLOSSensor.html#module-novel_swarms.sensors.BinaryLOSSensor">novel_swarms.sensors.BinaryLOSSensor</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.GenomeDependentSensor.html#module-novel_swarms.sensors.GenomeDependentSensor">novel_swarms.sensors.GenomeDependentSensor</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.RegionalSensor.html#module-novel_swarms.sensors.RegionalSensor">novel_swarms.sensors.RegionalSensor</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.SensorFactory.html#module-novel_swarms.sensors.SensorFactory">novel_swarms.sensors.SensorFactory</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.SensorSet.html#module-novel_swarms.sensors.SensorSet">novel_swarms.sensors.SensorSet</a>
+</li>
+        <li><a href="api/generated/novel_swarms.sensors.StaticSensor.html#module-novel_swarms.sensors.StaticSensor">novel_swarms.sensors.StaticSensor</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.html#module-novel_swarms.util">novel_swarms.util</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.asdict.html#module-novel_swarms.util.asdict">novel_swarms.util.asdict</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.collider.html#module-novel_swarms.util.collider">novel_swarms.util.collider</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.collider.AABB.html#module-novel_swarms.util.collider.AABB">novel_swarms.util.collider.AABB</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.collider.AngleSensitiveCC.html#module-novel_swarms.util.collider.AngleSensitiveCC">novel_swarms.util.collider.AngleSensitiveCC</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.collider.Collider.html#module-novel_swarms.util.collider.Collider">novel_swarms.util.collider.Collider</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.conversion.html#module-novel_swarms.util.conversion">novel_swarms.util.conversion</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.conversion.ControllerConverter.html#module-novel_swarms.util.conversion.ControllerConverter">novel_swarms.util.conversion.ControllerConverter</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.datasets.html#module-novel_swarms.util.datasets">novel_swarms.util.datasets</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.datasets.GenomeDataSet.html#module-novel_swarms.util.datasets.GenomeDataSet">novel_swarms.util.datasets.GenomeDataSet</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.geometry.html#module-novel_swarms.util.geometry">novel_swarms.util.geometry</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.geometry.ConvexHull.html#module-novel_swarms.util.geometry.ConvexHull">novel_swarms.util.geometry.ConvexHull</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.geometry.Point.html#module-novel_swarms.util.geometry.Point">novel_swarms.util.geometry.Point</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.geometry.Polygon.html#module-novel_swarms.util.geometry.Polygon">novel_swarms.util.geometry.Polygon</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.geometry.svg_extraction.html#module-novel_swarms.util.geometry.svg_extraction">novel_swarms.util.geometry.svg_extraction</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.pid.html#module-novel_swarms.util.pid">novel_swarms.util.pid</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.processing.html#module-novel_swarms.util.processing">novel_swarms.util.processing</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.signal.html#module-novel_swarms.util.signal">novel_swarms.util.signal</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.signal.Signal.html#module-novel_swarms.util.signal.Signal">novel_swarms.util.signal.Signal</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.statistics_tools.html#module-novel_swarms.util.statistics_tools">novel_swarms.util.statistics_tools</a>
+</li>
+        <li><a href="api/generated/novel_swarms.util.timer.html#module-novel_swarms.util.timer">novel_swarms.util.timer</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.html#module-novel_swarms.world">novel_swarms.world</a>, <a href="api/world.html#module-novel_swarms.world">[1]</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.generation.html#module-novel_swarms.world.generation">novel_swarms.world.generation</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.goals.html#module-novel_swarms.world.goals">novel_swarms.world.goals</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.goals.Goal.html#module-novel_swarms.world.goals.Goal">novel_swarms.world.goals.Goal</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.goals.GoalFactory.html#module-novel_swarms.world.goals.GoalFactory">novel_swarms.world.goals.GoalFactory</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.goals.GrowthRegion.html#module-novel_swarms.world.goals.GrowthRegion">novel_swarms.world.goals.GrowthRegion</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.html#module-novel_swarms.world.objects">novel_swarms.world.objects</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.DetectionRegion.html#module-novel_swarms.world.objects.DetectionRegion">novel_swarms.world.objects.DetectionRegion</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.ObjectFactory.html#module-novel_swarms.world.objects.ObjectFactory">novel_swarms.world.objects.ObjectFactory</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.StaticObject.html#module-novel_swarms.world.objects.StaticObject">novel_swarms.world.objects.StaticObject</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.TriggerRegion.html#module-novel_swarms.world.objects.TriggerRegion">novel_swarms.world.objects.TriggerRegion</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.Wall.html#module-novel_swarms.world.objects.Wall">novel_swarms.world.objects.Wall</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.objects.WorldObject.html#module-novel_swarms.world.objects.WorldObject">novel_swarms.world.objects.WorldObject</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.RectangularWorld.html#module-novel_swarms.world.RectangularWorld">novel_swarms.world.RectangularWorld</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.simulate.html#module-novel_swarms.world.simulate">novel_swarms.world.simulate</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.spawners.html#module-novel_swarms.world.spawners">novel_swarms.world.spawners</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.spawners.AgentSpawner.html#module-novel_swarms.world.spawners.AgentSpawner">novel_swarms.world.spawners.AgentSpawner</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.spawners.Spawner.html#module-novel_swarms.world.spawners.Spawner">novel_swarms.world.spawners.Spawner</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.subscribers.html#module-novel_swarms.world.subscribers">novel_swarms.world.subscribers</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.subscribers.World2Gif.html#module-novel_swarms.world.subscribers.World2Gif">novel_swarms.world.subscribers.World2Gif</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.subscribers.WorldSubscriber.html#module-novel_swarms.world.subscribers.WorldSubscriber">novel_swarms.world.subscribers.WorldSubscriber</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.World.html#module-novel_swarms.world.World">novel_swarms.world.World</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.WorldFactory.html#module-novel_swarms.world.WorldFactory">novel_swarms.world.WorldFactory</a>
+</li>
+        <li><a href="api/generated/novel_swarms.world.WorldIO.html#module-novel_swarms.world.WorldIO">novel_swarms.world.WorldIO</a>
+</li>
+        <li><a href="api/generated/novel_swarms.yaml.html#module-novel_swarms.yaml">novel_swarms.yaml</a>
+</li>
+        <li><a href="api/generated/novel_swarms.yaml.include.html#module-novel_swarms.yaml.include">novel_swarms.yaml.include</a>
+</li>
+        <li><a href="api/generated/novel_swarms.yaml.mathexpr.html#module-novel_swarms.yaml.mathexpr">novel_swarms.yaml.mathexpr</a>
+</li>
+        <li><a href="api/generated/novel_swarms.yaml.np_representer.html#module-novel_swarms.yaml.np_representer">novel_swarms.yaml.np_representer</a>
+</li>
+        <li><a href="api/generated/novel_swarms.yaml.pathlib_representer.html#module-novel_swarms.yaml.pathlib_representer">novel_swarms.yaml.pathlib_representer</a>
+</li>
+        <li><a href="api/generated/novel_swarms.yaml.unknown.html#module-novel_swarms.yaml.unknown">novel_swarms.yaml.unknown</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    novel_swarms
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.html#module-novel_swarms">module</a>, <a href="api/novel_swarms_module.html#module-novel_swarms">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.html#module-novel_swarms.agent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.Agent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.Agent.html#module-novel_swarms.agent.Agent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.DiffDriveAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.DiffDriveAgent.html#module-novel_swarms.agent.DiffDriveAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.DroneAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.DroneAgent.html#module-novel_swarms.agent.DroneAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.HumanAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.HumanAgent.html#module-novel_swarms.agent.HumanAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.LevyAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.LevyAgent.html#module-novel_swarms.agent.LevyAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.MazeAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.MazeAgent.html#module-novel_swarms.agent.MazeAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.ModeSwitchingAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.ModeSwitchingAgent.html#module-novel_swarms.agent.ModeSwitchingAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.StaticAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.StaticAgent.html#module-novel_swarms.agent.StaticAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.agent.UnicycleAgent
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.agent.UnicycleAgent.html#module-novel_swarms.agent.UnicycleAgent">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.cache
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.cache.html#module-novel_swarms.cache">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.cache.ExternalSimulationArchive
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.cache.ExternalSimulationArchive.html#module-novel_swarms.cache.ExternalSimulationArchive">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.html#module-novel_swarms.config">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.AgentConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.AgentConfig.html#module-novel_swarms.config.AgentConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.EvolutionaryConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.EvolutionaryConfig.html#module-novel_swarms.config.EvolutionaryConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.InitializationConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.InitializationConfig.html#module-novel_swarms.config.InitializationConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.ModeConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.ModeConfig.html#module-novel_swarms.config.ModeConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.OutputTensorConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.OutputTensorConfig.html#module-novel_swarms.config.OutputTensorConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.ResultsConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.ResultsConfig.html#module-novel_swarms.config.ResultsConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.config.WorldConfig
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.config.WorldConfig.html#module-novel_swarms.config.WorldConfig">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.gui
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.gui.html#module-novel_swarms.gui">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.gui.abstractGUI
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.gui.abstractGUI.html#module-novel_swarms.gui.abstractGUI">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.gui.agentGUI
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.gui.agentGUI.html#module-novel_swarms.gui.agentGUI">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.gui.connectivityGUI
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.gui.connectivityGUI.html#module-novel_swarms.gui.connectivityGUI">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.gui.controllerGUI
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.gui.controllerGUI.html#module-novel_swarms.gui.controllerGUI">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.gui.fullControlGUI
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.gui.fullControlGUI.html#module-novel_swarms.gui.fullControlGUI">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.html#module-novel_swarms.metrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.AlgebraicConnectivity
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.AlgebraicConnectivity.html#module-novel_swarms.metrics.AlgebraicConnectivity">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.AngularMomentum
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.AngularMomentum.html#module-novel_swarms.metrics.AngularMomentum">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.AverageSpeed
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.AverageSpeed.html#module-novel_swarms.metrics.AverageSpeed">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.BehaviorFactory
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.BehaviorFactory.html#module-novel_swarms.metrics.BehaviorFactory">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.BerlingerCircularity
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.BerlingerCircularity.html#module-novel_swarms.metrics.BerlingerCircularity">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.Centroid
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.Centroid.html#module-novel_swarms.metrics.Centroid">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.CirclePacking
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.CirclePacking.html#module-novel_swarms.metrics.CirclePacking">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.ConvexHull
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.ConvexHull.html#module-novel_swarms.metrics.ConvexHull">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.Orbit
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.Orbit.html#module-novel_swarms.metrics.Orbit">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.PersistentHomology
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.PersistentHomology.html#module-novel_swarms.metrics.PersistentHomology">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.RadialVariance
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.RadialVariance.html#module-novel_swarms.metrics.RadialVariance">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.RandomBoxAggregation
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.RandomBoxAggregation.html#module-novel_swarms.metrics.RandomBoxAggregation">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.RandomBoxSampling
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.RandomBoxSampling.html#module-novel_swarms.metrics.RandomBoxSampling">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.SensorOffset
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.SensorOffset.html#module-novel_swarms.metrics.SensorOffset">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.SensorSignal
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.SensorSignal.html#module-novel_swarms.metrics.SensorSignal">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.SubGroupWrapper
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.SubGroupWrapper.html#module-novel_swarms.metrics.SubGroupWrapper">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.metrics.TotalCollisions
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.metrics.TotalCollisions.html#module-novel_swarms.metrics.TotalCollisions">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.novelty
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.novelty.html#module-novel_swarms.novelty">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.novelty.GeneRule
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.novelty.GeneRule.html#module-novel_swarms.novelty.GeneRule">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.novelty.NoveltyArchive
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.novelty.NoveltyArchive.html#module-novel_swarms.novelty.NoveltyArchive">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.optim
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.optim.html#module-novel_swarms.optim">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.optim.OptimVar
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.optim.OptimVar.html#module-novel_swarms.optim.OptimVar">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.html#module-novel_swarms.results">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results.behavior_metrics
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.behavior_metrics.html#module-novel_swarms.results.behavior_metrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results.ClusterPoint
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.ClusterPoint.html#module-novel_swarms.results.ClusterPoint">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results.Experiment
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.Experiment.html#module-novel_swarms.results.Experiment">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results.scripts
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.scripts.html#module-novel_swarms.results.scripts">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results.scripts.domain_codomain
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.scripts.domain_codomain.html#module-novel_swarms.results.scripts.domain_codomain">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.results.Trends
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.results.Trends.html#module-novel_swarms.results.Trends">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.html#module-novel_swarms.sensors">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.AbstractSensor
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.AbstractSensor.html#module-novel_swarms.sensors.AbstractSensor">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    novel_swarms.sensors.BinaryFOVSensor
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.BinaryFOVSensor.html#module-novel_swarms.sensors.BinaryFOVSensor">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.BinaryLOSSensor
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.BinaryLOSSensor.html#module-novel_swarms.sensors.BinaryLOSSensor">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.GenomeDependentSensor
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.GenomeDependentSensor.html#module-novel_swarms.sensors.GenomeDependentSensor">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.RegionalSensor
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.RegionalSensor.html#module-novel_swarms.sensors.RegionalSensor">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.SensorFactory
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.SensorFactory.html#module-novel_swarms.sensors.SensorFactory">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.SensorSet
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.SensorSet.html#module-novel_swarms.sensors.SensorSet">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.sensors.StaticSensor
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.sensors.StaticSensor.html#module-novel_swarms.sensors.StaticSensor">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.html#module-novel_swarms.util">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.asdict
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.asdict.html#module-novel_swarms.util.asdict">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.collider
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.collider.html#module-novel_swarms.util.collider">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.collider.AABB
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.collider.AABB.html#module-novel_swarms.util.collider.AABB">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.collider.AngleSensitiveCC
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.collider.AngleSensitiveCC.html#module-novel_swarms.util.collider.AngleSensitiveCC">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.collider.Collider
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.collider.Collider.html#module-novel_swarms.util.collider.Collider">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.conversion
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.conversion.html#module-novel_swarms.util.conversion">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.conversion.ControllerConverter
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.conversion.ControllerConverter.html#module-novel_swarms.util.conversion.ControllerConverter">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.datasets
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.datasets.html#module-novel_swarms.util.datasets">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.datasets.GenomeDataSet
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.datasets.GenomeDataSet.html#module-novel_swarms.util.datasets.GenomeDataSet">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.geometry
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.geometry.html#module-novel_swarms.util.geometry">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.geometry.ConvexHull
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.geometry.ConvexHull.html#module-novel_swarms.util.geometry.ConvexHull">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.geometry.Point
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.geometry.Point.html#module-novel_swarms.util.geometry.Point">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.geometry.Polygon
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.geometry.Polygon.html#module-novel_swarms.util.geometry.Polygon">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.geometry.svg_extraction
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.geometry.svg_extraction.html#module-novel_swarms.util.geometry.svg_extraction">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.pid
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.pid.html#module-novel_swarms.util.pid">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.processing
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.processing.html#module-novel_swarms.util.processing">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.signal
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.signal.html#module-novel_swarms.util.signal">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.signal.Signal
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.signal.Signal.html#module-novel_swarms.util.signal.Signal">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.statistics_tools
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.statistics_tools.html#module-novel_swarms.util.statistics_tools">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.util.timer
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.util.timer.html#module-novel_swarms.util.timer">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.html#module-novel_swarms.world">module</a>, <a href="api/world.html#module-novel_swarms.world">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.generation
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.generation.html#module-novel_swarms.world.generation">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.goals
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.goals.html#module-novel_swarms.world.goals">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.goals.Goal
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.goals.Goal.html#module-novel_swarms.world.goals.Goal">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.goals.GoalFactory
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.goals.GoalFactory.html#module-novel_swarms.world.goals.GoalFactory">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.goals.GrowthRegion
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.goals.GrowthRegion.html#module-novel_swarms.world.goals.GrowthRegion">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.html#module-novel_swarms.world.objects">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects.DetectionRegion
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.DetectionRegion.html#module-novel_swarms.world.objects.DetectionRegion">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects.ObjectFactory
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.ObjectFactory.html#module-novel_swarms.world.objects.ObjectFactory">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects.StaticObject
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.StaticObject.html#module-novel_swarms.world.objects.StaticObject">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects.TriggerRegion
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.TriggerRegion.html#module-novel_swarms.world.objects.TriggerRegion">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects.Wall
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.Wall.html#module-novel_swarms.world.objects.Wall">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.objects.WorldObject
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.objects.WorldObject.html#module-novel_swarms.world.objects.WorldObject">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.RectangularWorld
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.RectangularWorld.html#module-novel_swarms.world.RectangularWorld">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.simulate
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.simulate.html#module-novel_swarms.world.simulate">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.spawners
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.spawners.html#module-novel_swarms.world.spawners">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.spawners.AgentSpawner
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.spawners.AgentSpawner.html#module-novel_swarms.world.spawners.AgentSpawner">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.spawners.Spawner
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.spawners.Spawner.html#module-novel_swarms.world.spawners.Spawner">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.subscribers
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.subscribers.html#module-novel_swarms.world.subscribers">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.subscribers.World2Gif
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.subscribers.World2Gif.html#module-novel_swarms.world.subscribers.World2Gif">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.subscribers.WorldSubscriber
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.subscribers.WorldSubscriber.html#module-novel_swarms.world.subscribers.WorldSubscriber">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.World
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.World.html#module-novel_swarms.world.World">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.WorldFactory
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.WorldFactory.html#module-novel_swarms.world.WorldFactory">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.world.WorldIO
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.world.WorldIO.html#module-novel_swarms.world.WorldIO">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.yaml
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.yaml.html#module-novel_swarms.yaml">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.yaml.include
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.yaml.include.html#module-novel_swarms.yaml.include">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.yaml.mathexpr
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.yaml.mathexpr.html#module-novel_swarms.yaml.mathexpr">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.yaml.np_representer
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.yaml.np_representer.html#module-novel_swarms.yaml.np_representer">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.yaml.pathlib_representer
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.yaml.pathlib_representer.html#module-novel_swarms.yaml.pathlib_representer">module</a>
+</li>
+      </ul></li>
+      <li>
+    novel_swarms.yaml.unknown
+
+      <ul>
+        <li><a href="api/generated/novel_swarms.yaml.unknown.html#module-novel_swarms.yaml.unknown">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.ScatterBehavior.html#novel_swarms.metrics.ScatterBehavior">ScatterBehavior (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/novel_swarms.metrics.SensorRotation.html#novel_swarms.metrics.SensorRotation">SensorRotation (class in novel_swarms.metrics)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Connor Mattson, Kevin Zhu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

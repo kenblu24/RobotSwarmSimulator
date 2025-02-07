@@ -1,0 +1,41 @@
+novel\_swarms.config
+====================
+
+.. automodule:: novel_swarms.config
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      associated_type
+      filter_unexpected_fields
+      get_agent_class
+      get_class_from_dict
+      initialize_natives
+      register_agent_type
+      register_dictlike_namespace
+      register_dictlike_type
+      register_world_type
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LazyKnownModules
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   AgentConfig
+   EvolutionaryConfig
+   HeterogenSwarmConfig
+   InitializationConfig
+   ModeConfig
+   OutputTensorConfig
+   ResultsConfig
+   WorldConfig
+   defaults
