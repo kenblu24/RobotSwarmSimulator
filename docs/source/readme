@@ -1,0 +1,13 @@
+To generate the documentation, you need to have installed the package with the `docs` extra:
+
+```bash
+pip install .[docs]
+```
+
+Then, you can generate the documentation with:
+
+```bash
+sphinx-build -M html docs/source/ docs/build/
+```
+
+The documentation will be generated in the `docs/build/html` directory.

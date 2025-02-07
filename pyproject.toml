@@ -45,6 +45,15 @@ dev = [
     "pytest-xdist",
 ]
 shapes = ["pointpats"]
+docs = [
+    "pydata-sphinx-theme~=0.16.1",
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-copybutton",
+    "sphinx-design",
+    "numpydoc",
+    "myst-parser",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
