@@ -47,6 +47,7 @@ For more detailed instructions, see the
 :doc:`installation guide <guide/install>`
 , which covers virtual environments, faster installation with uv, and more.
 
+Then, you can import the :py:mod:`novel_swarms` package:
 
 .. code-block:: python
    :caption: Python
