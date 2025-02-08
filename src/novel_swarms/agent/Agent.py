@@ -8,8 +8,11 @@ from ..agent.control.StaticController import zero_controller
 from ..config import get_class_from_dict, filter_unexpected_fields
 
 # typing
-from typing import Any
-from ..util.collider.AABB import AABB
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Any
+    from ..util.collider.AABB import AABB
+    from ..agent.control.AbstractController import AbstractController
 
 
 @filter_unexpected_fields
@@ -18,7 +21,7 @@ class BaseAgentConfig:
     position: tuple[float, ...] | np.ndarray = (0, 0)
     angle: float | Any = 0.
     name: str | Any = None
-    controller: Any = None
+    controller: AbstractController | None = None
     grounded: bool = False
     collides: bool | int = False
     sensors: list = field(default_factory=list)
