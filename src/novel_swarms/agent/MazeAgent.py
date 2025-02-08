@@ -3,7 +3,7 @@ import random
 from copy import deepcopy
 from typing import NamedTuple
 from dataclasses import dataclass, field
-from collections import namedtuple
+from collections import namedtuple, deque
 
 import pygame
 import numpy as np
@@ -107,6 +107,10 @@ class MazeAgent(StaticAgent):
             self.body_color = self.get_random_color()
         else:
             self.body_color = config.body_color
+
+        # Set Trace Settings if a trace was assigned to this object.
+        self.trace_color = config.trace_color
+        self.trace_path = deque(maxlen=config.trace_length)
 
         self.history = []
         self.track_io = getattr(config, "track_io", False)
