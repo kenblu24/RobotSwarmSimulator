@@ -5,9 +5,9 @@ from sklearn.manifold import TSNE
 from sklearn.cluster import AgglomerativeClustering, SpectralClustering, DBSCAN
 from sklearn_extra.cluster import KMedoids
 
-from src.novel_swarms.novelty.NoveltyArchive import NoveltyArchive
-from src.novel_swarms.results.ClusterPoint import ClusterPoint
-from src.novel_swarms.config.ResultsConfig import ResultsConfig
+from novel_swarms.novelty.NoveltyArchive import NoveltyArchive
+from novel_swarms.results.ClusterPoint import ClusterPoint
+from novel_swarms.config.ResultsConfig import ResultsConfig
 
 
 class Cluster:
@@ -27,7 +27,7 @@ class Cluster:
         (34, 153, 84),  # GREEN
         (133, 146, 158),  # GREY
     ]
-    
+
     def __init__(self, config: ResultsConfig, world_metadata=None, dim_reduction=True, heterogeneous=False):
 
         archive = config.archive

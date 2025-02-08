@@ -1,8 +1,4 @@
-import pygame
-from pygame import Rect
-
 class AbstractGUI:
-
     def __init__(self, x=0, y=0, w=0, h=0):
         self.x = x
         self.y = y
@@ -12,7 +8,7 @@ class AbstractGUI:
         self.track_all_mouse = False
 
     def set_selected(self, agent):
-        #print("Attaching New Agent")
+        # print("Attaching New Agent")
         pass
 
     def draw(self, screen, offset=((0, 0), 1.0)):

@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 
+
 class ClusterPoint:
     def __init__(self, x, y, color=(255, 255, 255), genome=None):
 
