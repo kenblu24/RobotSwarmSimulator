@@ -25,8 +25,20 @@ if __name__ == "__main__":
         GeneRuleContinuous(_max=1.0, _min=-1.0, mutation_step=0.4, round_digits=4),
     ]
 
+    from novel_swarms.metrics.AngularMomentum import AngularMomentumBehavior
+    from novel_swarms.metrics.AverageSpeed import AverageSpeedBehavior
+    from novel_swarms.metrics.GroupRotationBehavior import GroupRotationBehavior
+    from novel_swarms.metrics.RadialVariance import RadialVarianceMetric
+    from novel_swarms.metrics.ScatterBehavior import ScatterBehavior
+
     # Use the default Behavior Vector (from Brown et al.) to measure the collective swarm behaviors
-    phenotype = ConfigurationDefaults.BEHAVIOR_VECTOR
+    phenotype = BEHAVIOR_VECTOR = [
+        AverageSpeedBehavior(),
+        AngularMomentumBehavior(),
+        RadialVarianceMetric(),
+        ScatterBehavior(),
+        GroupRotationBehavior(),
+    ]
 
     # Define an empty Rectangular World with size (w, h) and n agents.
     world_config = RectangularWorldConfig(
