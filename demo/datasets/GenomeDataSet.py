@@ -51,4 +51,3 @@ class GenomeDataSet:
     def save(self):
         if self.file:
             np.savetxt(self.file, X=np.array(self.data), delimiter=",")
-
