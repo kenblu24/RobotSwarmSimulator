@@ -7,7 +7,7 @@ import argparse
 import numpy as np
 from tqdm import tqdm
 from src.novel_swarms.optim.CMAES import CMAES
-from src.novel_swarms.world.initialization.PredefInit import PredefinedInitialization
+from src.novel_swarms.world.spawners.ExcelSpawner import ExcelSpawner
 
 from .milling_search import DECISION_VARS, SCALE, BL
 # from .milling_search import fitness

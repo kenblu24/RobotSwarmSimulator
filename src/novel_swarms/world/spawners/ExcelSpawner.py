@@ -1,14 +1,14 @@
 from io import BytesIO
-from .Spawner import AbstractInitialization
+from .Spawner import Spawner
 
 # typing
 from typing import override
 
 
-class PredefinedInitialization(AbstractInitialization):
+class ExcelSpawner(Spawner):
     def __init__(self, **dwargs):
         """
-        Initialize the PredefinedInitialization Class
+        Initialize the ExcelSpawner Class
         @params
         num_agents: The number of agents present in the simulation (int, required)
         bb: A Bounding box of the form ((x1, y1), (x2, y2)), where x1 and y1 are the Upper Left corner and
