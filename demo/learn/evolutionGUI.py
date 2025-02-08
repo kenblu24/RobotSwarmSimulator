@@ -1,7 +1,8 @@
 import pygame
 from ..novelty.BehaviorDiscovery import BehaviorDiscovery
-from .abstractGUI import AbstractGUI
-from ..world.World import World
+from ...src.novel_swarms.gui.abstractGUI import AbstractGUI
+from ...src.novel_swarms.world.World import World
+
 
 class EvolutionGUI(AbstractGUI):
 
@@ -34,11 +35,11 @@ class EvolutionGUI(AbstractGUI):
         super().draw(screen)
         self.text_baseline = 10
         if pygame.font:
-            if(self.title):
+            if (self.title):
                 self.appendTextToGUI(screen, self.title, size=20)
-            if(self.subtitle):
+            if (self.subtitle):
                 self.appendTextToGUI(screen, self.subtitle, size=18)
-            if(self.discovery):
+            if (self.discovery):
                 self.appendTextToGUI(screen, "")
                 self.appendTextToGUI(screen, f"State: {self.discovery.status}")
                 self.appendTextToGUI(screen, f"Generation: {self.discovery.curr_generation}")
@@ -56,7 +57,7 @@ class EvolutionGUI(AbstractGUI):
         else:
             print("NO FONT")
 
-    def appendTextToGUI(self, screen, text, x = None, y = None, color=(255, 255, 255), aliasing=True, size=16):
+    def appendTextToGUI(self, screen, text, x=None, y=None, color=(255, 255, 255), aliasing=True, size=16):
 
         if not x:
             x = self.x + 10

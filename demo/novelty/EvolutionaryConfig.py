@@ -1,6 +1,7 @@
 from ..novelty.GeneRule import GeneRule, GeneBuilder
 from warnings import warn
 
+
 class GeneticEvolutionConfig:
     def __init__(self,
                  seed=None,
@@ -20,7 +21,7 @@ class GeneticEvolutionConfig:
                  show_gui=True,
                  save_every=None,
                  use_external_archive=False,
-                 world_metadata = None
+                 world_metadata=None
                  ):
 
         if gene_rules and not gene_builder:
@@ -46,4 +47,3 @@ class GeneticEvolutionConfig:
         self.mutation_flip_chance = mutation_flip_chance
         self.use_external_archive = use_external_archive
         self.world_metadata = world_metadata
-
