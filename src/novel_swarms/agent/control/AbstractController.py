@@ -23,7 +23,6 @@ class AbstractController:
         elif self.parent is None or parent is ...:
             self.parent = agent
 
-
     def get_actions(self, agent):
         pass
 

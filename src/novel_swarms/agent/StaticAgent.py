@@ -81,7 +81,8 @@ class StaticAgent(Agent):
                 self.shift = np.asarray(config.anchor_point, dtype=np.float64)
                 self.points += self.shift
             elif config.anchor_point is not None:
-                raise ValueError(f"Unknown points_shift type: {config.anchor_point}")
+                msg = f"Unknown points_shift type: {config.anchor_point}"
+                raise ValueError(msg)
 
         self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
         self.dt = world.dt
@@ -92,14 +93,15 @@ class StaticAgent(Agent):
         self.debug = config.debug or self.DEBUG
         self.rotmat = self.rotmat2d()
         self.aabb = self.make_aabb()
+        self.collider = None
 
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
 
     @override
-    def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-        super().step()
+    def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
+        super().step(world=world)
 
         self.rotmat = self.rotmat2d()
         self.aabb = self.make_aabb()
@@ -164,8 +166,10 @@ class StaticAgent(Agent):
 
     def build_collider(self):
         if self.is_poly:
-            return PolyCollider(self.poly_rotated + self.pos)
-        return CircularCollider(*self.pos, self.radius)
+            self.collider = PolyCollider(self.poly_rotated + self.pos)
+        else:
+            self.collider = CircularCollider(*self.pos, self.radius)
+        return self.collider
 
     def debug_draw(self, screen, offset):
         self.make_aabb().draw(screen, offset)
@@ -185,6 +189,7 @@ class StaticAgent(Agent):
         if self.is_poly:
             return max(np.linalg.norm(p) for p in self.points)
 
+    @override
     def __str__(self) -> str:
         x, y = self.pos
         return f"(x: {x}, y: {y}, r: {self.radius}, θ: {self.angle})"

@@ -124,13 +124,13 @@ class LazyKnownModules:
     def add_native_agent_types(self):
 
         # actual agents
-        from ..agent.DiffDriveAgent import DifferentialDriveAgent, DiffDriveAgentConfig
+        from ..agent.DiffDriveAgent import DifferentialDriveAgent, DifferentialDriveAgentConfig
         # from ..agent.HumanAgent import HumanDrivenAgent, HumanDrivenAgentConfig
         from ..agent.StaticAgent import StaticAgent, StaticAgentConfig
         from ..agent.MazeAgent import MazeAgent, MazeAgentConfig
 
         self._agent_types['MazeAgent'] = (MazeAgent, MazeAgentConfig)
-        self._agent_types['DiffDriveAgent'] = (DifferentialDriveAgent, DiffDriveAgentConfig)
+        self._agent_types['DiffDriveAgent'] = (DifferentialDriveAgent, DifferentialDriveAgentConfig)
         # self._agent_types['HumanDrivenAgent'] = (HumanDrivenAgent, HumanDrivenAgentConfig)
         self._agent_types['StaticAgent'] = (StaticAgent, StaticAgentConfig)
 

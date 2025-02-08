@@ -1,6 +1,6 @@
-from ..obstacles.Wall import Wall
 import random
 import time
+
 
 class Node:
     def __init__(self, i, j):
@@ -53,6 +53,7 @@ class Node:
     def __repr__(self):
         return f"({(self.i, self.j)}, E: {self.edges})"
 
+
 class Maze:
     def __init__(self, world_w, world_h, grid_w, grid_h, wall_width=2, padding=10):
         self.world_dims = (world_w, world_h)
@@ -73,7 +74,8 @@ class Maze:
         upper_corner = (min(x1, x2), min(y1, y2))
         lower_corner = (max(x1, x2) + self.wall_width, max(y1, y2) + self.wall_width)
         w, h = lower_corner[0] - upper_corner[0], lower_corner[1] - upper_corner[1]
-        return Wall(None, upper_corner[0], upper_corner[1], w, h)
+        return (None, upper_corner[0], upper_corner[1], w, h)
+        # return Wall(None, upper_corner[0], upper_corner[1], w, h)
 
     def get_wall_representation(self):
         walls = []
@@ -137,4 +139,3 @@ class Maze:
                     queue.append(node)
 
         return len(seen) == self.total_states, seen
-

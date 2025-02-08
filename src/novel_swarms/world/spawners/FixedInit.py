@@ -1,12 +1,12 @@
 import numpy as np
-from .Spawner import AbstractInitialization
+from .Spawner import Spawner
 
 
-class FixedInitialization(AbstractInitialization):
+class FixedSpawner(Spawner):
     """
-    FixedInitialization: Agent's (x, y, theta) are all defined in a CSV file
+    FixedSpawner: Agent's (x, y, theta) are all defined in a CSV file
     """
-    def __init__(self, file_in, scale=None):
+    def __init__(self, file_in, seed=None, scale=None):
         super().__init__()
         self.file_in = file_in
         values = np.loadtxt(file_in, delimiter=",")[:, 1:]
@@ -28,14 +28,14 @@ class FixedInitialization(AbstractInitialization):
 
     def as_dict(self):
         return {
-            "type": "FixedInit",
+            "type": "FixedSpawner",
             "file": self.file_in,
-            "scale": self.scale
+            "scale": self.scale,
         }
 
     @staticmethod
     def from_dict(d):
-        return FixedInitialization(d.get("file"), scale=d.get("scale", None))
+        return FixedSpawner(d.get("file"), scale=d.get("scale", None))
 
     def getShallowCopy(self):
         return self.from_dict(self.as_dict())

@@ -42,6 +42,7 @@ class Controller(AbstractController):
         else:
             raise Exception("The input value of controller to class Controller must be a callable, list, or 'self'!")
 
+    @override
     def get_actions(self, agent):
         if self.type == ControllerType.list_based:
             sensor_state = agent.sensors[0].current_state
@@ -67,5 +68,6 @@ class Controller(AbstractController):
         else:
             return repr(self.type)
 
+    @override
     def as_config_dict(self):
         return {'controller': self._config_controller}

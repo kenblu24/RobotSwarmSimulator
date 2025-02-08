@@ -7,6 +7,7 @@ class AgentMethodController(AbstractController):
     Given agent observations, return agent actions
     """
 
+    @override
     def get_actions(self, agent):
         return agent.get_actions()
 

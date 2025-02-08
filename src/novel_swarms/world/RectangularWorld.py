@@ -12,11 +12,6 @@ import pygame.draw
 
 from ..agent.Agent import Agent
 
-# from ..agent.DiffDriveAgent import DifferentialDriveAgent
-# from .. agent.HumanAgent import HumanDrivenAgent
-# from ..config.WorldConfig import RectangularWorldConfig
-# from ..agent.AgentFactory import AgentFactory
-# from ..config.HeterogenSwarmConfig import HeterogeneousSwarmConfig
 from .World import World, AbstractWorldConfig
 from ..config import associated_type, filter_unexpected_fields
 from ..util.timer import Timer

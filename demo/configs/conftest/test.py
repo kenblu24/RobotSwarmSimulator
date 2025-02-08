@@ -21,7 +21,7 @@ from novel_swarms.metrics import Circliness
 # from novel_swarms.world.simulate import main as sim
 
 # from novel_swarms.world.initialization.FixedInit import FixedInitialization
-# from novel_swarms.world.initialization.PredefInit import PredefinedInitialization
+# from novel_swarms.world.spawners.ExcelSpawner import ExcelSpawner
 
 SCALE = 1
 
