@@ -1,195 +1,113 @@
-import random
-import math
-import pygame
 import numpy as np
-from typing import Tuple
-from copy import deepcopy
-from ..agent.Agent import Agent
-from ..config.AgentConfig import DroneAgentConfig
-from ..sensors.GenomeDependentSensor import GenomeBinarySensor
-from ..util.collider.AABB import AABB
-from ..util.collider.Collider import CircularCollider
+
+from dataclasses import dataclass, field
+from ..config import filter_unexpected_fields, associated_type
+from .MazeAgent import MazeAgent, MazeAgentConfig, SPA, State
+
+# typing
+from typing import Any, override
 
 
-class DroneAgent(Agent):
+@associated_type("DroneAgent")
+@filter_unexpected_fields
+@dataclass
+class DroneAgentConfig(MazeAgentConfig):
+    wheel_radius: float = 0.01
 
+
+class DroneAgent(MazeAgent):
+
+    SEED = -1
     DEBUG = False
 
-    def __init__(self, config: DroneAgentConfig, name=None):
-        self.controller = config.controller
+    def __init__(self, config: DroneAgentConfig, world,
+                 name=None, initialize=True) -> None:
+        super().__init__(config, world, name=name, initialize=False)
 
-        # if config.x is None:
-        #     self.x_pos = random.randint(0 + config.agent_radius, config.world.w - config.agent_radius)
-        # else:
-        self.x_pos = config.x
+        self.wheel_radius = config.wheel_radius
 
-        # if config.y is None:
-        #     self.y_pos = random.randint(0 + config.agent_radius, config.world.h - config.agent_radius)
-        # else:
-        self.y_pos = config.y
+        if initialize:
+            self.setup_controller_from_config()
+            self.setup_sensors_from_config()
 
-        super().__init__(self.x_pos, self.y_pos, name="None")
-
-        if config.angle is None:
-            self.angle = random.random() * math.pi * 2
-        else:
-            self.angle = config.angle
-
-        self.radius = config.agent_radius
-        self.dt = config.dt
-        self.is_highlighted = False
-        self.deleted = False
-        self.body_filled = config.body_filled
-        self.agent_in_sight = None
-        self.config = config
-
-        # Set Trace Settings if a trace was assigned to this object.
-        self.trace = config.trace_length is not None
-        if self.trace:
-            self.trace_path = []
-            self.trace_length = config.trace_length
-
-        if config.body_color == "Random":
-            self.body_color = self.get_random_color()
-        else:
-            self.body_color = config.body_color
-        if not config.trace_color:
-            self.trace_color = self.body_color
-        else:
-            self.trace_color = config.trace_color
-
-        self.aabb = None
-        self.sensors = deepcopy(config.sensors)
-        for sensor in self.sensors:
-            if isinstance(sensor, GenomeBinarySensor):
-                sensor.augment_from_genome(config.controller)
-
-        self.attach_agent_to_sensors()
-
-    def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-
+    @override
+    def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
+        # This code is largely the same as that of MazeAgent, but we assume
+        # the controller returns two wheelspeeds, vl, vr instead of v, omega
+        # and convert said wheelspeeds to v, omega for the unicycle agent
+        world = world or self.world
         if world is None:
-            raise Exception("Expected a Valid value for 'World' in step method call")
+            raise Exception("Expected a Valid value for 'World' in step method call - Unicycle Agent")
 
         # timer = Timer("Calculations")
-        super().step()
-        self.aabb = None
-        delta_x, delta_y, da = self.interpretSensors()
+        super().step(world, check_for_world_boundaries=check_for_world_boundaries,
+                     check_for_agent_collisions=check_for_agent_collisions)
+
+        if self.dead:
+            return
+
+        if world.goals and world.goals[0].agent_achieved_goal(self) or self.detection_id == 2:
+            if self.stop_at_goal:
+                delta_x, delta_y, da = 0, 0, 0
+            else:
+                delta_x, delta_y, da = self.controller.get_actions(self)
+            # self.detection_id = 2
+            # self.set_color_by_id(3)
+        else:
+            delta_x, delta_y, da = self.controller.get_actions(self)
+
+        if self.track_io:
+            sensor_state = self.sensors[0].current_state
+            self.history.append(SPA(
+                State(*self.pos, self.angle),
+                sensor_state,
+                (delta_x, delta_y, da),
+            ))
 
         self.dx = delta_x * np.cos(self.angle) - delta_y * np.cos(self.angle)
         self.dy = delta_x * np.sin(self.angle) - delta_y * np.sin(self.angle)
-        heading = da
 
-        old_x_pos = self.x_pos
-        old_y_pos = self.y_pos
+        self.dtheta = da * self.idiosyncrasies[-1] * self.dt
+        orient = self.orientation_uvec(offset=self.angle)
+        delta = delta_x * orient - delta_y * orient
+        delta *= self.idiosyncrasies
 
-        self.x_pos += self.dx * self.dt
-        self.y_pos += self.dy * self.dt
-        self.angle += heading * self.dt
+        old_pos = self.pos.copy()
 
+        if self.stopped_duration > 0:
+            self.stopped_duration -= 1
+            if self.catastrophic_collisions:
+                self.dead = True
+                self.body_color = (200, 200, 200)
+                return
+        else:
+            self.pos += delta
+
+        self.angle += self.dtheta
+
+        self.collision_flag = False
         if check_for_world_boundaries is not None:
+            # TODO: remove this
             check_for_world_boundaries(self)
 
         self.handle_collisions(world)
 
         # Calculate the 'real' dx, dy after collisions have been calculated.
         # This is what we use for velocity in our equations
-        self.dx = self.x_pos - old_x_pos
-        self.dy = self.y_pos - old_y_pos
+        self.dpos = self.pos - old_pos
         # timer = timer.check_watch()
 
-        self.add_to_trace(self.x_pos, self.y_pos)
-
-        # timer = Timer("Sensors")
         for sensor in self.sensors:
             sensor.step(world=world)
+            if sensor.goal_detected:
+                self.goal_seen = True
 
-
-    def draw(self, screen) -> None:
-        super().draw(screen)
-        for sensor in self.sensors:
-            sensor.draw(screen)
-
-        # Draw Cell Membrane
-        filled = 0 if self.is_highlighted or self.body_filled else 1
-        pygame.draw.circle(screen, self.body_color, (self.x_pos, self.y_pos), self.radius, width=filled)
-
-        # Draw Trace (if parameterized to do so)
-        self.draw_trace(screen)
-
-        # "Front" direction vector
-        head = self.getFrontalPoint()
-        tail = self.getPosition()
-        vec = [head[0] - tail[0], head[1] - tail[1]]
-        mag = self.radius * 2
-        vec_with_magnitude = ((vec[0] * mag) + tail[0], (vec[1] * mag) + tail[1])
-        pygame.draw.line(screen, self.body_color, tail, vec_with_magnitude)
-
-        if self.DEBUG:
-            self.debug_draw(screen)
-
-
-    def interpretSensors(self) -> Tuple:
-        sensor_state = self.sensors.getState()
-        vl = self.controller[sensor_state][0]
-        vr = self.controller[sensor_state][1]
-        theta = self.controller[sensor_state][2]
-        return vl, vr, theta
-
-    def draw_trace(self, screen):
-        if not self.trace:
-            return
-        for x, y in self.trace_path:
-            pygame.draw.circle(screen, self.trace_color, (x, y), 2)
-
-    def add_to_trace(self, x, y):
-        if not self.trace:
-            return
-        self.trace_path.append((x, y))
-        if len(self.trace_path) > self.trace_length:
-            self.trace_path.pop(0)
-
-    def get_random_color(self):
-        rand_color = [255, 255, 255]
-        while sum(rand_color) > 245*3:
-            rand_color = np.random.choice(256, 3)
-        return rand_color
-
-    def debug_draw(self, screen):
-        self.get_aabb().draw(screen)
-
-    def handle_collisions(self, world):
-        collisions = True
-        attempts = 0
-        while collisions and attempts < 10:
-            collisions = False
-            attempts += 1
-            collider = self.build_collider()
-            agent_set = world.getAgentsMatchingYRange(self.get_aabb())
-            for agent in agent_set:
-                if agent.name == self.name:
-                    continue
-                if self.aabb.intersects(agent.get_aabb()):
-                    self.get_aabb().toggle_intersection()
-                    correction = collider.correction(agent.build_collider())
-                    if correction is not None:
-                        self.x_pos += correction[0]
-                        self.y_pos += correction[1]
-                        collisions = True
-                        break
-
-    def build_collider(self):
-        return CircularCollider(self.x_pos, self.y_pos, self.radius)
-
-    def get_aabb(self):
-        """
-        Return the Bounding Box of the agent
-        """
-        if not self.aabb:
-            top_left = (self.x_pos - self.radius, self.y_pos - self.radius)
-            bottom_right = (self.x_pos + self.radius, self.y_pos + self.radius)
-            self.aabb = AABB(top_left, bottom_right)
-        return self.aabb
-
-    def __str__(self) -> str:
-        return "(x: {}, y: {}, r: {}, θ: {})".format(self.x_pos, self.y_pos, self.radius, self.angle)
+    def simulate_error(self, err_type="Death"):
+        if err_type == "Death":
+            self.controller = [0 for _ in self.controller]
+            self.body_color = (255, 0, 0)
+            self.body_filled = True
+        elif err_type == "Divergence":
+            self.controller = [1, 1, 1, 1]
+            self.body_color = (255, 0, 0)
+            self.body_filled = True

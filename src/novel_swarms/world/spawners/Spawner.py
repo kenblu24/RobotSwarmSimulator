@@ -1,6 +1,7 @@
 # from abc import ABC
 import numpy as np
 
+
 class Spawner:
     """
     Spawner: An abstract object creator

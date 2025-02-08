@@ -6,12 +6,12 @@ import numpy as np
 from copy import deepcopy
 from .Agent import Agent
 from .DiffDriveAgent import DifferentialDriveAgent
-from ..config.AgentConfig import DiffDriveAgentConfig
+from .MazeAgent import MazeAgent, MazeAgentConfig
 from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 from ..util.collider.AABB import AABB
 
 
-class HumanDrivenAgent(DifferentialDriveAgent):
+class HumanDrivenAgent(MazeAgent):
     def __init__(self, config, control="keys-holonomic"):
         super().__init__(config)
         self.control = control
@@ -33,4 +33,3 @@ class HumanDrivenAgent(DifferentialDriveAgent):
                 self.set_y_pos(self.get_y_pos() + STEP_SIZE)
             if keys[pygame.K_UP]:
                 self.set_y_pos(self.get_y_pos() - STEP_SIZE)
-
