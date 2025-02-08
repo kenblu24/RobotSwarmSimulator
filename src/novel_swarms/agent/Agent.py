@@ -99,7 +99,7 @@ class Agent:
             raise TypeError("Expected a config dict or AbstractController instance but got a class instead.")
         # otherwise, it's a config dict. find the class specified and create the controller
         if not isinstance(self.config.controller, dict):
-            msg = f'Tried to setup controller, but {repr(self.config.controller)} is not a dict or subclass of AbstractController'
+            msg = f'Tried to setup controller, but {repr(self.config.controller)} is not a dict or subclass of AbstractController'  # noqa: E501
             raise Exception(msg)
         res = get_class_from_dict('controller', self.config.controller)
         if not res:
@@ -123,7 +123,7 @@ class Agent:
             sensor_cls, sensor_config = get_class_from_dict('sensors', sensor_config)
             self.sensors.append(sensor_cls(agent=self, **sensor_config))
 
-    def step(self, check_for_world_boundaries=None) -> None:
+    def step(self, *args, **kwargs) -> None:
         self.pos = np.asarray(self.pos, dtype='float64')
 
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
@@ -138,6 +138,10 @@ class Agent:
 
     def getVelocity(self):
         return np.asarray(self.dpos, dtype='float64')
+
+    @property
+    def position(self):
+        return self.pos
 
     def orientation_uvec(self, offset=0):
         return np.array([

@@ -10,20 +10,13 @@ import numpy as np
 
 from ..config import filter_unexpected_fields, associated_type
 from .StaticAgent import StaticAgent, StaticAgentConfig
-from ..sensors.GenomeDependentSensor import GenomeBinarySensor
-from ..util.collider.AABB import AABB
-from ..util.timer import Timer
 from ..util import statistics_tools as st
 from .control.Controller import Controller
-from ..world.RectangularWorld import RectangularWorldConfig
 
 # # typing
 from typing import Any, override
-from ..world.World import World
-# try:
-#     from ..config.AgentConfig import MazeAgentConfig
-# except ImportError:
-#     pass
+# from ..world.World import World
+# from ..world.RectangularWorld import RectangularWorldConfig
 
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
 State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
@@ -46,8 +39,8 @@ class MazeAgentConfig(StaticAgentConfig):
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
     catastrophic_collisions: bool = False
-    trace_length: tuple[int, int, int] | None = None
-    trace_color: tuple[int, int, int] | None = None
+    trace_length: int | None = 0
+    trace_color: tuple[int, int, int] = (255, 255, 255)
     controller: Controller | None = None
     track_io: bool = False
 
@@ -60,14 +53,9 @@ class MazeAgentConfig(StaticAgentConfig):
     def __badvars__(self):
         return super().__badvars__() + ["world", "world_config"]
 
+    @override
     def attach_world_config(self, world_config):
         self.world = world_config
-
-    # @staticmethod
-    # def from_dict(d):
-    #     # if isinstance(d["sensors"], dict):
-    #     #     d["sensors"] = SensorFactory.create(d["sensors"])
-    #     return MazeAgentConfig(**d)
 
     def rescale(self, zoom):
         self.agent_radius *= zoom
@@ -103,8 +91,8 @@ class MazeAgent(StaticAgent):
             self.idiosyncrasies = [1.0, 1.0]
         # I1_MEAN, I1_SD = 0.93, 0.08
         # I2_MEAN, I2_SD = 0.95, 0.06
-        self.delay_1 = st.Delay(delay=config.delay)
-        self.delay_2 = st.Delay(delay=config.delay)
+        self.delay_1 = st.Delay(delay=config.delay)  # type: ignore[reportArgumentType]
+        self.delay_2 = st.Delay(delay=config.delay)  # type: ignore[reportArgumentType]
         self.sensing_avg = st.Average(config.sensing_avg)
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
@@ -113,13 +101,6 @@ class MazeAgent(StaticAgent):
         self.goal_seen = False
         self.stop_at_goal = config.stop_at_goal
         self.config = config
-
-        # self.sensors = deepcopy(config.sensors)
-        # for sensor in self.sensors:
-        #     if isinstance(sensor, GenomeBinarySensor):
-        #         sensor.augment_from_genome(config.controller)
-
-        # self.attach_agent_to_sensors()
 
         self.body_filled = config.body_filled
         if config.body_color == "Random":
@@ -135,13 +116,13 @@ class MazeAgent(StaticAgent):
             self.setup_sensors_from_config()
 
     @override
-    def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-
+    def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
+        world = world or self.world
         if world is None:
             raise Exception("Expected a Valid value for 'World' in step method call - Unicycle Agent")
 
         # timer = Timer("Calculations")
-        super().step()
+        super().step(world)
 
         if self.dead:
             return
@@ -190,6 +171,7 @@ class MazeAgent(StaticAgent):
 
         self.collision_flag = False
         if check_for_world_boundaries is not None:
+            # TODO: remove this
             check_for_world_boundaries(self)
 
         self.handle_collisions(world)
@@ -206,25 +188,10 @@ class MazeAgent(StaticAgent):
 
     @override
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
-        pan, zoom = np.asarray(offset[0]), offset[1]
+        pan, zoom = np.asarray(offset[0]), offset[1]  # type:ignore[reportUnusedVariable]
         super().draw(screen, offset)
         for sensor in self.sensors:
             sensor.draw(screen, offset)
-
-    # def interpretSensors(self) -> Tuple:
-    #     """
-    #     Deprecated: See Controller Class (novel_swarms.agent.control.Controller)
-    #     """
-    #     sensor_state = self.sensors.getState()
-    #     sensor_detection_id = self.sensors.getDetectionId()
-    #     # self.set_color_by_id(sensor_detection_id)
-    #
-    #     # if sensor_state == 2:
-    #     #     return 12, 0
-    #
-    #     v = self.controller[sensor_state * 2]
-    #     omega = self.controller[(sensor_state * 2) + 1]
-    #     return v, omega
 
     def set_color_by_id(self, id):
         if id == 0:
@@ -279,4 +246,3 @@ class MazeAgent(StaticAgent):
 
         else:
             return True
-
