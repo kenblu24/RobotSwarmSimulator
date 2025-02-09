@@ -1,0 +1,21 @@
+novel\_swarms.agent
+===================
+
+.. automodule:: novel_swarms.agent
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   Agent
+   DiffDriveAgent
+   DroneAgent
+   HumanAgent
+   MazeAgent
+   ModeSwitchingAgent
+   StaticAgent
+   UnicycleAgent
+   control

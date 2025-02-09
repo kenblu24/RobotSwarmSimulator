@@ -1,0 +1,700 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>novel_swarms.util.collider.Collider &#8212; RobotSwarmSimulator</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=c6e86fd7"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/_gen/novel_swarms.util.collider.Collider';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="novel_swarms.util.conversion" href="novel_swarms.util.conversion.html" />
+    <link rel="prev" title="novel_swarms.util.collider.AngleSensitiveCC" href="novel_swarms.util.collider.AngleSensitiveCC.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RobotSwarmSimulator</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../config_store_api.html">Config Registry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.config.html">novel_swarms.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="novel_swarms.html">novel_swarms</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.agent.html">novel_swarms.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.Agent.html">novel_swarms.agent.Agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.DiffDriveAgent.html">novel_swarms.agent.DiffDriveAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.DroneAgent.html">novel_swarms.agent.DroneAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.HumanAgent.html">novel_swarms.agent.HumanAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.MazeAgent.html">novel_swarms.agent.MazeAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.ModeSwitchingAgent.html">novel_swarms.agent.ModeSwitchingAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.StaticAgent.html">novel_swarms.agent.StaticAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.UnicycleAgent.html">novel_swarms.agent.UnicycleAgent</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.agent.control.html">novel_swarms.agent.control</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.AbstractController.html">novel_swarms.agent.control.AbstractController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.AgentMethodController.html">novel_swarms.agent.control.AgentMethodController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.BinaryController.html">novel_swarms.agent.control.BinaryController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.Controller.html">novel_swarms.agent.control.Controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.HomogeneousController.html">novel_swarms.agent.control.HomogeneousController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.LevyController.html">novel_swarms.agent.control.LevyController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.StaticController.html">novel_swarms.agent.control.StaticController</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.cache.html">novel_swarms.cache</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.cache.ExternalSimulationArchive.html">novel_swarms.cache.ExternalSimulationArchive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.config.html">novel_swarms.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.gui.html">novel_swarms.gui</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.abstractGUI.html">novel_swarms.gui.abstractGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.agentGUI.html">novel_swarms.gui.agentGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.connectivityGUI.html">novel_swarms.gui.connectivityGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.controllerGUI.html">novel_swarms.gui.controllerGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.fullControlGUI.html">novel_swarms.gui.fullControlGUI</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.metrics.html">novel_swarms.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AbstractMetric.html">novel_swarms.metrics.AbstractMetric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AgentsAtGoal.html">novel_swarms.metrics.AgentsAtGoal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Aggregation.html">novel_swarms.metrics.Aggregation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AlgebraicConnectivity.html">novel_swarms.metrics.AlgebraicConnectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AngularMomentum.html">novel_swarms.metrics.AngularMomentum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AverageSpeed.html">novel_swarms.metrics.AverageSpeed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.BehaviorFactory.html">novel_swarms.metrics.BehaviorFactory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.BerlingerCircularity.html">novel_swarms.metrics.BerlingerCircularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Centroid.html">novel_swarms.metrics.Centroid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.CirclePacking.html">novel_swarms.metrics.CirclePacking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Circliness.html">novel_swarms.metrics.Circliness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.ConvexHull.html">novel_swarms.metrics.ConvexHull</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.CoordinateTest.html">novel_swarms.metrics.CoordinateTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.DistanceSizeRatio.html">novel_swarms.metrics.DistanceSizeRatio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.DistanceToGoal.html">novel_swarms.metrics.DistanceToGoal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.GroupRotationBehavior.html">novel_swarms.metrics.GroupRotationBehavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Orbit.html">novel_swarms.metrics.Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.PersistentHomology.html">novel_swarms.metrics.PersistentHomology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.RadialVariance.html">novel_swarms.metrics.RadialVariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.RandomBoxAggregation.html">novel_swarms.metrics.RandomBoxAggregation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.RandomBoxSampling.html">novel_swarms.metrics.RandomBoxSampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.ScatterBehavior.html">novel_swarms.metrics.ScatterBehavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SensorOffset.html">novel_swarms.metrics.SensorOffset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SensorRotation.html">novel_swarms.metrics.SensorRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SensorSignal.html">novel_swarms.metrics.SensorSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SubGroupWrapper.html">novel_swarms.metrics.SubGroupWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.TotalCollisions.html">novel_swarms.metrics.TotalCollisions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.sensors.html">novel_swarms.sensors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.AbstractSensor.html">novel_swarms.sensors.AbstractSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.BinaryFOVSensor.html">novel_swarms.sensors.BinaryFOVSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.BinaryLOSSensor.html">novel_swarms.sensors.BinaryLOSSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.GenomeDependentSensor.html">novel_swarms.sensors.GenomeDependentSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.RegionalSensor.html">novel_swarms.sensors.RegionalSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.SensorFactory.html">novel_swarms.sensors.SensorFactory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.SensorSet.html">novel_swarms.sensors.SensorSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.StaticSensor.html">novel_swarms.sensors.StaticSensor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="novel_swarms.util.html">novel_swarms.util</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.asdict.html">novel_swarms.util.asdict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.collections.html">novel_swarms.util.collections</a></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="novel_swarms.util.collider.html">novel_swarms.util.collider</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.collider.AABB.html">novel_swarms.util.collider.AABB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.collider.AngleSensitiveCC.html">novel_swarms.util.collider.AngleSensitiveCC</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">novel_swarms.util.collider.Collider</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.conversion.html">novel_swarms.util.conversion</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.conversion.ControllerConverter.html">novel_swarms.util.conversion.ControllerConverter</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.geometry.html">novel_swarms.util.geometry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.ConvexHull.html">novel_swarms.util.geometry.ConvexHull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.Point.html">novel_swarms.util.geometry.Point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.Polygon.html">novel_swarms.util.geometry.Polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.svg_extraction.html">novel_swarms.util.geometry.svg_extraction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.pid.html">novel_swarms.util.pid</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.processing.html">novel_swarms.util.processing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.processing.multicoreprocessing.html">novel_swarms.util.processing.multicoreprocessing</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.signal.html">novel_swarms.util.signal</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.signal.Signal.html">novel_swarms.util.signal.Signal</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.statistics_tools.html">novel_swarms.util.statistics_tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.timer.html">novel_swarms.util.timer</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.world.html">novel_swarms.world</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.RectangularWorld.html">novel_swarms.world.RectangularWorld</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.World.html">novel_swarms.world.World</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.WorldIO.html">novel_swarms.world.WorldIO</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.generation.html">novel_swarms.world.generation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.generation.Maze.html">novel_swarms.world.generation.Maze</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.goals.html">novel_swarms.world.goals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.goals.Goal.html">novel_swarms.world.goals.Goal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.goals.GoalFactory.html">novel_swarms.world.goals.GoalFactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.goals.GrowthRegion.html">novel_swarms.world.goals.GrowthRegion</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.objects.html">novel_swarms.world.objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.DetectionRegion.html">novel_swarms.world.objects.DetectionRegion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.ObjectFactory.html">novel_swarms.world.objects.ObjectFactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.StaticObject.html">novel_swarms.world.objects.StaticObject</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.TriggerRegion.html">novel_swarms.world.objects.TriggerRegion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.Wall.html">novel_swarms.world.objects.Wall</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.WorldObject.html">novel_swarms.world.objects.WorldObject</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.simulate.html">novel_swarms.world.simulate</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.spawners.html">novel_swarms.world.spawners</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.AgentSpawner.html">novel_swarms.world.spawners.AgentSpawner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.ExcelSpawner.html">novel_swarms.world.spawners.ExcelSpawner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.FixedInit.html">novel_swarms.world.spawners.FixedInit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.Spawner.html">novel_swarms.world.spawners.Spawner</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.subscribers.html">novel_swarms.world.subscribers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.subscribers.World2Gif.html">novel_swarms.world.subscribers.World2Gif</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.subscribers.WorldSubscriber.html">novel_swarms.world.subscribers.WorldSubscriber</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.yaml.html">novel_swarms.yaml</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.include.html">novel_swarms.yaml.include</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.mathexpr.html">novel_swarms.yaml.mathexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.np_representer.html">novel_swarms.yaml.np_representer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.pathlib_representer.html">novel_swarms.yaml.pathlib_representer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.unknown.html">novel_swarms.yaml.unknown</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="novel_swarms.html" class="nav-link">novel_swarms</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="novel_swarms.util.html" class="nav-link">novel_swarms.util</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="novel_swarms.util.collider.html" class="nav-link">novel_swarms.util.collider</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">novel_swarms.util.collider.Collider</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-novel_swarms.util.collider.Collider">
+<span id="novel-swarms-util-collider-collider"></span><h1>novel_swarms.util.collider.Collider<a class="headerlink" href="#module-novel_swarms.util.collider.Collider" title="Link to this heading">#</a></h1>
+<p class="rubric">Classes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CircularCollider</span></code>(x, y, r)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Collider</span></code>(x, y, r)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PolyCollider</span></code>(points)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="novel_swarms.util.collider.AngleSensitiveCC.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">novel_swarms.util.collider.AngleSensitiveCC</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="novel_swarms.util.conversion.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">novel_swarms.util.conversion</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/api/_gen/novel_swarms.util.collider.Collider.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/_gen/novel_swarms.util.collider.Collider.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Connor Mattson, Kevin Zhu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

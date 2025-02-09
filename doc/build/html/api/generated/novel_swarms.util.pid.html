@@ -316,6 +316,7 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="novel_swarms.util.asdict.html">novel_swarms.util.asdict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="novel_swarms.util.collections.html">novel_swarms.util.collections</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="novel_swarms.util.collider.html">novel_swarms.util.collider</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.collider.AABB.html">novel_swarms.util.collider.AABB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.collider.AngleSensitiveCC.html">novel_swarms.util.collider.AngleSensitiveCC</a></li>
@@ -326,10 +327,6 @@
 <li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.conversion.ControllerConverter.html">novel_swarms.util.conversion.ControllerConverter</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="novel_swarms.util.datasets.html">novel_swarms.util.datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.datasets.GenomeDataSet.html">novel_swarms.util.datasets.GenomeDataSet</a></li>
-</ul>
-</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="novel_swarms.util.geometry.html">novel_swarms.util.geometry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.geometry.ConvexHull.html">novel_swarms.util.geometry.ConvexHull</a></li>
 <li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.geometry.Point.html">novel_swarms.util.geometry.Point</a></li>
@@ -338,7 +335,10 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">novel_swarms.util.pid</a></li>
-<li class="toctree-l1"><a class="reference internal" href="novel_swarms.util.processing.html">novel_swarms.util.processing</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="novel_swarms.util.processing.html">novel_swarms.util.processing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.processing.multicoreprocessing.html">novel_swarms.util.processing.multicoreprocessing</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="novel_swarms.util.signal.html">novel_swarms.util.signal</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="novel_swarms.util.signal.Signal.html">novel_swarms.util.signal.Signal</a></li>
 </ul>
@@ -404,15 +404,23 @@
                   
   <section id="module-novel_swarms.util.pid">
 <span id="novel-swarms-util-pid"></span><h1>novel_swarms.util.pid<a class="headerlink" href="#module-novel_swarms.util.pid" title="Link to this heading">#</a></h1>
-<p>Example:
-from pid import PID
-pid1 = PID(p=0.07, i=0, imax=90)
-while(True):</p>
-<blockquote>
-<div><p>error = 50 #error should be caculated, target - mesure
-output=pid1.get_pid(error,1)
-#control value with output</p>
-</div></blockquote>
+<p>PID Controller class</p>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pid</span><span class="w"> </span><span class="kn">import</span> <span class="n">PID</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">imax</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">state</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">target</span> <span class="o">-</span> <span class="n">state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">controller</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="c1"># control value with output</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This class was adapted from the following micropython code:
+<a class="github reference external" href="https://github.com/openmv/openmv/blob/master/scripts/libraries/pid.py">openmv/openmv</a></p>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>

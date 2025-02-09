@@ -1,4 +1,4 @@
-novel\_swarms.agent
+﻿novel\_swarms.agent
 ===================
 
 .. automodule:: novel_swarms.agent
@@ -11,12 +11,11 @@ novel\_swarms.agent
    :recursive:
 
    Agent
-   AgentFactory
    DiffDriveAgent
    DroneAgent
    HumanAgent
-   LevyAgent
    MazeAgent
    ModeSwitchingAgent
    StaticAgent
    UnicycleAgent
+   control

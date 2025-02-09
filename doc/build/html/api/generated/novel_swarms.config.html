@@ -315,13 +315,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.AgentConfig.html">novel_swarms.config.AgentConfig</a></li>
-<li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.EvolutionaryConfig.html">novel_swarms.config.EvolutionaryConfig</a></li>
-<li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.InitializationConfig.html">novel_swarms.config.InitializationConfig</a></li>
-<li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.ModeConfig.html">novel_swarms.config.ModeConfig</a></li>
 <li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
 <li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
-<li class="toctree-l1"><a class="reference internal" href="novel_swarms.config.WorldConfig.html">novel_swarms.config.WorldConfig</a></li>
 </ul>
 </div>
 </nav></div>
@@ -381,40 +376,55 @@
                   
   <section id="module-novel_swarms.config">
 <span id="novel-swarms-config"></span><h1>novel_swarms.config<a class="headerlink" href="#module-novel_swarms.config" title="Link to this heading">#</a></h1>
-<p>this module enforces lazy initialization of the native modules
-prior to first use. This is to avoid circular imports.
-These modules can then be accessed via the store object
-for use with initialization from yaml files or config objects.</p>
-<p>It also provides the interface for registering external modules.</p>
+<p>Lazy initialization of built-in types</p>
+<p>Holds registry of classes for the initialization system.
+prior to first use. This is to avoid circular imports.</p>
+<p>These modules can then be accessed via the <a class="reference internal" href="../config_store_api.html#novel_swarms.config.store" title="novel_swarms.config.store"><code class="xref py py-data docutils literal notranslate"><span class="pre">store</span></code></a> object
+and the getting functions in this module
+for use with initialization from <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files or config objects.</p>
+<p>It also provides the interface for registering third-party types/classes.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../config_store_api.html"><span class="doc">Config Registry</span></a></p>
+</div>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.store" title="novel_swarms.config.store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store</span></code></a></p></td>
+<td><p>Holds the registry of known classes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">associated_type</span></code>(type_name)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.associated_type" title="novel_swarms.config.associated_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">associated_type</span></code></a>(type_name)</p></td>
+<td><p>Decorate a config dataclass to add an <code class="docutils literal notranslate"><span class="pre">associated_type</span></code> field</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_unexpected_fields</span></code>(cls)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.filter_unexpected_fields" title="novel_swarms.config.filter_unexpected_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_unexpected_fields</span></code></a>(cls)</p></td>
+<td><p>Decorate a dataclass to filter out unexpected fields</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_agent_class</span></code>(config)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.get_agent_class" title="novel_swarms.config.get_agent_class"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_agent_class</span></code></a>(config)</p></td>
+<td><p>Retrieve the <a class="reference internal" href="novel_swarms.agent.html#module-novel_swarms.agent" title="novel_swarms.agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code></a> class from the agent type registry</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_class_from_dict</span></code>(key, config[, copy, ...])</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.get_class_from_dict" title="novel_swarms.config.get_class_from_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_class_from_dict</span></code></a>(key, config[, copy, ...])</p></td>
+<td><p>Retrieve a class from the registry for a given config <code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize_natives</span></code>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.initialize_natives" title="novel_swarms.config.initialize_natives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize_natives</span></code></a>()</p></td>
+<td><p>Makes the config system aware of all the built-in classes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_agent_type</span></code>(name, agent_type[, ...])</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.register_agent_type" title="novel_swarms.config.register_agent_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_agent_type</span></code></a>(name, agent_type[, ...])</p></td>
+<td><p>Register an agent class with the config system</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_dictlike_namespace</span></code>(key)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.register_dictlike_namespace" title="novel_swarms.config.register_dictlike_namespace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_dictlike_namespace</span></code></a>(key)</p></td>
+<td><p>Register a new namespace for classes configured using dicts</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_dictlike_type</span></code>(key, name, cls)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.register_dictlike_type" title="novel_swarms.config.register_dictlike_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_dictlike_type</span></code></a>(key, name, cls)</p></td>
+<td><p>Register a class for a given namespace</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_world_type</span></code>(name, world_type[, ...])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.register_world_type" title="novel_swarms.config.register_world_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_world_type</span></code></a>(name, world_type[, ...])</p></td>
+<td><p>Register a world class with the config system</p></td>
 </tr>
 </tbody>
 </table>
@@ -422,8 +432,8 @@ for use with initialization from yaml files or config objects.</p>
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LazyKnownModules</span></code>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../config_store_api.html#novel_swarms.config.LazyKnownModules" title="novel_swarms.config.LazyKnownModules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LazyKnownModules</span></code></a>()</p></td>
+<td><p>Holds the registry of known classes</p></td>
 </tr>
 </tbody>
 </table>
@@ -431,25 +441,10 @@ for use with initialization from yaml files or config objects.</p>
 <p class="rubric">Modules</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.config.AgentConfig.html#module-novel_swarms.config.AgentConfig" title="novel_swarms.config.AgentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AgentConfig</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="novel_swarms.config.EvolutionaryConfig.html#module-novel_swarms.config.EvolutionaryConfig" title="novel_swarms.config.EvolutionaryConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EvolutionaryConfig</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.config.InitializationConfig.html#module-novel_swarms.config.InitializationConfig" title="novel_swarms.config.InitializationConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InitializationConfig</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="novel_swarms.config.ModeConfig.html#module-novel_swarms.config.ModeConfig" title="novel_swarms.config.ModeConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModeConfig</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html#module-novel_swarms.config.OutputTensorConfig" title="novel_swarms.config.OutputTensorConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OutputTensorConfig</span></code></a></p></td>
 <td><p>This class defines a configuration for how the World will output a large numpy array representing the pixels on the screen</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="novel_swarms.config.ResultsConfig.html#module-novel_swarms.config.ResultsConfig" title="novel_swarms.config.ResultsConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResultsConfig</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.config.WorldConfig.html#module-novel_swarms.config.WorldConfig" title="novel_swarms.config.WorldConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WorldConfig</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>

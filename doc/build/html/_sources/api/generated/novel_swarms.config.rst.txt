@@ -1,8 +1,14 @@
-novel\_swarms.config
+﻿novel\_swarms.config
 ====================
 
 .. automodule:: novel_swarms.config
 
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      store
    
    .. rubric:: Functions
 
@@ -30,12 +36,5 @@ novel\_swarms.config
    :toctree:
    :recursive:
 
-   AgentConfig
-   EvolutionaryConfig
-   HeterogenSwarmConfig
-   InitializationConfig
-   ModeConfig
    OutputTensorConfig
    ResultsConfig
-   WorldConfig
-   defaults
