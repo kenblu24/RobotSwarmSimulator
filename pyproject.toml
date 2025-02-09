@@ -46,10 +46,6 @@ dev = [
     "pytest-xdist",
 ]
 shapes = ["pointpats"]
-learn = [
-    "scikit-learn-extra",
-    "tqdm",
-]
 docs = [
     "pydata-sphinx-theme~=0.16.1",
     "sphinx",

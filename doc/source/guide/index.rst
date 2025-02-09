@@ -7,3 +7,4 @@ User Guide
    install
    firstrun
    structure
+   config
