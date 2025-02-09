@@ -1,7 +1,6 @@
 import pygame
 from ..gui.agentGUI import DifferentialDriveGUI
-from .World import World_from_config
-from ..config import initialize_natives
+from .World import World_from_config, World
 from ..util.timer import Timer
 
 screen = None
@@ -45,7 +44,10 @@ def main(
 
     # Create the simulation world
 
-    world = World_from_config(world_config)
+    if isinstance(world_config, World):
+        world = world_config
+    else:
+        world = World_from_config(world_config)
     world.original_zoom = viewport_zoom
     world._screen_cache = screen if screen else None
     world.setup()
