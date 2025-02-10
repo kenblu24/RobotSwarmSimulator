@@ -15,6 +15,10 @@ It's used internally to know how to create many types of objects in the simulato
 
 This allows you to register your own class definitions which will work in ``.yaml`` files.
 
+.. seealso::
+   
+   See the :doc:`/guide/yaml` for information on RobotSwarmSimulator's custom ``.yaml`` parser and tags
+
 :py:mod:`~novel_swarms.agent` and :py:mod:`~novel_swarms.world` Configs
 =======================================================================
 RobotSwarmSimulator uses dataclasses to define the configurations for agents and worlds.

@@ -2,14 +2,18 @@
 Our YAML module
 ***************
 
-Our :py:mod:`~novel_swarms.yaml` module provides a custom YAML loader
+The :py:mod:`novel_swarms.yaml` module provides a custom YAML loader
 that defines some convenience tags. This article will explain how
 the YAML files are loaded and how to use the custom tags.
 
 
 .. seealso::
+
    Looking for how to load or dump YAML files with our custom tags?
-   See :doc:`/api/yaml_api`
+   See :py:mod:`novel_swarms.yaml`
+
+   Or for information on how to use your custom class in a YAML file,
+   see :doc:`/api/config_store_api`.
 
 
 YAML
@@ -56,6 +60,7 @@ For example, the following YAML file:
 
    example: !np complex('2+2j')
 
+.. _yaml-tags-include:
 
 The ``!include`` tag
 --------------------
@@ -104,6 +109,8 @@ The file extension affects the behavior of the ``!include`` tag:
 * ``.json`` files will be loaded using ``json.load``
 * All other files are read as text and returned as a string
 
+.. _yaml-tags-relpath:
+
 The ``!relpath`` tag
 --------------------
 
@@ -122,19 +129,23 @@ This is equivalent to:
 
    path: /home/user/project/bar.yaml
 
+.. _relpath-resolution:
+
 Path Resolution Order
-^^^^^^^^^^^^^^^^^^^^^
+=====================
 
 When loading a YAML file, the ``!include`` and ``!relpath`` tags will resolve the path
 by testing the following assumptions in order:
 
-#. Path is **not** relative to the current working directory
+.. card::
 
-   (i.e. the path is absolute or relative to the user home directory)
-#. Path is relative to the ``.yaml`` file with the tag
-#. Path is relative to the current working directory
-   (where you were when you ran ``python``).
+   #. Path is **not** relative to the current working directory
 
-   This is the default behavior for relative paths in Python, but it is the last place we look.
+      (i.e. the path is absolute or relative to the user home directory)
+   #. Path is relative to the ``.yaml`` file with the tag
+   #. Path is relative to the current working directory
+      (where you were when you ran ``python``).
+
+      This is the default behavior for relative paths in Python, but it is the last place we look.
 
 If a file isn't found at any of these locations, an error will be raised.

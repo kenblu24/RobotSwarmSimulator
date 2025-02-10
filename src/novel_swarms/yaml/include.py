@@ -1,3 +1,11 @@
+"""
+Handles !include and !relpath tags
+
+.. autofunction: .search_file
+
+
+"""
+
 import os
 import json
 import pathlib as pl
@@ -22,18 +30,21 @@ class IncludeLoader(yaml.FullLoader):
 
 
 def search_file(parent_path: os.PathLike, path_str: os.PathLike) -> pl.Path:
-    """Include file referenced at node."""
+    """Include file referenced at node.
+
+    resolve order:
+    1. absolute or resolvable/home paths (i.e. ~/foo.yaml)
+    2. relative to yaml file
+    3. relative to cwd
+
+    see :doc:`/guide/yaml` for an example
+    """
     node_path = pl.Path(path_str)
     parent_path = pl.Path(parent_path)
 
     cwd = pl.Path.cwd()
     resolved = node_path.expanduser().resolve()
     not_cwd = resolved.exists() and not resolved.is_relative_to(cwd)
-
-    # resolve order:
-    # 1. absolute or resolvable/home paths (i.e. ~/foo.yaml)
-    # 2. relative to yaml file
-    # 3. relative to cwd
     if node_path.is_absolute() or not_cwd:
         return resolved
     elif (path := parent_path / node_path).exists():

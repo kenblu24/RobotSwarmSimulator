@@ -58,11 +58,15 @@ still use ``venv`` if you prefer.
 
 This will create a virtual environment in your current directory.
 
+.. _activate-venv:
 
 Activating the virtual environment
 ----------------------------------
 
 Once you have created your virtual environment, you need to activate it.
+
+Make sure you're in the directory where you created the virtual environment.
+In this example we're in the ``swarms/`` folder.
 
 .. tab-set::
    :class: sd-width-content-min
@@ -93,14 +97,14 @@ You should see the name of your virtual environment in parentheses at the beginn
 
       .. code-block:: doscon
 
-         .\Scripts\activate
+         (swarms) C:\swarms> 
 
    .. tab-item:: Linux / macOS / WSL
       :sync: posix
 
       .. code-block:: bash
 
-         source bin/activate
+         (swarms) user@host:~/swarms$
 
 To deactivate the virtual environment, use the ``deactivate`` command:
 

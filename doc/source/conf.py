@@ -18,6 +18,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
+    'sphinx.ext.linkcode',
     # 'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
@@ -56,16 +57,25 @@ html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 html_title = "RobotSwarmSimulator"
 
+github_version = "docs-live"
 
 html_context = {
     # "github_url": "https://github.com", # or your GitHub Enterprise site
     "github_user": "kenblu24",
     "github_repo": "RobotSwarmSimulator",
-    "github_version": "docs",
-    "doc_path": "docs/",
+    "github_version": "docs-live",
+    "doc_path": "doc/build/html/",
 }
 
 github_project_url = "https://github.com/kenblu24/RobotSwarmSimulator"
+
+def linkcode_resolve(domain, info):
+    if domain != 'py':
+        return None
+    if not info['module']:
+        return None
+    filename = info['module'].replace('.', '/')
+    return f"{github_project_url}/blob/{github_version}/{filename}.py"
 
 
 html_theme_options = {
