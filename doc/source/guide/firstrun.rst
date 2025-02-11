@@ -163,3 +163,18 @@ Let's recap what we've done so far:
 
    sim(world)
 
+
+.. todo::
+
+   * Go over RSS features i.e. panning, stepping
+   * sensors tutorial
+   * new controller type tutorial
+   * new sensor type tutorial
+   * metrics tutorial
+   * yaml config tutorial
+   * advanced yaml tutorial (np, include)
+   * new agent type tutorial
+   * world objects tutorial
+
+   * add pictures and animated gifs
+
