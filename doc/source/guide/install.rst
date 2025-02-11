@@ -14,7 +14,7 @@ Setting up your environment
    You need to do this before creating the virtual environment.
 
 .. important::
-   If you're on Windows and need to install Python, please DO NOT use the Windows Store.
+   :fab:`windows` Windows users: please **DO NOT** use Python from the :fab:`microsoft` Windows Store.
    Instead, download and install the latest version of Python from the `Python website <https://www.python.org/downloads/>`_.
    Make sure to check the box to add Python to your PATH:
 
@@ -23,6 +23,7 @@ Setting up your environment
 
    If you didn't do this when installing Python, you'll need to add it manually.
    See :ref:`python:setting-envvars` or `How to Add Python to PATH <https://realpython.com/add-python-to-path/>`_.
+   Or, uninstall and reinstall Python (You may need to re-\ ``pip install`` system Python packages).
 
 The recommended way to install RobotSwarmSimulator is with a **virtual environment**.
 
@@ -139,6 +140,17 @@ You can preface most ``pip install`` commands with ``uv`` for *much* faster inst
 
          pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
 
+
+If the installation was successful, you should be able to open a ``python`` shell and import the package:
+
+.. code-block:: python-console
+   :caption: ``python``
+
+   Python 3.11.0 (or newer)
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> import novel_swarms
+   >>> 
+
 Development Installations
 =========================
 
@@ -152,15 +164,24 @@ If you intend to contribute to RobotSwarmSimulator, you should follow the
 WSL Installation
 ================
 
-If you're on Windows, you can install RobotSwarmSimulator in a Windows Subsystem for Linux (WSL) environment.
-This is recommended if you're on Windows and want to use RobotSwarmSimulator.
+Although RobotSwarmSimulator works natively on :fab:`windows` Windows, you can also install RobotSwarmSimulator
+in a :fab:`windows`\ :fab:`linux` Windows Subsystem for Linux (WSL) environment.
 
 First, you need to install WSL.
-See the `Windows documentation <https://learn.microsoft.com/en-us/windows/wsl/install>`_ for instructions.
 
-Then, follow the :ref:`regular-install` or :ref:`development-install` instructions.
+.. toctree::
+   :maxdepth: 2
 
-Once you've done that, see :ref:`WSL Post-Installation` for instructions on how to get started with RobotSwarmSimulator.
+   install-wsl
 
-.. todo::
-   Add instructions for WSL post-installation and finish development install guide.
+Then, follow the :ref:`regular-install` or :doc:`/devel/install` instructions as if you were on Linux.
+
+-----
+
+.. card::
+   :link: /guide/firstrun
+   :link-type: doc
+   :link-alt: First Run Tutorial
+   :margin: 3
+
+   Finished installing? Check out the :doc:`/guide/firstrun` tutorial.  :fas:`circle-chevron-right;float-right font-size-1_7em`

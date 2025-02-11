@@ -1,3 +1,11 @@
+"""Abstract Sensor class.
+
+.. autoclass:: AbstractSensor
+    :members:
+    :undoc-members:
+
+"""
+
 from ..agent.Agent import Agent
 import numpy as np
 
@@ -6,10 +14,10 @@ class AbstractSensor:
     config_vars = ['static_position', 'n_possible_states', 'show']
 
     def __init__(self, agent, parent=None, static_position=None, n_possible_states=0, draw=True):
-        """
-        Initialize the abstract class.
-            Sensors should typically have a parent that is assigned to them that must be of subclass 'Agent'
-            If a parent is not included, a static position is accepted in the form (x, y)
+        """Sensor class for the agent.
+
+        Sensors should typically have a parent that is assigned to them that must be of subclass 'Agent'
+        If a parent is not included, a static position is accepted in the form (x, y)
         """
         if agent is not None and not issubclass(type(agent), Agent):
             raise Exception("The parent must be of type Agent")

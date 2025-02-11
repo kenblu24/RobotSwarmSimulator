@@ -5,6 +5,7 @@ Configuration System
 .. toctree::
    :maxdepth: 2
   
+   config_store_api
    yaml
 
 This article will cover the :py:mod:`~novel_swarms.config` module and explain
@@ -12,7 +13,7 @@ why it was created.
 
 .. seealso::
 
-   See :doc:`/api/config_store_api` for how to register your own classes
+   See :doc:`/guide/config_store_api` for how to register your own classes
    with this system.
 
 

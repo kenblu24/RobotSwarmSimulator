@@ -1,3 +1,16 @@
+"""An Agent Class and Config for a non-moving agent.
+
+.. autoclass:: novel_swarms.agent.StaticAgent.StaticAgentConfig
+    :members:
+    :inherited-members:
+    :undoc-members:
+
+.. autoclass:: novel_swarms.agent.StaticAgent.StaticAgent
+    :members:
+    :inherited-members:
+    :undoc-members:
+"""
+
 from functools import lru_cache, cached_property
 
 import pygame

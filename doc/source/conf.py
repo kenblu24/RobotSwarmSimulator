@@ -19,7 +19,7 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
     'sphinx.ext.linkcode',
-    # 'sphinx.ext.graphviz',
+    'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.ifconfig',
@@ -75,11 +75,15 @@ def linkcode_resolve(domain, info):
     if not info['module']:
         return None
     filename = info['module'].replace('.', '/')
-    return f"{github_project_url}/blob/{github_version}/{filename}.py"
+    return f"{github_project_url}/blob/{github_version}/src/{filename}.py"
 
+numpydoc_class_members_toctree = False
+
+html_last_updated_fmt = "%b %d, %Y"
 
 html_theme_options = {
     "use_edit_page_button": True,
+    "footer_end": ["theme-version", "last-updated"],
 
     # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/header-links.html
     "icon_links": [
@@ -99,3 +103,7 @@ html_theme_options = {
     # "search_as_you_type": True,
 }
 # html_show_sourcelink = False
+
+html_css_files = [
+    "css/custom.css",
+]

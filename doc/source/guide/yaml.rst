@@ -13,7 +13,7 @@ the YAML files are loaded and how to use the custom tags.
    See :py:mod:`novel_swarms.yaml`
 
    Or for information on how to use your custom class in a YAML file,
-   see :doc:`/api/config_store_api`.
+   see :doc:`/guide/config_store_api`.
 
 
 YAML

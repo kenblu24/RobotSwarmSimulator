@@ -1,4 +1,18 @@
-import os
+""" Base world class.
+
+.. seealso::
+    :doc:`/guide/structure`
+
+.. autoclass:: AbstractWorldConfig
+    :members:
+    :undoc-members:
+
+.. autoclass:: World
+    :members:
+    :undoc-members:
+
+.. autofunction:: World_from_config
+"""
 
 import pygame
 import numpy as np
@@ -100,12 +114,18 @@ class AbstractWorldConfig:
 
 
 class World:
+    """Base world class.
+    """
     def __init__(self, config):
         self.config = config
         config = replace(config)
+        #: List of agents in the world.
         self.population = []
+        #: List of spawners which create agents or objects.
         self.spawners = []
+        #: Metrics to calculate behaviors.
         self.metrics = []
+        #: The list of world objects.
         self.objects = []
         self.goals = config.goals
         self.meta = config.metadata
@@ -115,6 +135,8 @@ class World:
         self._screen_cache = None
         self.seed = config.seed
         self.set_seed(self.seed)
+        #: Random number generator.
+        #: Also may be used to seed RNG for agents, spawners, etc.
         self.rng: np.random.Generator
 
     def set_seed(self, seed):
@@ -238,6 +260,24 @@ class World:
 
 
 def World_from_config(config: dict):
+    """Returns a new world instance from the given config.
+
+    Parameters
+    ----------
+    config : dict | WorldConfig
+        The config to create the world from.
+
+        The config should either be a dict with a ``'type'`` key, or an instance
+        of :py:class:`AbstractWorldConfig` with an ``associated_type`` field
+        (which can be set using :py:deco:`~novel_swarms.config.associated_type` ).
+
+        The :doc:`/guide/config` will be used to lookup the class for the world type.
+
+    Returns
+    -------
+    World
+        A new world of type ``config['associated_type']`` or ``config.associated_type``.
+    """
     world_types = store.world_types
 
     if isinstance(config, dict):

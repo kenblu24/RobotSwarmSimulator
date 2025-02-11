@@ -11,11 +11,8 @@ This page describes how to install RobotSwarmSimulator for development.
 
 .. seealso::
    This guide assumes you're using a Unix-like operating system, such as :fab:`linux` Linux or :fab:`apple` macOS.
-   If you're on :fab:`windows` Windows, please use WSL :ref: `WSL Installation` and then follow this guide
-   as if you were on Linux (because you are). Then, see :ref:`WSL Installation` for further setup.
-
-   .. todo::
-      Add instructions for WSL post-installation
+   If you're on :fab:`windows` Windows, please use WSL :doc:`/guide/install-wsl` and then follow this guide
+   as if you were on Linux (because you are). Then, see :ref:`wsl-post-install` for further setup.
 
 
 Installing git
@@ -135,6 +132,7 @@ A ``pip --editable`` install allows you to make changes to the code and see the 
 
 .. dropdown:: Install UV for faster installs
    :color: secondary
+   :open:
 
    You can preface most ``pip install`` commands with ``uv`` for *much* faster installation.
 
@@ -145,6 +143,7 @@ A ``pip --editable`` install allows you to make changes to the code and see the 
 
    ``uv pip install`` may not work for some packages. If you get an error, try using regular ``pip install`` first.
 
+It's finally time to install RobotSwarmSimulator into our virtual environment:
 
 .. tab-set::
    :class: sd-width-content-min
@@ -164,13 +163,23 @@ A ``pip --editable`` install allows you to make changes to the code and see the 
 
          pip install -e .[dev, docs]
 
-.. card:: 
-   
-   Check if it's installed
-   ^^^^^^^^^^^^^^^^^^^^^^^
+If the installation was successful, you should be able to open a ``python`` shell and import the package:
 
-   .. code-block:: python
-      :caption: Python
+.. code-block:: python-console
+   :caption: ``python``
 
-      >>> import novel_swarms
-      >>> 
+   Python 3.11.0 (or newer)
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> import novel_swarms
+   >>> 
+
+
+-----
+
+.. card::
+   :link: /guide/firstrun
+   :link-type: doc
+   :link-alt: First Run Tutorial
+   :margin: 3
+
+   Finished installing? Check out the :doc:`/guide/firstrun` tutorial.  :fas:`circle-chevron-right;float-right font-size-1_7em`

@@ -5,9 +5,9 @@ Config Registry
 The config module stores references to classes and config dataclasses.
 It's used internally to know how to create many types of objects in the simulator:
 
-* :py:mod:`novel_swarms.agent` s
-   * :py:mod:`novel_swarms.agent.control` lers
-* :py:mod:`novel_swarms.world` s
+* :py:mod:`novel_swarms.agent`\ s
+   * :py:mod:`novel_swarms.agent.control`\ lers
+* :py:mod:`novel_swarms.world`\ s
    * :py:mod:`novel_swarms.world.objects`
    * :py:mod:`novel_swarms.world.spawners`
 * :py:mod:`novel_swarms.sensors`
@@ -16,6 +16,8 @@ It's used internally to know how to create many types of objects in the simulato
 This allows you to register your own class definitions which will work in ``.yaml`` files.
 
 .. seealso::
+
+   See the :py:mod:`novel_swarms.config` module for the API.
    
    See the :doc:`/guide/yaml` for information on RobotSwarmSimulator's custom ``.yaml`` parser and tags
 
@@ -119,42 +121,4 @@ And then you can use it in a ``.yaml`` file:
        controller:
          type: SpinningController
          angular_velocity: 0.1  # rad/s
-
-----
-
-Module
-======
-
-.. autosummary::
-   :toctree: _gen
-   
-   novel_swarms.config
-
-.. autodata:: novel_swarms.config.store
-
-.. autoclass:: novel_swarms.config.LazyKnownModules
-
-
-Functions
-=========
-
-.. currentmodule:: novel_swarms.config
-
-.. autofunction:: get_agent_class
-.. autofunction:: get_class_from_dict
-.. autofunction:: register_agent_type
-.. autofunction:: register_world_type
-.. autofunction:: register_dictlike_namespace
-.. autofunction:: register_dictlike_type
-.. autofunction:: initialize_natives
-
-Decorators
-==========
-
-.. autofunction:: associated_type
-.. autofunction:: filter_unexpected_fields
-
-.. seealso::
-   There is no ``novel_swarms.config.get_world_class`` function,
-   world type lookup is handled inside :py:mod:`~novel_swarms.world.World.World_from_config`.
 

@@ -10,7 +10,36 @@ for use with initialization from ``.yaml`` files or config objects.
 It also provides the interface for registering third-party types/classes.
 
 .. seealso::
-    :doc:`/api/config_store_api`
+    :doc:`/guide/config_store_api`
+
+.. autoclass:: LazyKnownModules
+    :members: world_types, agent_types, dictlike_types, initialized_natives
+
+.. autodata:: novel_swarms.config.store
+
+Functions
+=========
+
+.. currentmodule:: novel_swarms.config
+
+.. autofunction:: get_agent_class
+.. autofunction:: get_class_from_dict
+.. autofunction:: register_agent_type
+.. autofunction:: register_world_type
+.. autofunction:: register_dictlike_namespace
+.. autofunction:: register_dictlike_type
+.. autofunction:: initialize_natives
+
+Decorators
+==========
+
+.. autofunction:: associated_type
+.. autofunction:: filter_unexpected_fields
+
+.. seealso::
+   There is no ``novel_swarms.config.get_world_class`` function,
+   world type lookup is handled inside :py:mod:`~novel_swarms.world.World.World_from_config`.
+
 """
 
 from dataclasses import fields
@@ -114,6 +143,7 @@ class LazyKnownModules:
         self._dictlike_types = {}
         self._controllers = {}
         self._behaviors = {}
+        #: True after the registry has been initialized.
         self.initialized_natives = False
 
     @property
