@@ -5,6 +5,7 @@ Configuration System
 .. toctree::
    :maxdepth: 2
   
+   config_store_api
    yaml
 
 This article will cover the :py:mod:`~novel_swarms.config` module and explain
@@ -12,11 +13,12 @@ why it was created.
 
 .. seealso::
 
-   :doc:`/api/config_store_api`
+   See :doc:`/guide/config_store_api` for how to register your own classes
+   with this system.
 
 
-Why use the config system?
-==========================
+Why does the config system exist?
+=================================
 
 RobotSwarmSimulator is designed for simulations to be definable with :fab:`python` Python code,
 but also for simulation objects to be modified easily in an object-oriented way.
@@ -93,7 +95,7 @@ Then, we can run the simulation with:
     from novel_swarms.world.RectangularWorld import RectangularWorldConfig
     from novel_swarms.world.simulate import main as sim
     
-    world_config = RectangularWorldConfig.from_yaml(code_dir / 'world.yaml')
+    world_config = RectangularWorldConfig.from_yaml('world.yaml')
 
     sim(world_config)
 

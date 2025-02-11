@@ -1,3 +1,13 @@
+"""Abstract Controller class.
+
+.. autoclass:: AbstractController
+    :members:
+    :undoc-members:
+
+.. autodata:: ControllerType
+
+"""
+
 from enum import Enum
 from typing import override
 
@@ -5,8 +15,11 @@ ControllerType = Enum("ControllerType", ["method_based", "list_based", "inherit_
 
 
 class AbstractController:
-    """
-    Given agent observations, return agent actions
+    """Given agent observations, return agent actions
+
+    Controllers can optionally take in sensor data and
+    then return an action for the agent to take, usually in
+    the form of a requested movement vector.
     """
 
     def __init__(self, agent, parent=None):  # type:ignore[reportMissingSuperCall]

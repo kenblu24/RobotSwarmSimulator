@@ -1,3 +1,39 @@
+"""MazeAgent has Unicycle Dynamics and can move based on sensor info.
+
+.. autoclass:: novel_swarms.agent.MazeAgent.MazeAgentConfig
+    :members:
+    :inherited-members:
+
+.. autoclass:: novel_swarms.agent.MazeAgent.MazeAgent
+    :members:
+    :inherited-members:
+    :undoc-members:
+
+.. py:class:: State
+
+    A :py:class:`typing.NamedTuple` for recording the state of the agent.
+
+    Args:
+        x : float
+            The agent's x position in the world.
+        y : float
+            The agent's y position in the world.
+        angle : float
+            The agent's heading. (radians)
+
+.. py:class:: SPA
+
+    A :py:func:`collections.namedtuple` for recording the **S**\\ tate, **P**\\ erception, **A**\\ ction of the agent.
+
+    Args:
+        state : State | tuple[float, ...] | np.ndarray
+            The agent's position and heading.
+        perception : tuple[Any, ...] | np.ndarray
+            The sensor readings.
+        action : tuple[float, ...] | np.ndarray
+            The action to take.
+"""
+
 import math
 import random
 from copy import deepcopy
@@ -73,11 +109,39 @@ class MazeAgent(StaticAgent):
     SEED = -1
 
     def __init__(self, config: MazeAgentConfig, world, name=None, initialize=True) -> None:
+        """Agent w/ Unicycle Dynamics which can move based on sensor info.
 
-        # if hasattr(config.controller, 'get_actions'):
-        #     self.controller = config.controller
-        # else:
-        #     self.controller = Controller(config.controller)
+        Parameters
+        ----------
+        config : MazeAgentConfig
+            Agent will be initialized with this config.
+        world : RectangularWorld
+            Back-reference to the world instance.
+        name : str, optional
+            Name of the agent, by default None
+        initialize : bool, optional
+            If True, run post-init procedure (setup controller and sensors from config).
+
+            Leave this as True if it's the last call to the constructor.
+
+        .. dropdown:: Inheritance Tree
+            :color: primary
+
+            .. inheritance-diagram:: novel_swarms.agent.MazeAgent.MazeAgent
+
+        .. toggle:: Why is it called ``MazeAgent``?
+
+            You might be wondering why it's called ``MazeAgent``, or rather, why
+            this agent is so commonly used. It's also the subclass of a lot of other
+            agent types, such as the nearly identical :py:class:`UnicycleAgent <novel_swarms.agent.UnicycleAgent>`.
+            So why not have ``UnicycleAgent`` be the base?
+
+            The reason is largely historical. One of the research directions was to
+            discover behaviors that could allow a swarm to navigate a maze faster.
+            Research then shifted to multi-agent search-and-rendezvous, but this
+            being so early in the sim's development, the name ``MazeAgent`` had
+            been developed just enough to be used as a base for other agent types.
+        """
 
         super().__init__(config, world, name=name, initialize=False)
 

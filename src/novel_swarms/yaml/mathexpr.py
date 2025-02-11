@@ -1,19 +1,34 @@
 """
 Handle !np yaml tag. Allows for evaluation of simple math/numpy expressions.
 
-Examples:
+.. WARNING::
 
-```
-0: !np [radians(90 + 45), pi / 2, 3.14]  -> [-2.356194490192345, 1.5707963267948966, 3.14]
-1: !np complex('2+2j')  -> (2+2j)
-2: !np array(list(range(10)), dtype=float)  -> array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
-```
+    This code is not safe for arbitrary code execution as it uses ``eval()``.
+    Do not use untrusted ``.yaml`` files.
+    While the functionality has been limited to expressions, ``eval()`` is still dangerous.
+    Assignments and named expressions (walrus ``:=``) and lambdas are disallowed to prevent
+    the user from breaking things too much.
 
-WARNING: This code is not safe for arbitrary code execution as it uses eval().
-Do not use untrusted .yaml files.
-While the functionality has been limited to expressions, eval() is still dangerous.
-Assignments and named expressions (walrus) and lambdas are disallowed to prevent
-the user from breaking things too much.
+Examples
+--------
+
+.. code-block:: yaml
+
+    0: !np [radians(90 + 45), pi / 2, 3.14]  # -> [-2.356194490192345, 1.5707963267948966, 3.14]
+    1: !np complex('2+2j')  # -> (2+2j)
+    2: !np array(list(range(10)), dtype=float)  # -> array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+
+Allowed Names
+-------------
+
+.. autodata:: allowed_builtins_names
+
+    Names of builtins that are allowed to be used in expressions.
+
+.. autodata:: allowed_numpy_names
+
+    Names of numpy objects that are allowed to be used in expressions.
+
 """
 import yaml
 import ast
@@ -45,6 +60,7 @@ def safe_eval(expr, variables=()):
     """
     Somewhat safely evaluate a a string containing a Python expression.
     """
+    #: These names are very unsafe.
     unsafe_nodes = [
         'Delete', 'Assert', 'Raise', 'AnnAssign', 'Assign', 'AugAssign', 'NamedExpr', 'Import', 'ImportFrom',
         'Lambda', 'FunctionDef', 'Global', 'Nonlocal', 'ClassDef', 'Yield', 'YieldFrom', 'Return',
@@ -66,6 +82,7 @@ def safe_eval(expr, variables=()):
 
 
 def unwrap_node_recursive(loader, node):
+    """Handles ``!np`` tag on sequences and mappings."""
     if isinstance(node, SequenceNode):
         return [unwrap_node_recursive(loader, n) for n in node.value]
     elif isinstance(node, MappingNode):
@@ -76,6 +93,7 @@ def unwrap_node_recursive(loader, node):
 
 
 def construct_numexpr(loader: yaml.SafeLoader, node: yaml.Node) -> Any:
+    """Handles the ``!np`` tag on YAML nodes."""
     return unwrap_node_recursive(loader, node)
 
 

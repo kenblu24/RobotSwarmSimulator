@@ -10,8 +10,7 @@ RobotSwarmSimulator |release| documentation
 
 RobotSwarmSimulator is a Python package for simulating 2D robot swarms.
 
-.. note::
-   This documentation covers the ``kenblu24`` fork of RobotSwarmSimulator.
+This documentation covers the https://github.com/kenblu24/RobotSwarmSimulator fork.
 
 .. warning::
    Both the documentation and the simulator software are under heavy development.
