@@ -1,23 +1,6 @@
-import yaml
+""" Provides a slightly more human-readable YAML representer for numpy arrays.
 
-import numpy as np
-import numpy
-
-
-def represent_ndarray(dumper: yaml.Dumper, data: np.ndarray):
-    """For small arrays, return a more human-readable representation.
-
-    For large arrays, return the default representation.
-
-    Parameters
-    ----------
-    dumper : yaml.Dumper
-    data : np.ndarray
-
-    Returns
-    -------
-    node
-        Either a YAML sequence or mapping node.
+.. autofunction:: represent_ndarray
 
     Examples
     --------
@@ -29,6 +12,7 @@ def represent_ndarray(dumper: yaml.Dumper, data: np.ndarray):
     * The array is a 2D matrix with fewer than 9 elements
 
     .. code-block:: python
+
         >>> import sys
         >>> import numpy as np
         >>> import novel_swarms.yaml
@@ -94,6 +78,29 @@ def represent_ndarray(dumper: yaml.Dumper, data: np.ndarray):
             APA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA
             8D8=
 
+
+"""
+
+import yaml
+
+import numpy as np
+import numpy
+
+
+def represent_ndarray(dumper: yaml.Dumper, data: np.ndarray):
+    """For small arrays, return a more human-readable representation.
+
+    For large arrays, return the default representation.
+
+    Parameters
+    ----------
+    dumper : yaml.Dumper
+    data : np.ndarray
+
+    Returns
+    -------
+    node
+        Either a YAML sequence or mapping node.
 
     """
     is_vector = data.ndim == 1

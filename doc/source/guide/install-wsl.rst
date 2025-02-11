@@ -211,6 +211,7 @@ Here are some more resources for getting started with WSL:
 * `Get started using Git on Windows Subsystem for Linux <https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-git>`_
 * `Run Linux GUI apps on the Windows Subsystem for Linux <https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps>`_
 * `Getting started with Linux and Bash <Getting started with Linux and Bash>`_  :bdg-primary:`highly recommended`
+* `VSCode: Developing in WSL <https://code.visualstudio.com/docs/remote/wsl>`_
 
 
 -----

@@ -1,8 +1,20 @@
 """
 Handles !include and !relpath tags
 
-.. autofunction: .search_file
+.. py:class:: IncludeLoader(self, stream: IO)
 
+    YAML Loader with `!include` constructor.
+
+
+.. autofunction:: search_file
+
+.. autofunction:: construct_include
+
+.. autofunction:: construct_relative_path
+
+.. autodata:: INCLUDE_TAG
+
+.. autodata:: RELPATH_TAG
 
 """
 
@@ -33,6 +45,7 @@ def search_file(parent_path: os.PathLike, path_str: os.PathLike) -> pl.Path:
     """Include file referenced at node.
 
     resolve order:
+
     1. absolute or resolvable/home paths (i.e. ~/foo.yaml)
     2. relative to yaml file
     3. relative to cwd
@@ -57,6 +70,7 @@ def search_file(parent_path: os.PathLike, path_str: os.PathLike) -> pl.Path:
 
 
 def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
+    """Read the contents of a yaml/text/json file into a node"""
     node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))
 
     ext = node_path.suffix
@@ -71,12 +85,15 @@ def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
 
 
 def construct_relative_path(loader: IncludeLoader, node: yaml.Node) -> str:
+    """Construct a path which is resolved absolutely or relative to the yaml file"""
     node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))
     return str(node_path.resolve().absolute())
 
-
+#: str : YAML tag for !include
 INCLUDE_TAG = '!include'
+#: str : YAML tag for !relpath
 RELPATH_TAG = '!relpath'
+
 yaml.add_constructor(INCLUDE_TAG, construct_include, IncludeLoader)
 yaml.add_constructor(RELPATH_TAG, construct_relative_path, IncludeLoader)
 

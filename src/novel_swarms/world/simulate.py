@@ -27,13 +27,18 @@ def main(
         pygame.init()
         pygame.display.set_caption("Swarm Simulation")
 
+    if isinstance(world_config, World):
+        world = world_config
+    else:
+        world = World_from_config(world_config)
+
     # screen must be global so that other modules can access + draw to the window
     global screen
     gui_width = 300
     if gui:
         gui_width = gui.w
     if show_gui:
-        w, h = world_config.size
+        w, h = world.config.size
         dims = (w * viewport_zoom + gui_width, h * viewport_zoom)
         screen = pygame.display.set_mode(dims, pygame.RESIZABLE)
 
@@ -43,11 +48,6 @@ def main(
     draw_world = True
 
     # Create the simulation world
-
-    if isinstance(world_config, World):
-        world = world_config
-    else:
-        world = World_from_config(world_config)
     world.original_zoom = viewport_zoom
     world._screen_cache = screen if screen else None
     world.setup()
@@ -68,7 +68,7 @@ def main(
         gui.set_screen(screen)
         world.attach_gui(gui)
 
-    total_allowed_steps = world_config.stop_at
+    total_allowed_steps = getattr(world, 'stop_at', world.config.stop_at)
     steps_taken = 0
     steps_per_frame = step_size
     slowdown_level = 0
@@ -78,11 +78,14 @@ def main(
 
     do_plot = False
 
+    def background_color():
+        return getattr(world, 'background_color', world.config.background_color)
+
     def draw():
         if gui and screen:
             gui.set_time(steps_taken)
             gui.sim_paused = paused
-            screen.fill(world_config.background_color)
+            screen.fill(background_color())
             if draw_world:
                 world.draw(screen)
             # gui.step()
@@ -118,7 +121,7 @@ def main(
                         draw()
                         pygame.display.flip()
                     elif event.key == pygame.K_r:
-                        world = WorldFactory.create(world_config)
+                        # world = WorldFactory.create(world_config)
                         steps_taken = 0
                     elif event.key == pygame.K_RSHIFT:
                         if slowdown_level > 0:
