@@ -148,4 +148,4 @@ by testing the following assumptions in order:
 
       This is the default behavior for relative paths in Python, but it is the last place we look.
 
-If a file isn't found at any of these locations, an error will be raised.
+If a file isn't found at any of these locations, an error will be raised. See :py:func:`.include.search_file`.

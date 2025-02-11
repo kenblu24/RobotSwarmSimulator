@@ -8,6 +8,7 @@ from ...util.collider.AABB import AABB
 from ...config import get_agent_class
 
 # typing:
+from ...agent.Agent import Agent
 from ...agent.StaticAgent import StaticAgent, StaticAgentConfig
 
 
@@ -44,7 +45,10 @@ class PointAgentSpawner(Spawner):
         else:
             self.facing = facing
 
-        self.agent_class, self.agent_config = get_agent_class(agent)
+        if isinstance(agent, Agent):
+            self.agent_class, self.agent_config = type(agent), agent
+        else:
+            self.agent_class, self.agent_config = get_agent_class(agent)
         self.agent_class: StaticAgent
         self.agent_config: StaticAgentConfig
 
@@ -93,7 +97,10 @@ class PointAgentSpawner(Spawner):
 
     def do_spawn(self, name=None):
         config = self.generate_config(name)
-        agent = self.make_agent(config)
+        if isinstance(self.agent_config, Agent):
+            agent = config
+        else:
+            agent = self.make_agent(config)
         self.world.population.append(agent)  # make world aware of the new agent. necessary for collision handling
         if self.avoid_overlap:
             agent.handle_collisions(self.world, max_attempts=5, nudge_amount=0.4, rng=self.rng, refresh=True)

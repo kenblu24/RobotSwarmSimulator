@@ -48,7 +48,7 @@ Take this example from the :doc:`firstrun` guide:
    world = RectangularWorld(world_config)
    controller = StaticController(output=[0.01, 0])
    agent = MazeAgent(MazeAgentConfig(agent_radius=0.1, controller=controller), world)
-   spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
+   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
    world.spawners.append(spawner)
 
    sim(world)

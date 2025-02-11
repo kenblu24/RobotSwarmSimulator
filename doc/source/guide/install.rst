@@ -14,7 +14,7 @@ Setting up your environment
    You need to do this before creating the virtual environment.
 
 .. important::
-   :fab:`windows` Windows users: please **DO NOT** use Python from the :fab:`microsoft` Windows Store.
+   :fab:`windows` Windows users: please **DO NOT** use Python from the :fab:`microsoft` Microsoft Store.
    Instead, download and install the latest version of Python from the `Python website <https://www.python.org/downloads/>`_.
    Make sure to check the box to add Python to your PATH:
 
@@ -73,15 +73,23 @@ In this example we're in the ``swarms/`` folder.
    :class: sd-width-content-min
    :sync-group: os
 
-   .. tab-item:: Windows
+   .. tab-item:: :fab:`windows` Windows
       :sync: windows
+
+      Make sure you're in the directory where you created the virtual environment, which should
+      contain ``Scripts\\`` and ``Lib\\`` and ``pyvenv.cfg`` among other things. You can see what's
+      in your current folder by typing ``dir`` in the command prompt.
 
       .. code-block:: bat
 
          .\Scripts\activate
 
-   .. tab-item:: Linux / macOS / WSL
+   .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
       :sync: posix
+
+      Make sure you're in the directory where you created the virtual environment, which should
+      have a ``bin/`` and ``lib/`` and ``pyvenv.cfg`` among other things. You can see what's
+      in your current folder by typing ``ls`` in the command prompt.
 
       .. code-block:: bash
 
@@ -93,14 +101,14 @@ You should see the name of your virtual environment in parentheses at the beginn
    :class: sd-width-content-min
    :sync-group: os
 
-   .. tab-item:: Windows
+   .. tab-item:: :fab:`windows` Windows
       :sync: windows
 
       .. code-block:: doscon
 
          (swarms) C:\swarms> 
 
-   .. tab-item:: Linux / macOS / WSL
+   .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
       :sync: posix
 
       .. code-block:: bash
