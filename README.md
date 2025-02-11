@@ -1,9 +1,8 @@
 # Robot Swarm Simulator
 Contributors: Connor Mattson, Jeremy Clark, Daniel S. Brown, Kevin Zhu
 
-## Documentation
+[<img src="https://gist.githubusercontent.com/cxmeel/0dbc95191f239b631c3874f4ccf114e2/raw/documentation.svg" alt="Documentation" height="40" />](https://kenblu24.github.io/RobotSwarmSimulator/)
 
-[Online Documentation](https://kenblu24.github.io/RobotSwarmSimulator/guide/install.html)
 
 ## Setup
 Install RSS with pip
