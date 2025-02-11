@@ -1,8 +1,15 @@
-novel\_swarms.yaml.include
+﻿novel\_swarms.yaml.include
 ==========================
 
 .. automodule:: novel_swarms.yaml.include
 
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      INCLUDE_TAG
+      RELPATH_TAG
    
    .. rubric:: Functions
 

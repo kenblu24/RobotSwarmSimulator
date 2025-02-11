@@ -549,16 +549,81 @@
   <section id="module-novel_swarms.yaml.include">
 <span id="novel-swarms-yaml-include"></span><h1>novel_swarms.yaml.include<a class="headerlink" href="#module-novel_swarms.yaml.include" title="Link to this heading">#</a></h1>
 <p>Handles !include and !relpath tags</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.yaml.include.IncludeLoader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.include.</span></span><span class="sig-name descname"><span class="pre">IncludeLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IO</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/include.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.include.IncludeLoader" title="Link to this definition">#</a></dt>
+<dd><p>YAML Loader with <cite>!include</cite> constructor.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="novel_swarms.yaml.include.search_file">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.include.</span></span><span class="sig-name descname"><span class="pre">search_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">Path</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/include.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.include.search_file" title="Link to this definition">#</a></dt>
+<dd><p>Include file referenced at node.</p>
+<p>resolve order:</p>
+<ol class="arabic simple">
+<li><p>absolute or resolvable/home paths (i.e. ~/foo.yaml)</p></li>
+<li><p>relative to yaml file</p></li>
+<li><p>relative to cwd</p></li>
+</ol>
+<p>see <a class="reference internal" href="../../guide/yaml.html"><span class="doc">Our YAML module</span></a> for an example</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="novel_swarms.yaml.include.construct_include">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.include.</span></span><span class="sig-name descname"><span class="pre">construct_include</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#novel_swarms.yaml.include.IncludeLoader" title="novel_swarms.yaml.include.IncludeLoader"><span class="pre">IncludeLoader</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/include.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.include.construct_include" title="Link to this definition">#</a></dt>
+<dd><p>Read the contents of a yaml/text/json file into a node</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="novel_swarms.yaml.include.construct_relative_path">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.include.</span></span><span class="sig-name descname"><span class="pre">construct_relative_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#novel_swarms.yaml.include.IncludeLoader" title="novel_swarms.yaml.include.IncludeLoader"><span class="pre">IncludeLoader</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/include.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.include.construct_relative_path" title="Link to this definition">#</a></dt>
+<dd><p>Construct a path which is resolved absolutely or relative to the yaml file</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="novel_swarms.yaml.include.INCLUDE_TAG">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.include.</span></span><span class="sig-name descname"><span class="pre">INCLUDE_TAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'!include'</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/include.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.include.INCLUDE_TAG" title="Link to this definition">#</a></dt>
+<dd><p>YAML tag for !include</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="novel_swarms.yaml.include.RELPATH_TAG">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.include.</span></span><span class="sig-name descname"><span class="pre">RELPATH_TAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'!relpath'</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/include.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.include.RELPATH_TAG" title="Link to this definition">#</a></dt>
+<dd><p>YAML tag for !relpath</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.yaml.include.INCLUDE_TAG" title="novel_swarms.yaml.include.INCLUDE_TAG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">INCLUDE_TAG</span></code></a></p></td>
+<td><p>YAML tag for !include</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.yaml.include.RELPATH_TAG" title="novel_swarms.yaml.include.RELPATH_TAG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RELPATH_TAG</span></code></a></p></td>
+<td><p>YAML tag for !relpath</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_include</span></code>(loader, node)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.yaml.include.construct_include" title="novel_swarms.yaml.include.construct_include"><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_include</span></code></a>(loader, node)</p></td>
+<td><p>Read the contents of a yaml/text/json file into a node</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_relative_path</span></code>(loader, node)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.yaml.include.construct_relative_path" title="novel_swarms.yaml.include.construct_relative_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_relative_path</span></code></a>(loader, node)</p></td>
+<td><p>Construct a path which is resolved absolutely or relative to the yaml file</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_file</span></code>(parent_path, path_str)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.yaml.include.search_file" title="novel_swarms.yaml.include.search_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_file</span></code></a>(parent_path, path_str)</p></td>
 <td><p>Include file referenced at node.</p></td>
 </tr>
 </tbody>
@@ -567,7 +632,7 @@
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IncludeLoader</span></code>(stream)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.yaml.include.IncludeLoader" title="novel_swarms.yaml.include.IncludeLoader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IncludeLoader</span></code></a>(stream)</p></td>
 <td><p>YAML Loader with <cite>!include</cite> constructor.</p></td>
 </tr>
 </tbody>
@@ -613,6 +678,23 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.include.IncludeLoader"><code class="docutils literal notranslate"><span class="pre">IncludeLoader</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.include.search_file"><code class="docutils literal notranslate"><span class="pre">search_file()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.include.construct_include"><code class="docutils literal notranslate"><span class="pre">construct_include()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.include.construct_relative_path"><code class="docutils literal notranslate"><span class="pre">construct_relative_path()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.include.INCLUDE_TAG"><code class="docutils literal notranslate"><span class="pre">INCLUDE_TAG</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.include.RELPATH_TAG"><code class="docutils literal notranslate"><span class="pre">RELPATH_TAG</span></code></a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

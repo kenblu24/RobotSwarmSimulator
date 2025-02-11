@@ -392,7 +392,135 @@
                   
   <section id="basic-usage">
 <h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">#</a></h1>
-<p>For your first run after <a class="reference external" href="guide/install">installing RobotSwarmSimulator</a>, you’ll need to install the <code class="docutils literal notranslate"><span class="pre">novel_swarms</span></code> package.</p>
+<p>For your first run after <a class="reference external" href="guide/install">installing RobotSwarmSimulator</a>, let’s walk through some simple examples.</p>
+<section id="your-first-simulation">
+<h2>Your first simulation<a class="headerlink" href="#your-first-simulation" title="Link to this heading">#</a></h2>
+<p>Let’s start with a simple simulation.</p>
+<p>We’ll use the <a class="reference internal" href="../api/_gen/novel_swarms.world.RectangularWorld.html#module-novel_swarms.world.RectangularWorld" title="novel_swarms.world.RectangularWorld"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RectangularWorld</span></code></a> class to create a world with a single agent.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Remember to <a class="reference internal" href="install.html#activate-venv"><span class="std std-ref">activate the virtual environment</span></a> so that you can import <code class="docutils literal notranslate"><span class="pre">novel_swarms</span></code>!</p>
+</div>
+<p>Open a Python shell with <code class="docutils literal notranslate"><span class="pre">python</span></code>, and make sure you can <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">novel_swarms</span></code> with no errors.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">python</span></code></span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-python-console notranslate"><div class="highlight"><pre><span></span><span class="go">Python 3.11.0 (or newer)</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">novel_swarms</span>
+<span class="gp">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<section id="creating-a-world">
+<h3>Creating a <span class="fas fa-earth-americas"></span> world<a class="headerlink" href="#creating-a-world" title="Link to this heading">#</a></h3>
+<p>First, let’s create a world. To do that, we first need to create a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code> object.</p>
+<p>Then, we can create the world by passing the config to the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorld</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span><span class="p">,</span> <span class="n">RectangularWorldConfig</span>
+<span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">time_step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">RectangularWorld</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-an-agent">
+<h3>Creating an <span class="fas fa-user"></span> agent<a class="headerlink" href="#creating-an-agent" title="Link to this heading">#</a></h3>
+<p>We now have a world that we can add things to. Let’s add an agent to it!</p>
+<p>Let’s create the <a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig" title="novel_swarms.agent.MazeAgent.MazeAgentConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">MazeAgentConfig</span></code></a>
+and use it to initialize the <a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent" title="novel_swarms.agent.MazeAgent.MazeAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">MazeAgent</span></code></a> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_config</span> <span class="o">=</span> <span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">agent_config</span><span class="p">,</span> <span class="n">world</span><span class="p">)</span>
+
+<span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>  <span class="c1"># add the agent to the world</span>
+</pre></div>
+</div>
+<p>Notice how we passed the <code class="docutils literal notranslate"><span class="pre">world</span></code> to the agent. This is so that the agent
+has a reference to the world, allowing it to access the world’s properties.</p>
+</section>
+<section id="starting-the-simulation">
+<h3>Starting the <span class="fas fa-arrows-spin"></span> simulation<a class="headerlink" href="#starting-the-simulation" title="Link to this heading">#</a></h3>
+<p>Now that we have something to look at, let’s start the simulation!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.simulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">sim</span>
+<span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You should see a window pop up with a single agent in the center of the world.</p>
+<p>But it’s not doing anything yet. Let’s make it move.
+Stop the simulation by sending <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">C</kbd></kbd> to the terminal.</p>
+</section>
+<section id="adding-a-controller">
+<h3>Adding a <span class="fas fa-gamepad"></span> controller<a class="headerlink" href="#adding-a-controller" title="Link to this heading">#</a></h3>
+<p>Let’s add a controller to the agent. Controllers make the agent move.
+We’ll use the <code class="xref py py-class docutils literal notranslate"><span class="pre">StaticController</span></code> class,
+which sends the same movement signals to the agent every step.
+<a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent" title="novel_swarms.agent.MazeAgent.MazeAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">MazeAgent</span></code></a> takes two movement signals:</p>
+<ol class="arabic simple">
+<li><p>A forwards speed, in in units per second.</p></li>
+<li><p>A turning speed, in radians per second.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.control.StaticController</span><span class="w"> </span><span class="kn">import</span> <span class="n">StaticController</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">StaticController</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>  <span class="c1"># 10 cm/s forwards, 0.1 rad/s clockwise.</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">controller</span>
+
+<span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now the agent should move forwards and turn slowly.</p>
+</section>
+<section id="spawners">
+<h3><span class="fas fa-hands-holding-child"></span> Spawners<a class="headerlink" href="#spawners" title="Link to this heading">#</a></h3>
+<p>But why settle for just one agent? Let’s try spawning a bunch of agents.</p>
+<p>First, we need to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">PointAgentSpawner</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.spawners.AgentSpawner</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointAgentSpawner</span>
+<span class="n">spawner</span> <span class="o">=</span> <span class="n">PointAgentSpawner</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">facing</span><span class="o">=</span><span class="s2">&quot;away&quot;</span><span class="p">,</span> <span class="n">avoid_overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">oneshot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">spawners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spawner</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, remove the existing agent from the <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a> and run the simulation again.</p>
+<p>The spawner will create copies of the agent and controller and add the copies to the world’s population.</p>
+<p>The agents will spawn in the same location, but get pushed apart as they spawn.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># remove the most recently added agent</span>
+<span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Because of the <code class="docutils literal notranslate"><span class="pre">oneshot=True</span></code> argument, the spawner will spawn all its agents once,
+and then delete itself.</p>
+<p>Congrats! You’ve created your first simulation!
+To stop the simulation, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">C</kbd></kbd> in the Python shell,
+and type <code class="docutils literal notranslate"><span class="pre">exit()</span></code> to exit Python (or press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">D</kbd></kbd> or <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Z</kbd></kbd>).</p>
+</section>
+<section id="all-together-now">
+<h3>All together now!<a class="headerlink" href="#all-together-now" title="Link to this heading">#</a></h3>
+<p>Let’s recap what we’ve done so far:</p>
+<ul class="simple">
+<li><p>We created a world with a single agent.</p></li>
+<li><p>We added a controller to the agent.</p></li>
+<li><p>We spawned a bunch of agents.</p></li>
+<li><p>We ran the simulation.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">my_first_simulation.py</span></code></span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span><span class="p">,</span> <span class="n">RectangularWorldConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.control.StaticController</span><span class="w"> </span><span class="kn">import</span> <span class="n">StaticController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.spawners.AgentSpawner</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointAgentSpawner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.MazeAgent</span><span class="w"> </span><span class="kn">import</span> <span class="n">MazeAgent</span><span class="p">,</span> <span class="n">MazeAgentConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.simulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">sim</span>
+
+<span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">time_step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">RectangularWorld</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">StaticController</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                                  <span class="n">controller</span><span class="o">=</span><span class="n">controller</span><span class="p">),</span> <span class="n">world</span><span class="p">)</span>
+<span class="n">spawner</span> <span class="o">=</span> <span class="n">PointAgentSpawner</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">facing</span><span class="o">=</span><span class="s2">&quot;away&quot;</span><span class="p">,</span> <span class="n">avoid_overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">oneshot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">spawners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spawner</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
 </section>
 
 
@@ -433,6 +561,26 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-first-simulation">Your first simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-world">Creating a <span class="fas fa-earth-americas"></span> world</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-an-agent">Creating an <span class="fas fa-user"></span> agent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#starting-the-simulation">Starting the <span class="fas fa-arrows-spin"></span> simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-controller">Adding a <span class="fas fa-gamepad"></span> controller</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spawners"><span class="fas fa-hands-holding-child"></span> Spawners</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#all-together-now">All together now!</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

@@ -548,10 +548,106 @@
                   
   <section id="module-novel_swarms.yaml.np_representer">
 <span id="novel-swarms-yaml-np-representer"></span><h1>novel_swarms.yaml.np_representer<a class="headerlink" href="#module-novel_swarms.yaml.np_representer" title="Link to this heading">#</a></h1>
+<p>Provides a slightly more human-readable YAML representer for numpy arrays.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="novel_swarms.yaml.np_representer.represent_ndarray">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.np_representer.</span></span><span class="sig-name descname"><span class="pre">represent_ndarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dumper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dumper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/np_representer.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.np_representer.represent_ndarray" title="Link to this definition">#</a></dt>
+<dd><p>For small arrays, return a more human-readable representation.</p>
+<p>For large arrays, return the default representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dumper</strong> (<em>yaml.Dumper</em>)</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either a YAML sequence or mapping node.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node</p>
+</dd>
+</dl>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<p>For vectors and small matrices, we show the array as a sequence.
+This representation is used if:</p>
+<ul class="simple">
+<li><p>The array is a vector with <code class="docutils literal notranslate"><span class="pre">len(array)</span> <span class="pre">&lt;</span> <span class="pre">11</span></code></p></li>
+<li><p>The array is a 2D matrix with fewer than 9 elements</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">novel_swarms.yaml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">novel_swarms</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">({</span>
+<span class="go">        &#39;small_array&#39;: np.array([8, 8]),</span>
+<span class="go">        &#39;big_array&#39;: np.ones((3, 3)),</span>
+<span class="go">        &#39;very_big_array&#39;: np.ones((10, 10)),</span>
+<span class="go">    }, sys.stdout)</span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">big_array</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/object/apply:numpy.array</span>
+<span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/tuple</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]]</span>
+<span class="nt">kwargs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float64</span>
+<span class="nt">small_array</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/object/apply:numpy.array</span>
+<span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/tuple</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">- 8</span>
+<span class="nt">kwargs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int64</span>
+<span class="nt">very_big_array</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/object/apply:numpy._core.multiarray._reconstruct</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!!python/name:numpy.ndarray</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!!python/tuple</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!!binary</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">Yg==</span>
+<span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/tuple</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!!python/tuple</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!!python/object/apply:numpy.dtype</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">f8</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="kt">!!python/tuple</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!!binary</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8A</span>
+<span class="w">    </span><span class="no">AAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAA</span>
+<span class="w">    </span><span class="no">AAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAA</span>
+<span class="w">    </span><span class="no">AAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAA</span>
+<span class="w">    </span><span class="no">AADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAA</span>
+<span class="w">    </span><span class="no">APA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA</span>
+<span class="w">    </span><span class="no">8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADw</span>
+<span class="w">    </span><span class="no">PwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/</span>
+<span class="w">    </span><span class="no">AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8A</span>
+<span class="w">    </span><span class="no">AAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAA</span>
+<span class="w">    </span><span class="no">AAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAA</span>
+<span class="w">    </span><span class="no">AAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAA</span>
+<span class="w">    </span><span class="no">AADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAA</span>
+<span class="w">    </span><span class="no">APA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8AAAAAAADwPwAAAAAAAPA/AAAAAAAA</span>
+<span class="w">    </span><span class="no">8D8=</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">represent_ndarray</span></code>(dumper, data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.yaml.np_representer.represent_ndarray" title="novel_swarms.yaml.np_representer.represent_ndarray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">represent_ndarray</span></code></a>(dumper, data)</p></td>
 <td><p>For small arrays, return a more human-readable representation.</p></td>
 </tr>
 </tbody>
@@ -597,6 +693,18 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.np_representer.represent_ndarray"><code class="docutils literal notranslate"><span class="pre">represent_ndarray()</span></code></a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
