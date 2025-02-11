@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -50,11 +51,12 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Config Registry" href="config_store_api.html" />
+    <link rel="next" title="novel_swarms" href="_gen/novel_swarms.html" />
     <link rel="prev" title="Our YAML module" href="../guide/yaml.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -317,16 +319,6 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="config_store_api.html">Config Registry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="_gen/novel_swarms.config.html">novel_swarms.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="_gen/novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_gen/novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
-</ul>
-</details></li>
-</ul>
-</details></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="_gen/novel_swarms.html">novel_swarms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="_gen/novel_swarms.agent.html">novel_swarms.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="_gen/novel_swarms.agent.Agent.html">novel_swarms.agent.Agent</a></li>
@@ -548,10 +540,134 @@
   <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h1>
 <p>This is the API reference for the <a class="reference internal" href="_gen/novel_swarms.html#module-novel_swarms" title="novel_swarms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">novel_swarms</span></code></a> package.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="config_store_api.html">Config Registry</a></li>
-</ul>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-earth-americas"></span> The World</div>
+<p class="sd-card-text">The <a class="reference internal" href="_gen/novel_swarms.world.html#module-novel_swarms.world" title="novel_swarms.world"><code class="xref py py-mod docutils literal notranslate"><span class="pre">world</span></code></a> contains all the objects that will be simulated.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-users-viewfinder"></span> Population</div>
+<p class="sd-card-text">The <a class="reference internal" href="_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a> is the collection of agents in the world.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-user"></span> Agent</div>
+<p class="sd-card-text">An <a class="reference internal" href="_gen/novel_swarms.agent.html#module-novel_swarms.agent" title="novel_swarms.agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code></a> is an object that exists in the world and has volition.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-compass"></span> Sensor</div>
+<p class="sd-card-text">An agent can have <a class="reference internal" href="_gen/novel_swarms.sensors.html#module-novel_swarms.sensors" title="novel_swarms.sensors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensors</span></code></a> which distill information from the world
+into observations for the agent to use on each <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-gamepad"></span> Controller</div>
+<p class="sd-card-text">Each agent has a <a class="reference internal" href="_gen/novel_swarms.agent.control.html#module-novel_swarms.agent.control" title="novel_swarms.agent.control"><code class="xref py py-mod docutils literal notranslate"><span class="pre">control</span></code></a>ler that
+can control the agent’s movement and act based on the sensor information
+each <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-users"></span> Agent</div>
+<p class="sd-card-text">A <a class="reference internal" href="_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a> often has multiple agents, each of
+which can have a different type, controller, or set of sensors.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-draw-polygon"></span>  World Objects (props)</div>
+<p class="sd-card-text"><a class="reference internal" href="_gen/novel_swarms.world.objects.html#module-novel_swarms.world.objects" title="novel_swarms.world.objects"><code class="xref py py-mod docutils literal notranslate"><span class="pre">objects</span></code></a> are a special type of agent that are not part of the population.
+It is used to represent objects in the world that are not agents, such as walls, props, and triggers.
+They are stored in the world’s <a class="reference internal" href="_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.objects" title="novel_swarms.world.World.World.objects"><code class="xref py py-attr docutils literal notranslate"><span class="pre">objects</span></code></a> list.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-hands-holding-child"></span> Spawners</div>
+<p class="sd-card-text"><a class="reference internal" href="_gen/novel_swarms.world.spawners.html#module-novel_swarms.world.spawners" title="novel_swarms.world.spawners"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spawners</span></code></a> can create new agents and
+add them to the <a class="reference internal" href="_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a>.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-ruler-combined"></span> Metrics</div>
+<p class="sd-card-text">A world can have one or more <a class="reference internal" href="_gen/novel_swarms.metrics.html#module-novel_swarms.metrics" title="novel_swarms.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code></a> which reduce the state
+of the world. They can describe the behavior of the agents and are useful for
+quantifying or training global behaviors.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-cart-plus"></span> Subscribers</div>
+<p class="sd-card-text">A world can have <a class="reference internal" href="_gen/novel_swarms.world.subscribers.html#module-novel_swarms.world.subscribers" title="novel_swarms.world.subscribers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">subscribers</span></code></a> which allow user-defined
+hooks to run each <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 sd-pt-0 sd-pb-0 sd-pl-0 sd-pr-0 docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+config</div>
+<p class="sd-card-text">The <a class="reference internal" href="_gen/novel_swarms.config.html#module-novel_swarms.config" title="novel_swarms.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config</span></code></a> module houses the initialization machinery and class registry.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+yaml</div>
+<p class="sd-card-text">The <a class="reference internal" href="_gen/novel_swarms.yaml.html#module-novel_swarms.yaml" title="novel_swarms.yaml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code></a> module provides additional functionality on top of PyYAML’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code> module.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+util</div>
+<p class="sd-card-text">The <a class="reference internal" href="_gen/novel_swarms.util.html#module-novel_swarms.util" title="novel_swarms.util"><code class="xref py py-mod docutils literal notranslate"><span class="pre">util</span></code></a> module contains miscellaneous utility functions.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+gui</div>
+<p class="sd-card-text">The <a class="reference internal" href="_gen/novel_swarms.gui.html#module-novel_swarms.gui" title="novel_swarms.gui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gui</span></code></a> module contains user interface
+and other display code not related to the world simulation.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
@@ -583,11 +699,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="config_store_api.html"
+       href="_gen/novel_swarms.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Config Registry</p>
+        <p class="prev-next-title">novel_swarms</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -606,7 +722,7 @@
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/api/index.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/api/index.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -676,6 +792,11 @@
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>

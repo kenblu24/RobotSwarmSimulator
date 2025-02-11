@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -54,6 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -388,12 +390,8 @@ and uses <strong>SSH URLs</strong> for git. External contributors should fork th
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>This guide assumes you’re using a Unix-like operating system, such as <span class="fab fa-linux"></span> Linux or <span class="fab fa-apple"></span> macOS.
-If you’re on <span class="fab fa-windows"></span> Windows, please use WSL :ref: <cite>WSL Installation</cite> and then follow this guide
-as if you were on Linux (because you are). Then, see <span class="xref std std-ref">WSL Installation</span> for further setup.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Add instructions for WSL post-installation</p>
-</div>
+If you’re on <span class="fab fa-windows"></span> Windows, please use WSL <a class="reference internal" href="../guide/install-wsl.html"><span class="doc">Installing Windows Subsystem for Linux</span></a> and then follow this guide
+as if you were on Linux (because you are). Then, see <a class="reference internal" href="../guide/install-wsl.html#wsl-post-install"><span class="std std-ref">Post-Installation</span></a> for further setup.</p>
 </div>
 <section id="installing-git">
 <h2>Installing git<a class="headerlink" href="#installing-git" title="Link to this heading">#</a></h2>
@@ -406,8 +404,8 @@ as if you were on Linux (because you are). Then, see <span class="xref std std-r
 <p>This guide uses SSH URLs for git. You’ll need to have an SSH key set up and added to your GitHub account
 to clone, pull, or push to/from the remote repository.
 If you don’t have an SSH key on your system, you’ll need to generate one.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">“Check if you have an SSH key already”</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">“Check if you have an SSH key already”</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>-A<span class="w"> </span>~/.ssh
 <span class="go">id_rsa  id_rsa.pub  known_hosts</span>
 </pre></div>
@@ -420,8 +418,8 @@ If you don’t, you’ll need to generate a new SSH key.</p>
 <p>Be aware that existing SSH keys may be used by other applications. If you delete or overwrite an existing key,
 you may need to re-add it wherever it was used.</p>
 </div>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Generate a new SSH key</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Generate a new SSH key</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh-keygen
 </pre></div>
 </div>
@@ -437,8 +435,8 @@ Make sure to give the key a descriptive title; you won’t be able to change it 
 to install <span class="fab fa-python"></span> Python 3.11 or later.</p>
 <p>This allows you to install any Python version you want, without affecting your system Python installation.
 See the <a class="reference external" href="https://github.com/pyenv/pyenv#installation">pyenv installation instructions</a>.</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Install &amp; switch to Python&gt;=3.11</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Install &amp; switch to Python&gt;=3.11</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.13
 pyenv<span class="w"> </span>global<span class="w"> </span><span class="m">3</span>.13
 </pre></div>
@@ -446,8 +444,8 @@ pyenv<span class="w"> </span>global<span class="w"> </span><span class="m">3</sp
 </div>
 <p>Then, make sure we’re actually using the right version of Python.
 You should see something similar to this:</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">Check the python version and make sure <code class="docutils literal notranslate"><span class="pre">_ctypes</span></code> is available</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Check the python version and make sure <code class="docutils literal notranslate"><span class="pre">_ctypes</span></code> is available</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>which<span class="w"> </span>python
 <span class="go">/home/username/.pyenv/shims/python</span>
 <span class="gp">$ </span>python<span class="w"> </span>--version
@@ -473,8 +471,8 @@ will use whatever version of Python it finds when you run it. Running <code clas
 <h2>Downloading &amp; Installing as editable<a class="headerlink" href="#downloading-installing-as-editable" title="Link to this heading">#</a></h2>
 <p>First, let’s make a project folder and <strong>virtual environment</strong>. Pick a place
 to store your virtual environment. In this example, we’ll use the <code class="docutils literal notranslate"><span class="pre">swarm/</span></code> folder.</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Make a project folder and virtual environment</span><a class="headerlink" href="#id6" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Make a project folder and virtual environment</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>swarm
 <span class="nb">cd</span><span class="w"> </span>swarm
 pip<span class="w"> </span>install<span class="w"> </span>virtualenv
@@ -483,27 +481,28 @@ virtualenv<span class="w"> </span>.
 </div>
 </div>
 <p>Then, let’s <cite>git clone</cite> the RobotSwarmSimulator repository.</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">git clone the RobotSwarmSimulator repository and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into it</span><a class="headerlink" href="#id7" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">git clone the RobotSwarmSimulator repository and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into it</span><a class="headerlink" href="#id6" title="Link to this code">#</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:kenblu24/RobotSwarmSimulator.git
 <span class="nb">cd</span><span class="w"> </span>RobotSwarmSimulator
 </pre></div>
 </div>
 </div>
 <p>A <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">--editable</span></code> install allows you to make changes to the code and see the effects immediately.</p>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
 <summary class="sd-summary-title sd-card-header sd-bg-secondary sd-bg-text-secondary">
 <span class="sd-summary-text">Install UV for faster installs</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <p class="sd-card-text">You can preface most <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> commands with <code class="docutils literal notranslate"><span class="pre">uv</span></code> for <em>much</em> faster installation.</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Install <code class="docutils literal notranslate"><span class="pre">uv</span></code> &lt;<a class="github reference external" href="https://github.com/pyuv/uv">pyuv/uv</a>&gt; for faster installs</span><a class="headerlink" href="#id8" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Install <code class="docutils literal notranslate"><span class="pre">uv</span></code> &lt;<a class="github reference external" href="https://github.com/pyuv/uv">pyuv/uv</a>&gt; for faster installs</span><a class="headerlink" href="#id7" title="Link to this code">#</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>uv
 </pre></div>
 </div>
 </div>
 <p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span></code> may not work for some packages. If you get an error, try using regular <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> first.</p>
 </div>
-</details><div class="sd-tab-set sd-width-content-min docutils">
+</details><p>It’s finally time to install RobotSwarmSimulator into our virtual environment:</p>
+<div class="sd-tab-set sd-width-content-min docutils">
 <input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
 <label class="sd-tab-label" data-sync-group="uv" data-sync-id="uv" for="sd-tab-item-0">
 uv</label><div class="sd-tab-content docutils">
@@ -519,20 +518,22 @@ pip</label><div class="sd-tab-content docutils">
 </div>
 </div>
 </div>
-<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
-<div class="sd-card-header docutils">
-<p class="sd-card-text">Check if it’s installed</p>
-</div>
-<div class="sd-card-body docutils">
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id9" title="Link to this code">#</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">novel_swarms</span>
+<p>If the installation was successful, you should be able to open a <code class="docutils literal notranslate"><span class="pre">python</span></code> shell and import the package:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">python</span></code></span><a class="headerlink" href="#id8" title="Link to this code">#</a></div>
+<div class="highlight-python-console notranslate"><div class="highlight"><pre><span></span><span class="go">Python 3.11.0 (or newer)</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">novel_swarms</span>
 <span class="gp">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
+<div class="sd-card sd-sphinx-override sd-m-3 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Finished installing? Check out the <a class="reference internal" href="../guide/firstrun.html"><span class="doc">Basic Usage</span></a> tutorial.  <span class="fas fa-circle-chevron-right float-right font-size-1_7em"></span></p>
 </div>
-</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="../guide/firstrun.html"><span class="doc">First Run Tutorial</span></a></div>
 </section>
 </section>
 
@@ -585,7 +586,7 @@ pip</label><div class="sd-tab-content docutils">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/devel/install.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/devel/install.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -655,6 +656,11 @@ pip</label><div class="sd-tab-content docutils">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>

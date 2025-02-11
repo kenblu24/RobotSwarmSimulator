@@ -8,3 +8,4 @@ User Guide
    firstrun
    structure
    config
+   

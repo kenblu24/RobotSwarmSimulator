@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -55,6 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -316,17 +318,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../config_store_api.html">Config Registry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.config.html">novel_swarms.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
-<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
-</ul>
-</details></li>
-</ul>
-</details></li>
-</ul>
-<ul class="current nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="novel_swarms.html">novel_swarms</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="novel_swarms.agent.html">novel_swarms.agent</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">novel_swarms.agent.Agent</a></li>
@@ -556,13 +548,481 @@
                   
   <section id="module-novel_swarms.agent.Agent">
 <span id="novel-swarms-agent-agent"></span><h1>novel_swarms.agent.Agent<a class="headerlink" href="#module-novel_swarms.agent.Agent" title="Link to this heading">#</a></h1>
+<p>Base Agent Config and Class to be inherited by all agents.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.agent.Agent.</span></span><span class="sig-name descname"><span class="pre">BaseAgentConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position:</span> <span class="pre">tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...]</span> <span class="pre">|</span> <span class="pre">numpy.ndarray</span> <span class="pre">=</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle:</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">typing.Any</span> <span class="pre">=</span> <span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">typing.Any</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controller:</span> <span class="pre">typing.Any</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grounded:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collides:</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensors:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>controller</strong></dt><dd></dd>
+<dt><strong>name</strong></dt><dd></dd>
+<dt><strong>team</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>as_config_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>as_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>as_generator</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>asdict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>from_dict</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.angle" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.as_config_dict">
+<span class="sig-name descname"><span class="pre">as_config_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.as_config_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.as_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.as_generator">
+<span class="sig-name descname"><span class="pre">as_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.as_generator" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.asdict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.collides">
+<span class="sig-name descname"><span class="pre">collides</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.collides" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.controller">
+<span class="sig-name descname"><span class="pre">controller</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.controller" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.from_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.grounded">
+<span class="sig-name descname"><span class="pre">grounded</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.grounded" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">0)</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.position" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.sensors">
+<span class="sig-name descname"><span class="pre">sensors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.sensors" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.BaseAgentConfig.team">
+<span class="sig-name descname"><span class="pre">team</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.BaseAgentConfig.team" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.agent.Agent.</span></span><span class="sig-name descname"><span class="pre">Agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.position" title="novel_swarms.agent.Agent.Agent.position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">position</span></code></a></dt><dd><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.pos" title="novel_swarms.agent.Agent.Agent.pos"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pos</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.from_config" title="novel_swarms.agent.Agent.Agent.from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_config</span></code></a>(config, world)</p></td>
+<td><p>Returns a new agent instance from the given config and world.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.getPosition" title="novel_swarms.agent.Agent.Agent.getPosition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPosition</span></code></a>()</p></td>
+<td><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.pos" title="novel_swarms.agent.Agent.Agent.pos"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pos</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.getVelocity" title="novel_swarms.agent.Agent.Agent.getVelocity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getVelocity</span></code></a>()</p></td>
+<td><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.dpos" title="novel_swarms.agent.Agent.Agent.dpos"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dpos</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.get_aabb" title="novel_swarms.agent.Agent.Agent.get_aabb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_aabb</span></code></a>()</p></td>
+<td><p>Get the agent's <a class="reference internal" href="novel_swarms.util.collider.AABB.html#module-novel_swarms.util.collider.AABB" title="novel_swarms.util.collider.AABB"><code class="xref py py-class docutils literal notranslate"><span class="pre">AABB</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.get_sensors" title="novel_swarms.agent.Agent.Agent.get_sensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sensors</span></code></a>()</p></td>
+<td><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.sensors" title="novel_swarms.agent.Agent.Agent.sensors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensors</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.orientation_uvec" title="novel_swarms.agent.Agent.Agent.orientation_uvec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orientation_uvec</span></code></a>([offset])</p></td>
+<td><p>Returns the agent's 2D orientation matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.set_heading" title="novel_swarms.agent.Agent.Agent.set_heading"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_heading</span></code></a>(new_heading)</p></td>
+<td><p>Set the agent's heading (radians).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.set_name" title="novel_swarms.agent.Agent.Agent.set_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_name</span></code></a>(new_name)</p></td>
+<td><p>Set the name of the agent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.set_pos_vec" title="novel_swarms.agent.Agent.Agent.set_pos_vec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_pos_vec</span></code></a>(vec)</p></td>
+<td><p>Set the <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, and <code class="docutils literal notranslate"><span class="pre">angle</span></code> of the agent.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.setup_controller_from_config" title="novel_swarms.agent.Agent.Agent.setup_controller_from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_controller_from_config</span></code></a>()</p></td>
+<td><p>Creates and adds the <code class="xref py py-attr docutils literal notranslate"><span class="pre">AgentConfig.controller</span></code> to the agent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent.setup_sensors_from_config" title="novel_swarms.agent.Agent.Agent.setup_sensors_from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_sensors_from_config</span></code></a>()</p></td>
+<td><p>Creates and adds sensors from the <code class="xref py py-attr docutils literal notranslate"><span class="pre">AgentConfig.sensors</span></code> to the agent.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>attach_agent_to_sensors</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>draw</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>getFrontalPoint</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_heading</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_name</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_x_pos</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_y_pos</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>on_key_press</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>set_x_pos</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>set_y_pos</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>step</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.aabb">
+<span class="sig-name descname"><span class="pre">aabb</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.aabb" title="Link to this definition">#</a></dt>
+<dd><p>The agent’s <a class="reference internal" href="novel_swarms.util.collider.AABB.html#module-novel_swarms.util.collider.AABB" title="novel_swarms.util.collider.AABB"><code class="xref py py-class docutils literal notranslate"><span class="pre">AABB</span></code></a>.
+This gets built at least once on init.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.angle" title="Link to this definition">#</a></dt>
+<dd><p>Agent’s heading in radians. 0 is facing frame right.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.attach_agent_to_sensors">
+<span class="sig-name descname"><span class="pre">attach_agent_to_sensors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.attach_agent_to_sensors" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.collides">
+<span class="sig-name descname"><span class="pre">collides</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.collides" title="Link to this definition">#</a></dt>
+<dd><p>If True, the agent should be solid.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.collision_flag">
+<span class="sig-name descname"><span class="pre">collision_flag</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.collision_flag" title="Link to this definition">#</a></dt>
+<dd><p>Colliders should set to True if a collision was detected.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.config" title="Link to this definition">#</a></dt>
+<dd><p>Agent config.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.controller">
+<span class="sig-name descname"><span class="pre">controller</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.controller" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference internal" href="novel_swarms.agent.control.Controller.html#module-novel_swarms.agent.control.Controller" title="novel_swarms.agent.control.Controller"><code class="xref py py-class docutils literal notranslate"><span class="pre">Controller</span></code></a> for this agent.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.dpos">
+<span class="sig-name descname"><span class="pre">dpos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.dpos" title="Link to this definition">#</a></dt>
+<dd><p>Change in position since last step</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">((0,</span> <span class="pre">0),</span> <span class="pre">1.0)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.draw" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.dtheta">
+<span class="sig-name descname"><span class="pre">dtheta</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.dtheta" title="Link to this definition">#</a></dt>
+<dd><p>Change in heading since last step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.from_config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.from_config" title="Link to this definition">#</a></dt>
+<dd><p>Returns a new agent instance from the given config and world.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>AgentConfig</em>) – The config to create the agent from.</p></li>
+<li><p><strong>world</strong> (<a class="reference internal" href="novel_swarms.world.World.html#novel_swarms.world.World.World" title="novel_swarms.world.World.World"><em>World</em></a>) – This provides a back-reference to the world instance for the new agent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new agent has the same type as the class/instance it was called from.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent">Agent</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.getFrontalPoint">
+<span class="sig-name descname"><span class="pre">getFrontalPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.getFrontalPoint" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.getPosition">
+<span class="sig-name descname"><span class="pre">getPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.getPosition" title="Link to this definition">#</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.pos" title="novel_swarms.agent.Agent.Agent.pos"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pos</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.getVelocity">
+<span class="sig-name descname"><span class="pre">getVelocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.getVelocity" title="Link to this definition">#</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.dpos" title="novel_swarms.agent.Agent.Agent.dpos"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dpos</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.get_aabb">
+<span class="sig-name descname"><span class="pre">get_aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AABB</span></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.get_aabb" title="Link to this definition">#</a></dt>
+<dd><p>Get the agent’s <a class="reference internal" href="novel_swarms.util.collider.AABB.html#module-novel_swarms.util.collider.AABB" title="novel_swarms.util.collider.AABB"><code class="xref py py-class docutils literal notranslate"><span class="pre">AABB</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.get_heading">
+<span class="sig-name descname"><span class="pre">get_heading</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.get_heading" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.get_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.get_sensors">
+<span class="sig-name descname"><span class="pre">get_sensors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.get_sensors" title="Link to this definition">#</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.sensors" title="novel_swarms.agent.Agent.Agent.sensors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensors</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.get_x_pos">
+<span class="sig-name descname"><span class="pre">get_x_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.get_x_pos" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.get_y_pos">
+<span class="sig-name descname"><span class="pre">get_y_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.get_y_pos" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.grounded">
+<span class="sig-name descname"><span class="pre">grounded</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.grounded" title="Link to this definition">#</a></dt>
+<dd><p>If True, the agent should never change position or be pushed during collision resolution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.name" title="Link to this definition">#</a></dt>
+<dd><p>Agent’s name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.on_key_press">
+<span class="sig-name descname"><span class="pre">on_key_press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.on_key_press" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.orientation_uvec">
+<span class="sig-name descname"><span class="pre">orientation_uvec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.orientation_uvec" title="Link to this definition">#</a></dt>
+<dd><p>Returns the agent’s 2D orientation matrix.</p>
+<p>This is a unit vector pointing in the direction of the agent’s
+heading plus an offset.</p>
+<p>Equivalent to</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">+</span> <span class="n">offset</span><span class="p">),</span>
+    <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=0</em>) – The offset to add to the agent’s heading (radians).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The 2D orientation matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)">numpy.ndarray</a> (2,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.pos">
+<span class="sig-name descname"><span class="pre">pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.pos" title="Link to this definition">#</a></dt>
+<dd><p>Agent’s position in the world.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.position" title="Link to this definition">#</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.pos" title="novel_swarms.agent.Agent.Agent.pos"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pos</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.sensors">
+<span class="sig-name descname"><span class="pre">sensors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.sensors" title="Link to this definition">#</a></dt>
+<dd><p>List of this agent’s sensors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.set_heading">
+<span class="sig-name descname"><span class="pre">set_heading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_heading</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.set_heading" title="Link to this definition">#</a></dt>
+<dd><p>Set the agent’s heading (radians).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.set_name">
+<span class="sig-name descname"><span class="pre">set_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.set_name" title="Link to this definition">#</a></dt>
+<dd><p>Set the name of the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em><em> | </em><em>Any</em>) – The new name of the agent. Strongly recommended to use <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.set_pos_vec">
+<span class="sig-name descname"><span class="pre">set_pos_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.set_pos_vec" title="Link to this definition">#</a></dt>
+<dd><p>Set the <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, and <code class="docutils literal notranslate"><span class="pre">angle</span></code> of the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>] </em><em>| </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><em>numpy.ndarray</em></a>) – A vector with <code class="docutils literal notranslate"><span class="pre">len()</span></code> of <code class="docutils literal notranslate"><span class="pre">3</span></code> containing the <code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">angle</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.set_x_pos">
+<span class="sig-name descname"><span class="pre">set_x_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.set_x_pos" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.set_y_pos">
+<span class="sig-name descname"><span class="pre">set_y_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.set_y_pos" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.setup_controller_from_config">
+<span class="sig-name descname"><span class="pre">setup_controller_from_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.setup_controller_from_config" title="Link to this definition">#</a></dt>
+<dd><p>Creates and adds the <code class="xref py py-attr docutils literal notranslate"><span class="pre">AgentConfig.controller</span></code> to the agent.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">config.controller</span></code> is a dict with a <code class="docutils literal notranslate"><span class="pre">type</span></code> key, then it is created
+through the <a class="reference internal" href="../../guide/config.html"><span class="doc">Configuration System</span></a> and set as the agent’s <a class="reference internal" href="#novel_swarms.agent.Agent.Agent.controller" title="novel_swarms.agent.Agent.Agent.controller"><code class="xref py py-attr docutils literal notranslate"><span class="pre">controller</span></code></a>.
+<a class="reference internal" href="novel_swarms.agent.control.AbstractController.html#module-novel_swarms.agent.control.AbstractController" title="novel_swarms.agent.control.AbstractController"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractController</span></code></a> instances copied and added to the list.</p>
+<p>The controller is also given a back-reference to this agent via its
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_agent()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><strong>TypeError</strong></a> – if the <code class="docutils literal notranslate"><span class="pre">element</span></code> is not a dict or <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSensor</span></code> instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.setup_sensors_from_config">
+<span class="sig-name descname"><span class="pre">setup_sensors_from_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.setup_sensors_from_config" title="Link to this definition">#</a></dt>
+<dd><p>Creates and adds sensors from the <code class="xref py py-attr docutils literal notranslate"><span class="pre">AgentConfig.sensors</span></code> to the agent.</p>
+<p>For each <code class="docutils literal notranslate"><span class="pre">element</span></code> of <code class="docutils literal notranslate"><span class="pre">config.sensors</span></code>, if the <code class="docutils literal notranslate"><span class="pre">element</span></code> is a
+dict with a <code class="docutils literal notranslate"><span class="pre">type</span></code> key, then it is created through the <a class="reference internal" href="../../guide/config.html"><span class="doc">Configuration System</span></a>
+and then added to the agent’s <code class="docutils literal notranslate"><span class="pre">sensors</span></code> list. <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSensor</span></code> instances
+copied and added to the list.</p>
+<p>The new sensor instances are also given a back-reference to this agent via their
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_agent()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><strong>TypeError</strong></a> – if the <code class="docutils literal notranslate"><span class="pre">element</span></code> is not a dict or <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSensor</span></code> instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.step" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.team">
+<span class="sig-name descname"><span class="pre">team</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.team" title="Link to this definition">#</a></dt>
+<dd><p>The agent’s team.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.agent.Agent.Agent.world">
+<span class="sig-name descname"><span class="pre">world</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/agent/Agent.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.agent.Agent.Agent.world" title="Link to this definition">#</a></dt>
+<dd><p>Back-reference to the world instance.</p>
+</dd></dl>
+
+</dd></dl>
+
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Agent</span></code>(config, world[, name, group, initialize])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Agent</span></code></a>(config, world[, name, group, initialize])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseAgentConfig</span></code>(position, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.agent.Agent.BaseAgentConfig" title="novel_swarms.agent.Agent.BaseAgentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseAgentConfig</span></code></a>(position, ...)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -610,10 +1070,77 @@
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.angle"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.angle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.as_config_dict"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.as_config_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.as_dict"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.as_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.as_generator"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.as_generator()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.asdict"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.collides"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.collides</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.controller"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.controller</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.grounded"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.grounded</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.name"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.position"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.position</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.sensors"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.sensors</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.BaseAgentConfig.team"><code class="docutils literal notranslate"><span class="pre">BaseAgentConfig.team</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent"><code class="docutils literal notranslate"><span class="pre">Agent</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.aabb"><code class="docutils literal notranslate"><span class="pre">Agent.aabb</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.angle"><code class="docutils literal notranslate"><span class="pre">Agent.angle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.attach_agent_to_sensors"><code class="docutils literal notranslate"><span class="pre">Agent.attach_agent_to_sensors()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.collides"><code class="docutils literal notranslate"><span class="pre">Agent.collides</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.collision_flag"><code class="docutils literal notranslate"><span class="pre">Agent.collision_flag</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.config"><code class="docutils literal notranslate"><span class="pre">Agent.config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.controller"><code class="docutils literal notranslate"><span class="pre">Agent.controller</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.dpos"><code class="docutils literal notranslate"><span class="pre">Agent.dpos</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.draw"><code class="docutils literal notranslate"><span class="pre">Agent.draw()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.dtheta"><code class="docutils literal notranslate"><span class="pre">Agent.dtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.from_config"><code class="docutils literal notranslate"><span class="pre">Agent.from_config()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.getFrontalPoint"><code class="docutils literal notranslate"><span class="pre">Agent.getFrontalPoint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.getPosition"><code class="docutils literal notranslate"><span class="pre">Agent.getPosition()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.getVelocity"><code class="docutils literal notranslate"><span class="pre">Agent.getVelocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.get_aabb"><code class="docutils literal notranslate"><span class="pre">Agent.get_aabb()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.get_heading"><code class="docutils literal notranslate"><span class="pre">Agent.get_heading()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.get_name"><code class="docutils literal notranslate"><span class="pre">Agent.get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.get_sensors"><code class="docutils literal notranslate"><span class="pre">Agent.get_sensors()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.get_x_pos"><code class="docutils literal notranslate"><span class="pre">Agent.get_x_pos()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.get_y_pos"><code class="docutils literal notranslate"><span class="pre">Agent.get_y_pos()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.grounded"><code class="docutils literal notranslate"><span class="pre">Agent.grounded</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.name"><code class="docutils literal notranslate"><span class="pre">Agent.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.on_key_press"><code class="docutils literal notranslate"><span class="pre">Agent.on_key_press()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.orientation_uvec"><code class="docutils literal notranslate"><span class="pre">Agent.orientation_uvec()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.pos"><code class="docutils literal notranslate"><span class="pre">Agent.pos</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.position"><code class="docutils literal notranslate"><span class="pre">Agent.position</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.sensors"><code class="docutils literal notranslate"><span class="pre">Agent.sensors</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.set_heading"><code class="docutils literal notranslate"><span class="pre">Agent.set_heading()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.set_name"><code class="docutils literal notranslate"><span class="pre">Agent.set_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.set_pos_vec"><code class="docutils literal notranslate"><span class="pre">Agent.set_pos_vec()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.set_x_pos"><code class="docutils literal notranslate"><span class="pre">Agent.set_x_pos()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.set_y_pos"><code class="docutils literal notranslate"><span class="pre">Agent.set_y_pos()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.setup_controller_from_config"><code class="docutils literal notranslate"><span class="pre">Agent.setup_controller_from_config()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.setup_sensors_from_config"><code class="docutils literal notranslate"><span class="pre">Agent.setup_sensors_from_config()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.step"><code class="docutils literal notranslate"><span class="pre">Agent.step()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.team"><code class="docutils literal notranslate"><span class="pre">Agent.team</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.agent.Agent.Agent.world"><code class="docutils literal notranslate"><span class="pre">Agent.world</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/api/_gen/novel_swarms.agent.Agent.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/api/_gen/novel_swarms.agent.Agent.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -683,6 +1210,11 @@
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>

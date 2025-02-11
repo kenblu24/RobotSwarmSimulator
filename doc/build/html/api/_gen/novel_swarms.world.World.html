@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -55,6 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -316,17 +318,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../config_store_api.html">Config Registry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.config.html">novel_swarms.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
-<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
-</ul>
-</details></li>
-</ul>
-</details></li>
-</ul>
-<ul class="current nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="novel_swarms.html">novel_swarms</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.agent.html">novel_swarms.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.Agent.html">novel_swarms.agent.Agent</a></li>
@@ -556,11 +548,284 @@
                   
   <section id="module-novel_swarms.world.World">
 <span id="novel-swarms-world-world"></span><h1>novel_swarms.world.World<a class="headerlink" href="#module-novel_swarms.world.World" title="Link to this heading">#</a></h1>
+<p>Base world class.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../guide/structure.html"><span class="doc">Structure of RobotSwarmSimulator</span></a></p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.world.World.</span></span><span class="sig-name descname"><span class="pre">AbstractWorldConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size:</span> <span class="pre">tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...]</span> <span class="pre">|</span> <span class="pre">numpy.ndarray</span> <span class="pre">=</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agents:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spawners:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goals:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_at:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">collections.abc.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color:</span> <span class="pre">tuple[int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int]</span> <span class="pre">=</span> <span class="pre">(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>radius</strong></dt><dd></dd>
+<dt><strong>seed</strong></dt><dd></dd>
+<dt><strong>stop_at</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>as_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>asdict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>from_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>from_yaml</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>save_yaml</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.agents">
+<span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.agents" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.as_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.asdict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.background_color">
+<span class="sig-name descname"><span class="pre">background_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.background_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.from_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.from_yaml">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.from_yaml" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.goals">
+<span class="sig-name descname"><span class="pre">goals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.goals" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.metrics" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.objects" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.radius">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">radius</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.radius" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.save_yaml">
+<span class="sig-name descname"><span class="pre">save_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.save_yaml" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.seed" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">0)</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.spawners">
+<span class="sig-name descname"><span class="pre">spawners</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.spawners" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.AbstractWorldConfig.stop_at">
+<span class="sig-name descname"><span class="pre">stop_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.AbstractWorldConfig.stop_at" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.world.World.</span></span><span class="sig-name descname"><span class="pre">World</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World" title="Link to this definition">#</a></dt>
+<dd><p>Base world class.</p>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>as_config_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>as_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>asdict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>attach_gui</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>draw</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>evaluate</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>from_config</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>handle_key_press</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>set_seed</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>setup</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>step</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.as_config_dict">
+<span class="sig-name descname"><span class="pre">as_config_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.as_config_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.as_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.asdict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.attach_gui">
+<span class="sig-name descname"><span class="pre">attach_gui</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractGUI</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.attach_gui" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.draw" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_capture</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OutputTensorConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.evaluate" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.from_config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.from_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.handle_key_press">
+<span class="sig-name descname"><span class="pre">handle_key_press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.handle_key_press" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.metrics" title="Link to this definition">#</a></dt>
+<dd><p>Metrics to calculate behaviors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.objects" title="Link to this definition">#</a></dt>
+<dd><p>The list of world objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.population">
+<span class="sig-name descname"><span class="pre">population</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.population" title="Link to this definition">#</a></dt>
+<dd><p>List of agents in the world.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.rng">
+<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="(in NumPy v2.2)"><span class="pre">Generator</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.rng" title="Link to this definition">#</a></dt>
+<dd><p>Random number generator.
+Also may be used to seed RNG for agents, spawners, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.set_seed" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.setup" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.spawners">
+<span class="sig-name descname"><span class="pre">spawners</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.spawners" title="Link to this definition">#</a></dt>
+<dd><p>List of spawners which create agents or objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World.step" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="novel_swarms.world.World.World_from_config">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.world.World.</span></span><span class="sig-name descname"><span class="pre">World_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/World.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.World.World_from_config" title="Link to this definition">#</a></dt>
+<dd><p>Returns a new world instance from the given config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><em>WorldConfig</em>) – <p>The config to create the world from.</p>
+<p>The config should either be a dict with a <code class="docutils literal notranslate"><span class="pre">'type'</span></code> key, or an instance
+of <a class="reference internal" href="#novel_swarms.world.World.AbstractWorldConfig" title="novel_swarms.world.World.AbstractWorldConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractWorldConfig</span></code></a> with an <code class="docutils literal notranslate"><span class="pre">associated_type</span></code> field
+(which can be set using <a href="#id1"><span class="problematic" id="id2">:py:deco:`~novel_swarms.config.associated_type`</span></a> ).</p>
+<p>The <a class="reference internal" href="../../guide/config.html"><span class="doc">Configuration System</span></a> will be used to lookup the class for the world type.</p>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new world of type <code class="docutils literal notranslate"><span class="pre">config['associated_type']</span></code> or <code class="docutils literal notranslate"><span class="pre">config.associated_type</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#novel_swarms.world.World.World" title="novel_swarms.world.World.World">World</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">World_from_config</span></code>(config)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.World.World_from_config" title="novel_swarms.world.World.World_from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">World_from_config</span></code></a>(config)</p></td>
+<td><p>Returns a new world instance from the given config.</p></td>
 </tr>
 </tbody>
 </table>
@@ -568,11 +833,11 @@
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractWorldConfig</span></code>(size, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.World.AbstractWorldConfig" title="novel_swarms.world.World.AbstractWorldConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractWorldConfig</span></code></a>(size, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">World</span></code>(config)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.world.World.World" title="novel_swarms.world.World.World"><code class="xref py py-obj docutils literal notranslate"><span class="pre">World</span></code></a>(config)</p></td>
+<td><p>Base world class.</p></td>
 </tr>
 </tbody>
 </table>
@@ -619,10 +884,60 @@
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.agents"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.agents</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.as_dict"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.as_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.asdict"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.background_color"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.background_color</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.from_yaml"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.from_yaml()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.goals"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.goals</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.metadata"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.metadata</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.metrics"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.metrics</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.objects"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.objects</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.radius"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.radius</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.save_yaml"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.save_yaml()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.seed"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.seed</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.size"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.spawners"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.spawners</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.AbstractWorldConfig.stop_at"><code class="docutils literal notranslate"><span class="pre">AbstractWorldConfig.stop_at</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World"><code class="docutils literal notranslate"><span class="pre">World</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.as_config_dict"><code class="docutils literal notranslate"><span class="pre">World.as_config_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.as_dict"><code class="docutils literal notranslate"><span class="pre">World.as_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.asdict"><code class="docutils literal notranslate"><span class="pre">World.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.attach_gui"><code class="docutils literal notranslate"><span class="pre">World.attach_gui()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.draw"><code class="docutils literal notranslate"><span class="pre">World.draw()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.evaluate"><code class="docutils literal notranslate"><span class="pre">World.evaluate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.from_config"><code class="docutils literal notranslate"><span class="pre">World.from_config()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.handle_key_press"><code class="docutils literal notranslate"><span class="pre">World.handle_key_press()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.metrics"><code class="docutils literal notranslate"><span class="pre">World.metrics</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.objects"><code class="docutils literal notranslate"><span class="pre">World.objects</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.population"><code class="docutils literal notranslate"><span class="pre">World.population</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.rng"><code class="docutils literal notranslate"><span class="pre">World.rng</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.set_seed"><code class="docutils literal notranslate"><span class="pre">World.set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.setup"><code class="docutils literal notranslate"><span class="pre">World.setup()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.spawners"><code class="docutils literal notranslate"><span class="pre">World.spawners</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World.step"><code class="docutils literal notranslate"><span class="pre">World.step()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.World.World_from_config"><code class="docutils literal notranslate"><span class="pre">World_from_config()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/api/_gen/novel_swarms.world.World.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/api/_gen/novel_swarms.world.World.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -692,6 +1007,11 @@
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>

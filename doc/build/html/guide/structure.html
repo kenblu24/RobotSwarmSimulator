@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -55,6 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -317,10 +319,14 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="install.html">Installation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="install-wsl.html">Installing Windows Subsystem for Linux</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="firstrun.html">Basic Usage</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Structure of RobotSwarmSimulator</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="config.html">Configuration System</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html">Config Registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="yaml.html">Our YAML module</a></li>
 </ul>
 </details></li>
@@ -387,6 +393,278 @@
   <section id="structure-of-robotswarmsimulator">
 <h1>Structure of RobotSwarmSimulator<a class="headerlink" href="#structure-of-robotswarmsimulator" title="Link to this heading">#</a></h1>
 <p>Let’s take a look at the different components of RobotSwarmSimulator.</p>
+<section id="world-map">
+<h2>World Map<a class="headerlink" href="#world-map" title="Link to this heading">#</a></h2>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-earth-americas"></span> The World</div>
+<p class="sd-card-text">The <a class="reference internal" href="../api/_gen/novel_swarms.world.html#module-novel_swarms.world" title="novel_swarms.world"><code class="xref py py-mod docutils literal notranslate"><span class="pre">world</span></code></a> contains all the objects that will be simulated.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-users-viewfinder"></span> Population</div>
+<p class="sd-card-text">The <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a> is the collection of agents in the world.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-user"></span> Agent</div>
+<p class="sd-card-text">An <a class="reference internal" href="../api/_gen/novel_swarms.agent.html#module-novel_swarms.agent" title="novel_swarms.agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code></a> is an object that exists in the world and has volition.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-compass"></span> Sensor</div>
+<p class="sd-card-text">An agent can have <a class="reference internal" href="../api/_gen/novel_swarms.sensors.html#module-novel_swarms.sensors" title="novel_swarms.sensors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensors</span></code></a> which distill information from the world
+into observations for the agent to use on each <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-gamepad"></span> Controller</div>
+<p class="sd-card-text">Each agent has a <a class="reference internal" href="../api/_gen/novel_swarms.agent.control.html#module-novel_swarms.agent.control" title="novel_swarms.agent.control"><code class="xref py py-mod docutils literal notranslate"><span class="pre">control</span></code></a>ler that
+can control the agent’s movement and act based on the sensor information
+each <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-users"></span> Agent</div>
+<p class="sd-card-text">A <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a> often has multiple agents, each of
+which can have a different type, controller, or set of sensors.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-draw-polygon"></span>  World Objects (props)</div>
+<p class="sd-card-text"><a class="reference internal" href="../api/_gen/novel_swarms.world.objects.html#module-novel_swarms.world.objects" title="novel_swarms.world.objects"><code class="xref py py-mod docutils literal notranslate"><span class="pre">objects</span></code></a> are a special type of agent that are not part of the population.
+It is used to represent objects in the world that are not agents, such as walls, props, and triggers.
+They are stored in the world’s <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.objects" title="novel_swarms.world.World.World.objects"><code class="xref py py-attr docutils literal notranslate"><span class="pre">objects</span></code></a> list.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-hands-holding-child"></span> Spawners</div>
+<p class="sd-card-text"><a class="reference internal" href="../api/_gen/novel_swarms.world.spawners.html#module-novel_swarms.world.spawners" title="novel_swarms.world.spawners"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spawners</span></code></a> can create new agents and
+add them to the <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">population</span></code></a>.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-ruler-combined"></span> Metrics</div>
+<p class="sd-card-text">A world can have one or more <a class="reference internal" href="../api/_gen/novel_swarms.metrics.html#module-novel_swarms.metrics" title="novel_swarms.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code></a> which reduce the state
+of the world. They can describe the behavior of the agents and are useful for
+quantifying or training global behaviors.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-cart-plus"></span> Subscribers</div>
+<p class="sd-card-text">A world can have <a class="reference internal" href="../api/_gen/novel_swarms.world.subscribers.html#module-novel_swarms.world.subscribers" title="novel_swarms.world.subscribers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">subscribers</span></code></a> which allow user-defined
+hooks to run each <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="initialization-order">
+<h2>Initialization Order<a class="headerlink" href="#initialization-order" title="Link to this heading">#</a></h2>
+<p>The initialization system machinery starts with the <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World_from_config" title="novel_swarms.world.World.World_from_config"><code class="xref py py-func docutils literal notranslate"><span class="pre">World_from_config()</span></code></a> function.</p>
+<p>Here is the order in which the initialization system runs:</p>
+<ul>
+<li><p><span class="fas fa-desktop"></span> <a class="reference internal" href="../api/_gen/novel_swarms.world.simulate.html#module-novel_swarms.world.simulate" title="novel_swarms.world.simulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulate</span></code></a></p>
+<blockquote>
+<div><p>First, the simulation initializes the world.</p>
+<ul>
+<li><p><span class="fas fa-earth-americas"></span> <code class="xref py py-mod docutils literal notranslate"><span class="pre">World.setup</span></code></p>
+<blockquote>
+<div><p>The world then runs <code class="docutils literal notranslate"><span class="pre">setup()</span></code>, which creates the following:</p>
+<ol class="arabic">
+<li><p><span class="fas fa-users-viewfinder"></span> <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">World.population</span></code></a> <span class="fas fa-arrow-left"></span> <span class="far fa-user"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">Agent.__init__()</span></code></p>
+<p>The world then creates agents from agent configs in its <code class="docutils literal notranslate"><span class="pre">config.agents</span></code> list, and back-references to the <code class="docutils literal notranslate"><span class="pre">world</span></code>
+are added to these agents. These agents are then appended to the world’s <code class="docutils literal notranslate"><span class="pre">population</span></code> list.</p>
+<p>Upon initialization, each agent also initializes its controller and sensors from its config,
+and back-references to the agent are passed to them.</p>
+<ol class="arabic simple">
+<li><p><span class="far fa-user"></span> <span class="fas fa-brain"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">Agent.controller</span></code> <span class="fas fa-arrow-left"></span> <span class="fas fa-gamepad"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">Controller.__init__()</span></code></p></li>
+<li><p><span class="far fa-user"></span> <span class="fas fa-group-arrows-rotate"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">Agent.sensors</span></code> <span class="fas fa-arrow-left"></span> <span class="far fa-compass"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">Sensor.__init__()</span></code></p></li>
+</ol>
+</li>
+<li><p><span class="fas fa-user-plus"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.spawners</span></code> <span class="fas fa-arrow-left"></span> <span class="fas fa-hands-holding-child"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">Spawner.__init__()</span></code></p>
+<p>Spawners are created from spawner configs and appended to the world’s <code class="docutils literal notranslate"><span class="pre">config.spawners</span></code> list.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Spawners do not become active until the first <code class="docutils literal notranslate"><span class="pre">step()</span></code> of the simulation.</p>
+</div>
+</li>
+<li><p><span class="far fa-object-group"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.objects</span></code> <span class="fas fa-arrow-left"></span> <span class="fas fa-draw-polygon"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">WorldObject.__init__()</span></code></p>
+<p>A similar process to the population initialization is carried out for world objects.</p>
+</li>
+<li><p><span class="fas fa-chart-column"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.metrics</span></code> <span class="fas fa-arrow-left"></span> <span class="fas fa-ruler-combined"></span> <code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics.__init__</span></code></p>
+<p>Lastly, any metrics in the world’s <code class="docutils literal notranslate"><span class="pre">config.metrics</span></code> list are created and appended to the world’s <code class="docutils literal notranslate"><span class="pre">metrics</span></code> list.</p>
+</li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Keep in mind that the initialization system operates on the configs, but you can
+side-step it entirely by creating the objects in code yourself!</p>
+</div>
+</section>
+<section id="simulation-loop">
+<h2>Simulation Loop<a class="headerlink" href="#simulation-loop" title="Link to this heading">#</a></h2>
+<p>The simulator runs on a single thread. Let’s take a look at the execution order
+inside the simulation loop. On each tick of the simulation, the following happens:</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<a class="reference internal" href="../api/_gen/novel_swarms.world.simulate.html#module-novel_swarms.world.simulate" title="novel_swarms.world.simulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulate</span></code></a> <span class="fas fa-arrows-spin"></span></div>
+<p class="sd-card-text">The <code class="xref py py-func docutils literal notranslate"><span class="pre">novel_swarms.world.simulate.main()</span></code> function runs the main simulation loop.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-keyboard"></span> <span class="fas fa-arrow-pointer"></span> Event Handling</div>
+<p class="sd-card-text">If the simulation is <strong>not</strong> in headless mode, input events are handled first.</p>
+</div>
+</div>
+<p class="sd-card-text">The simulator then asks the world object to <code class="docutils literal notranslate"><span class="pre">step()</span></code> itself.</p>
+<p class="sd-card-text">Outputting to the screen can be slow, so when the user requests the simulation to speedup,
+<code class="docutils literal notranslate"><span class="pre">step()</span></code> will be called multiple times, skipping event handling and <code class="docutils literal notranslate"><span class="pre">draw()</span></code> calls.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-earth-americas"></span> <code class="xref py py-meth docutils literal notranslate"><span class="pre">RectangularWorld.step()</span></code> <span class="fas fa-arrows-spin"></span></div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each spawner in <span class="fas fa-user-plus"></span> <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.spawners" title="novel_swarms.world.World.World.spawners"><code class="xref py py-attr docutils literal notranslate"><span class="pre">World.spawners</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-hands-holding-child"></span> <code class="docutils literal notranslate"><span class="pre">spawner.step()</span></code> <span class="fas fa-arrows-spin"></span></div>
+<p class="sd-card-text">Each <span class="fas fa-hands-holding-child"></span> spawner performs its <code class="docutils literal notranslate"><span class="pre">step()</span></code> method at this point.</p>
+<p class="sd-card-text">Spawners have a <code class="docutils literal notranslate"><span class="pre">mark_for_deletion</span></code> flag to remove them from the list of <span class="fas fa-user-plus"></span> <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.spawners" title="novel_swarms.world.World.World.spawners"><code class="xref py py-attr docutils literal notranslate"><span class="pre">World.spawners</span></code></a>.
+If a spawner has <code class="docutils literal notranslate"><span class="pre">oneshot=True</span></code>, then it will be marked for deletion after its first <code class="docutils literal notranslate"><span class="pre">step()</span></code>.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each agent in <span class="fas fa-users-viewfinder"></span> <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">World.population</span></code></a>:</p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-user"></span> <code class="xref py py-meth docutils literal notranslate"><span class="pre">Agent.step()</span></code> <span class="fas fa-arrows-spin"></span></div>
+<p class="sd-card-text">Each <span class="far fa-user"></span> <a class="reference internal" href="../api/_gen/novel_swarms.agent.html#module-novel_swarms.agent" title="novel_swarms.agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code></a> performs its <code class="docutils literal notranslate"><span class="pre">step()</span></code> method at this point.</p>
+<p class="sd-card-text">Its <code class="docutils literal notranslate"><span class="pre">step()</span></code> method may call <code class="docutils literal notranslate"><span class="pre">step()</span></code> on its <span class="far fa-user"></span> <span class="fas fa-brain"></span> <a class="reference internal" href="../api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.controller" title="novel_swarms.agent.Agent.Agent.controller"><code class="xref py py-attr docutils literal notranslate"><span class="pre">controller</span></code></a>
+or <span class="far fa-user"></span> <span class="fas fa-group-arrows-rotate"></span> <a class="reference internal" href="../api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.sensors" title="novel_swarms.agent.Agent.Agent.sensors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sensors</span></code></a>.</p>
+<p class="sd-card-text">Here’s the execution order for <a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.step" title="novel_swarms.agent.MazeAgent.MazeAgent.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MazeAgent.step()</span></code></a>:</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-gamepad"></span> <code class="xref py py-meth docutils literal notranslate"><span class="pre">Controller.get_actions()</span></code></div>
+<p class="sd-card-text">The controller returns actions to take based on the <span class="far fa-user"></span> <span class="fas fa-group-arrows-rotate"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">Agent.sensors</span></code>.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-user"></span> <span class="fas fa-up-down-left-right"></span> agent changes its state</div>
+<p class="sd-card-text">The <span class="far fa-user"></span> agent carries out the actions from the <span class="far fa-user"></span> <span class="fas fa-brain"></span> <a class="reference internal" href="../api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.controller" title="novel_swarms.agent.Agent.Agent.controller"><code class="xref py py-attr docutils literal notranslate"><span class="pre">controller</span></code></a>,
+moving according to its agent-specific dynamics.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each sensor in <span class="far fa-user"></span> <span class="fas fa-group-arrows-rotate"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">Agent.sensors</span></code>:</p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-compass"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">Sensor.step()</span></code> <span class="fas fa-arrows-spin"></span></div>
+<p class="sd-card-text">The <span class="far fa-user"></span> agent updates its sensors so that the new <span class="far fa-compass"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">current_state</span></code>
+will be available on the next <span class="far fa-user"></span> <code class="docutils literal notranslate"><span class="pre">step()</span></code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each object in <span class="far fa-object-group"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.objects</span></code>:</p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-draw-polygon"></span> <code class="xref py py-meth docutils literal notranslate"><span class="pre">WorldObject.step()</span></code> <span class="fas fa-arrows-spin"></span></div>
+<p class="sd-card-text">A world object is based on the <a class="reference internal" href="../api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent"><code class="xref py py-class docutils literal notranslate"><span class="pre">Agent</span></code></a> class, so its <code class="docutils literal notranslate"><span class="pre">step()</span></code>
+method may also call <code class="docutils literal notranslate"><span class="pre">step()</span></code> on its <span class="far fa-user"></span> <span class="fas fa-brain"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">controller</span></code>
+or <span class="far fa-user"></span> <span class="fas fa-group-arrows-rotate"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">sensors</span></code>, if it has any.</p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each metric in <span class="fas fa-earth-americas"></span> <span class="fas fa-chart-column"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.metrics</span></code>:</p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-ruler-combined"></span> <code class="xref py py-func docutils literal notranslate"><span class="pre">AbstractMetric.calculate()</span></code> <span class="fas fa-arrows-spin"></span></div>
+<p class="sd-card-text">Following the <span class="fas fa-earth-americas"></span> <code class="docutils literal notranslate"><span class="pre">step()</span></code> <span class="fas fa-arrows-spin"></span>, each metric takes an
+observation of the world’s state and performs its calculations, storing the results in its
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">value_history</span></code> attribute.</p>
+</div>
+</div>
+</div>
+</div>
+<p class="sd-card-text">If the simulation is not operating headlessly, then the simulator calls <code class="docutils literal notranslate"><span class="pre">draw()</span></code> on the world object.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-earth-americas"></span> <code class="xref py py-mod docutils literal notranslate"><span class="pre">draw</span></code> <span class="fas fa-pen-to-square"></span></div>
+<p class="sd-card-text">There is currently no layering system, so the first things that are drawn are the bottom-most ‘layer’
+and succeeding <code class="docutils literal notranslate"><span class="pre">draw()</span></code> calls draw on top.</p>
+<p class="sd-card-text">First, the <span class="fas fa-window-maximize"></span> screen is cleared. Then, <code class="docutils literal notranslate"><span class="pre">draw()</span></code> is called:</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each object in <span class="far fa-object-group"></span> <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.objects</span></code>:</p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-draw-polygon"></span> <code class="xref py py-meth docutils literal notranslate"><span class="pre">Object.draw()</span></code> <span class="fas fa-pen-to-square"></span></div>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">For each agent in <span class="fas fa-users-viewfinder"></span> <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.population" title="novel_swarms.world.World.World.population"><code class="xref py py-attr docutils literal notranslate"><span class="pre">World.population</span></code></a>:</p>
+</div>
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="far fa-user"></span> <code class="xref py py-meth docutils literal notranslate"><span class="pre">Agent.draw()</span></code> <span class="fas fa-pen-to-square"></span></div>
+<p class="sd-card-text">As an example, see <a class="reference internal" href="../api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.draw" title="novel_swarms.agent.StaticAgent.StaticAgent.draw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">StaticAgent.draw()</span></code></a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
 
@@ -429,10 +707,24 @@
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#world-map">World Map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialization-order">Initialization Order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-loop">Simulation Loop</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/guide/structure.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/guide/structure.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -502,6 +794,11 @@
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>

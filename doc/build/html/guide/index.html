@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,10 +52,11 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Basic Usage" href="firstrun.html" />
-    <link rel="prev" title="Installation" href="install.html" />
+    <link rel="prev" title="Installing Windows Subsystem for Linux" href="install-wsl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -317,10 +319,14 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="install.html">Installation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="install-wsl.html">Installing Windows Subsystem for Linux</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="firstrun.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Structure of RobotSwarmSimulator</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="config.html">Configuration System</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html">Config Registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="yaml.html">Our YAML module</a></li>
 </ul>
 </details></li>
@@ -393,10 +399,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="firstrun.html">Basic Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure of RobotSwarmSimulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure of RobotSwarmSimulator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#world-map">World Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#initialization-order">Initialization Order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#simulation-loop">Simulation Loop</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html">Config Registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="yaml.html">Our YAML module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="config.html#why-use-the-config-system">Why use the config system?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#why-does-the-config-system-exist">Why does the config system exist?</a></li>
 </ul>
 </li>
 </ul>
@@ -414,12 +426,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="install.html"
+       href="install-wsl.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Installation</p>
+        <p class="prev-next-title">Installing Windows Subsystem for Linux</p>
       </div>
     </a>
     <a class="right-next"
@@ -446,7 +458,7 @@
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/guide/index.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/guide/index.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -516,6 +528,11 @@
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>

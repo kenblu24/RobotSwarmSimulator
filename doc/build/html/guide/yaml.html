@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,10 +52,11 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API Reference" href="../api/index.html" />
-    <link rel="prev" title="Configuration System" href="config.html" />
+    <link rel="prev" title="Config Registry" href="config_store_api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 10, 2025"/>
   </head>
   
   
@@ -317,10 +319,14 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="install.html">Installation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="install-wsl.html">Installing Windows Subsystem for Linux</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="firstrun.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Structure of RobotSwarmSimulator</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="config.html">Configuration System</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html">Config Registry</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Our YAML module</a></li>
 </ul>
 </details></li>
@@ -389,13 +395,15 @@
                   
   <section id="our-yaml-module">
 <h1>Our YAML module<a class="headerlink" href="#our-yaml-module" title="Link to this heading">#</a></h1>
-<p>Our <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#module-novel_swarms.yaml" title="novel_swarms.yaml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code></a> module provides a custom YAML loader
+<p>The <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#module-novel_swarms.yaml" title="novel_swarms.yaml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">novel_swarms.yaml</span></code></a> module provides a custom YAML loader
 that defines some convenience tags. This article will explain how
 the YAML files are loaded and how to use the custom tags.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Looking for how to load or dump YAML files with our custom tags?
-See <a class="reference internal" href="../api/yaml_api.html"><span class="doc">YAML API</span></a></p>
+See <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#module-novel_swarms.yaml" title="novel_swarms.yaml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">novel_swarms.yaml</span></code></a></p>
+<p>Or for information on how to use your custom class in a YAML file,
+see <a class="reference internal" href="config_store_api.html"><span class="doc">Config Registry</span></a>.</p>
 </div>
 <section id="yaml">
 <h2>YAML<a class="headerlink" href="#yaml" title="Link to this heading">#</a></h2>
@@ -432,7 +440,7 @@ The custom YAML tags are defined in the <a class="reference internal" href="../a
 </div>
 </section>
 <section id="the-include-tag">
-<h3>The <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag<a class="headerlink" href="#the-include-tag" title="Link to this heading">#</a></h3>
+<span id="yaml-tags-include"></span><h3>The <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag<a class="headerlink" href="#the-include-tag" title="Link to this heading">#</a></h3>
 <p>This tag is used to include another YAML file as a mapping.</p>
 <p>For example, see the following YAML files:</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-pt-0 sd-pb-0 sd-pl-0 sd-pr-0 docutils">
@@ -472,13 +480,13 @@ The custom YAML tags are defined in the <a class="reference internal" href="../a
 </div>
 <p>The file extension affects the behavior of the <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files will be loaded using the <code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code> function</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files will be loaded using the <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#novel_swarms.yaml.load" title="novel_swarms.yaml.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a> function</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.json</span></code> files will be loaded using <code class="docutils literal notranslate"><span class="pre">json.load</span></code></p></li>
 <li><p>All other files are read as text and returned as a string</p></li>
 </ul>
 </section>
 <section id="the-relpath-tag">
-<h3>The <code class="docutils literal notranslate"><span class="pre">!relpath</span></code> tag<a class="headerlink" href="#the-relpath-tag" title="Link to this heading">#</a></h3>
+<span id="yaml-tags-relpath"></span><h3>The <code class="docutils literal notranslate"><span class="pre">!relpath</span></code> tag<a class="headerlink" href="#the-relpath-tag" title="Link to this heading">#</a></h3>
 <p>This tag is used to resolve the relative path given, but unlike the
 <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag, it does not load the file, and instead returns
 the absolute path as a string.</p>
@@ -492,23 +500,27 @@ the absolute path as a string.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/project/bar.yaml</span>
 </pre></div>
 </div>
+</section>
+</section>
 <section id="path-resolution-order">
-<h4>Path Resolution Order<a class="headerlink" href="#path-resolution-order" title="Link to this heading">#</a></h4>
+<span id="relpath-resolution"></span><h2>Path Resolution Order<a class="headerlink" href="#path-resolution-order" title="Link to this heading">#</a></h2>
 <p>When loading a YAML file, the <code class="docutils literal notranslate"><span class="pre">!include</span></code> and <code class="docutils literal notranslate"><span class="pre">!relpath</span></code> tags will resolve the path
 by testing the following assumptions in order:</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
 <ol class="arabic">
-<li><p>Path is <strong>not</strong> relative to the current working directory</p>
-<p>(i.e. the path is absolute or relative to the user home directory)</p>
+<li><p class="sd-card-text">Path is <strong>not</strong> relative to the current working directory</p>
+<p class="sd-card-text">(i.e. the path is absolute or relative to the user home directory)</p>
 </li>
-<li><p>Path is relative to the <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> file with the tag</p></li>
-<li><p>Path is relative to the current working directory
+<li><p class="sd-card-text">Path is relative to the <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> file with the tag</p></li>
+<li><p class="sd-card-text">Path is relative to the current working directory
 (where you were when you ran <code class="docutils literal notranslate"><span class="pre">python</span></code>).</p>
-<p>This is the default behavior for relative paths in Python, but it is the last place we look.</p>
+<p class="sd-card-text">This is the default behavior for relative paths in Python, but it is the last place we look.</p>
 </li>
 </ol>
+</div>
+</div>
 <p>If a file isn’t found at any of these locations, an error will be raised.</p>
-</section>
-</section>
 </section>
 </section>
 
@@ -523,12 +535,12 @@ by testing the following assumptions in order:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="config.html"
+       href="config_store_api.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Configuration System</p>
+        <p class="prev-next-title">Config Registry</p>
       </div>
     </a>
     <a class="right-next"
@@ -563,12 +575,10 @@ by testing the following assumptions in order:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yaml-tags">YAML Tags</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-np-tag">The <code class="docutils literal notranslate"><span class="pre">!np</span></code> tag</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-include-tag">The <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relpath-tag">The <code class="docutils literal notranslate"><span class="pre">!relpath</span></code> tag</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#path-resolution-order">Path Resolution Order</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relpath-tag">The <code class="docutils literal notranslate"><span class="pre">!relpath</span></code> tag</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#path-resolution-order">Path Resolution Order</a></li>
 </ul>
   </nav></div>
 
@@ -576,7 +586,7 @@ by testing the following assumptions in order:</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs/docs/guide/yaml.rst">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/guide/yaml.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -646,6 +656,11 @@ by testing the following assumptions in order:</p>
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
   Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 10, 2025.
+  <br/>
 </p></div>
       
     </div>
