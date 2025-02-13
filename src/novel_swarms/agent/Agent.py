@@ -1,5 +1,12 @@
 """Base Agent Config and Class to be inherited by all agents.
 
+.. rubric:
+
+    Inheritance Diagram
+
+.. inheritance-diagram:: novel_swarms.agent.Agent.Agent
+    :parts: 1
+
 .. autoclass:: novel_swarms.agent.Agent.BaseAgentConfig
     :members:
     :inherited-members:

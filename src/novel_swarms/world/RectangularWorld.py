@@ -1,3 +1,25 @@
+"""2D world module.
+
+The RectangularWorld is a 2D world.
+
+It is currently the only world type available.
+
+Config Class
+------------
+
+.. autoclass:: RectangularWorldConfig
+    :members:
+    :undoc-members:
+    :inherited-members:
+
+World Class
+-----------
+
+.. autoclass:: RectangularWorld
+    :members:
+    :undoc-members:
+"""
+
 import math
 from functools import partial
 
@@ -22,17 +44,21 @@ from .objects.Wall import Wall
 # typing
 from typing import List, Tuple
 
-COLLISION_CLASSES = ['nocollide', 'collide']
-
 min_zoom = 0.0001
 
 distance = math.dist
 
 
+#: words to put in SVG layer names to indicate if that object should collide
+COLLISION_CLASSES = ['nocollide', 'collide']
+
+#: removes certain words from the layer names
+#: such as 'Layer_1' from Illustrator SVGs.
 remove_special_classes = partial(remove_classes, classes=COLLISION_CLASSES + ['Layer_1'])
 
 
 def get_collision_config(collides: bool | str | None):
+    """Get collision config dict from string or bool."""
     if collides is None:
         return {}
     if isinstance(collides, str):
@@ -50,11 +76,26 @@ def get_collision_config(collides: bool | str | None):
 @filter_unexpected_fields
 @dataclass
 class RectangularWorldConfig(AbstractWorldConfig):
+    """Config dataclass for a RectangularWorld."""
+
+    #: size of the world.
     size: tuple[float, float] | np.ndarray = (5, 5)
-    show_walls: bool = True
-    collide_walls: bool = True
-    detectable_walls: bool = False
+    show_walls: bool = True  #: Currently unused.
+    collide_walls: bool = True  #: Currently unused.
+    detectable_walls: bool = False  #: Currently unused.
+
     time_step: float = 1 / 60
+    """float: :math:`\\Delta t` delta time (seconds)
+
+    The time step, or delta time, is used by simulated objects and agents
+    when calculating anything that depends on time, such as velocity.
+
+    It is stored into the world's :py:attr:`~.RectangularWorld.dt` attribute,
+    which should be used if an agent needs to know "how much time passed
+    **in the simulated world** since the last tick".
+
+    It does not directly determine how fast the simulation runs, or the FPS.
+    """
 
     def factor_zoom(self, zoom):
         print("RectangularWorld Factor_Zoom called", zoom, self.size)
@@ -77,13 +118,28 @@ class RectangularWorld(World):
         self.config = config
         # self.padding = config.padding
         # self.population_size = config.population_size
+        #: float: current zoom level used when ``draw()``\\ ing.
         self.zoom = 1.0
+        #: float: original zoom level to reset to when :kbd:`Num0` is pressed.
         self._original_zoom = 1.0
+        #: np.ndarray[float, float]: current offset of the camera when ``draw()``\\ ing.
         self.pos = np.array([0.0, 0.0])
+        #: np.ndarray[int, int]: last mouse position in viewport pixel coordinates (UL 0,0).
         self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
-        self.dt = config.time_step
 
+        self.dt = config.time_step
+        """float: :math:`\\Delta t` delta time (seconds)
+
+        The time step, or delta time, is used by simulated objects and agents
+        when calculating anything that depends on time, such as velocity, or
+        any time an agent needs to know "how much time passed
+        **in the simulated world** since the last tick".
+
+        It does not directly determine how fast the simulation runs, or the FPS.
+        """
+
+        #: Agent : currently selected agent.
         self.selected = None
         self.highlighted_set = []
         self.human_controlled = []
@@ -164,9 +220,7 @@ class RectangularWorld(World):
         # behavior_timer.check_watch()
 
     def draw(self, screen, offset=None):
-        """
-        Cycle through the entire population and draw the agents. Draw Environment Walls if needed.
-        """
+        """Cycle through the entire population and draw the agents and objects."""
         if offset is None:
             offset = (self.pos, self.zoom)
         # pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]
@@ -202,6 +256,7 @@ class RectangularWorld(World):
         return filtered_agents
 
     def onClick(self, event) -> None:
+        """Handle mouse click events."""
         viewport_pos = np.asarray(event.pos)
         pos = (viewport_pos - self.pos) / self.zoom
         d = self.population[0].radius * 1.1
@@ -223,6 +278,7 @@ class RectangularWorld(World):
             neighborhood[0].is_highlighted = True
 
     def onZoom(self, mouse_event, scroll_event):
+        """Handle mouse wheel events."""
         if not (mouse_event.type == pygame.MOUSEBUTTONUP and scroll_event.type == pygame.MOUSEWHEEL):
             raise TypeError("Expected a mouse button up and scroll event.")
 
@@ -230,8 +286,9 @@ class RectangularWorld(World):
         v = scroll_event.precise_y
         self.do_zoom(pos, v)
 
-    def do_zoom(self, point, v):
-        v *= 0.4
+    def do_zoom(self, point: np.ndarray[int, int], v: int | float):
+        """zooms the camera around a point"""
+        v *= 0.4  # scroll speed multiplier
         old_zoom = self.zoom
         self.zoom = self.zoom * (2**v)
         self.zoom = max(self.zoom, min_zoom)
@@ -242,10 +299,12 @@ class RectangularWorld(World):
         self.pos = (self.pos - point) * self.zoom / old_zoom + point
 
     def zoom_reset(self):
+        """Reset the camera position and zoom level to the original zoom level."""
         self.zoom = self.original_zoom
         self.pos = np.array([0.0, 0.0])
 
     def on_mouse(self, pos):
+        """Handle mouse movement events."""
         viewport_pos = self.mouse_position = np.asarray(pos)
         pos = (viewport_pos - self.pos) / self.zoom
         if self.gui:
@@ -258,7 +317,7 @@ class RectangularWorld(World):
     @original_zoom.setter
     def original_zoom(self, value):
         self._original_zoom = value
-        self.zoom = value
+        self.zoom = value  # also set the current zoom
 
     def handle_middle_mouse_events(self, events):
         for event in events:
@@ -464,6 +523,7 @@ class RectangularWorld(World):
         return False
 
     def handle_key_press(self, event):
+        # events from pygame are passed from simulate.main() to the world here.
         for a in self.population:
             a.on_key_press(event)
 

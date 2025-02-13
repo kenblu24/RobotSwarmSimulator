@@ -25,7 +25,6 @@ class BinaryFOVSensor(AbstractSensor):
         parent=None,
         theta=10,
         distance=100,
-        degrees=False,
         bias=0.0,
         false_positive=0.0,
         false_negative=0.0,
@@ -58,9 +57,6 @@ class BinaryFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
-        if degrees:
-            self.theta = np.deg2rad(self.theta)
-            self.bias = np.deg2rad(self.bias)
         self.r = distance
 
         self.seed = seed

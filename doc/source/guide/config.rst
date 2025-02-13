@@ -39,22 +39,25 @@ Take this example from the :doc:`firstrun` guide:
    :caption: Run a simulation purely using Python
 
    from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+   from novel_swarms.agent.control.StaticController import StaticController
    from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
    from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-   from novel_swarms.agent.control.StaticController import StaticController
    from novel_swarms.world.simulate import main as sim
 
-   world_config = RectangularWorldConfig(size=[10, 10], time_step=1 / 40)
+   world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
    world = RectangularWorld(world_config)
    controller = StaticController(output=[0.01, 0])
-   agent = MazeAgent(MazeAgentConfig(agent_radius=0.1, controller=controller), world)
-   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
+   agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1,
+                                     controller=controller), world)
+   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
+                               agent=agent, oneshot=True)
    world.spawners.append(spawner)
 
    sim(world)
 
 This allows for you to have a lot of control over the simulated world and how
 the agents behave, but look at how messy it is to define the world and agents.
+It's difficult to read, and you also have to remember what order to define the objects in.
 
 And if you want to run the simulation with a different configuration, you have to
 make an entirely new Python file, even if most of the code is the same.
@@ -82,6 +85,7 @@ For example, the above simulation can be defined in a single file like this:
        avoid_overlap: true
        agent:
          type: MazeAgent
+         position: [5, 5]
          agent_radius: 0.1
          controller:
            type: StaticController
@@ -108,24 +112,4 @@ and the ``!include`` tag for including other YAML files as a mapping.
 
 This allows you to do cool things like:
 
-.. code-block:: yaml
-    :caption: world.yaml (example)
-
-    type: "RectangularWorld"
-    size: [10, 10]  # yaml flow style
-    agents:
-      - !include robot1.yaml  # add robot1 agent
-      - !include robot2.yaml  # add robot2 agent
-      - &anchor003  # save this robot as an anchor
-        type: MazeAgent
-        name: robot3
-        agent_radius: 0.1
-        angle: !np radians(90 + 45)  # convert degrees to radians
-        poly: !include body_shape.svg  # load an SVG file
-        controller:
-          type: StaticController
-          output: !np [1e-2, pi / 2]  # pi constant from numpy
-    spawners:
-      - type: ExcelSpawner
-        path: !relpath positions.xlsx  # path is relative to cwd or this YAML file
-        agent: *anchor003  # use the robot3 agent from above
+.. include:: crazy_yaml_example.rst
