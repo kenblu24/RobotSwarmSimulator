@@ -15,7 +15,7 @@ from copy import copy
 from novel_swarms import yaml
 from novel_swarms.config import get_agent_class
 from novel_swarms.agent.control.Controller import Controller
-from novel_swarms.world.spawners.AgentSpawner import UniformAgentSpawner
+from novel_swarms.world.spawners.AgentSpawner import UniformAgentSpawner, PointAgentSpawner
 from novel_swarms.world.RectangularWorld import RectangularWorldConfig
 
 from novel_swarms.metrics import Circliness
@@ -89,13 +89,13 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         # build spawner config and inject agent config
         spawner_config = {
-            'type': UniformAgentSpawner,
+            'type': PointAgentSpawner,
             'agent': defender_config,
             'n': n_agents,
             'avoid_overlap': True,
             'facing': "away",
             'oneshot': True,
-            'region': [[4, 4], [4, 6], [6, 6], [6, 4]],
+            # 'region': [[4, 4], [4, 6], [6, 6], [6, 4]],
         }
 
         # modify world config, overwriting defaults and whatever was in the yaml
