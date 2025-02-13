@@ -1,5 +1,8 @@
 """MazeAgent has Unicycle Dynamics and can move based on sensor info.
 
+.. inheritance-diagram:: novel_swarms.agent.MazeAgent.MazeAgent
+    :parts: 1
+
 .. autoclass:: novel_swarms.agent.MazeAgent.MazeAgentConfig
     :members:
     :inherited-members:
@@ -64,11 +67,11 @@ State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 class MazeAgentConfig(StaticAgentConfig):
     # world: World | None = None
     # world_config: RectangularWorldConfig | None = None
+    #: list[Sensor]: The sensors used by the agent. Emtpy list by default.
     sensors: list = field(default_factory=list)
+    #: AbstractController: The controller used by the agent. Zero controller by default.
     controller: Any = None
-    # sensors: SensorSet | None = None
-    idiosyncrasies: Any = False
-    delay: str | int | float = 0
+
     sensing_avg: int = 1
     stop_on_collision: bool = False
     stop_at_goal: bool = False
@@ -79,6 +82,11 @@ class MazeAgentConfig(StaticAgentConfig):
     trace_color: tuple[int, int, int] = (255, 255, 255)
     controller: Controller | None = None
     track_io: bool = False
+
+    idiosyncrasies: Any = False
+    #: dict[str, float]: The idiosyncrasies of the agent. False by default.
+
+    delay: str | int | float = 0
 
     def __post_init__(self):
         # super().__post_init__()
@@ -145,7 +153,6 @@ class MazeAgent(StaticAgent):
 
         super().__init__(config, world, name=name, initialize=False)
 
-        self.radius = config.agent_radius
         self.is_highlighted = False
         self.agent_in_sight = None
         if config.idiosyncrasies:

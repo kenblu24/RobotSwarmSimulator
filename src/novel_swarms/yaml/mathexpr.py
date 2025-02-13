@@ -13,6 +13,7 @@ Examples
 --------
 
 .. code-block:: yaml
+    :caption: YAML
 
     0: !np [radians(90 + 45), pi / 2, 3.14]  # -> [-2.356194490192345, 1.5707963267948966, 3.14]
     1: !np complex('2+2j')  # -> (2+2j)

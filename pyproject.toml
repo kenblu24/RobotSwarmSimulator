@@ -51,6 +51,7 @@ docs = [
     "sphinx",
     "sphinx-autodoc-typehints",
     "sphinx-copybutton",
+    "sphinx-togglebutton",
     "sphinx-design",
     "numpydoc",
     "myst-parser",

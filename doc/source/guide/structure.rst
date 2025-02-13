@@ -10,11 +10,15 @@ World Map
 .. include:: world_map.rst
 
 
+.. _initialization_order:
 
 Initialization Order
 ====================
 
-The initialization system machinery starts with the :py:func:`~novel_swarms.world.World.World_from_config` function.
+The initialization system machinery typically starts with the :py:func:`~novel_swarms.world.World.World_from_config` function.
+Then, the world object runs its ``__init__()`` method.
+
+If using the :py:mod:`~novel_swarms.world.simulate` module, the simulation initializes the world by calling ``world.setup()``.
 
 Here is the order in which the initialization system runs:
 
@@ -62,7 +66,9 @@ Here is the order in which the initialization system runs:
    Keep in mind that the initialization system operates on the configs, but you can
    side-step it entirely by creating the objects in code yourself!
 
-      
+
+.. _step_execution_order:
+
 Simulation Loop
 ===============
 
@@ -144,6 +150,13 @@ inside the simulation loop. On each tick of the simulation, the following happen
 
 
    If the simulation is not operating headlessly, then the simulator calls ``draw()`` on the world object.
+
+   .. admonition:: Step rate is not tied to FPS!
+
+      ``draw()`` is not guaranteed to be called once per ``step()``! It is called
+      even when the simulation is :fas:`pause` paused.
+
+      When the simulation is sped up, some ``draw()`` calls will be skipped.
 
    .. card::  :fas:`earth-americas` :py:mod:`~novel_swarms.world.World.RectangularWorld.draw` :fas:`pen-to-square`
 

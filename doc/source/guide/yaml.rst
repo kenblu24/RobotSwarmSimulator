@@ -48,17 +48,30 @@ example of standard tags are type specifiers, such as ``!!str`` and ``!!int``.
 RobotSwarmSimulator uses a custom PyYAML loader to allow for some nice features.
 The custom YAML tags are defined in the :py:mod:`~novel_swarms.yaml` module.
 
+.. _yaml_crazy_tag_example:
+
+Here's an example of a crazy YAML file that uses a bunch of YAML features and our custom tags:
+
+.. include:: crazy_yaml_example.rst
+
+If you're new to YAML or haven't seen the ``&anchor`` and ``*anchor`` syntax,
+check out `Learn YAML in Y minutes`_.
+
+To understand what the ``!include``, ``!relpath``, and ``!np`` tags do, read on.
+
 The ``!np`` tag
 ---------------
 
 This tag is used to convert a YAML string, sequence, or mapping to a numpy object.
 
-For example, the following YAML file:
+In this example, the following YAML files are in the same directory:
 
 .. code-block:: yaml
    :caption: foo.yaml
 
    example: !np complex('2+2j')
+
+See the :py:mod:`~novel_swarms.yaml.mathexpr` module for more information on what you can do.
 
 .. _yaml-tags-include:
 
@@ -103,7 +116,7 @@ For example, see the following YAML files:
          >>> print(mapping)
          {'foo': {'my_list': [1, 2, 3]}}
 
-The file extension affects the behavior of the ``!include`` tag:
+The file extension of what you're including affects the behavior of the ``!include`` tag:
 
 * ``.yaml`` files will be loaded using the :py:func:`~novel_swarms.yaml.load` function
 * ``.json`` files will be loaded using ``json.load``

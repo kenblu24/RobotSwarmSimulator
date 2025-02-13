@@ -19,21 +19,24 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
     'sphinx.ext.linkcode',
-    'sphinx.ext.graphviz',
-    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.ifconfig',
     'sphinx_copybutton',
     'sphinx.ext.todo',
     'sphinx_design',
+    'sphinx_togglebutton',
     # 'sphinx_tags',
     'numpydoc',  # Needs to be loaded *after* autodoc.
+    'sphinx.ext.graphviz',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.duration',
     "myst_parser",
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
+
+graphviz_output_format = "svg"
 
 todo_include_todos = True
 copybutton_exclude = '.linenos, .gp, .go'
