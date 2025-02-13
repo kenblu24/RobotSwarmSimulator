@@ -550,13 +550,13 @@ of an agent to a :py:mod:`~novel_swarms.agent.control.BinaryController`\ :
 
 .. rubric:: Citations
 
-.. [#gauci_evolving] M. Gauci, J. Chen, T. J. Dodd, and R. Groß, “Evolving Aggregation Behaviors in Multi-Robot Systems with Binary Sensors,” 2014, doi: `10.1007/978-3-642-55146-8_25 <https://doi.org/10.1007/978-3-642-55146-8_25>`_.
+.. [#gauci_evolving] \M. Gauci, J. Chen, T. J. Dodd, and R. Groß, “Evolving Aggregation Behaviors in Multi-Robot Systems with Binary Sensors,” 2014, doi: `10.1007/978-3-642-55146-8_25 <https://doi.org/10.1007/978-3-642-55146-8_25>`_.
 
-.. [#novel_discovery] D. S. Brown, R. Turner, O. Hennigh, and S. Loscalzo, “Discovery and Exploration of Novel Swarm Behaviors Given Limited Robot Capabilities,” 2018, doi: `10.1007/978-3-319-73008-0_31 <https://doi.org/10.1007/978-3-319-73008-0_31>`_.
+.. [#novel_discovery] \D. S. Brown, R. Turner, O. Hennigh, and S. Loscalzo, “Discovery and Exploration of Novel Swarm Behaviors Given Limited Robot Capabilities,” 2018, doi: `10.1007/978-3-319-73008-0_31 <https://doi.org/10.1007/978-3-319-73008-0_31>`_.
 
-.. [#novel_human] C. Mattson and D. S. Brown, “Leveraging Human Feedback to Evolve and Discover Novel Emergent Behaviors in Robot Swarms,” Jul. 2023, `doi: 10.1145/3583131.3590443 <https://doi.org/10.1145/3583131.3590443>`_.
+.. [#novel_human] \C. Mattson and D. S. Brown, “Leveraging Human Feedback to Evolve and Discover Novel Emergent Behaviors in Robot Swarms,” Jul. 2023, `doi: 10.1145/3583131.3590443 <https://doi.org/10.1145/3583131.3590443>`_.
 
-.. [#snnicons] K. Zhu et al., “Spiking Neural Networks as a Controller for Emergent Swarm Agents,” Jul. 2024, doi: `10.1109/ICONS62911.2024.00055 <https://doi.org/10.1109/ICONS62911.2024.00055>`_.
+.. [#snnicons] \K. Zhu et al., “Spiking Neural Networks as a Controller for Emergent Swarm Agents,” Jul. 2024, doi: `10.1109/ICONS62911.2024.00055 <https://doi.org/10.1109/ICONS62911.2024.00055>`_.
 
-.. [#snnnice] K. Zhu, S. Snyder, R. Vega, M. Parsa, and C. Nowzari, “A Milling Swarm of Ground Robots using Spiking Neural Networks.” at the 2025 Neuro Inspired Computational Elements (NICE), Mar. 2025.
+.. [#snnnice] \K. Zhu, S. Snyder, R. Vega, M. Parsa, and C. Nowzari, “A Milling Swarm of Ground Robots using Spiking Neural Networks.” at the 2025 Neuro Inspired Computational Elements (NICE), Mar. 2025.
 
