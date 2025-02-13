@@ -17,7 +17,16 @@ class RunnerController(AbstractController):
 
     def get_actions(self, agent):
         v, omega = 0, 0
-        goal_position = np.asarray(self.goal_object.position)
+        goal_position = np.asarray(self.goal_object.pos)
+        
+        dist_to_goal = np.linalg.norm(agent.pos - goal_position)
+        radians_to_goal = np.arctan2(goal_position[1] - agent.pos[1], goal_position[0] - agent.pos[0])
+        if dist_to_goal > agent.radius:
+            v = 0.3
+            if agent.angle != radians_to_goal:
+                omega = 5 if agent.angle < radians_to_goal else -5
+        
+
         return v, omega  # return the agent's desired velocity and omega here
 
     @cached_property  # find the goal object and cache the result
