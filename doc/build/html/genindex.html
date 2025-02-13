@@ -30,8 +30,9 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=b48425a4" />
   
@@ -46,14 +47,20 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -359,6 +366,7 @@
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -408,12 +416,22 @@
 </li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent">Agent (class in novel_swarms.agent.Agent)</a>
 </li>
-      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.agent_radius">agent_radius (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.agent_radius">agent_radius (novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.agent_radius">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.agent_radius">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.control.AgentMethodController.html#novel_swarms.agent.control.AgentMethodController.AgentMethodController">AgentMethodController (class in novel_swarms.agent.control.AgentMethodController)</a>
 </li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.agents">agents (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.agents">agents (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.agents">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
 </li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.metrics.AgentsAtGoal.html#novel_swarms.metrics.AgentsAtGoal">AgentsAtGoal (class in novel_swarms.metrics)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.metrics.Aggregation.html#novel_swarms.metrics.Aggregation">Aggregation (class in novel_swarms.metrics)</a>
@@ -423,7 +441,11 @@
       <li><a href="api/_gen/novel_swarms.yaml.mathexpr.html#novel_swarms.yaml.mathexpr.allowed_numpy_names">allowed_numpy_names (in module novel_swarms.yaml.mathexpr)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.anchor_point">anchor_point (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.anchor_point">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.angle">angle (novel_swarms.agent.Agent.Agent attribute)</a>
 
       <ul>
@@ -435,9 +457,9 @@
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.angle">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.angle">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.BaseAgentConfig.as_config_dict">as_config_dict() (novel_swarms.agent.Agent.BaseAgentConfig method)</a>
 
       <ul>
@@ -447,13 +469,23 @@
 </li>
         <li><a href="api/_gen/novel_swarms.sensors.AbstractSensor.html#novel_swarms.sensors.AbstractSensor.AbstractSensor.as_config_dict">(novel_swarms.sensors.AbstractSensor.AbstractSensor method)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.as_config_dict">(novel_swarms.world.objects.StaticObject.StaticObjectConfig method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.as_config_dict">(novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.as_config_dict">(novel_swarms.world.World.World method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.BaseAgentConfig.as_dict">as_dict() (novel_swarms.agent.Agent.BaseAgentConfig method)</a>
 
       <ul>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.as_dict">(novel_swarms.agent.StaticAgent.StaticAgentConfig method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.as_dict">(novel_swarms.world.objects.StaticObject.StaticObjectConfig method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.as_dict">(novel_swarms.world.RectangularWorld.RectangularWorldConfig method)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.as_dict">(novel_swarms.world.World.AbstractWorldConfig method)</a>
 </li>
@@ -465,11 +497,17 @@
       <ul>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.as_generator">(novel_swarms.agent.StaticAgent.StaticAgentConfig method)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.as_generator">(novel_swarms.world.objects.StaticObject.StaticObjectConfig method)</a>
+</li>
       </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.BaseAgentConfig.asdict">asdict() (novel_swarms.agent.Agent.BaseAgentConfig method)</a>
 
       <ul>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.asdict">(novel_swarms.agent.StaticAgent.StaticAgentConfig method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.asdict">(novel_swarms.world.objects.StaticObject.StaticObjectConfig method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.asdict">(novel_swarms.world.RectangularWorld.RectangularWorldConfig method)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.asdict">(novel_swarms.world.World.AbstractWorldConfig method)</a>
 </li>
@@ -489,23 +527,45 @@
       <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.attach_gui">attach_gui() (novel_swarms.world.World.World method)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.attach_world_config">attach_world_config() (novel_swarms.agent.StaticAgent.StaticAgentConfig method)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.attach_world_config">(novel_swarms.world.objects.StaticObject.StaticObjectConfig method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.background_color">background_color (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.background_color">background_color (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.background_color">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
 </li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.BaseAgentConfig">BaseAgentConfig (class in novel_swarms.agent.Agent)</a>
 </li>
-      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.body_color">body_color (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.behavior_dict">behavior_dict (novel_swarms.world.RectangularWorld.RectangularWorld property)</a>
 </li>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.body_color">body_color (novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.body_color">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.body_color">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.body_filled">body_filled (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.body_filled">body_filled (novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.body_filled">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.body_filled">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.build_collider">build_collider() (novel_swarms.agent.MazeAgent.MazeAgent method)</a>
 
       <ul>
@@ -520,6 +580,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.metrics.Circliness.html#novel_swarms.metrics.Circliness">Circliness (class in novel_swarms.metrics)</a>
 </li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.collide_walls">collide_walls (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.collides">collides (novel_swarms.agent.Agent.Agent attribute)</a>
 
       <ul>
@@ -527,9 +589,13 @@
 </li>
         <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.collides">(novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.collides">(novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.collides">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.collides">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.collides">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.collision_flag">collision_flag (novel_swarms.agent.Agent.Agent attribute)</a>
@@ -540,6 +606,10 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.collision_flag">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.collision_forward">collision_forward() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.config">config (novel_swarms.agent.Agent.Agent attribute)</a>
 
       <ul>
@@ -548,8 +618,6 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.config">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.sensors.AbstractSensor.html#novel_swarms.sensors.AbstractSensor.AbstractSensor.config_vars">config_vars (novel_swarms.sensors.AbstractSensor.AbstractSensor attribute)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.yaml.include.html#novel_swarms.yaml.include.construct_include">construct_include() (in module novel_swarms.yaml.include)</a>
@@ -563,9 +631,13 @@
 </li>
         <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.controller">(novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.controller">(novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.controller">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.controller">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.controller">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.control.AbstractController.html#novel_swarms.agent.control.AbstractController.ControllerType">ControllerType (in module novel_swarms.agent.control.AbstractController)</a>
@@ -577,22 +649,30 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.DEBUG">DEBUG (novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.debug">debug (novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.DEBUG">DEBUG (novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.debug">debug (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 
       <ul>
-        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.DEBUG">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.debug">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.debug">debug (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
-</li>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.debug_draw">debug_draw() (novel_swarms.agent.MazeAgent.MazeAgent method)</a>
 
       <ul>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.debug_draw">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
 </li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.detectable_walls">detectable_walls (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.metrics.DistanceSizeRatio.html#novel_swarms.metrics.DistanceSizeRatio">DistanceSizeRatio (class in novel_swarms.metrics)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.metrics.DistanceToGoal.html#novel_swarms.metrics.DistanceToGoal">DistanceToGoal (class in novel_swarms.metrics)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.do_zoom">do_zoom() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.dpos">dpos (novel_swarms.agent.Agent.Agent attribute)</a>
 
@@ -602,8 +682,6 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.dpos">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.draw">draw() (novel_swarms.agent.Agent.Agent method)</a>
 
       <ul>
@@ -613,13 +691,27 @@
 </li>
         <li><a href="api/_gen/novel_swarms.sensors.AbstractSensor.html#novel_swarms.sensors.AbstractSensor.AbstractSensor.draw">(novel_swarms.sensors.AbstractSensor.AbstractSensor method)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.draw">(novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.draw">(novel_swarms.world.World.World method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.draw_direction">draw_direction() (novel_swarms.agent.MazeAgent.MazeAgent method)</a>
 
       <ul>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.draw_direction">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObject.draw_direction">(novel_swarms.world.objects.StaticObject.StaticObject method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.dt">dt (novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.dt">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.dt">(novel_swarms.world.RectangularWorld.RectangularWorld attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.dtheta">dtheta (novel_swarms.agent.Agent.Agent attribute)</a>
@@ -646,6 +738,8 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.factor_zoom">factor_zoom() (novel_swarms.world.RectangularWorld.RectangularWorldConfig method)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.config.html#novel_swarms.config.filter_unexpected_fields">filter_unexpected_fields() (in module novel_swarms.config)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.from_config">from_config() (novel_swarms.agent.Agent.Agent class method)</a>
@@ -665,11 +759,19 @@
       <ul>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.from_dict">(novel_swarms.agent.StaticAgent.StaticAgentConfig class method)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.from_dict">(novel_swarms.world.objects.StaticObject.StaticObjectConfig class method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_dict">(novel_swarms.world.RectangularWorld.RectangularWorldConfig class method)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.from_dict">(novel_swarms.world.World.AbstractWorldConfig class method)</a>
 </li>
       </ul></li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.from_yaml">from_yaml() (novel_swarms.world.World.AbstractWorldConfig class method)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_yaml">from_yaml() (novel_swarms.world.RectangularWorld.RectangularWorldConfig class method)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.from_yaml">(novel_swarms.world.World.AbstractWorldConfig class method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -746,6 +848,10 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.get_y_pos">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
 </li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.getAgentsMatchingYRange">getAgentsMatchingYRange() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.getBehaviorVector">getBehaviorVector() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.getFrontalPoint">getFrontalPoint() (novel_swarms.agent.Agent.Agent method)</a>
 
       <ul>
@@ -754,6 +860,8 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.getFrontalPoint">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
 </li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.getNeighborsWithinDistance">getNeighborsWithinDistance() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.getPosition">getPosition() (novel_swarms.agent.Agent.Agent method)</a>
 
       <ul>
@@ -770,8 +878,12 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.getVelocity">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
 </li>
       </ul></li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.goals">goals (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.goals">goals (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.goals">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
 </li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.grounded">grounded (novel_swarms.agent.Agent.Agent attribute)</a>
 
       <ul>
@@ -782,6 +894,8 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.grounded">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.grounded">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.grounded">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/_gen/novel_swarms.metrics.GroupRotationBehavior.html#novel_swarms.metrics.GroupRotationBehavior">GroupRotationBehavior (class in novel_swarms.metrics)</a>
@@ -794,9 +908,23 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.handle_collisions">handle_collisions() (novel_swarms.agent.MazeAgent.MazeAgent method)</a>
 </li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.handle_held_keys">handle_held_keys() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.handle_key_press">handle_key_press() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.handle_key_press">(novel_swarms.world.World.World method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.handle_key_press">handle_key_press() (novel_swarms.world.World.World method)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_events">handle_middle_mouse_events() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_held">handle_middle_mouse_held() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.handleGoalCollisions">handleGoalCollisions() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.handleWallCollisions">handleWallCollisions() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -848,11 +976,17 @@
 </li>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig">MazeAgentConfig (class in novel_swarms.agent.MazeAgent)</a>
 </li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.metadata">metadata (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
-</li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.metrics">metrics (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.metadata">metadata (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
 
       <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.metadata">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.metrics">metrics (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.metrics">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.metrics">(novel_swarms.world.World.World attribute)</a>
 </li>
       </ul></li>
@@ -1082,6 +1216,10 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.mouse_position">mouse_position (novel_swarms.world.RectangularWorld.RectangularWorld attribute)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="N">N</h2>
@@ -1097,6 +1235,8 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.name">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.name">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.name">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
       </ul></li>
       <li>
@@ -1877,9 +2017,11 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.objects">objects (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.objects">objects (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
 
       <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.objects">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.objects">(novel_swarms.world.World.World attribute)</a>
 </li>
       </ul></li>
@@ -1893,6 +2035,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.on_mouse">on_mouse() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.onClick">onClick() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.onZoom">onZoom() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.orientation_uvec">orientation_uvec() (novel_swarms.agent.Agent.Agent method)</a>
 
       <ul>
@@ -1901,14 +2049,22 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.orientation_uvec">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
 </li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.original_zoom">original_zoom (novel_swarms.world.RectangularWorld.RectangularWorld property)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.points">points (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.points">points (novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.points">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.points">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.poly_rotated">poly_rotated (novel_swarms.agent.MazeAgent.MazeAgent property)</a>
 
       <ul>
@@ -1923,6 +2079,8 @@
         <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.pos">(novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.pos">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.pos">(novel_swarms.world.RectangularWorld.RectangularWorld attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1940,14 +2098,30 @@
 </li>
         <li><a href="api/_gen/novel_swarms.sensors.AbstractSensor.html#novel_swarms.sensors.AbstractSensor.AbstractSensor.position">(novel_swarms.sensors.AbstractSensor.AbstractSensor property)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.position">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.preventAgentCollisions">preventAgentCollisions() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.radius">radius (novel_swarms.world.World.AbstractWorldConfig property)</a>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.radius">radius (novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.radius">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.radius">(novel_swarms.world.RectangularWorld.RectangularWorldConfig property)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.radius">(novel_swarms.world.World.AbstractWorldConfig property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld">RectangularWorld (class in novel_swarms.world.RectangularWorld)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig">RectangularWorldConfig (class in novel_swarms.world.RectangularWorld)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.config.html#novel_swarms.config.register_agent_type">register_agent_type() (in module novel_swarms.config)</a>
 </li>
@@ -1955,12 +2129,14 @@
 </li>
       <li><a href="api/_gen/novel_swarms.config.html#novel_swarms.config.register_dictlike_type">register_dictlike_type() (in module novel_swarms.config)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.config.html#novel_swarms.config.register_world_type">register_world_type() (in module novel_swarms.config)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.yaml.include.html#novel_swarms.yaml.include.RELPATH_TAG">RELPATH_TAG (in module novel_swarms.yaml.include)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.removeAgent">removeAgent() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.yaml.np_representer.html#novel_swarms.yaml.np_representer.represent_ndarray">represent_ndarray() (in module novel_swarms.yaml.np_representer)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.yaml.pathlib_representer.html#novel_swarms.yaml.pathlib_representer.represent_path">represent_path() (in module novel_swarms.yaml.pathlib_representer)</a>
@@ -1987,8 +2163,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.yaml.html#novel_swarms.yaml.safe_load">safe_load() (in module novel_swarms.yaml)</a>
 </li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.save_yaml">save_yaml() (novel_swarms.world.World.AbstractWorldConfig method)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.save_yaml">save_yaml() (novel_swarms.world.RectangularWorld.RectangularWorldConfig method)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.save_yaml">(novel_swarms.world.World.AbstractWorldConfig method)</a>
 </li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.metrics.ScatterBehavior.html#novel_swarms.metrics.ScatterBehavior">ScatterBehavior (class in novel_swarms.metrics)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.yaml.include.html#novel_swarms.yaml.include.search_file">search_file() (in module novel_swarms.yaml.include)</a>
@@ -1998,9 +2178,15 @@
       <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.seed">seed (novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 
       <ul>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.seed">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.seed">(novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.seed">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.selected">selected (novel_swarms.world.RectangularWorld.RectangularWorld attribute)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.metrics.SensorRotation.html#novel_swarms.metrics.SensorRotation">SensorRotation (class in novel_swarms.metrics)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.sensors">sensors (novel_swarms.agent.Agent.Agent attribute)</a>
@@ -2010,9 +2196,13 @@
 </li>
         <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent.sensors">(novel_swarms.agent.MazeAgent.MazeAgent attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig.sensors">(novel_swarms.agent.MazeAgent.MazeAgentConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.sensors">(novel_swarms.agent.StaticAgent.StaticAgent attribute)</a>
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.sensors">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.sensors">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/_gen/novel_swarms.agent.control.AbstractController.html#novel_swarms.agent.control.AbstractController.AbstractController.set_agent">set_agent() (novel_swarms.agent.control.AbstractController.AbstractController method)</a>
@@ -2097,13 +2287,21 @@
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent.setup_sensors_from_config">(novel_swarms.agent.StaticAgent.StaticAgent method)</a>
 </li>
       </ul></li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.size">size (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.show_walls">show_walls (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
 </li>
-      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.SPA">SPA (class in novel_swarms.agent.MazeAgent)</a>
-</li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.spawners">spawners (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.size">size (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
 
       <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.size">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.SPA">SPA (class in novel_swarms.agent.MazeAgent)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.spawners">spawners (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.spawners">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.spawners">(novel_swarms.world.World.World attribute)</a>
 </li>
       </ul></li>
@@ -2115,6 +2313,10 @@
 </li>
       <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig">StaticAgentConfig (class in novel_swarms.agent.StaticAgent)</a>
 </li>
+      <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObject">StaticObject (class in novel_swarms.world.objects.StaticObject)</a>
+</li>
+      <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig">StaticObjectConfig (class in novel_swarms.world.objects.StaticObject)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.step">step() (novel_swarms.agent.Agent.Agent method)</a>
 
       <ul>
@@ -2124,11 +2326,19 @@
 </li>
         <li><a href="api/_gen/novel_swarms.sensors.AbstractSensor.html#novel_swarms.sensors.AbstractSensor.AbstractSensor.step">(novel_swarms.sensors.AbstractSensor.AbstractSensor method)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObject.step">(novel_swarms.world.objects.StaticObject.StaticObject method)</a>
+</li>
+        <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.step">(novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
         <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World.step">(novel_swarms.world.World.World method)</a>
 </li>
       </ul></li>
-      <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.stop_at">stop_at (novel_swarms.world.World.AbstractWorldConfig attribute)</a>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.stop_at">stop_at (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig.stop_at">(novel_swarms.world.World.AbstractWorldConfig attribute)</a>
 </li>
+      </ul></li>
       <li><a href="api/_gen/novel_swarms.config.html#novel_swarms.config.store">store (in module novel_swarms.config)</a>
 </li>
   </ul></td>
@@ -2148,13 +2358,21 @@
 </li>
         <li><a href="api/_gen/novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgentConfig.team">(novel_swarms.agent.StaticAgent.StaticAgentConfig attribute)</a>
 </li>
+        <li><a href="api/_gen/novel_swarms.world.objects.StaticObject.html#novel_swarms.world.objects.StaticObject.StaticObjectConfig.team">(novel_swarms.world.objects.StaticObject.StaticObjectConfig attribute)</a>
+</li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.time_step">time_step (novel_swarms.world.RectangularWorld.RectangularWorldConfig attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.withinWorldBoundaries">withinWorldBoundaries() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
+</li>
       <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World">World (class in novel_swarms.world.World)</a>
 </li>
       <li><a href="api/_gen/novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent.world">world (novel_swarms.agent.Agent.Agent attribute)</a>
@@ -2168,6 +2386,18 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World_from_config">World_from_config() (in module novel_swarms.world.World)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.zoom">zoom (novel_swarms.world.RectangularWorld.RectangularWorld attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld.zoom_reset">zoom_reset() (novel_swarms.world.RectangularWorld.RectangularWorld method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2240,7 +2470,7 @@
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

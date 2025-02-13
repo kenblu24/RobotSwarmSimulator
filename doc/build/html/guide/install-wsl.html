@@ -31,8 +31,9 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
@@ -47,7 +48,13 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guide/install-wsl';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -398,8 +405,8 @@ has a good overview of WSL and its features.</p>
 <h2>Installing WSL<a class="headerlink" href="#installing-wsl" title="Link to this heading">#</a></h2>
 <p>These days, installing WSL is pretty easy. You should be able to install WSL with just
 one command from an Administrator cmd or PowerShell prompt.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Install WSL</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Install WSL</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">wsl --install</span>
 </pre></div>
 </div>
@@ -433,8 +440,8 @@ Scroll down and check the <span class="far fa-square-check"></span> <span class=
 <label class="sd-tab-label" data-sync-group="gui_cli" data-sync-id="cli" for="sd-tab-item-1">
 <span class="fas fa-terminal"></span> PowerShell</label><div class="sd-tab-content docutils">
 <p class="sd-card-text">Open a PowerShell prompt as an <span class="fas fa-shield"></span> Administrator.</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text"><span class="fas fa-shield"></span> Administrator: Windows PowerShell</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><span class="fas fa-shield"></span> Administrator: Windows PowerShell</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
 <div class="highlight-pwsh-session notranslate"><div class="highlight"><pre><span></span><span class="gp">PS C:\&gt; </span><span class="nb">Enable-WindowsOptionalFeature</span> <span class="n">-Online</span> <span class="n">-FeatureName</span> <span class="n">VirtualMachinePlatform</span> <span class="n">-NoRestart</span>
 <span class="gp">PS C:\&gt; </span><span class="nb">Enable-WindowsOptionalFeature</span> <span class="n">-Online</span> <span class="n">-FeatureName</span> <span class="n">Microsoft-Windows-Subsystem-Linux</span>
 <span class="go">Do you want to restart the computer to complete this operation now?</span>
@@ -448,8 +455,8 @@ Scroll down and check the <span class="far fa-square-check"></span> <span class=
 <label class="sd-tab-label" data-sync-group="gui_cli" data-sync-id="cli-cmd" for="sd-tab-item-2">
 <span class="fas fa-terminal"></span> cmd or other terminal</label><div class="sd-tab-content docutils">
 <p class="sd-card-text">Open a PowerShell prompt as an <span class="fas fa-shield"></span> Administrator.</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text"><span class="fas fa-shield"></span> Administrator: Windows PowerShell</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><span class="fas fa-shield"></span> Administrator: Windows PowerShell</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
 <div class="highlight-pwsh-session notranslate"><div class="highlight"><pre><span></span><span class="go">C:\&gt; dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</span>
 <span class="go">C:\&gt; dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all</span>
 </pre></div>
@@ -482,8 +489,8 @@ Then click <span class="guilabel">Get</span> or <span class="guilabel">Install</
 <p class="sd-card-text">Open a terminal (wt, cmd, pwsh, etc.) as an <span class="fas fa-shield"></span> Administrator.
 Then, get the list of available distributions with <code class="docutils literal notranslate"><span class="pre">wsl</span> <span class="pre">-l</span> <span class="pre">-o</span></code> and
 install the desired distribution with <code class="docutils literal notranslate"><span class="pre">wsl</span> <span class="pre">--install</span> <span class="pre">--distribution</span> <span class="pre">{distribution_name}</span></code>.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text"><span class="fas fa-shield"></span> Terminal</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><span class="fas fa-shield"></span> Terminal</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; wsl --list --online</span>
 <span class="go">&gt; wsl --install --inbox --distribution &lt;DISTRIBUTION_NAME&gt;</span>
 </pre></div>
@@ -499,13 +506,9 @@ Make sure to remember your password! It’s not connected to your Windows passwo
 <section id="common-installation-errors">
 <h3>Common Installation Errors<a class="headerlink" href="#common-installation-errors" title="Link to this heading">#</a></h3>
 <p>Microsoft has some troubleshooting steps for common WSL errors:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/troubleshooting">Troubleshooting Windows Subsystem for Linux</a></p></li>
-</ul>
+<p><a class="sd-sphinx-override sd-btn sd-text-wrap sd-shadow-sm reference external" href="https://learn.microsoft.com/en-us/windows/wsl/troubleshooting"><span>Troubleshooting Windows Subsystem for Linux</span></a></p>
 <p>You might also try the <a class="reference internal" href="#wsl-install-old"><span class="std std-ref">old installation method</span></a>.</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install-manual">Manual installation steps for older versions of WSL</a></p></li>
-</ul>
+<p><a class="sd-sphinx-override sd-btn sd-text-wrap sd-shadow-sm reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install-manual"><span>Manual installation steps for older versions of WSL</span></a></p>
 <p>If you’re having trouble with GUI applications, see this guide: <a class="github reference external" href="https://github.com/microsoft/wslg/wiki/Diagnosing-%22cannot-open-display%22-type-issues-with-WSLg">microsoft/wslg</a></p>
 <p>If you’re still having problems, try forcing X11 forwarding instead of wayland:</p>
 <ol class="arabic simple">
@@ -701,7 +704,7 @@ and how to use it for development.</p>
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

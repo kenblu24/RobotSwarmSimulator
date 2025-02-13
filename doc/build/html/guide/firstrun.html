@@ -31,8 +31,9 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
@@ -47,7 +48,13 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guide/firstrun';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -402,8 +409,8 @@
 <p>Remember to <a class="reference internal" href="install.html#activate-venv"><span class="std std-ref">activate the virtual environment</span></a> so that you can import <code class="docutils literal notranslate"><span class="pre">novel_swarms</span></code>!</p>
 </div>
 <p>Open a Python shell with <code class="docutils literal notranslate"><span class="pre">python</span></code>, and make sure you can <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">novel_swarms</span></code> with no errors.</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">python</span></code></span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">python</span></code></span><a class="headerlink" href="#id9" title="Link to this code">#</a></div>
 <div class="highlight-python-console notranslate"><div class="highlight"><pre><span></span><span class="go">Python 3.11.0 (or newer)</span>
 <span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">novel_swarms</span>
@@ -414,9 +421,9 @@
 <section id="creating-a-world">
 <h3>Creating a <span class="fas fa-earth-americas"></span> world<a class="headerlink" href="#creating-a-world" title="Link to this heading">#</a></h3>
 <p>First, let’s create a world. To do that, we first need to create a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code> object.</p>
+<a class="reference internal" href="../api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig" title="novel_swarms.world.RectangularWorld.RectangularWorldConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code></a> object.</p>
 <p>Then, we can create the world by passing the config to the
-<code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorld</span></code> class.</p>
+<a class="reference internal" href="../api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorld" title="novel_swarms.world.RectangularWorld.RectangularWorld"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorld</span></code></a> class.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span><span class="p">,</span> <span class="n">RectangularWorldConfig</span>
 <span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">time_step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">40</span><span class="p">)</span>
 <span class="n">world</span> <span class="o">=</span> <span class="n">RectangularWorld</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
@@ -445,6 +452,13 @@ has a reference to the world, allowing it to access the world’s properties.</p
 </pre></div>
 </div>
 <p>You should see a window pop up with a single agent in the center of the world.</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/rss-hes_just_sitting_there_menacingly.png"><img alt="A simulation with a single agent" src="../_images/rss-hes_just_sitting_there_menacingly.png" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">A simulation with a single agent.</span><a class="headerlink" href="#id10" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>But it’s not doing anything yet. Let’s make it move.
 Stop the simulation by sending <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">C</kbd></kbd> to the terminal.</p>
 </section>
@@ -466,6 +480,13 @@ which sends the same movement signals to the agent every step.
 </pre></div>
 </div>
 <p>Now the agent should move forwards and turn slowly.</p>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/rss-you_spin_me_right_round.gif"><img alt="Agent spinning in circle" src="../_images/rss-you_spin_me_right_round.gif" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Now the agent goes round in circles.</span><a class="headerlink" href="#id11" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="spawners">
 <h3><span class="fas fa-hands-holding-child"></span> Spawners<a class="headerlink" href="#spawners" title="Link to this heading">#</a></h3>
@@ -487,10 +508,12 @@ which sends the same movement signals to the agent every step.
 and then delete itself.</p>
 <p>Congrats! You’ve created your first simulation!
 To stop the simulation, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">C</kbd></kbd> in the Python shell,
-and type <code class="docutils literal notranslate"><span class="pre">exit()</span></code> to exit Python (or press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">D</kbd></kbd> or <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Z</kbd></kbd>).</p>
+and type <code class="docutils literal notranslate"><span class="pre">quit()</span></code> or <code class="docutils literal notranslate"><span class="pre">exit()</span></code> to exit Python (or press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">D</kbd></kbd> or <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Z</kbd></kbd>).</p>
 </section>
 <section id="all-together-now">
 <h3>All together now!<a class="headerlink" href="#all-together-now" title="Link to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../_images/rss-tutorial_circling.png"><img alt="Six agents in a world" class="align-right" src="../_images/rss-tutorial_circling.png" style="width: 45%;" />
+</a>
 <p>Let’s recap what we’ve done so far:</p>
 <ul class="simple">
 <li><p>We created a world with a single agent.</p></li>
@@ -498,8 +521,9 @@ and type <code class="docutils literal notranslate"><span class="pre">exit()</sp
 <li><p>We spawned a bunch of agents.</p></li>
 <li><p>We ran the simulation.</p></li>
 </ul>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">my_first_simulation.py</span></code></span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<p id="babys-first-simulation">Here’s all of the code in one file:</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">my_first_simulation.py</span></code></span><a class="headerlink" href="#id12" title="Link to this code">#</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span><span class="p">,</span> <span class="n">RectangularWorldConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.control.StaticController</span><span class="w"> </span><span class="kn">import</span> <span class="n">StaticController</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.spawners.AgentSpawner</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointAgentSpawner</span>
@@ -509,7 +533,7 @@ and type <code class="docutils literal notranslate"><span class="pre">exit()</sp
 <span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">time_step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">40</span><span class="p">)</span>
 <span class="n">world</span> <span class="o">=</span> <span class="n">RectangularWorld</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
 <span class="n">controller</span> <span class="o">=</span> <span class="n">StaticController</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                                   <span class="n">controller</span><span class="o">=</span><span class="n">controller</span><span class="p">),</span> <span class="n">world</span><span class="p">)</span>
 <span class="n">spawner</span> <span class="o">=</span> <span class="n">PointAgentSpawner</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">facing</span><span class="o">=</span><span class="s2">&quot;away&quot;</span><span class="p">,</span> <span class="n">avoid_overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">oneshot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -520,6 +544,344 @@ and type <code class="docutils literal notranslate"><span class="pre">exit()</sp
 </div>
 </div>
 </section>
+</section>
+<section id="simulator-features">
+<h2>Simulator Features<a class="headerlink" href="#simulator-features" title="Link to this heading">#</a></h2>
+<p>Let’s have a look at some of the features of the simulator.</p>
+<p>First, let’s start the simulation again, but in a paused state.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">start_paused</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Click <span class="fas fa-arrow-pointer"></span> on the simulation to focus the window. If you tap <kbd class="kbd docutils literal notranslate">L</kbd> or the <kbd class="kbd docutils literal notranslate">▷</kbd> right arrow key,
+the simulation will perform a single step <span class="fas fa-forward-step"></span>.</p>
+<p>You can <span class="fas fa-pause"></span> <strong>pause</strong> or <span class="fas fa-play"></span> <strong>unpause</strong> the simulation by pressing <kbd class="kbd docutils literal notranslate">Space</kbd>.</p>
+<p><kbd class="kbd docutils literal notranslate">⇧LShift</kbd> and <kbd class="kbd docutils literal notranslate">⇧RShift</kbd> will <strong>slow down</strong> or <span class="fas fa-gauge-high"></span> <strong>speed up</strong> the simulation.
+The speed multiplier is shown in the top left corner of the window. Values beginning with a <code class="docutils literal notranslate"><span class="pre">/</span></code> slash
+are divisors, i.e. <code class="docutils literal notranslate"><span class="pre">/2</span></code> half or <code class="docutils literal notranslate"><span class="pre">/4</span></code> quarter speed. The number of <span class="far fa-clock"></span> elapsed time steps is also shown.</p>
+<p>The number in between the timesteps and multiplier is the <span class="fas fa-stopwatch"></span> step rate and <span class="fas fa-film"></span> framerate, respectively, in frames per second.</p>
+<p>You can also see the <span class="fas fa-ruler-combined"></span> world coordinates under your cursor displayed in this area.</p>
+<p>Clicking and dragging the <span class="fas fa-computer-mouse"></span> <kbd class="kbd docutils literal notranslate">MMB</kbd> inside the simulation window will
+allow you to <span class="far fa-hand"></span> <strong>pan</strong> the simulation, and <span class="fas fa-computer-mouse"></span> scrolling up or down will
+<span class="fas fa-magnifying-glass-plus"></span> <strong>zoom</strong> in or <span class="fas fa-magnifying-glass-minus"></span> <strong>zoom</strong> out.</p>
+<p>You can reset the viewport and <span class="fas fa-magnifying-glass"></span> zoom level with the <kbd class="kbd docutils literal notranslate">Num0</kbd> Numpad 0 key if you get lost <span class="fas fa-house"></span>.</p>
+<figure class="align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/rss-panzoom.gif"><img alt="Panning inside the simulation window" src="../_images/rss-panzoom.gif" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">You can pan the simulation with the middle mouse button, and zoom with the scroll wheel.</span><a class="headerlink" href="#id13" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<a class="reference internal image-reference" href="../_images/rss-agent_selected.png"><img alt="Agent selected" class="align-left" src="../_images/rss-agent_selected.png" style="width: 70%;" />
+</a>
+<p>Clicking on an agent will <strong>select</strong> it. This will show some information about the agent on the right side of the window.
+You can <strong>de-select</strong> by clicking on the blank background.</p>
+<p>The time-related functions are handled by the <code class="xref py py-func docutils literal notranslate"><span class="pre">simulate.main()</span></code> function, while panning, zooming, and other
+event-handling is done inside the <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.World" title="novel_swarms.world.World.World"><code class="xref py py-class docutils literal notranslate"><span class="pre">World</span></code></a> class.</p>
+</section>
+<section id="sensors-controllers">
+<h2>Sensors &amp; Controllers<a class="headerlink" href="#sensors-controllers" title="Link to this heading">#</a></h2>
+<p>Earlier, we saw how to add a static controller to an agent.
+Static controllers, as you saw, cause the agent to move with a constant
+speed and turn at a constant rate. But “Agent” implies that they can make
+decisions and control their actions in response to changes in their environment.</p>
+<p>So let’s add sensors to our agents, and connect those sensors
+to the agents’ controllers.</p>
+<p>For this example, we’ll use a binary field of view (FOV) sensor.
+This sensor will detect the presence of other agents in its field of view,
+a triangular region of space that projects from the agent’s front. (Actually, it’s
+a sector of a circle, but we’ll gloss over that).</p>
+<p>Assuming you’re starting from the <a class="reference internal" href="#babys-first-simulation"><span class="std std-ref">first example code</span></a>,
+let’s add a sensor to your existing agent like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.sensors.BinaryFOVSensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryFOVSensor</span>
+
+<span class="n">sensor</span> <span class="o">=</span> <span class="n">BinaryFOVSensor</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">2</span><span class="p">,)</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">sensors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">theta</span></code> parameter is <strong>half</strong> the angle of the FOV in radians, and the
+<code class="docutils literal notranslate"><span class="pre">distance</span></code> parameter is the detection range. As with controllers, you should also
+pass a back-reference to the agent as the first argument.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>If you downloaded the <a class="reference internal" href="#babys-first-simulation"><span class="std std-ref">my_first_simulation.py</span></a> file,
+you can either open a new Python REPL with <code class="docutils literal notranslate"><span class="pre">python</span></code> and paste the code, or run
+the file with the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-i</span> <span class="pre">my_first_simulation.py</span></code>. The <code class="docutils literal notranslate"><span class="pre">-i</span></code>
+stants for “interactive” and will return control to you after running the file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sim()</span></code> function starts the sim, so don’t forget to stop the simulation with <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">C</kbd></kbd>!</p>
+</div>
+<p>Now let’s create a controller that will read the sensor data and change how the robot moves:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.control.BinaryController</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">BinaryController</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">controller</span>
+</pre></div>
+</div>
+<p>Now, if you run <code class="docutils literal notranslate"><span class="pre">sim(world)</span></code>, you should see some agents that turn left if one sees something and right if one doesn’t!</p>
+<p>If not, try re-adding the spawner to the world’s <code class="docutils literal notranslate"><span class="pre">spawners</span></code> list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="p">[:]</span>  <span class="c1"># Delete all agents</span>
+<span class="n">spawner</span><span class="o">.</span><span class="n">mark_for_deletion</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Re-enable the spawner</span>
+<span class="n">world</span><span class="o">.</span><span class="n">spawners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spawner</span><span class="p">)</span>
+</pre></div>
+</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-secondary sd-bg-text-secondary">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-light-bulb" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg></span><span class="sd-summary-text">Why did that work?</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Depending on exactly how you set things up before this section, there’s a chance nothing happened.
+Or, you might be wondering why you didn’t need to re-define a new <code class="docutils literal notranslate"><span class="pre">Spawner()</span></code> instance to
+get the new agent.</p>
+<p class="sd-card-text">There’s a couple things going on here.</p>
+<p class="sd-card-text">1. The <code class="docutils literal notranslate"><span class="pre">Spawner()</span></code> has the <code class="docutils literal notranslate"><span class="pre">oneshot=True</span></code> argument, which will set its <code class="docutils literal notranslate"><span class="pre">spawner.mark_for_deletion</span></code>
+flag to <code class="docutils literal notranslate"><span class="pre">True</span></code> after the first simulation step, otherwise it would create new agents
+on every <code class="docutils literal notranslate"><span class="pre">step()</span></code> (bad). This doesn’t mean the spawner deletes itself,
+but the world will simply remove it from its <code class="xref py py-attr docutils literal notranslate"><span class="pre">spawners</span></code> list.
+So, you don’t need to re-define the spawner, you already created it before and can just
+<em>un-mark it for deletion</em> and add it back to the <code class="docutils literal notranslate"><span class="pre">spawners</span></code> list.</p>
+<p class="sd-card-text">2. Our <code class="xref py py-class docutils literal notranslate"><span class="pre">AgentSpawner</span></code> stores either a config
+for the agent parameters, or in this example, a <strong>reference</strong> to the actual agent itself.
+In the case of the latter, the spawner will attempt to make a <a class="reference external" href="https://docs.python.org/3/library/copy.html#copy.deepcopy" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">deepcopy()</span></code></a>
+of the <code class="docutils literal notranslate"><span class="pre">agent</span></code> we gave it earlier. Because <code class="docutils literal notranslate"><span class="pre">agent</span></code> is a reference to the agent
+we created earlier, and because we modified the same reference to <code class="docutils literal notranslate"><span class="pre">agent</span></code> by setting
+<code class="docutils literal notranslate"><span class="pre">agent.controller</span> <span class="pre">=</span> <span class="pre">controller</span></code>, you’re modifying <em>the same</em> <code class="docutils literal notranslate"><span class="pre">agent</span></code> object that
+the spawner has. If you create a new <code class="docutils literal notranslate"><span class="pre">agent</span></code> instance and assign it with <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">=</span> <span class="pre">Agent(...)</span></code>,
+the spawner will not have access to it automatically.</p>
+<p class="rubric">Exercise</p>
+<p class="sd-card-text">One way to understand this would be to try adding your <code class="docutils literal notranslate"><span class="pre">agent</span></code> to the <code class="docutils literal notranslate"><span class="pre">world.population</span></code>
+multiple times.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">You won’t see three new agents, <strong>just one</strong>. This is because <em>you didn’t create copies</em> of <code class="docutils literal notranslate"><span class="pre">agent</span></code>,
+the world just has three extra <strong>references</strong> to the same <code class="docutils literal notranslate"><span class="pre">agent</span></code> in the population list.
+This means that we’re calling <code class="docutils literal notranslate"><span class="pre">agent.step()</span></code> three times as often now, but it’s still only
+the same actual agent.</p>
+</div>
+</details><div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>If the above still didn’t work, dry <code class="docutils literal notranslate"><span class="pre">exit()</span></code>-ing your Python shell and starting
+from scratch:</p>
+<div class="toggle docutils container">
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">milling.py</span></code></span><a class="headerlink" href="#id14" title="Link to this code">#</a></div>
+<div class="dropdown highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span><span class="p">,</span> <span class="n">RectangularWorldConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.control.BinaryController</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.spawners.AgentSpawner</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointAgentSpawner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.MazeAgent</span><span class="w"> </span><span class="kn">import</span> <span class="n">MazeAgent</span><span class="p">,</span> <span class="n">MazeAgentConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.sensors.BinaryFOVSensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryFOVSensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.simulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">sim</span>
+
+<span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">time_step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">RectangularWorld</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">world</span><span class="p">)</span>
+<span class="n">sensor</span> <span class="o">=</span> <span class="n">BinaryFOVSensor</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">2</span><span class="p">,)</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">sensors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">BinaryController</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">controller</span>
+<span class="n">spawner</span> <span class="o">=</span> <span class="n">PointAgentSpawner</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">facing</span><span class="o">=</span><span class="s2">&quot;away&quot;</span><span class="p">,</span> <span class="n">avoid_overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">oneshot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">spawners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spawner</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="history">
+<h2>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h2>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<img alt="" class="sd-card-img-top" src="../_images/rss-first_milling.png" />
+<div class="sd-card-body docutils">
+<p class="sd-card-text">This circular formation is an example of milling!</p>
+<p class="sd-card-text">In 2014, a group of researchers discovered that a simple rule could be used to
+create this milling formation <a class="footnote-reference brackets" href="#gauci-evolving" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p class="sd-card-text">You can even mill with a group of humans! The rule is simple:</p>
+<blockquote>
+<div><p class="sd-card-text">If you see someone, turn left.</p>
+<p class="sd-card-text">If you don’t see anyone, turn right.</p>
+</div></blockquote>
+<p class="sd-card-text">However, the speed is important to get right. In fact, if you adjust the <span class="fas fa-gauge-high"></span> speed and how
+quickly you <span class="fas fa-arrows-turn-to-dots"></span> turn, you can create a variety of different behaviors, not just milling.</p>
+</div>
+</div>
+<aside class="sidebar">
+<p>Ants can also mill! <a class="reference external" href="https://en.wikipedia.org/wiki/Ant_mill">Ant mills</a>
+are an example of emergent behaviors.</p>
+<img alt="Ants milling" loading="lazy" src="../_images/ant_mill.gif" />
+<p>img: Clemzouzou69, <a class="reference external" href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via <a class="reference external" href="https://commons.wikimedia.org/wiki/File:Ant_mill.gif">Wikimedia Commons</a></p>
+</aside>
+<p>This is actually why RobotSwarmSimulator was created. We needed a way to test what
+swarm behaviors result from different <span class="fas fa-gauge-high"></span> speeds and <span class="fas fa-rotate-right"></span> turning rates.</p>
+<p>We’ve used it to automatically discover interesting behaviors <a class="footnote-reference brackets" href="#novel-discovery" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#novel-human" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>,
+train Spiking Neural Networks <a class="footnote-reference brackets" href="#snnicons" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>, and even train real robots <a class="footnote-reference brackets" href="#snnnice" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>That’s also why the package is called <a class="reference internal" href="../api/_gen/novel_swarms.html#module-novel_swarms" title="novel_swarms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">novel_swarms</span></code></a>.</p>
+</div>
+</section>
+<section id="yaml-configuration">
+<h2>YAML Configuration<a class="headerlink" href="#yaml-configuration" title="Link to this heading">#</a></h2>
+<p>So far, we’ve only been configuring our world and agents using Python code.</p>
+<p>This has benefits, but it’s not the only way to configure RobotSwarmSimulator.
+You can also use a YAML file to configure your world and agents.</p>
+<p>Let’s start by replicating the previous example, but this time we’ll use a YAML file.</p>
+<p>First, let’s create a new file called <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code> and add the following:</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">world.yaml</span></code></span><a class="headerlink" href="#id15" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RectangularWorld&quot;</span>
+<span class="w"> </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span>
+<span class="w"> </span><span class="nt">time_step</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1 / 40</span>
+<span class="w"> </span><span class="nt">spawners</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PointAgentSpawner&quot;</span>
+<span class="w">     </span><span class="nt">n</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="w">     </span><span class="nt">facing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;away&quot;</span>
+<span class="w">     </span><span class="nt">avoid_overlap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="nt">oneshot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="nt">agent</span><span class="p">:</span>
+<span class="w">       </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MazeAgent&quot;</span>
+<span class="w">       </span><span class="nt">position</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">]</span>
+<span class="w">       </span><span class="nt">agent_radius</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">       </span><span class="nt">sensors</span><span class="p">:</span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;BinaryFOVSensor&quot;</span>
+<span class="w">           </span><span class="nt">theta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.45</span>
+<span class="w">           </span><span class="nt">distance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">       </span><span class="nt">controller</span><span class="p">:</span>
+<span class="w">         </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;BinaryController&quot;</span>
+<span class="w">         </span><span class="nt">a</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.02</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-0.5</span><span class="p p-Indicator">]</span>
+<span class="w">         </span><span class="nt">b</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.02</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<p>Then, let’s create a python file or open a new Python shell and run the following:</p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">run.py</span></code></span><a class="headerlink" href="#id16" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.simulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">sim</span>
+
+<span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="s1">&#39;world.yaml&#39;</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can run the file with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">run.py</span></code> or <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-i</span> <span class="pre">run.py</span></code>.
+Make sure your <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code> file is in the same directory as <code class="docutils literal notranslate"><span class="pre">run.py</span></code>.</p>
+</div>
+<p>You should see the same milling formation as before.</p>
+<section id="what-just-happened">
+<h3>What just happened?<a class="headerlink" href="#what-just-happened" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="../api/_gen/novel_swarms.world.html#module-novel_swarms.world" title="novel_swarms.world"><code class="xref py py-mod docutils literal notranslate"><span class="pre">world</span></code></a>s and <a class="reference internal" href="../api/_gen/novel_swarms.agent.html#module-novel_swarms.agent" title="novel_swarms.agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code></a>s use Config classes,
+but to see configuration options for sensors, controllers, and spawners, the arguments are simply
+passed as a <code class="docutils literal notranslate"><span class="pre">dict</span></code> to the constructors.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code> file is a YAML file that describes the world, and <a class="reference internal" href="../api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_yaml" title="novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_yaml"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RectangularWorldConfig.from_yaml()</span></code></a>
+loads it as a <code class="docutils literal notranslate"><span class="pre">dict</span></code> and turns it into a <a class="reference internal" href="../api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig" title="novel_swarms.world.RectangularWorld.RectangularWorldConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code></a>.
+Just as <code class="docutils literal notranslate"><span class="pre">dict</span></code>s can contain nested <code class="docutils literal notranslate"><span class="pre">dict</span></code>s, Configs can contain other configs, so the <code class="docutils literal notranslate"><span class="pre">spawners:</span></code> sequence
+becomes a list of dictionaries, which are then turned into <code class="xref py py-class docutils literal notranslate"><span class="pre">AgentSpawner</span></code>s.</p>
+<p>We cover the order that things are initialized in <a class="reference internal" href="structure.html#initialization-order"><span class="std std-ref">Initialization Order</span></a>.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><strong>Exercise</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Try changing the parameters in the <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code> file and see what happens.</p>
+<p class="sd-card-text">You can also try adding a single agent to the <code class="docutils literal notranslate"><span class="pre">world.population</span></code> list
+adding the <code class="docutils literal notranslate"><span class="pre">agents:</span> <span class="pre">``</span> <span class="pre">sequence</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">``world.yaml</span></code> file.</p>
+<p class="sd-card-text">If you’ve never used YAML before, check out <a class="reference external" href="https://learnxinyminutes.com/docs/yaml/">Learn YAML in Y minutes</a></p>
+</div>
+</div>
+</section>
+</section>
+<section id="what-can-i-change">
+<h2>What can I change?<a class="headerlink" href="#what-can-i-change" title="Link to this heading">#</a></h2>
+<p>If you tried the exercise above, you might be wondering what the parameters are
+called and what they do. This information can be gleaned from the <a class="reference internal" href="../api/index.html"><span class="doc">API Reference</span></a>.</p>
+<p>For example, the options for configuring <code class="docutils literal notranslate"><span class="pre">RectangularWorld</span></code> are the parameters
+for the <a class="reference internal" href="../api/_gen/novel_swarms.world.RectangularWorld.html#novel_swarms.world.RectangularWorld.RectangularWorldConfig" title="novel_swarms.world.RectangularWorld.RectangularWorldConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code></a> class, which
+also inherits options and defaults from the <a class="reference internal" href="../api/_gen/novel_swarms.world.World.html#novel_swarms.world.World.AbstractWorldConfig" title="novel_swarms.world.World.AbstractWorldConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractWorldConfig</span></code></a> class.</p>
+<p>Similarly, the options for configuring <code class="docutils literal notranslate"><span class="pre">MazeAgent</span></code> are the parameters
+for the <a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig" title="novel_swarms.agent.MazeAgent.MazeAgentConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">MazeAgentConfig</span></code></a> class, and so on.</p>
+<p>For objects that don’t use Config classes, such as sensors, controllers, and spawners,
+remember that the arguments are simply passed as a <code class="docutils literal notranslate"><span class="pre">dict</span></code> to the constructors. So the
+options are the parameters for the constructor. This is how you might set the controller
+of an agent to a <a class="reference internal" href="../api/_gen/novel_swarms.agent.control.BinaryController.html#module-novel_swarms.agent.control.BinaryController" title="novel_swarms.agent.control.BinaryController"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BinaryController</span></code></a>:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-column docutils">
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id17" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">BinaryController</span><span class="p">(</span><span class="n">agent</span>
+    <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">b</span><span class="o">=</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">YAML</span><a class="headerlink" href="#id18" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">controller</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;BinaryController&quot;</span>
+<span class="w">  </span><span class="nt">a</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.02</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-0.5</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">b</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.02</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonition-todo admonition" id="id6">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>new controller type tutorial</p></li>
+<li><p>new sensor type tutorial</p></li>
+<li><p>metrics tutorial</p></li>
+<li><p>advanced yaml tutorial (np, include)</p></li>
+<li><p>new agent type tutorial</p></li>
+<li><p>world objects tutorial</p></li>
+<li><p>add pictures and animated gifs</p></li>
+</ul>
+</div>
+<p class="rubric">Citations</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="gauci-evolving" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="13">
+<li><p>Gauci, J. Chen, T. J. Dodd, and R. Groß, “Evolving Aggregation Behaviors in Multi-Robot Systems with Binary Sensors,” 2014, doi: <a class="reference external" href="https://doi.org/10.1007/978-3-642-55146-8_25">10.1007/978-3-642-55146-8_25</a>.</p></li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="novel-discovery" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="4">
+<li><ol class="upperalpha simple" start="19">
+<li><p>Brown, R. Turner, O. Hennigh, and S. Loscalzo, “Discovery and Exploration of Novel Swarm Behaviors Given Limited Robot Capabilities,” 2018, doi: <a class="reference external" href="https://doi.org/10.1007/978-3-319-73008-0_31">10.1007/978-3-319-73008-0_31</a>.</p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="novel-human" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="3">
+<li><p>Mattson and D. S. Brown, “Leveraging Human Feedback to Evolve and Discover Novel Emergent Behaviors in Robot Swarms,” Jul. 2023, <a class="reference external" href="https://doi.org/10.1145/3583131.3590443">doi: 10.1145/3583131.3590443</a>.</p></li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="snnicons" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="11">
+<li><p>Zhu et al., “Spiking Neural Networks as a Controller for Emergent Swarm Agents,” Jul. 2024, doi: <a class="reference external" href="https://doi.org/10.1109/ICONS62911.2024.00055">10.1109/ICONS62911.2024.00055</a>.</p></li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="snnnice" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="11">
+<li><p>Zhu, S. Snyder, R. Vega, M. Parsa, and C. Nowzari, “A Milling Swarm of Ground Robots using Spiking Neural Networks.” at the 2025 Neuro Inspired Computational Elements (NICE), Mar. 2025.</p></li>
+</ol>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -579,6 +941,14 @@ and type <code class="docutils literal notranslate"><span class="pre">exit()</sp
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#all-together-now">All together now!</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulator-features">Simulator Features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors-controllers">Sensors &amp; Controllers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#history">History</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yaml-configuration">YAML Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-just-happened">What just happened?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-can-i-change">What can I change?</a></li>
 </ul>
   </nav></div>
 
@@ -659,7 +1029,7 @@ and type <code class="docutils literal notranslate"><span class="pre">exit()</sp
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

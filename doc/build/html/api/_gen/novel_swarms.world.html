@@ -31,8 +31,9 @@
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=b48425a4" />
   
@@ -47,7 +48,14 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/_gen/novel_swarms.world';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -56,7 +64,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -545,11 +553,36 @@
                   
   <section id="module-novel_swarms.world">
 <span id="novel-swarms-world"></span><h1>novel_swarms.world<a class="headerlink" href="#module-novel_swarms.world" title="Link to this heading">#</a></h1>
+<p>Houses World modules.</p>
+<p>Worlds are the root of the simulation.</p>
+<p>All worlds must inherit from <a class="reference internal" href="novel_swarms.world.World.html#novel_swarms.world.World.World" title="novel_swarms.world.World.World"><code class="xref py py-class docutils literal notranslate"><span class="pre">World</span></code></a></p>
+<p>The world is simulated by the <a class="reference internal" href="novel_swarms.world.simulate.html#module-novel_swarms.world.simulate" title="novel_swarms.world.simulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulate</span></code></a> module.</p>
+<p class="rubric">Subpackages</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.world.generation.html#module-novel_swarms.world.generation" title="novel_swarms.world.generation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="novel_swarms.world.goals.html#module-novel_swarms.world.goals" title="novel_swarms.world.goals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">goals</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.world.objects.html#module-novel_swarms.world.objects" title="novel_swarms.world.objects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objects</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="novel_swarms.world.spawners.html#module-novel_swarms.world.spawners" title="novel_swarms.world.spawners"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawners</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.world.subscribers.html#module-novel_swarms.world.subscribers" title="novel_swarms.world.subscribers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subscribers</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Modules</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="novel_swarms.world.RectangularWorld.html#module-novel_swarms.world.RectangularWorld" title="novel_swarms.world.RectangularWorld"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangularWorld</span></code></a></p></td>
-<td><p></p></td>
+<td><p>2D world module.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="novel_swarms.world.World.html#module-novel_swarms.world.World" title="novel_swarms.world.World"><code class="xref py py-obj docutils literal notranslate"><span class="pre">World</span></code></a></p></td>
 <td><p>Base world class.</p></td>
@@ -696,7 +729,7 @@
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

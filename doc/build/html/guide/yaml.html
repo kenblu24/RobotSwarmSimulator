@@ -31,8 +31,9 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
   
@@ -47,7 +48,13 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guide/yaml';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -428,16 +435,44 @@ example of standard tags are type specifiers, such as <code class="docutils lite
 </div>
 <p>RobotSwarmSimulator uses a custom PyYAML loader to allow for some nice features.
 The custom YAML tags are defined in the <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#module-novel_swarms.yaml" title="novel_swarms.yaml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code></a> module.</p>
+<p id="yaml-crazy-tag-example">Here’s an example of a crazy YAML file that uses a bunch of YAML features and our custom tags:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">world.yaml (example)</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RectangularWorld&quot;</span>
+<span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># yaml flow style</span>
+<span class="nt">agents</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot1.yaml</span><span class="w">  </span><span class="c1"># add robot1 agent</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot2.yaml</span><span class="w">  </span><span class="c1"># add robot2 agent</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nl">&amp;anchor003</span><span class="w">  </span><span class="c1"># save this robot as an anchor</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MazeAgent</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot3</span>
+<span class="w">  </span><span class="nt">agent_radius</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">angle</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">radians(90 + 45)</span><span class="w">  </span><span class="c1"># convert degrees to radians</span>
+<span class="w">  </span><span class="nt">poly</span><span class="p">:</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">body_shape.svg</span><span class="w">  </span><span class="c1"># load an SVG file</span>
+<span class="w">  </span><span class="nt">controller</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StaticController</span>
+<span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1e-2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pi / 2</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># pi constant from numpy</span>
+<span class="nt">spawners</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ExcelSpawner</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="kt">!relpath</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">positions.xlsx</span><span class="w">  </span><span class="c1"># path is relative to cwd or this YAML file</span>
+<span class="w">  </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="nv">*anchor003</span><span class="w">  </span><span class="c1"># use the robot3 agent from above</span>
+</pre></div>
+</div>
+</div>
+<p>If you’re new to YAML or haven’t seen the <code class="docutils literal notranslate"><span class="pre">&amp;anchor</span></code> and <code class="docutils literal notranslate"><span class="pre">*anchor</span></code> syntax,
+check out <a class="reference external" href="https://learnxinyminutes.com/docs/yaml/">Learn YAML in Y minutes</a>.</p>
+<p>To understand what the <code class="docutils literal notranslate"><span class="pre">!include</span></code>, <code class="docutils literal notranslate"><span class="pre">!relpath</span></code>, and <code class="docutils literal notranslate"><span class="pre">!np</span></code> tags do, read on.</p>
 <section id="the-np-tag">
 <h3>The <code class="docutils literal notranslate"><span class="pre">!np</span></code> tag<a class="headerlink" href="#the-np-tag" title="Link to this heading">#</a></h3>
 <p>This tag is used to convert a YAML string, sequence, or mapping to a numpy object.</p>
-<p>For example, the following YAML file:</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">foo.yaml</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<p>In this example, the following YAML files are in the same directory:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">foo.yaml</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">complex(&#39;2+2j&#39;)</span>
 </pre></div>
 </div>
 </div>
+<p>See the <a class="reference internal" href="../api/_gen/novel_swarms.yaml.mathexpr.html#module-novel_swarms.yaml.mathexpr" title="novel_swarms.yaml.mathexpr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mathexpr</span></code></a> module for more information on what you can do.</p>
 </section>
 <section id="the-include-tag">
 <span id="yaml-tags-include"></span><h3>The <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag<a class="headerlink" href="#the-include-tag" title="Link to this heading">#</a></h3>
@@ -446,8 +481,8 @@ The custom YAML tags are defined in the <a class="reference internal" href="../a
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-pt-0 sd-pb-0 sd-pl-0 sd-pr-0 docutils">
 <div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
 <div class="sd-col sd-d-flex-column docutils">
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">bar.yaml</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">bar.yaml</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">my_list</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
@@ -457,16 +492,16 @@ The custom YAML tags are defined in the <a class="reference internal" href="../a
 </div>
 </div>
 <div class="sd-col sd-d-flex-column docutils">
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">foo.yaml</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">foo.yaml</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">foo</span><span class="p">:</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar.yaml</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Result</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Result</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.yaml</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mapping</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;foo.yaml&#39;</span><span class="p">)</span>
 
@@ -478,7 +513,7 @@ The custom YAML tags are defined in the <a class="reference internal" href="../a
 </div>
 </div>
 </div>
-<p>The file extension affects the behavior of the <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag:</p>
+<p>The file extension of what you’re including affects the behavior of the <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files will be loaded using the <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#novel_swarms.yaml.load" title="novel_swarms.yaml.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a> function</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.json</span></code> files will be loaded using <code class="docutils literal notranslate"><span class="pre">json.load</span></code></p></li>
@@ -490,8 +525,8 @@ The custom YAML tags are defined in the <a class="reference internal" href="../a
 <p>This tag is used to resolve the relative path given, but unlike the
 <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag, it does not load the file, and instead returns
 the absolute path as a string.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">/home/user/project/foo.yaml</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">/home/user/project/foo.yaml</span><a class="headerlink" href="#id6" title="Link to this code">#</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="kt">!relpath</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar.yaml</span>
 </pre></div>
 </div>
@@ -659,7 +694,7 @@ by testing the following assumptions in order:</p>
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

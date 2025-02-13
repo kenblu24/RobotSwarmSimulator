@@ -31,8 +31,9 @@
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=b48425a4" />
   
@@ -47,7 +48,13 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/_gen/novel_swarms.yaml.mathexpr';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -56,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -558,10 +565,13 @@ Assignments and named expressions (walrus <code class="docutils literal notransl
 the user from breaking things too much.</p>
 </div>
 <p class="rubric">Examples</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">YAML</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">0</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">radians(90 + 45)</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pi / 2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3.14</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># -&gt; [-2.356194490192345, 1.5707963267948966, 3.14]</span>
 <span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">complex(&#39;2+2j&#39;)</span><span class="w">  </span><span class="c1"># -&gt; (2+2j)</span>
 <span class="nt">2</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array(list(range(10)), dtype=float)</span><span class="w">  </span><span class="c1"># -&gt; array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])</span>
 </pre></div>
+</div>
 </div>
 <section id="allowed-names">
 <h2>Allowed Names<a class="headerlink" href="#allowed-names" title="Link to this heading">#</a></h2>
@@ -733,7 +743,7 @@ The argument must be an iterable if specified.</p>
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

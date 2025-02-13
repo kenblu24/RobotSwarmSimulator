@@ -1,8 +1,15 @@
-novel\_swarms.world.RectangularWorld
+﻿novel\_swarms.world.RectangularWorld
 ====================================
 
 .. automodule:: novel_swarms.world.RectangularWorld
 
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      COLLISION_CLASSES
+      remove_special_classes
    
    .. rubric:: Functions
 

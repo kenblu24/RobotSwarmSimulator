@@ -1,0 +1,44 @@
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://www.w3.org/1999/xlink" width="277pt" height="29pt" viewBox="0.00 0.00 277.00 28.75">
+<ns0:g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 24.75)">
+<ns0:title>inheritanced87444011f</ns0:title>
+
+<ns0:g id="node1" class="node">
+<ns0:title>Agent</ns0:title>
+<ns0:g id="a_node1"><ns0:a ns1:href="..\api\_gen\novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent" ns1:title="Agent" target="_top">
+<ns0:polygon fill="white" stroke="black" stroke-width="0.5" points="54,-20.75 0,-20.75 0,0 54,0 54,-20.75" />
+<ns0:text text-anchor="middle" x="27" y="-7.25" font-family="Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans" font-size="10.00">Agent</ns0:text>
+</ns0:a>
+</ns0:g>
+</ns0:g>
+
+<ns0:g id="node3" class="node">
+<ns0:title>StaticAgent</ns0:title>
+<ns0:g id="a_node3"><ns0:a ns1:href="..\api\_gen\novel_swarms.agent.StaticAgent.html#novel_swarms.agent.StaticAgent.StaticAgent" ns1:title="StaticAgent" target="_top">
+<ns0:polygon fill="white" stroke="black" stroke-width="0.5" points="162.25,-20.75 90,-20.75 90,0 162.25,0 162.25,-20.75" />
+<ns0:text text-anchor="middle" x="126.12" y="-7.25" font-family="Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans" font-size="10.00">StaticAgent</ns0:text>
+</ns0:a>
+</ns0:g>
+</ns0:g>
+
+<ns0:g id="edge2" class="edge">
+<ns0:title>Agent-&gt;StaticAgent</ns0:title>
+<ns0:path fill="none" stroke="black" stroke-width="0.5" d="M54.28,-10.38C63.22,-10.38 73.45,-10.38 83.3,-10.38" />
+<ns0:polygon fill="black" stroke="black" stroke-width="0.5" points="83.94,-12.13 88.94,-10.38 83.94,-8.63 83.94,-12.13" />
+</ns0:g>
+
+<ns0:g id="node2" class="node">
+<ns0:title>MazeAgent</ns0:title>
+<ns0:g id="a_node2"><ns0:a ns1:href="..\api\_gen\novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent" ns1:title="MazeAgent" target="_top">
+<ns0:polygon fill="white" stroke="black" stroke-width="0.5" points="269,-20.75 198.25,-20.75 198.25,0 269,0 269,-20.75" />
+<ns0:text text-anchor="middle" x="233.62" y="-7.25" font-family="Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans" font-size="10.00">MazeAgent</ns0:text>
+</ns0:a>
+</ns0:g>
+</ns0:g>
+
+<ns0:g id="edge1" class="edge">
+<ns0:title>StaticAgent-&gt;MazeAgent</ns0:title>
+<ns0:path fill="none" stroke="black" stroke-width="0.5" d="M162.55,-10.38C171.79,-10.38 181.83,-10.38 191.34,-10.38" />
+<ns0:polygon fill="black" stroke="black" stroke-width="0.5" points="192.08,-12.13 197.08,-10.38 192.08,-8.63 192.08,-12.13" />
+</ns0:g>
+</ns0:g>
+</ns0:svg>

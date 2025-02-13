@@ -31,8 +31,9 @@
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=b48425a4" />
   
@@ -47,7 +48,14 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/_gen/novel_swarms.world.RectangularWorld';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -56,7 +64,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 11, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
   </head>
   
   
@@ -548,11 +556,484 @@
                   
   <section id="module-novel_swarms.world.RectangularWorld">
 <span id="novel-swarms-world-rectangularworld"></span><h1>novel_swarms.world.RectangularWorld<a class="headerlink" href="#module-novel_swarms.world.RectangularWorld" title="Link to this heading">#</a></h1>
+<p>2D world module.</p>
+<p>The RectangularWorld is a 2D world.</p>
+<p>It is currently the only world type available.</p>
+<section id="config-class">
+<h2>Config Class<a class="headerlink" href="#config-class" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.world.RectangularWorld.</span></span><span class="sig-name descname"><span class="pre">RectangularWorldConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig" title="Link to this definition">#</a></dt>
+<dd><p>Config dataclass for a RectangularWorld.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>radius</strong></dt><dd></dd>
+<dt><strong>seed</strong></dt><dd></dd>
+<dt><strong>stop_at</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>as_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>asdict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>factor_zoom</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>from_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>from_yaml</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>save_yaml</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.agents">
+<span class="sig-name descname"><span class="pre">agents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.agents" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.as_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.asdict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.background_color">
+<span class="sig-name descname"><span class="pre">background_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.background_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.collide_walls">
+<span class="sig-name descname"><span class="pre">collide_walls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.collide_walls" title="Link to this definition">#</a></dt>
+<dd><p>Currently unused.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.detectable_walls">
+<span class="sig-name descname"><span class="pre">detectable_walls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.detectable_walls" title="Link to this definition">#</a></dt>
+<dd><p>Currently unused.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.factor_zoom">
+<span class="sig-name descname"><span class="pre">factor_zoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zoom</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.factor_zoom" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_yaml">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_yaml" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.goals">
+<span class="sig-name descname"><span class="pre">goals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.goals" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.metrics" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.objects" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.radius">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">radius</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.radius" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.save_yaml">
+<span class="sig-name descname"><span class="pre">save_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.save_yaml" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.seed" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.show_walls">
+<span class="sig-name descname"><span class="pre">show_walls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.show_walls" title="Link to this definition">#</a></dt>
+<dd><p>Currently unused.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(5,</span> <span class="pre">5)</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.size" title="Link to this definition">#</a></dt>
+<dd><p>size of the world.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.spawners">
+<span class="sig-name descname"><span class="pre">spawners</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.spawners" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.stop_at">
+<span class="sig-name descname"><span class="pre">stop_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.stop_at" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorldConfig.time_step">
+<span class="sig-name descname"><span class="pre">time_step</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.016666666666666666</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.time_step" title="Link to this definition">#</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Delta t\)</span> delta time (seconds)</p>
+<p>The time step, or delta time, is used by simulated objects and agents
+when calculating anything that depends on time, such as velocity.</p>
+<p>It is stored into the world’s <a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.dt" title="novel_swarms.world.RectangularWorld.RectangularWorld.dt"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dt</span></code></a> attribute,
+which should be used if an agent needs to know “how much time passed
+<strong>in the simulated world</strong> since the last tick”.</p>
+<p>It does not directly determine how fast the simulation runs, or the FPS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="world-class">
+<h2>World Class<a class="headerlink" href="#world-class" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">novel_swarms.world.RectangularWorld.</span></span><span class="sig-name descname"><span class="pre">RectangularWorld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig" title="novel_swarms.world.RectangularWorld.RectangularWorldConfig"><span class="pre">RectangularWorldConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>behavior_dict</strong></dt><dd></dd>
+<dt><strong>original_zoom</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.do_zoom" title="novel_swarms.world.RectangularWorld.RectangularWorld.do_zoom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">do_zoom</span></code></a>(point, v)</p></td>
+<td><p>zooms the camera around a point</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.draw" title="novel_swarms.world.RectangularWorld.RectangularWorld.draw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw</span></code></a>(screen[, offset])</p></td>
+<td><p>Cycle through the entire population and draw the agents and objects.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getNeighborsWithinDistance" title="novel_swarms.world.RectangularWorld.RectangularWorld.getNeighborsWithinDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNeighborsWithinDistance</span></code></a>(center, r[, excluded])</p></td>
+<td><p>Given the center of a circle, find all Agents located within the circumference defined by center and r</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.onClick" title="novel_swarms.world.RectangularWorld.RectangularWorld.onClick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onClick</span></code></a>(event)</p></td>
+<td><p>Handle mouse click events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.onZoom" title="novel_swarms.world.RectangularWorld.RectangularWorld.onZoom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">onZoom</span></code></a>(mouse_event, scroll_event)</p></td>
+<td><p>Handle mouse wheel events.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.on_mouse" title="novel_swarms.world.RectangularWorld.RectangularWorld.on_mouse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_mouse</span></code></a>(pos)</p></td>
+<td><p>Handle mouse movement events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.step" title="novel_swarms.world.RectangularWorld.RectangularWorld.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>()</p></td>
+<td><p>Cycle through the entire population and take one step.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.withinWorldBoundaries" title="novel_swarms.world.RectangularWorld.RectangularWorld.withinWorldBoundaries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">withinWorldBoundaries</span></code></a>(agent)</p></td>
+<td><p>Set agent position with respect to the world's boundaries and the bounding box of the agent</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld.zoom_reset" title="novel_swarms.world.RectangularWorld.RectangularWorld.zoom_reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zoom_reset</span></code></a>()</p></td>
+<td><p>Reset the camera position and zoom level to the original zoom level.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>as_config_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>as_dict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>asdict</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>attach_gui</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>collision_forward</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>evaluate</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>from_config</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>getAgentsMatchingYRange</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>getBehaviorVector</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>handleGoalCollisions</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>handleWallCollisions</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>handle_held_keys</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>handle_key_press</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>handle_middle_mouse_events</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>handle_middle_mouse_held</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>preventAgentCollisions</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>removeAgent</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>set_seed</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>setup</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.as_config_dict">
+<span class="sig-name descname"><span class="pre">as_config_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.as_config_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.behavior_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">behavior_dict</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.behavior_dict" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.collision_forward">
+<span class="sig-name descname"><span class="pre">collision_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colliding_agent</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.collision_forward" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.do_zoom">
+<span class="sig-name descname"><span class="pre">do_zoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.do_zoom" title="Link to this definition">#</a></dt>
+<dd><p>zooms the camera around a point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.draw" title="Link to this definition">#</a></dt>
+<dd><p>Cycle through the entire population and draw the agents and objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.dt" title="Link to this definition">#</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\Delta t\)</span> delta time (seconds)</p>
+<p>The time step, or delta time, is used by simulated objects and agents
+when calculating anything that depends on time, such as velocity, or
+any time an agent needs to know “how much time passed
+<strong>in the simulated world</strong> since the last tick”.</p>
+<p>It does not directly determine how fast the simulation runs, or the FPS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.getAgentsMatchingYRange">
+<span class="sig-name descname"><span class="pre">getAgentsMatchingYRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AABB</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getAgentsMatchingYRange" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.getBehaviorVector">
+<span class="sig-name descname"><span class="pre">getBehaviorVector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getBehaviorVector" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.getNeighborsWithinDistance">
+<span class="sig-name descname"><span class="pre">getNeighborsWithinDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getNeighborsWithinDistance" title="Link to this definition">#</a></dt>
+<dd><p>Given the center of a circle, find all Agents located within the circumference defined by center and r</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.handleGoalCollisions">
+<span class="sig-name descname"><span class="pre">handleGoalCollisions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handleGoalCollisions" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.handleWallCollisions">
+<span class="sig-name descname"><span class="pre">handleWallCollisions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent"><span class="pre">Agent</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handleWallCollisions" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.handle_held_keys">
+<span class="sig-name descname"><span class="pre">handle_held_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_held_keys" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.handle_key_press">
+<span class="sig-name descname"><span class="pre">handle_key_press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_key_press" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_events">
+<span class="sig-name descname"><span class="pre">handle_middle_mouse_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_events" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_held">
+<span class="sig-name descname"><span class="pre">handle_middle_mouse_held</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_held" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.mouse_position">
+<span class="sig-name descname"><span class="pre">mouse_position</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.mouse_position" title="Link to this definition">#</a></dt>
+<dd><p>last mouse position in viewport pixel coordinates (UL 0,0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.onClick">
+<span class="sig-name descname"><span class="pre">onClick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.onClick" title="Link to this definition">#</a></dt>
+<dd><p>Handle mouse click events.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.onZoom">
+<span class="sig-name descname"><span class="pre">onZoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mouse_event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scroll_event</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.onZoom" title="Link to this definition">#</a></dt>
+<dd><p>Handle mouse wheel events.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.on_mouse">
+<span class="sig-name descname"><span class="pre">on_mouse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.on_mouse" title="Link to this definition">#</a></dt>
+<dd><p>Handle mouse movement events.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.original_zoom">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">original_zoom</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.original_zoom" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.pos">
+<span class="sig-name descname"><span class="pre">pos</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.pos" title="Link to this definition">#</a></dt>
+<dd><p>current offset of the camera when <code class="docutils literal notranslate"><span class="pre">draw()</span></code>\ ing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.preventAgentCollisions">
+<span class="sig-name descname"><span class="pre">preventAgentCollisions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent"><span class="pre">Agent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">forward_freeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.preventAgentCollisions" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.removeAgent">
+<span class="sig-name descname"><span class="pre">removeAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.removeAgent" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.selected">
+<span class="sig-name descname"><span class="pre">selected</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.selected" title="Link to this definition">#</a></dt>
+<dd><p>currently selected agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent">Agent</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.step" title="Link to this definition">#</a></dt>
+<dd><p>Cycle through the entire population and take one step. Calculate Behavior if needed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.withinWorldBoundaries">
+<span class="sig-name descname"><span class="pre">withinWorldBoundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="novel_swarms.agent.Agent.html#novel_swarms.agent.Agent.Agent" title="novel_swarms.agent.Agent.Agent"><span class="pre">Agent</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.withinWorldBoundaries" title="Link to this definition">#</a></dt>
+<dd><p>Set agent position with respect to the world’s boundaries and the bounding box of the agent</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.zoom">
+<span class="sig-name descname"><span class="pre">zoom</span></span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.zoom" title="Link to this definition">#</a></dt>
+<dd><p>current zoom level used when <code class="docutils literal notranslate"><span class="pre">draw()</span></code>\ ing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="novel_swarms.world.RectangularWorld.RectangularWorld.zoom_reset">
+<span class="sig-name descname"><span class="pre">zoom_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/world/RectangularWorld.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.world.RectangularWorld.RectangularWorld.zoom_reset" title="Link to this definition">#</a></dt>
+<dd><p>Reset the camera position and zoom level to the original zoom level.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">COLLISION_CLASSES</span></code></p></td>
+<td><p>words to put in SVG layer names to indicate if that object should collide</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_special_classes</span></code>(names, *[, classes])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_collision_config</span></code>(collides)</p></td>
-<td><p></p></td>
+<td><p>Get collision config dict from string or bool.</p></td>
 </tr>
 </tbody>
 </table>
@@ -560,11 +1041,11 @@
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangularWorld</span></code>(config)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorld" title="novel_swarms.world.RectangularWorld.RectangularWorld"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangularWorld</span></code></a>(config)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code>(size, ...)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig" title="novel_swarms.world.RectangularWorld.RectangularWorldConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Config dataclass for a RectangularWorld.</p></td>
 </tr>
 </tbody>
 </table>
@@ -609,6 +1090,78 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-class">Config Class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.agents"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.agents</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.as_dict"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.as_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.asdict"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.asdict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.background_color"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.background_color</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.collide_walls"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.collide_walls</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.detectable_walls"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.detectable_walls</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.factor_zoom"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.factor_zoom()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.from_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.from_yaml"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.from_yaml()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.goals"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.goals</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.metadata"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.metadata</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.metrics"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.metrics</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.objects"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.objects</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.radius"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.save_yaml"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.save_yaml()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.seed"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.seed</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.show_walls"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.show_walls</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.size"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.spawners"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.spawners</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.stop_at"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.stop_at</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorldConfig.time_step"><code class="docutils literal notranslate"><span class="pre">RectangularWorldConfig.time_step</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#world-class">World Class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld"><code class="docutils literal notranslate"><span class="pre">RectangularWorld</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.as_config_dict"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.as_config_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.behavior_dict"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.behavior_dict</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.collision_forward"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.collision_forward()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.do_zoom"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.do_zoom()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.draw"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.draw()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.dt"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.dt</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getAgentsMatchingYRange"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.getAgentsMatchingYRange()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getBehaviorVector"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.getBehaviorVector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.getNeighborsWithinDistance"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.getNeighborsWithinDistance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handleGoalCollisions"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.handleGoalCollisions()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handleWallCollisions"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.handleWallCollisions()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_held_keys"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.handle_held_keys()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_key_press"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.handle_key_press()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_events"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.handle_middle_mouse_events()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.handle_middle_mouse_held"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.handle_middle_mouse_held()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.mouse_position"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.mouse_position</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.onClick"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.onClick()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.onZoom"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.onZoom()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.on_mouse"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.on_mouse()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.original_zoom"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.original_zoom</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.pos"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.pos</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.preventAgentCollisions"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.preventAgentCollisions()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.removeAgent"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.removeAgent()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.selected"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.selected</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.step"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.step()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.withinWorldBoundaries"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.withinWorldBoundaries()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.zoom"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.zoom</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.world.RectangularWorld.RectangularWorld.zoom_reset"><code class="docutils literal notranslate"><span class="pre">RectangularWorld.zoom_reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
@@ -687,7 +1240,7 @@
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 11, 2025.
+  Last built Feb 13, 2025.
   <br/>
 </p></div>
       

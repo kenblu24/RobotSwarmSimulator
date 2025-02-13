@@ -163,11 +163,17 @@ Common Installation Errors
 
 Microsoft has some troubleshooting steps for common WSL errors:
 
-* `Troubleshooting Windows Subsystem for Linux <https://learn.microsoft.com/en-us/windows/wsl/troubleshooting>`_
+.. button-link:: https://learn.microsoft.com/en-us/windows/wsl/troubleshooting
+   :shadow:
+
+   Troubleshooting Windows Subsystem for Linux
 
 You might also try the :ref:`old installation method <wsl-install-old>`\ .
 
-* `Manual installation steps for older versions of WSL <https://learn.microsoft.com/en-us/windows/wsl/install-manual>`_
+.. button-link:: https://learn.microsoft.com/en-us/windows/wsl/install-manual
+   :shadow:
+
+   Manual installation steps for older versions of WSL
 
 If you're having trouble with GUI applications, see this guide: https://github.com/microsoft/wslg/wiki/Diagnosing-%22cannot-open-display%22-type-issues-with-WSLg
 
