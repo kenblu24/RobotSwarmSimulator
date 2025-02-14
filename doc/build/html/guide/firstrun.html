@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Feb 13, 2025"/>
+    <meta name="docbuild:last-update" content="Feb 14, 2025"/>
   </head>
   
   
@@ -435,7 +435,8 @@
 <p>We now have a world that we can add things to. Let’s add an agent to it!</p>
 <p>Let’s create the <a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgentConfig" title="novel_swarms.agent.MazeAgent.MazeAgentConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">MazeAgentConfig</span></code></a>
 and use it to initialize the <a class="reference internal" href="../api/_gen/novel_swarms.agent.MazeAgent.html#novel_swarms.agent.MazeAgent.MazeAgent" title="novel_swarms.agent.MazeAgent.MazeAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">MazeAgent</span></code></a> class.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_config</span> <span class="o">=</span> <span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.MazeAgent</span><span class="w"> </span><span class="kn">import</span> <span class="n">MazeAgent</span><span class="p">,</span> <span class="n">MazeAgentConfig</span>
+<span class="n">agent_config</span> <span class="o">=</span> <span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">agent_config</span><span class="p">,</span> <span class="n">world</span><span class="p">)</span>
 
 <span class="n">world</span><span class="o">.</span><span class="n">population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>  <span class="c1"># add the agent to the world</span>
@@ -850,36 +851,23 @@ of an agent to a <a class="reference internal" href="../api/_gen/novel_swarms.ag
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="gauci-evolving" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<ol class="upperalpha simple" start="13">
-<li><p>Gauci, J. Chen, T. J. Dodd, and R. Groß, “Evolving Aggregation Behaviors in Multi-Robot Systems with Binary Sensors,” 2014, doi: <a class="reference external" href="https://doi.org/10.1007/978-3-642-55146-8_25">10.1007/978-3-642-55146-8_25</a>.</p></li>
-</ol>
+<p>M. Gauci, J. Chen, T. J. Dodd, and R. Groß, “Evolving Aggregation Behaviors in Multi-Robot Systems with Binary Sensors,” 2014, doi: <a class="reference external" href="https://doi.org/10.1007/978-3-642-55146-8_25">10.1007/978-3-642-55146-8_25</a>.</p>
 </aside>
 <aside class="footnote brackets" id="novel-discovery" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<ol class="upperalpha simple" start="4">
-<li><ol class="upperalpha simple" start="19">
-<li><p>Brown, R. Turner, O. Hennigh, and S. Loscalzo, “Discovery and Exploration of Novel Swarm Behaviors Given Limited Robot Capabilities,” 2018, doi: <a class="reference external" href="https://doi.org/10.1007/978-3-319-73008-0_31">10.1007/978-3-319-73008-0_31</a>.</p></li>
-</ol>
-</li>
-</ol>
+<p>D. S. Brown, R. Turner, O. Hennigh, and S. Loscalzo, “Discovery and Exploration of Novel Swarm Behaviors Given Limited Robot Capabilities,” 2018, doi: <a class="reference external" href="https://doi.org/10.1007/978-3-319-73008-0_31">10.1007/978-3-319-73008-0_31</a>.</p>
 </aside>
 <aside class="footnote brackets" id="novel-human" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
-<ol class="upperalpha simple" start="3">
-<li><p>Mattson and D. S. Brown, “Leveraging Human Feedback to Evolve and Discover Novel Emergent Behaviors in Robot Swarms,” Jul. 2023, <a class="reference external" href="https://doi.org/10.1145/3583131.3590443">doi: 10.1145/3583131.3590443</a>.</p></li>
-</ol>
+<p>C. Mattson and D. S. Brown, “Leveraging Human Feedback to Evolve and Discover Novel Emergent Behaviors in Robot Swarms,” Jul. 2023, <a class="reference external" href="https://doi.org/10.1145/3583131.3590443">doi: 10.1145/3583131.3590443</a>.</p>
 </aside>
 <aside class="footnote brackets" id="snnicons" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
-<ol class="upperalpha simple" start="11">
-<li><p>Zhu et al., “Spiking Neural Networks as a Controller for Emergent Swarm Agents,” Jul. 2024, doi: <a class="reference external" href="https://doi.org/10.1109/ICONS62911.2024.00055">10.1109/ICONS62911.2024.00055</a>.</p></li>
-</ol>
+<p>K. Zhu et al., “Spiking Neural Networks as a Controller for Emergent Swarm Agents,” Jul. 2024, doi: <a class="reference external" href="https://doi.org/10.1109/ICONS62911.2024.00055">10.1109/ICONS62911.2024.00055</a>.</p>
 </aside>
 <aside class="footnote brackets" id="snnnice" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
-<ol class="upperalpha simple" start="11">
-<li><p>Zhu, S. Snyder, R. Vega, M. Parsa, and C. Nowzari, “A Milling Swarm of Ground Robots using Spiking Neural Networks.” at the 2025 Neuro Inspired Computational Elements (NICE), Mar. 2025.</p></li>
-</ol>
+<p>K. Zhu, S. Snyder, R. Vega, M. Parsa, and C. Nowzari, “A Milling Swarm of Ground Robots using Spiking Neural Networks.” at the 2025 Neuro Inspired Computational Elements (NICE), Mar. 2025.</p>
 </aside>
 </aside>
 </section>
@@ -1029,7 +1017,7 @@ of an agent to a <a class="reference internal" href="../api/_gen/novel_swarms.ag
 </p></div>
       
         <div class="footer-item"><p class="last-updated">
-  Last built Feb 13, 2025.
+  Last built Feb 14, 2025.
   <br/>
 </p></div>
       
