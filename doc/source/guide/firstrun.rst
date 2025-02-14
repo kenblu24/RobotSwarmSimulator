@@ -53,6 +53,7 @@ and use it to initialize the :py:class:`~novel_swarms.agent.MazeAgent.MazeAgent`
 
 .. code-block:: python
 
+   from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
    agent_config = MazeAgentConfig(pos=(5, 5), agent_radius=0.1)
    agent = MazeAgent(agent_config, world)
 
