@@ -24,7 +24,7 @@ Open a Python shell with ``python``, and make sure you can ``import novel_swarms
    Python 3.11.0 (or newer)
    Type "help", "copyright", "credits" or "license" for more information.
    >>> import novel_swarms
-   >>> 
+   >>>
 
 
 Creating a :fas:`earth-americas` world
@@ -54,7 +54,7 @@ and use it to initialize the :py:class:`~novel_swarms.agent.MazeAgent.MazeAgent`
 .. code-block:: python
 
    from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-   agent_config = MazeAgentConfig(pos=(5, 5), agent_radius=0.1)
+   agent_config = MazeAgentConfig(position=(5, 5), agent_radius=0.1)
    agent = MazeAgent(agent_config, world)
 
    world.population.append(agent)  # add the agent to the world
@@ -126,9 +126,11 @@ First, we need to create a :py:class:`~novel_swarms.world.spawners.AgentSpawner.
    spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
    world.spawners.append(spawner)
 
-Now, remove the existing agent from the :py:attr:`~novel_swarms.world.World.World.population` and run the simulation again.
+Now, remove the existing agent from the :py:attr:`~novel_swarms.world.World.World.population`
+and run the simulation again.
 
-The spawner will create copies of the agent and controller and add the copies to the world's population.
+On the first ``step()`` after the ``sim()`` starts, the spawner will create copies of the agent and
+controller and add the copies to the world's population.
 
 The agents will spawn in the same location, but get pushed apart as they spawn.
 
@@ -137,7 +139,7 @@ The agents will spawn in the same location, but get pushed apart as they spawn.
    del world.population[-1]  # remove the most recently added agent
    sim(world)
 
-Because of the ``oneshot=True`` argument, the spawner will spawn all its agents once,
+Because of the ``oneshot=True`` argument, the spawner will spawn all its agents once on that first ``step()``\ ,
 and then delete itself.
 
 
@@ -204,7 +206,7 @@ the simulation will perform a single step :fas:`forward-step`.
 You can :fas:`pause` **pause** or :fas:`play` **unpause** the simulation by pressing :kbd:`Space`.
 
 :kbd:`⇧LShift` and :kbd:`⇧RShift` will **slow down** or :fas:`gauge-high` **speed up** the simulation.
-The speed multiplier is shown in the top left corner of the window. Values beginning with a ``/`` slash 
+The speed multiplier is shown in the top left corner of the window. Values beginning with a ``/`` slash
 are divisors, i.e. ``/2`` half or ``/4`` quarter speed. The number of :far:`clock` elapsed time steps is also shown.
 
 The number in between the timesteps and multiplier is the :fas:`stopwatch` step rate and :fas:`film` framerate, respectively, in frames per second.
@@ -212,7 +214,7 @@ The number in between the timesteps and multiplier is the :fas:`stopwatch` step 
 You can also see the :fas:`ruler-combined` world coordinates under your cursor displayed in this area.
 
 Clicking and dragging the :fas:`computer-mouse` :kbd:`MMB` inside the simulation window will
-allow you to :far:`hand` **pan** the simulation, and :fas:`computer-mouse` scrolling up or down will 
+allow you to :far:`hand` **pan** the simulation, and :fas:`computer-mouse` scrolling up or down will
 :fas:`magnifying-glass-plus` **zoom** in or :fas:`magnifying-glass-minus` **zoom** out.
 
 You can reset the viewport and :fas:`magnifying-glass` zoom level with the :kbd:`Num0` Numpad 0 key if you get lost :fas:`house`\ .
@@ -314,7 +316,7 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
    So, you don't need to re-define the spawner, you already created it before and can just
    *un-mark it for deletion* and add it back to the ``spawners`` list.
 
-   2. Our :py:class:`~novel_swarms.spawners.AgentSpawner.AgentSpawner` stores either a config
+   2. Our :py:mod:`~novel_swarms.spawners.AgentSpawner` stores either a config
    for the agent parameters, or in this example, a **reference** to the actual agent itself.
    In the case of the latter, the spawner will attempt to make a :py:func:`~copy.deepcopy`
    of the ``agent`` we gave it earlier. Because ``agent`` is a reference to the agent
@@ -391,7 +393,7 @@ History
    However, the speed is important to get right. In fact, if you adjust the :fas:`gauge-high` speed and how
    quickly you :fas:`arrows-turn-to-dots` turn, you can create a variety of different behaviors, not just milling.
 
-.. sidebar:: 
+.. sidebar::
 
    Ants can also mill! `Ant mills <https://en.wikipedia.org/wiki/Ant_mill>`_
    are an example of emergent behaviors.
@@ -409,7 +411,7 @@ We've used it to automatically discover interesting behaviors [#novel_discovery]
 train Spiking Neural Networks [#snnicons]_, and even train real robots [#snnnice]_!
 
 .. note::
-   
+
    That's also why the package is called :py:mod:`novel_swarms`\ .
 
 
@@ -484,7 +486,7 @@ becomes a list of dictionaries, which are then turned into :py:class:`~novel_swa
 We cover the order that things are initialized in :ref:`initialization_order`\ .
 
 .. card::
-   
+
    **Exercise**
    ^^^
 
@@ -526,7 +528,7 @@ of an agent to a :py:mod:`~novel_swarms.agent.control.BinaryController`\ :
              a=(0.02, -0.5),
              b=(0.02, 0.5)
          )
-   
+
    .. grid-item::
 
       .. code-block:: yaml
