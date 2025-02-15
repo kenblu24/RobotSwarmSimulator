@@ -11,10 +11,12 @@ if TYPE_CHECKING:
 else:
     World = None
 
+import warnings
+
 
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
-        'theta', 'distance', 'degrees', 'bias', 'false_positive', 'false_negative',
+        'theta', 'distance', 'bias', 'false_positive', 'false_negative',
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
         'store_history', 'detect_goal_with_added_state', 'show'
     ]
@@ -36,7 +38,8 @@ class BinaryFOVSensor(AbstractSensor):
         store_history=False,
         detect_goal_with_added_state=False,
         show=True,
-        seed=None
+        seed=None,
+        **kwargs
     ):
         super().__init__(agent=agent, parent=parent)
         self.angle = 0
@@ -56,6 +59,12 @@ class BinaryFOVSensor(AbstractSensor):
         self.invert = invert
         self.goal_detected = False
         self.detection_id = 0
+
+        NOTFOUND = object()
+        if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
+            warnings.warn("The 'degrees' kwarg is deprecated.", FutureWarning, stacklevel=1)
+            if degrees:
+                self.theta = np.radians(self.theta)
 
         self.r = distance
 

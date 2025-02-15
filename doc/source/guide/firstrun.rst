@@ -129,8 +129,9 @@ First, we need to create a :py:class:`~novel_swarms.world.spawners.AgentSpawner.
 Now, remove the existing agent from the :py:attr:`~novel_swarms.world.World.World.population`
 and run the simulation again.
 
-On the first ``step()`` after the ``sim()`` starts, the spawner will create copies of the agent and
-controller and add the copies to the world's population.
+When you run ``sim()``, during the :py:func:`.World.setup`\ , the spawner will create copies of the agent and
+controller and add the copies to the world's population. But because of the ``oneshot=True`` argument,
+the spawner will then delete itself.
 
 The agents will spawn in the same location, but get pushed apart as they spawn.
 
@@ -138,9 +139,6 @@ The agents will spawn in the same location, but get pushed apart as they spawn.
 
    del world.population[-1]  # remove the most recently added agent
    sim(world)
-
-Because of the ``oneshot=True`` argument, the spawner will spawn all its agents once on that first ``step()``\ ,
-and then delete itself.
 
 
 Congrats! You've created your first simulation!

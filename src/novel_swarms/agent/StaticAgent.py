@@ -216,7 +216,7 @@ class StaticAgent(Agent):
 
     def get_simple_poly_radius(self):
         if self.is_poly:
-            return max(np.linalg.norm(p) for p in self.points)
+            return max(np.linalg.norm(p) for p in self.points)  # pyright: ignore[reportArgumentType]
 
     @override
     def __str__(self) -> str:

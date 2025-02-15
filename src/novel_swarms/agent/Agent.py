@@ -211,6 +211,10 @@ class Agent:
         """Alias for :py:attr:`~novel_swarms.agent.Agent.Agent.pos`."""
         return self.pos
 
+    @position.setter
+    def position(self, new_pos: np.ndarray[(2,), np.dtype[float]] | tuple[float, float]):
+        self.pos = np.asarray(new_pos, dtype='float64')
+
     def orientation_uvec(self, offset=0):
         """Returns the agent's 2D orientation matrix.
 

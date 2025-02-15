@@ -60,6 +60,12 @@ Here is the order in which the initialization system runs:
 
          Lastly, any metrics in the world's ``config.metrics`` list are created and appended to the world's ``metrics`` list.
 
+      #. :fas:`user-plus` :py:attr:`World.spawners` :fas:`arrows-spin` :fas:`hands-holding-child` :py:func:`Spawner.step`
+      
+         By default, ``step()`` is called on all spawners in the world's ``spawners`` list.
+         This is done so that spawners have a chance to run before the first ``step()`` of the simulation, but this can
+         be disabled with the ``step_spawners=False`` argument to :py:func:`.World.setup`.
+
 
 .. hint::
 

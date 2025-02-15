@@ -8,8 +8,9 @@ from ...util.collider.AABB import AABB
 from ...config import get_agent_class
 
 # typing:
-from ...agent.Agent import Agent
+from ...agent.Agent import Agent, BaseAgentConfig
 from ...agent.StaticAgent import StaticAgent, StaticAgentConfig
+from ...agent.MazeAgent import MazeAgent
 
 
 def AgentSpawner(*args, **kwargs):
@@ -46,11 +47,11 @@ class PointAgentSpawner(Spawner):
             self.facing = facing
 
         if isinstance(agent, Agent):
-            self.agent_class, self.agent_config = type(agent), agent
+            self.agent_class, self.agent_config = type(agent), agent  # this is a REFERENCE, not a COPY!
         else:
-            self.agent_class, self.agent_config = get_agent_class(agent)
-        self.agent_class: StaticAgent
-        self.agent_config: StaticAgentConfig
+            self.agent_class, self.agent_config = get_agent_class(agent)  # pyright: ignore[reportAttributeAccessIssue]
+        self.agent_class: type
+        self.agent_config: Agent | BaseAgentConfig
 
     def generate_config(self, name=None):
         config = copy.deepcopy(self.agent_config)
@@ -102,7 +103,7 @@ class PointAgentSpawner(Spawner):
         else:
             agent = self.make_agent(config)
         self.world.population.append(agent)  # make world aware of the new agent. necessary for collision handling
-        if self.avoid_overlap:
+        if self.avoid_overlap and isinstance(agent, MazeAgent):
             agent.handle_collisions(self.world, max_attempts=5, nudge_amount=0.4, rng=self.rng, refresh=True)
             agent.handle_collisions(self.world, max_attempts=10, nudge_amount=1.0, rng=self.rng, refresh=True)
 
@@ -131,8 +132,8 @@ class UniformAgentSpawner(PointAgentSpawner):
             holes = np.asarray(holes, dtype=np.float64)
         try:
             self.poly = Polygon(shell, holes)
-        except ValueError:
-            raise ValueError("Invalid region specified for UniformAgentSpawner")
+        except ValueError as err:
+            raise ValueError("Invalid region specified for UniformAgentSpawner") from err
         self.aabb = AABB(shell)
         self.is_aabb = self.aabb.is_mungible(shell, tolerance=0.000_001)
         if self.is_aabb:

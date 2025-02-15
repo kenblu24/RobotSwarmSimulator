@@ -48,7 +48,7 @@ class ExcelSpawner(Spawner):
         xlsx = pd.ExcelFile(BytesIO(xlsx))
         dataframes = [pd.read_excel(xlsx, sheet_name=sheet, usecols=usecols) for sheet in xlsx.sheet_names]
         df = dataframes[sheet_number]
-        return [(x, y, r) for idx, x, y, r in df.itertuples()]
+        return [(x, y, r) for _idx, x, y, r in df.itertuples()]
 
     def set_states_from_xlsx(self, fpath, sheet_number=0, usecols='B,C,D'):
         self.file_name = fpath

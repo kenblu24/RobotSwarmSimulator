@@ -3,19 +3,15 @@ This class defines a configuration for how the World will output a large numpy a
 pixels on the screen
 """
 
+from dataclasses import dataclass
 
+
+@dataclass
 class OutputTensorConfig:
-    def __init__(self,
-                 screen=None,
-                 total_frames=5,
-                 steps_between_frames=4,
-                 timeless=False,
-                 colored=False,
-                 background_color=(0,0,0)
-                 ):
-        self.screen = screen
-        self.total_frames = total_frames
-        self.step = steps_between_frames
-        self.timeless = timeless
-        self.colored = colored
-        self.background_color = background_color
+    screen = None
+    total_frames: int = 5
+    steps_between_frames: int = 4
+    timeless: bool = False
+    colored: bool = False
+    background_color: tuple[int, int, int] = (0, 0, 0)
+    step: int | None = None

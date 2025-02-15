@@ -14,6 +14,8 @@
 .. autofunction:: World_from_config
 """
 
+import os
+
 import pygame
 import numpy as np
 
@@ -21,7 +23,6 @@ from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
 from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class, _ERRMSG_MISSING_ASSOCIATED_TYPE
 
-import inspect
 from dataclasses import dataclass, field, replace
 from ..util.asdict import asdict
 from collections.abc import Callable
@@ -29,6 +30,8 @@ from collections.abc import Callable
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
 from ..metrics.AbstractMetric import AbstractMetric
+
+from typing import Any
 
 
 @filter_unexpected_fields
@@ -144,7 +147,7 @@ class World:
         self.rng = np.random.default_rng(self.seed)
         return self.seed
 
-    def setup(self):
+    def setup(self, step_spawners=True):
         # create agents, spawners, behaviors, objects, goals
         if self.initialized:
             return
@@ -180,9 +183,33 @@ class World:
         # self.objects = config.objects
         # self.goals = config.goals
         # self.seed = config.seed
+        if step_spawners:
+            self.step_spawners()
 
     def step(self):
         self.total_steps += 1
+
+        self.step_spawners()
+        self.step_agents()
+        self.step_objects()
+        self.step_metrics()
+
+    def step_spawners(self):
+        self.spawners = [s for s in self.spawners if not s.mark_for_deletion]
+        for spawner in self.spawners:
+            spawner.step()
+
+    def step_agents(self):
+        for agent in self.population:
+            agent.step(world=self,)
+
+    def step_objects(self):
+        for obj in self.objects:
+            obj.step()
+
+    def step_metrics(self):
+        for metric in self.metrics:
+            metric.calculate()
 
     def draw(self, screen, offset=None):
         pass
@@ -206,10 +233,9 @@ class World:
     def from_config(cls, c):
         return cls(c)
 
-    def evaluate(self, steps: int, output_capture: OutputTensorConfig = None, screen=None):
+    def evaluate(self, steps: int, output_capture: OutputTensorConfig | None = None, screen=None):
         frame_markers = []
         output = None
-        screen = None
         if output_capture is not None:
             if output_capture.total_frames * output_capture.step > steps:
                 raise Exception(
@@ -223,6 +249,8 @@ class World:
                 frame_markers = [(start + (output_capture.step * i)) - 1 for i in range(output_capture.total_frames)]
 
             screen = output_capture.screen
+        if screen is None:
+            raise Exception("Screen is None")
         for step in range(steps):
             self.step()
 
@@ -281,15 +309,15 @@ def World_from_config(config: dict):
     world_types = store.world_types
 
     if isinstance(config, dict):
-        if not config.get("associated_type", None):
+        if not config.get('associated_type', None):
             raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
-        if config["associated_type"] in world_types:
-            world_cls = world_types[config["type"]]
+        if config['associated_type'] in world_types:
+            world_cls = world_types[config['type']]
         else:
             msg = f"Unknown world type: {config['associated_type']}"
             raise Exception(msg)
     else:
-        if not hasattr(config, "associated_type"):
+        if not hasattr(config, 'associated_type'):
             raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
         if config.associated_type not in world_types:
             msg = f"Unknown world type: {config.associated_type}"
@@ -297,9 +325,38 @@ def World_from_config(config: dict):
         world_cls = world_types[config.associated_type]
     if isinstance(world_cls, (list, tuple)):
         world_cls, _config_cls = world_cls
-    if hasattr(world_cls, "from_config"):
+    if hasattr(world_cls, 'from_config'):
         return world_cls.from_config(config)
     else:
         if not isinstance(config, dict):
             config = config.as_dict()
         return world_cls.from_dict(config)
+
+
+def config_from_dict(d: dict):
+    if 'type' not in d:
+        raise ValueError("World config must have a 'type' key.")
+    if d['type'] not in store.world_types:
+        msg = f"Unknown world type: {d['type']}"
+        raise IndexError(msg)
+    world_type = d.pop('type')
+    _world_cls, world_config_cls = store.world_types[world_type]
+    return world_config_cls.from_dict(d)
+
+
+def config_from_yamls(s: str | Any):
+    """Load a YAML string or stream and return a config object."""
+    from .. import yaml
+    d = yaml.load(s)
+    return config_from_dict(d)
+
+
+def config_from_yaml(path: os.PathLike):
+    """Load a YAML file and return a config object."""
+    with open(path, "r") as f:
+        try:
+            return config_from_yamls(f)
+        except ValueError as err:
+            if str(err) == "World config must have a 'type' key.":
+                msg = f"YAML must have a 'type' entry to indicate the world type. Please add a 'type' to {path}"
+                raise ValueError(msg) from err
