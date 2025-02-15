@@ -12,6 +12,11 @@
     :undoc-members:
 
 .. autofunction:: World_from_config
+
+.. autofunction:: config_from_dict
+.. autofunction:: config_from_yaml
+.. autofunction:: config_from_yamls
+
 """
 
 import os
@@ -38,13 +43,21 @@ from typing import Any
 @dataclass
 class AbstractWorldConfig:
     size: tuple[float, ...] | np.ndarray = (0, 0)
+    #: list : The list of metrics configs for the world
     metrics: list = field(default_factory=list)
+    #: list : The list of agent configs for the world
     agents: list = field(default_factory=list)
+    #: list : The list of spawner configs for the world
     spawners: list = field(default_factory=list)
+    #: list : The list of objects configs for the world
     objects: list = field(default_factory=list)
     goals: list = field(default_factory=list)
+    #: int | Callable | None : The maximum number of steps to run the simulation.
     stop_at: int | Callable | None = None
+    #: tuple[int, int, int] : The background color of the world. Default is black.
     background_color: tuple[int, int, int] = (0, 0, 0)
+    #: int | None : The seed to use for the world.
+    #: If None, the world will be seeded based on system time.
     seed: int | None = None
     metadata: dict = field(default_factory=dict)
 
@@ -334,6 +347,28 @@ def World_from_config(config: dict):
 
 
 def config_from_dict(d: dict):
+    """Create a world config dataclass from a dict.
+
+    Parameters
+    ----------
+    d : dict
+        The dict to create the world config from.
+
+        Must have a 'type' key that specifies the world type as a string.
+
+    Returns
+    -------
+    dataclass
+        Returns a dataclass of the world config.
+        The type of the dataclass is determined by the 'type' key in the dict.
+
+    Raises
+    ------
+    ValueError
+        Raised if the dict does not have a 'type' key.
+    IndexError
+        Raised if the world type is not found in the registry.
+    """
     if 'type' not in d:
         raise ValueError("World config must have a 'type' key.")
     if d['type'] not in store.world_types:
