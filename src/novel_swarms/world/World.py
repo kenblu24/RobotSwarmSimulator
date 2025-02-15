@@ -95,6 +95,20 @@ class AbstractWorldConfig:
         with open(path, "w") as f:
             yaml.dump(self.as_dict(), f)
 
+    def create_world(self):
+        world_type = getattr(self, 'associated_type', None)
+        if not world_type:
+            name = self.__class__.__name__
+            msg = f"""{name} requires an associated_type field to be set explicitly for world creation,
+            even though it is likely {name.removesuffix('Config')}.\nRefusing to create world.\n
+            Use @novel_swarms.config.associated_type(ClassNameHere) on the config dataclass."""
+            raise Exception(msg)
+        if world_type not in store.world_types:
+            msg = f"Unknown world type: {world_type}"
+            raise Exception(msg)
+        world_cls, _world_config_cls = store.world_types[world_type]
+        return world_cls(self)
+
     # def addAgentConfig(self, agent_config):
     #     self.agentConfig = agent_config
     #     if self.agentConfig:

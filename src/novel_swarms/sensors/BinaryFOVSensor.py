@@ -99,7 +99,7 @@ class BinaryFOVSensor(AbstractSensor):
         consideration_set = []
         if self.walls is not None:
             # Get e_left, e_right line_segments
-            l = [sensor_origin, sensor_origin + (e_left[:2] * self.wall_sensing_range)]
+            l = [sensor_origin, sensor_origin + (e_left[:2] * self.wall_sensing_range)]  # noqa: E741
             r = [sensor_origin, sensor_origin + (e_right[:2] * self.wall_sensing_range)]
             wall_top = [self.walls[0], [self.walls[1][0], self.walls[0][1]]]
             wall_right = [[self.walls[1][0], self.walls[0][1]], self.walls[1]]
@@ -142,7 +142,7 @@ class BinaryFOVSensor(AbstractSensor):
 
         # consideration_set.sort()
         # print(consideration_set)
-        score, val = consideration_set.pop(0)
+        _score, val = consideration_set.pop(0)
         self.determineState(True, val, world)
 
     def check_goals(self, world):
@@ -244,6 +244,7 @@ class BinaryFOVSensor(AbstractSensor):
     def draw(self, screen, offset=((0, 0), 1.0)):
         super(BinaryFOVSensor, self).draw(screen, offset)
         pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
+        zoom: float
         if self.show:
             # Draw Sensory Vector (Vision Vector)
             sight_color = (255, 0, 0)
