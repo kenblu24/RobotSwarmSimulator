@@ -50,7 +50,7 @@ intersphinx_mapping = {
     'numba': ('https://numba.readthedocs.io/en/stable', None),
     'cuquantum': ('https://docs.nvidia.com/cuda/cuquantum/latest', None),
     # blocked by data-apis/array-api#428
-    #'array-api': ('https://data-apis.org/array-api/2021.12/', None),
+    # 'array-api': ('https://data-apis.org/array-api/2021.12/', None),
 }
 
 # -- Options for HTML output -------------------------------------------------
@@ -72,6 +72,7 @@ html_context = {
 
 github_project_url = "https://github.com/kenblu24/RobotSwarmSimulator"
 
+
 def linkcode_resolve(domain, info):
     if domain != 'py':
         return None
@@ -79,6 +80,7 @@ def linkcode_resolve(domain, info):
         return None
     filename = info['module'].replace('.', '/')
     return f"{github_project_url}/blob/{github_version}/src/{filename}.py"
+
 
 numpydoc_class_members_toctree = False
 

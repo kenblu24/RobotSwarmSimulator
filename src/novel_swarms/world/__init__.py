@@ -29,5 +29,6 @@ Functions
 """
 
 from .World import World_from_config, config_from_dict, config_from_yaml, config_from_yamls
+from .simulate import main as sim
 
-__all__ = ['World_from_config', 'config_from_dict', 'config_from_yaml', 'config_from_yamls']
+__all__ = ['World_from_config', 'config_from_dict', 'config_from_yaml', 'config_from_yamls', 'sim']

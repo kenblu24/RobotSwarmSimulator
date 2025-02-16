@@ -66,7 +66,6 @@ def get_world_generator(n_agents, horizon, round_genome=False):
             'n': n_agents,
             'avoid_overlap': True,
             'facing': "away",
-            'oneshot': True,
             'region': [[3, 3], [3, 6], [6, 6], [6, 3]],
         }
 

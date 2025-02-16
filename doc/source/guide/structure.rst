@@ -50,7 +50,7 @@ Here is the order in which the initialization system runs:
 
          .. note::
 
-            Spawners do not become active until the first ``step()`` of the simulation.
+            Spawners are ``step()``\ ed once during the world's :py:meth:`World.setup` method.
 
       #. :far:`object-group` :py:attr:`World.objects` :fas:`arrow-left` :fas:`draw-polygon` :py:func:`WorldObject.__init__`
 

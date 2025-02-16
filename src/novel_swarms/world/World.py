@@ -400,7 +400,7 @@ def config_from_yamls(s: str | Any):
     return config_from_dict(d)
 
 
-def config_from_yaml(path: os.PathLike):
+def config_from_yaml(path: str | os.PathLike):
     """Load a YAML file and return a config object."""
     with open(path, "r") as f:
         try:
