@@ -22,9 +22,17 @@ Functions
 =========
 
 .. autofunction:: novel_swarms.world.World.World_from_config
+   :noindex:
+
 .. autofunction:: novel_swarms.world.World.config_from_dict
+   :noindex:
+
 .. autofunction:: novel_swarms.world.World.config_from_yaml
+   :noindex:
+
 .. autofunction:: novel_swarms.world.World.config_from_yamls
+   :noindex:
+
 
 """
 

@@ -7,6 +7,7 @@ Saving agent properties to a spreadsheet:
 
 .. code-block:: python
     :caption: my_world.py
+
     from novel_swarms.world.spawners.ExcelSpawner import world_to_df
     from novel_swarms.world import config_from_yaml
     from novel_swarms.util.pdutils import save_df
