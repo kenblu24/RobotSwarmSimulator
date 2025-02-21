@@ -2,7 +2,7 @@
 git.sh
 
 # Media
-*.gif
+# *.gif
 
 # General MacOS
 .DS_Store
