@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Configuration System &#8212; RobotSwarmSimulator</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=c6e86fd7"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guide/config';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Config Registry" href="config_store_api.html" />
+    <link rel="prev" title="Structure of RobotSwarmSimulator" href="structure.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 21, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RobotSwarmSimulator</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="install.html">Installation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="install-wsl.html">Installing Windows Subsystem for Linux</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="firstrun.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure of RobotSwarmSimulator</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Configuration System</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html">Config Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml.html">Our YAML module</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Configuration System</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="configuration-system">
+<h1>Configuration System<a class="headerlink" href="#configuration-system" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config_store_api.html">Config Registry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html#agent-and-world-configs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">world</span></code> Configs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_store_api.html#everything-else-dict-like-config-objects">Everything Else (dict-like config objects)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">Our YAML module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yaml.html#yaml">YAML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml.html#yaml-tags">YAML Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml.html#path-resolution-order">Path Resolution Order</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This article will cover the <a class="reference internal" href="../api/_gen/novel_swarms.config.html#module-novel_swarms.config" title="novel_swarms.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config</span></code></a> module and explain
+why it was created.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="config_store_api.html"><span class="doc">Config Registry</span></a> for how to register your own classes
+with this system.</p>
+</div>
+<section id="why-does-the-config-system-exist">
+<h2>Why does the config system exist?<a class="headerlink" href="#why-does-the-config-system-exist" title="Link to this heading">#</a></h2>
+<p>RobotSwarmSimulator is designed for simulations to be definable with <span class="fab fa-python"></span> Python code,
+but also for simulation objects to be modified easily in an object-oriented way.</p>
+<p>This is why <a class="reference internal" href="../api/_gen/novel_swarms.world.html#module-novel_swarms.world" title="novel_swarms.world"><code class="xref py py-mod docutils literal notranslate"><span class="pre">world</span></code></a> and <a class="reference internal" href="../api/_gen/novel_swarms.agent.html#module-novel_swarms.agent" title="novel_swarms.agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">agent</span></code></a> must
+be created using dataclasses: it allows us to inherit properties from the base class
+in a much more manageable way. This also separates the configuration from the object
+itself, so the parameters of <code class="docutils literal notranslate"><span class="pre">agent</span></code> instance can be moved around, copied, or
+modified without needing to have an actual <code class="docutils literal notranslate"><span class="pre">agent</span></code> instance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">controllers</span></code> and other simulation objects use <code class="docutils literal notranslate"><span class="pre">dict</span></code> s for configuration for the same reason.</p>
+<p>However, sometimes this can be cumbersome.</p>
+<p>Take this example from the <a class="reference internal" href="firstrun.html"><span class="doc">Basic Usage</span></a> guide:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Run a simulation purely using Python</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorld</span><span class="p">,</span> <span class="n">RectangularWorldConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.control.StaticController</span><span class="w"> </span><span class="kn">import</span> <span class="n">StaticController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.spawners.AgentSpawner</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointAgentSpawner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.agent.MazeAgent</span><span class="w"> </span><span class="kn">import</span> <span class="n">MazeAgent</span><span class="p">,</span> <span class="n">MazeAgentConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.simulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">sim</span>
+
+<span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">time_step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">RectangularWorld</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">StaticController</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">MazeAgent</span><span class="p">(</span><span class="n">MazeAgentConfig</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">agent_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                                  <span class="n">controller</span><span class="o">=</span><span class="n">controller</span><span class="p">),</span> <span class="n">world</span><span class="p">)</span>
+<span class="n">spawner</span> <span class="o">=</span> <span class="n">PointAgentSpawner</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">facing</span><span class="o">=</span><span class="s2">&quot;away&quot;</span><span class="p">,</span> <span class="n">avoid_overlap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">oneshot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">spawners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spawner</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This allows for you to have a lot of control over the simulated world and how
+the agents behave, but look at how messy it is to define the world and agents.
+It’s difficult to read, and you also have to remember what order to define the objects in.</p>
+<p>And if you want to run the simulation with a different configuration, you have to
+make an entirely new Python file, even if most of the code is the same.
+That’s not so bad for a simple simulation like this, but when you start building
+training programs around these simulations, it can get very messy.</p>
+<p>The config system is designed to make this easier by allowing you to
+define a lot of the simulation in a single file with easy-to-read YAML.</p>
+<p>For example, the above simulation can be defined in a single file like this:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">world.yaml</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RectangularWorld&quot;</span>
+<span class="nt">size</span><span class="p">:</span><span class="w">  </span><span class="c1"># in meters</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">time_step</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1 / 40</span>
+<span class="nt">spawners</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PointAgentSpawner</span>
+<span class="w">    </span><span class="nt">oneshot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">n</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="w">    </span><span class="nt">facing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">away</span>
+<span class="w">    </span><span class="nt">avoid_overlap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">agent</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MazeAgent</span>
+<span class="w">      </span><span class="nt">position</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">agent_radius</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">      </span><span class="nt">controller</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StaticController</span>
+<span class="w">        </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.01</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<p>Then, we can run the simulation with:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Run a simulation using <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code></span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.RectangularWorld</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangularWorldConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novel_swarms.world.simulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">sim</span>
+
+<span class="n">world_config</span> <span class="o">=</span> <span class="n">RectangularWorldConfig</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="s1">&#39;world.yaml&#39;</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="p">(</span><span class="n">world_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now, if we need to change the simulation, we only need to change the <code class="docutils literal notranslate"><span class="pre">world.yaml</span></code> file.
+And we can save different <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files for different simulations.</p>
+<p>Our <a class="reference internal" href="../api/_gen/novel_swarms.yaml.html#module-novel_swarms.yaml" title="novel_swarms.yaml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code></a> module also provides a custom YAML loader
+that defines some nice tags, such as the <code class="docutils literal notranslate"><span class="pre">!np</span></code> tag for numpy objects
+and the <code class="docutils literal notranslate"><span class="pre">!include</span></code> tag for including other YAML files as a mapping.</p>
+<p>This allows you to do cool things like:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">world.yaml (example)</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RectangularWorld&quot;</span>
+<span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># yaml flow style</span>
+<span class="nt">agents</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot1.yaml</span><span class="w">  </span><span class="c1"># add robot1 agent</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot2.yaml</span><span class="w">  </span><span class="c1"># add robot2 agent</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nl">&amp;anchor003</span><span class="w">  </span><span class="c1"># save this robot as an anchor</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MazeAgent</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot3</span>
+<span class="w">  </span><span class="nt">agent_radius</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">angle</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">radians(90 + 45)</span><span class="w">  </span><span class="c1"># convert degrees to radians</span>
+<span class="w">  </span><span class="nt">poly</span><span class="p">:</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">body_shape.svg</span><span class="w">  </span><span class="c1"># load an SVG file</span>
+<span class="w">  </span><span class="nt">controller</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StaticController</span>
+<span class="w">    </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1e-2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pi / 2</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># pi constant from numpy</span>
+<span class="nt">spawners</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ExcelSpawner</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="kt">!relpath</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">positions.xlsx</span><span class="w">  </span><span class="c1"># path is relative to cwd or this YAML file</span>
+<span class="w">  </span><span class="nt">agent</span><span class="p">:</span><span class="w"> </span><span class="nv">*anchor003</span><span class="w">  </span><span class="c1"># use the robot3 agent from above</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="structure.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Structure of RobotSwarmSimulator</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="config_store_api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Config Registry</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-does-the-config-system-exist">Why does the config system exist?</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/guide/config.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/guide/config.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Connor Mattson, Kevin Zhu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 21, 2025.
+  <br/>
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

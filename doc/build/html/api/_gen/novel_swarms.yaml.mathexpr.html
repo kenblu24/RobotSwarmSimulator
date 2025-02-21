@@ -1,0 +1,757 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>novel_swarms.yaml.mathexpr &#8212; RobotSwarmSimulator</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=b48425a4" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=c6e86fd7"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/_gen/novel_swarms.yaml.mathexpr';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="novel_swarms.yaml.np_representer" href="novel_swarms.yaml.np_representer.html" />
+    <link rel="prev" title="novel_swarms.yaml.include" href="novel_swarms.yaml.include.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 21, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RobotSwarmSimulator</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../devel/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="novel_swarms.html">novel_swarms</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.agent.html">novel_swarms.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.Agent.html">novel_swarms.agent.Agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.DiffDriveAgent.html">novel_swarms.agent.DiffDriveAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.DroneAgent.html">novel_swarms.agent.DroneAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.HumanAgent.html">novel_swarms.agent.HumanAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.MazeAgent.html">novel_swarms.agent.MazeAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.ModeSwitchingAgent.html">novel_swarms.agent.ModeSwitchingAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.StaticAgent.html">novel_swarms.agent.StaticAgent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.agent.UnicycleAgent.html">novel_swarms.agent.UnicycleAgent</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.agent.control.html">novel_swarms.agent.control</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.AbstractController.html">novel_swarms.agent.control.AbstractController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.AgentMethodController.html">novel_swarms.agent.control.AgentMethodController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.BinaryController.html">novel_swarms.agent.control.BinaryController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.Controller.html">novel_swarms.agent.control.Controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.HomogeneousController.html">novel_swarms.agent.control.HomogeneousController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.LevyController.html">novel_swarms.agent.control.LevyController</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.agent.control.StaticController.html">novel_swarms.agent.control.StaticController</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.cache.html">novel_swarms.cache</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.cache.ExternalSimulationArchive.html">novel_swarms.cache.ExternalSimulationArchive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.config.html">novel_swarms.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.OutputTensorConfig.html">novel_swarms.config.OutputTensorConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.config.ResultsConfig.html">novel_swarms.config.ResultsConfig</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.gui.html">novel_swarms.gui</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.abstractGUI.html">novel_swarms.gui.abstractGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.agentGUI.html">novel_swarms.gui.agentGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.connectivityGUI.html">novel_swarms.gui.connectivityGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.controllerGUI.html">novel_swarms.gui.controllerGUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.gui.fullControlGUI.html">novel_swarms.gui.fullControlGUI</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.metrics.html">novel_swarms.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AbstractMetric.html">novel_swarms.metrics.AbstractMetric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AgentsAtGoal.html">novel_swarms.metrics.AgentsAtGoal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Aggregation.html">novel_swarms.metrics.Aggregation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AlgebraicConnectivity.html">novel_swarms.metrics.AlgebraicConnectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AngularMomentum.html">novel_swarms.metrics.AngularMomentum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.AverageSpeed.html">novel_swarms.metrics.AverageSpeed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.BehaviorFactory.html">novel_swarms.metrics.BehaviorFactory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.BerlingerCircularity.html">novel_swarms.metrics.BerlingerCircularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Centroid.html">novel_swarms.metrics.Centroid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.CirclePacking.html">novel_swarms.metrics.CirclePacking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Circliness.html">novel_swarms.metrics.Circliness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.ConvexHull.html">novel_swarms.metrics.ConvexHull</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.CoordinateTest.html">novel_swarms.metrics.CoordinateTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.DistanceSizeRatio.html">novel_swarms.metrics.DistanceSizeRatio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.DistanceToGoal.html">novel_swarms.metrics.DistanceToGoal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.GroupRotationBehavior.html">novel_swarms.metrics.GroupRotationBehavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.Orbit.html">novel_swarms.metrics.Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.PersistentHomology.html">novel_swarms.metrics.PersistentHomology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.RadialVariance.html">novel_swarms.metrics.RadialVariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.RandomBoxAggregation.html">novel_swarms.metrics.RandomBoxAggregation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.RandomBoxSampling.html">novel_swarms.metrics.RandomBoxSampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.ScatterBehavior.html">novel_swarms.metrics.ScatterBehavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SensorOffset.html">novel_swarms.metrics.SensorOffset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SensorRotation.html">novel_swarms.metrics.SensorRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SensorSignal.html">novel_swarms.metrics.SensorSignal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.SubGroupWrapper.html">novel_swarms.metrics.SubGroupWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.metrics.TotalCollisions.html">novel_swarms.metrics.TotalCollisions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.sensors.html">novel_swarms.sensors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.AbstractSensor.html">novel_swarms.sensors.AbstractSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.BinaryFOVSensor.html">novel_swarms.sensors.BinaryFOVSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.BinaryLOSSensor.html">novel_swarms.sensors.BinaryLOSSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.GenomeDependentSensor.html">novel_swarms.sensors.GenomeDependentSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.RegionalSensor.html">novel_swarms.sensors.RegionalSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.SensorFactory.html">novel_swarms.sensors.SensorFactory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.SensorSet.html">novel_swarms.sensors.SensorSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.sensors.StaticSensor.html">novel_swarms.sensors.StaticSensor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.util.html">novel_swarms.util</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.asdict.html">novel_swarms.util.asdict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.collections.html">novel_swarms.util.collections</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.collider.html">novel_swarms.util.collider</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.collider.AABB.html">novel_swarms.util.collider.AABB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.collider.AngleSensitiveCC.html">novel_swarms.util.collider.AngleSensitiveCC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.collider.Collider.html">novel_swarms.util.collider.Collider</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.conversion.html">novel_swarms.util.conversion</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.conversion.ControllerConverter.html">novel_swarms.util.conversion.ControllerConverter</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.geometry.html">novel_swarms.util.geometry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.ConvexHull.html">novel_swarms.util.geometry.ConvexHull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.Point.html">novel_swarms.util.geometry.Point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.Polygon.html">novel_swarms.util.geometry.Polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.geometry.svg_extraction.html">novel_swarms.util.geometry.svg_extraction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.pdutils.html">novel_swarms.util.pdutils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.pid.html">novel_swarms.util.pid</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.processing.html">novel_swarms.util.processing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.processing.multicoreprocessing.html">novel_swarms.util.processing.multicoreprocessing</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.util.signal.html">novel_swarms.util.signal</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.util.signal.Signal.html">novel_swarms.util.signal.Signal</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.statistics_tools.html">novel_swarms.util.statistics_tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.util.timer.html">novel_swarms.util.timer</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="novel_swarms.world.html">novel_swarms.world</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.RectangularWorld.html">novel_swarms.world.RectangularWorld</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.World.html">novel_swarms.world.World</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.WorldIO.html">novel_swarms.world.WorldIO</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.generation.html">novel_swarms.world.generation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.generation.Maze.html">novel_swarms.world.generation.Maze</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.goals.html">novel_swarms.world.goals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.goals.Goal.html">novel_swarms.world.goals.Goal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.goals.GoalFactory.html">novel_swarms.world.goals.GoalFactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.goals.GrowthRegion.html">novel_swarms.world.goals.GrowthRegion</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.objects.html">novel_swarms.world.objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.DetectionRegion.html">novel_swarms.world.objects.DetectionRegion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.ObjectFactory.html">novel_swarms.world.objects.ObjectFactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.StaticObject.html">novel_swarms.world.objects.StaticObject</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.TriggerRegion.html">novel_swarms.world.objects.TriggerRegion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.Wall.html">novel_swarms.world.objects.Wall</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.objects.WorldObject.html">novel_swarms.world.objects.WorldObject</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.world.simulate.html">novel_swarms.world.simulate</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.spawners.html">novel_swarms.world.spawners</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.AgentSpawner.html">novel_swarms.world.spawners.AgentSpawner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.ExcelSpawner.html">novel_swarms.world.spawners.ExcelSpawner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.FixedInit.html">novel_swarms.world.spawners.FixedInit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.spawners.Spawner.html">novel_swarms.world.spawners.Spawner</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="novel_swarms.world.subscribers.html">novel_swarms.world.subscribers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.subscribers.World2Gif.html">novel_swarms.world.subscribers.World2Gif</a></li>
+<li class="toctree-l4"><a class="reference internal" href="novel_swarms.world.subscribers.WorldSubscriber.html">novel_swarms.world.subscribers.WorldSubscriber</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="novel_swarms.yaml.html">novel_swarms.yaml</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.include.html">novel_swarms.yaml.include</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">novel_swarms.yaml.mathexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.np_representer.html">novel_swarms.yaml.np_representer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.pathlib_representer.html">novel_swarms.yaml.pathlib_representer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="novel_swarms.yaml.unknown.html">novel_swarms.yaml.unknown</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="novel_swarms.html" class="nav-link">novel_swarms</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="novel_swarms.yaml.html" class="nav-link">novel_swarms.yaml</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">novel_swarms.yaml.mathexpr</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-novel_swarms.yaml.mathexpr">
+<span id="novel-swarms-yaml-mathexpr"></span><h1>novel_swarms.yaml.mathexpr<a class="headerlink" href="#module-novel_swarms.yaml.mathexpr" title="Link to this heading">#</a></h1>
+<p>Handle !np yaml tag. Allows for evaluation of simple math/numpy expressions.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This code is not safe for arbitrary code execution as it uses <code class="docutils literal notranslate"><span class="pre">eval()</span></code>.
+Do not use untrusted <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files.
+While the functionality has been limited to expressions, <code class="docutils literal notranslate"><span class="pre">eval()</span></code> is still dangerous.
+Assignments and named expressions (walrus <code class="docutils literal notranslate"><span class="pre">:=</span></code>) and lambdas are disallowed to prevent
+the user from breaking things too much.</p>
+</div>
+<p class="rubric">Examples</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">YAML</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">0</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">radians(90 + 45)</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pi / 2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3.14</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># -&gt; [-2.356194490192345, 1.5707963267948966, 3.14]</span>
+<span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">complex(&#39;2+2j&#39;)</span><span class="w">  </span><span class="c1"># -&gt; (2+2j)</span>
+<span class="nt">2</span><span class="p">:</span><span class="w"> </span><span class="kt">!np</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array(list(range(10)), dtype=float)</span><span class="w">  </span><span class="c1"># -&gt; array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])</span>
+</pre></div>
+</div>
+</div>
+<section id="allowed-names">
+<h2>Allowed Names<a class="headerlink" href="#allowed-names" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="novel_swarms.yaml.mathexpr.allowed_builtins_names">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.mathexpr.</span></span><span class="sig-name descname"><span class="pre">allowed_builtins_names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['all',</span> <span class="pre">'any',</span> <span class="pre">'bin',</span> <span class="pre">'bool',</span> <span class="pre">'complex',</span> <span class="pre">'dict',</span> <span class="pre">'complex',</span> <span class="pre">'int',</span> <span class="pre">'float',</span> <span class="pre">'len',</span> <span class="pre">'range',</span> <span class="pre">'list',</span> <span class="pre">'max',</span> <span class="pre">'min',</span> <span class="pre">'oct',</span> <span class="pre">'pow',</span> <span class="pre">'repr',</span> <span class="pre">'round',</span> <span class="pre">'set',</span> <span class="pre">'slice',</span> <span class="pre">'sorted',</span> <span class="pre">'str',</span> <span class="pre">'sum',</span> <span class="pre">'tuple',</span> <span class="pre">'zip',</span> <span class="pre">'Ellipsis',</span> <span class="pre">'None',</span> <span class="pre">'True',</span> <span class="pre">'False']</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/mathexpr.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.mathexpr.allowed_builtins_names" title="Link to this definition">#</a></dt>
+<dd><p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p>
+<p>Names of builtins that are allowed to be used in expressions.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="novel_swarms.yaml.mathexpr.allowed_numpy_names">
+<span class="sig-prename descclassname"><span class="pre">novel_swarms.yaml.mathexpr.</span></span><span class="sig-name descname"><span class="pre">allowed_numpy_names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['PI',</span> <span class="pre">'Inf',</span> <span class="pre">'Infinity',</span> <span class="pre">'MAXDIMS',</span> <span class="pre">'NAN',</span> <span class="pre">'NINF',</span> <span class="pre">'NZERO',</span> <span class="pre">'NaN',</span> <span class="pre">'PINF',</span> <span class="pre">'PZERO',</span> <span class="pre">'abs',</span> <span class="pre">'absolute',</span> <span class="pre">'acos',</span> <span class="pre">'acosh',</span> <span class="pre">'add',</span> <span class="pre">'all',</span> <span class="pre">'allclose',</span> <span class="pre">'alltrue',</span> <span class="pre">'amax',</span> <span class="pre">'amin',</span> <span class="pre">'angle',</span> <span class="pre">'any',</span> <span class="pre">'apply_along_axis',</span> <span class="pre">'apply_over_axes',</span> <span class="pre">'arange',</span> <span class="pre">'arccos',</span> <span class="pre">'arccosh',</span> <span class="pre">'arcsin',</span> <span class="pre">'arcsinh',</span> <span class="pre">'arctan',</span> <span class="pre">'arctan2',</span> <span class="pre">'arctanh',</span> <span class="pre">'argmax',</span> <span class="pre">'argmin',</span> <span class="pre">'argpartition',</span> <span class="pre">'argsort',</span> <span class="pre">'argwhere',</span> <span class="pre">'around',</span> <span class="pre">'array',</span> <span class="pre">'array2string',</span> <span class="pre">'array_equal',</span> <span class="pre">'array_equiv',</span> <span class="pre">'array_split',</span> <span class="pre">'atan',</span> <span class="pre">'atan2',</span> <span class="pre">'atanh',</span> <span class="pre">'atleast_1d',</span> <span class="pre">'atleast_2d',</span> <span class="pre">'atleast_3d',</span> <span class="pre">'average',</span> <span class="pre">'bartlett',</span> <span class="pre">'bincount',</span> <span class="pre">'bitwise_and',</span> <span class="pre">'bitwise_not',</span> <span class="pre">'bitwise_or',</span> <span class="pre">'bitwise_xor',</span> <span class="pre">'blackman',</span> <span class="pre">'block',</span> <span class="pre">'bmat',</span> <span class="pre">'bool',</span> <span class="pre">'bool_',</span> <span class="pre">'broadcast',</span> <span class="pre">'broadcast_arrays',</span> <span class="pre">'broadcast_shapes',</span> <span class="pre">'broadcast_to',</span> <span class="pre">'busday_count',</span> <span class="pre">'busday_offset',</span> <span class="pre">'busdaycalendar',</span> <span class="pre">'byte',</span> <span class="pre">'bytes_',</span> <span class="pre">'can_cast',</span> <span class="pre">'cast',</span> <span class="pre">'cbrt',</span> <span class="pre">'cdouble',</span> <span class="pre">'ceil',</span> <span class="pre">'cfloat',</span> <span class="pre">'char',</span> <span class="pre">'character',</span> <span class="pre">'chararray',</span> <span class="pre">'choose',</span> <span class="pre">'clip',</span> <span class="pre">'clongdouble',</span> <span class="pre">'clongfloat',</span> <span class="pre">'column_stack',</span> <span class="pre">'common_type',</span> <span class="pre">'compare_chararrays',</span> <span class="pre">'compat',</span> <span class="pre">'complex128',</span> <span class="pre">'complex256',</span> <span class="pre">'complex64',</span> <span class="pre">'complex_',</span> <span class="pre">'complexfloating',</span> <span class="pre">'compress',</span> <span class="pre">'concatenate',</span> <span class="pre">'conj',</span> <span class="pre">'conjugate',</span> <span class="pre">'convolve',</span> <span class="pre">'copy',</span> <span class="pre">'copysign',</span> <span class="pre">'copyto',</span> <span class="pre">'corrcoef',</span> <span class="pre">'correlate',</span> <span class="pre">'cos',</span> <span class="pre">'cosh',</span> <span class="pre">'count_nonzero',</span> <span class="pre">'cov',</span> <span class="pre">'cross',</span> <span class="pre">'csingle',</span> <span class="pre">'ctypeslib',</span> <span class="pre">'cumprod',</span> <span class="pre">'cumproduct',</span> <span class="pre">'cumsum',</span> <span class="pre">'datetime64',</span> <span class="pre">'datetime_as_string',</span> <span class="pre">'datetime_data',</span> <span class="pre">'deg2rad',</span> <span class="pre">'degrees',</span> <span class="pre">'diag',</span> <span class="pre">'diag_indices',</span> <span class="pre">'diag_indices_from',</span> <span class="pre">'diagflat',</span> <span class="pre">'diagonal',</span> <span class="pre">'diff',</span> <span class="pre">'digitize',</span> <span class="pre">'disp',</span> <span class="pre">'divide',</span> <span class="pre">'divmod',</span> <span class="pre">'dot',</span> <span class="pre">'double',</span> <span class="pre">'dsplit',</span> <span class="pre">'dstack',</span> <span class="pre">'dtype',</span> <span class="pre">'dtypes',</span> <span class="pre">'e',</span> <span class="pre">'ediff1d',</span> <span class="pre">'einsum',</span> <span class="pre">'einsum_path',</span> <span class="pre">'emath',</span> <span class="pre">'empty',</span> <span class="pre">'empty_like',</span> <span class="pre">'equal',</span> <span class="pre">'errstate',</span> <span class="pre">'euler_gamma',</span> <span class="pre">'exceptions',</span> <span class="pre">'exp',</span> <span class="pre">'exp2',</span> <span class="pre">'expand_dims',</span> <span class="pre">'expm1',</span> <span class="pre">'expm1x',</span> <span class="pre">'extract',</span> <span class="pre">'eye',</span> <span class="pre">'fabs',</span> <span class="pre">'fft',</span> <span class="pre">'fill_diagonal',</span> <span class="pre">'finfo',</span> <span class="pre">'fix',</span> <span class="pre">'flatiter',</span> <span class="pre">'flatnonzero',</span> <span class="pre">'flexible',</span> <span class="pre">'flip',</span> <span class="pre">'fliplr',</span> <span class="pre">'flipud',</span> <span class="pre">'float128',</span> <span class="pre">'float16',</span> <span class="pre">'float32',</span> <span class="pre">'float64',</span> <span class="pre">'float_',</span> <span class="pre">'float_power',</span> <span class="pre">'floating',</span> <span class="pre">'floor',</span> <span class="pre">'floor_divide',</span> <span class="pre">'fmax',</span> <span class="pre">'fmin',</span> <span class="pre">'fmod',</span> <span class="pre">'format_parser',</span> <span class="pre">'frexp',</span> <span class="pre">'full',</span> <span class="pre">'full_like',</span> <span class="pre">'gcd',</span> <span class="pre">'generic',</span> <span class="pre">'genfromtxt',</span> <span class="pre">'geomspace',</span> <span class="pre">'get_array_wrap',</span> <span class="pre">'get_include',</span> <span class="pre">'get_printoptions',</span> <span class="pre">'getbufsize',</span> <span class="pre">'geterr',</span> <span class="pre">'geterrcall',</span> <span class="pre">'geterrobj',</span> <span class="pre">'gradient',</span> <span class="pre">'greater',</span> <span class="pre">'greater_equal',</span> <span class="pre">'half',</span> <span class="pre">'hamming',</span> <span class="pre">'hanning',</span> <span class="pre">'heaviside',</span> <span class="pre">'histogram',</span> <span class="pre">'histogram2d',</span> <span class="pre">'histogram_bin_edges',</span> <span class="pre">'histogramdd',</span> <span class="pre">'hsplit',</span> <span class="pre">'hstack',</span> <span class="pre">'hypot',</span> <span class="pre">'i0',</span> <span class="pre">'identity',</span> <span class="pre">'iinfo',</span> <span class="pre">'imag',</span> <span class="pre">'in1d',</span> <span class="pre">'index_exp',</span> <span class="pre">'indices',</span> <span class="pre">'inexact',</span> <span class="pre">'inf',</span> <span class="pre">'info',</span> <span class="pre">'infty',</span> <span class="pre">'inner',</span> <span class="pre">'insert',</span> <span class="pre">'int16',</span> <span class="pre">'int32',</span> <span class="pre">'int64',</span> <span class="pre">'int8',</span> <span class="pre">'int_',</span> <span class="pre">'intc',</span> <span class="pre">'integer',</span> <span class="pre">'interp',</span> <span class="pre">'intersect1d',</span> <span class="pre">'intp',</span> <span class="pre">'invert',</span> <span class="pre">'is_busday',</span> <span class="pre">'isclose',</span> <span class="pre">'iscomplex',</span> <span class="pre">'iscomplexobj',</span> <span class="pre">'isfinite',</span> <span class="pre">'isin',</span> <span class="pre">'isinf',</span> <span class="pre">'isnan',</span> <span class="pre">'isnat',</span> <span class="pre">'isneginf',</span> <span class="pre">'isposinf',</span> <span class="pre">'isreal',</span> <span class="pre">'isrealobj',</span> <span class="pre">'isscalar',</span> <span class="pre">'issctype',</span> <span class="pre">'issubclass_',</span> <span class="pre">'issubdtype',</span> <span class="pre">'issubsctype',</span> <span class="pre">'iterable',</span> <span class="pre">'ix_',</span> <span class="pre">'kaiser',</span> <span class="pre">'kernel_version',</span> <span class="pre">'kron',</span> <span class="pre">'lcm',</span> <span class="pre">'ldexp',</span> <span class="pre">'left_shift',</span> <span class="pre">'less',</span> <span class="pre">'less_equal',</span> <span class="pre">'lexsort',</span> <span class="pre">'lib',</span> <span class="pre">'linalg',</span> <span class="pre">'linspace',</span> <span class="pre">'little_endian',</span> <span class="pre">'load',</span> <span class="pre">'loadtxt',</span> <span class="pre">'log',</span> <span class="pre">'log10',</span> <span class="pre">'log1p',</span> <span class="pre">'log2',</span> <span class="pre">'logaddexp',</span> <span class="pre">'logaddexp2',</span> <span class="pre">'logical_and',</span> <span class="pre">'logical_not',</span> <span class="pre">'logical_or',</span> <span class="pre">'logical_xor',</span> <span class="pre">'logspace',</span> <span class="pre">'long',</span> <span class="pre">'longcomplex',</span> <span class="pre">'longdouble',</span> <span class="pre">'longfloat',</span> <span class="pre">'longlong',</span> <span class="pre">'lookfor',</span> <span class="pre">'ma',</span> <span class="pre">'mask_indices',</span> <span class="pre">'mat',</span> <span class="pre">'matmul',</span> <span class="pre">'matrix',</span> <span class="pre">'max',</span> <span class="pre">'maximum',</span> <span class="pre">'mean',</span> <span class="pre">'median',</span> <span class="pre">'memmap',</span> <span class="pre">'meshgrid',</span> <span class="pre">'mgrid',</span> <span class="pre">'min',</span> <span class="pre">'min_scalar_type',</span> <span class="pre">'minimum',</span> <span class="pre">'mintypecode',</span> <span class="pre">'mod',</span> <span class="pre">'modf',</span> <span class="pre">'moveaxis',</span> <span class="pre">'msort',</span> <span class="pre">'multiply',</span> <span class="pre">'nan',</span> <span class="pre">'nan_to_num',</span> <span class="pre">'nanargmax',</span> <span class="pre">'nanargmin',</span> <span class="pre">'nancumprod',</span> <span class="pre">'nancumsum',</span> <span class="pre">'nanmax',</span> <span class="pre">'nanmean',</span> <span class="pre">'nanmedian',</span> <span class="pre">'nanmin',</span> <span class="pre">'nanpercentile',</span> <span class="pre">'nanprod',</span> <span class="pre">'nanquantile',</span> <span class="pre">'nanstd',</span> <span class="pre">'nansum',</span> <span class="pre">'nanvar',</span> <span class="pre">'nbytes',</span> <span class="pre">'ndarray',</span> <span class="pre">'ndenumerate',</span> <span class="pre">'ndim',</span> <span class="pre">'ndindex',</span> <span class="pre">'nditer',</span> <span class="pre">'negative',</span> <span class="pre">'nested_iters',</span> <span class="pre">'newaxis',</span> <span class="pre">'nextafter',</span> <span class="pre">'nonzero',</span> <span class="pre">'not_equal',</span> <span class="pre">'numarray',</span> <span class="pre">'number',</span> <span class="pre">'obj2sctype',</span> <span class="pre">'object_',</span> <span class="pre">'ogrid',</span> <span class="pre">'oldnumeric',</span> <span class="pre">'ones',</span> <span class="pre">'ones_like',</span> <span class="pre">'outer',</span> <span class="pre">'packbits',</span> <span class="pre">'pad',</span> <span class="pre">'partition',</span> <span class="pre">'percentile',</span> <span class="pre">'pi',</span> <span class="pre">'piecewise',</span> <span class="pre">'place',</span> <span class="pre">'poly',</span> <span class="pre">'poly1d',</span> <span class="pre">'polyadd',</span> <span class="pre">'polyder',</span> <span class="pre">'polydiv',</span> <span class="pre">'polyfit',</span> <span class="pre">'polyint',</span> <span class="pre">'polymul',</span> <span class="pre">'polynomial',</span> <span class="pre">'polysub',</span> <span class="pre">'polyval',</span> <span class="pre">'positive',</span> <span class="pre">'pow',</span> <span class="pre">'power',</span> <span class="pre">'printoptions',</span> <span class="pre">'prod',</span> <span class="pre">'product',</span> <span class="pre">'promote_types',</span> <span class="pre">'ptp',</span> <span class="pre">'put',</span> <span class="pre">'put_along_axis',</span> <span class="pre">'putmask',</span> <span class="pre">'quantile',</span> <span class="pre">'rad2deg',</span> <span class="pre">'radians',</span> <span class="pre">'random',</span> <span class="pre">'ravel',</span> <span class="pre">'ravel_multi_index',</span> <span class="pre">'real',</span> <span class="pre">'real_if_close',</span> <span class="pre">'rec',</span> <span class="pre">'recarray',</span> <span class="pre">'recfromcsv',</span> <span class="pre">'recfromtxt',</span> <span class="pre">'reciprocal',</span> <span class="pre">'record',</span> <span class="pre">'remainder',</span> <span class="pre">'repeat',</span> <span class="pre">'require',</span> <span class="pre">'reshape',</span> <span class="pre">'resize',</span> <span class="pre">'result_type',</span> <span class="pre">'right_shift',</span> <span class="pre">'rint',</span> <span class="pre">'roll',</span> <span class="pre">'rollaxis',</span> <span class="pre">'roots',</span> <span class="pre">'rot90',</span> <span class="pre">'round',</span> <span class="pre">'round_',</span> <span class="pre">'row_stack',</span> <span class="pre">'s_',</span> <span class="pre">'safe_eval',</span> <span class="pre">'sctype2char',</span> <span class="pre">'sctypeDict',</span> <span class="pre">'sctypes',</span> <span class="pre">'searchsorted',</span> <span class="pre">'select',</span> <span class="pre">'set_numeric_ops',</span> <span class="pre">'set_printoptions',</span> <span class="pre">'set_string_function',</span> <span class="pre">'setxor1d',</span> <span class="pre">'shape',</span> <span class="pre">'short',</span> <span class="pre">'show_config',</span> <span class="pre">'show_runtime',</span> <span class="pre">'sign',</span> <span class="pre">'signbit',</span> <span class="pre">'signedinteger',</span> <span class="pre">'sin',</span> <span class="pre">'sinc',</span> <span class="pre">'single',</span> <span class="pre">'singlecomplex',</span> <span class="pre">'sinh',</span> <span class="pre">'size',</span> <span class="pre">'sometrue',</span> <span class="pre">'sort',</span> <span class="pre">'sort_complex',</span> <span class="pre">'source',</span> <span class="pre">'spacing',</span> <span class="pre">'split',</span> <span class="pre">'sqrt',</span> <span class="pre">'square',</span> <span class="pre">'squeeze',</span> <span class="pre">'stack',</span> <span class="pre">'std',</span> <span class="pre">'str_',</span> <span class="pre">'string_',</span> <span class="pre">'subtract',</span> <span class="pre">'sum',</span> <span class="pre">'swapaxes',</span> <span class="pre">'take',</span> <span class="pre">'take_along_axis',</span> <span class="pre">'tan',</span> <span class="pre">'tanh',</span> <span class="pre">'tensordot',</span> <span class="pre">'tile',</span> <span class="pre">'timedelta64',</span> <span class="pre">'trace',</span> <span class="pre">'transpose',</span> <span class="pre">'tri',</span> <span class="pre">'tril',</span> <span class="pre">'tril_indices',</span> <span class="pre">'tril_indices_from',</span> <span class="pre">'trim_zeros',</span> <span class="pre">'triu',</span> <span class="pre">'triu_indices',</span> <span class="pre">'triu_indices_from',</span> <span class="pre">'true_divide',</span> <span class="pre">'trunc',</span> <span class="pre">'typename',</span> <span class="pre">'ubyte',</span> <span class="pre">'ufunc',</span> <span class="pre">'uint',</span> <span class="pre">'uint16',</span> <span class="pre">'uint32',</span> <span class="pre">'uint64',</span> <span class="pre">'uint8',</span> <span class="pre">'uintc',</span> <span class="pre">'uintp',</span> <span class="pre">'ulong',</span> <span class="pre">'ulonglong',</span> <span class="pre">'unicode_',</span> <span class="pre">'union1d',</span> <span class="pre">'unique',</span> <span class="pre">'unpackbits',</span> <span class="pre">'unravel_index',</span> <span class="pre">'unsignedinteger',</span> <span class="pre">'unwrap',</span> <span class="pre">'ushort',</span> <span class="pre">'vander',</span> <span class="pre">'var',</span> <span class="pre">'vecdot',</span> <span class="pre">'vdot',</span> <span class="pre">'vectorize',</span> <span class="pre">'version',</span> <span class="pre">'void',</span> <span class="pre">'vsplit',</span> <span class="pre">'vstack',</span> <span class="pre">'where',</span> <span class="pre">'zeros',</span> <span class="pre">'zeros_like']</span></em><a class="reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/blob/docs-live/src/novel_swarms/yaml/mathexpr.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#novel_swarms.yaml.mathexpr.allowed_numpy_names" title="Link to this definition">#</a></dt>
+<dd><p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p>
+<p>Names of numpy objects that are allowed to be used in expressions.</p>
+</dd></dl>
+
+</section>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_numexpr</span></code>(loader, node)</p></td>
+<td><p>Handles the <code class="docutils literal notranslate"><span class="pre">!np</span></code> tag on YAML nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_eval</span></code>(expr[, variables, skip_errors])</p></td>
+<td><p>Somewhat safely evaluate a a string containing a Python expression.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">unwrap_node_recursive</span></code>(loader, node)</p></td>
+<td><p>Handles <code class="docutils literal notranslate"><span class="pre">!np</span></code> tag on sequences and mappings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="novel_swarms.yaml.include.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">novel_swarms.yaml.include</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="novel_swarms.yaml.np_representer.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">novel_swarms.yaml.np_representer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#allowed-names">Allowed Names</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.mathexpr.allowed_builtins_names"><code class="docutils literal notranslate"><span class="pre">allowed_builtins_names</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#novel_swarms.yaml.mathexpr.allowed_numpy_names"><code class="docutils literal notranslate"><span class="pre">allowed_numpy_names</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/api/_gen/novel_swarms.yaml.mathexpr.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/_gen/novel_swarms.yaml.mathexpr.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Connor Mattson, Kevin Zhu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 21, 2025.
+  <br/>
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

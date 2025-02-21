@@ -1,0 +1,679 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Installing for Development &#8212; RobotSwarmSimulator</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=b48425a4" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=c6e86fd7"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'devel/install';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Development" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Feb 21, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RobotSwarmSimulator</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide/install.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kenblu24/RobotSwarmSimulator" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installing for Development</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Development</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installing for Development</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="installing-for-development">
+<h1>Installing for Development<a class="headerlink" href="#installing-for-development" title="Link to this heading">#</a></h1>
+<p>This page describes how to install RobotSwarmSimulator for development.</p>
+<div class="admonition-this-is-a-guide-for-internal-contributors-to-robotswarmsimulator admonition">
+<p class="admonition-title">This is a guide for <strong>internal contributors</strong> to RobotSwarmSimulator.</p>
+<p>It assumes you’re added to the github repository as a collaborator
+and uses <strong>SSH URLs</strong> for git. External contributors should fork the repository &lt;<a class="github reference external" href="https://github.com/kenblu24/RobotSwarmSimulator/fork">kenblu24/RobotSwarmSimulator</a>&gt;</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This guide assumes you’re using a Unix-like operating system, such as <span class="fab fa-linux"></span> Linux or <span class="fab fa-apple"></span> macOS.
+If you’re on <span class="fab fa-windows"></span> Windows, please use WSL <a class="reference internal" href="../guide/install-wsl.html"><span class="doc">Installing Windows Subsystem for Linux</span></a> and then follow this guide
+as if you were on Linux (because you are). Then, see <a class="reference internal" href="../guide/install-wsl.html#wsl-post-install"><span class="std std-ref">Post-Installation</span></a> for further setup.</p>
+</div>
+<section id="installing-git">
+<h2>Installing git<a class="headerlink" href="#installing-git" title="Link to this heading">#</a></h2>
+<p>If you’re contributing to RobotSwarmSimulator, you should probably be using <span class="fab fa-git-alt"></span> <span class="fab fa-git"></span> git version control.</p>
+<p><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary reference external" href="https://git-scm.com/downloads"><span><span class="fab fa-git-alt"></span> Download git <span class="fas fa-arrow-up-right-from-square"></span></span></a></p>
+<p>Once you have git, make sure you can run <code class="docutils literal notranslate"><span class="pre">git</span></code> from the command line. If not, you may need to restart your terminal.</p>
+</section>
+<section id="ssh-keys">
+<h2>SSH keys<a class="headerlink" href="#ssh-keys" title="Link to this heading">#</a></h2>
+<p>This guide uses SSH URLs for git. You’ll need to have an SSH key set up and added to your GitHub account
+to clone, pull, or push to/from the remote repository.
+If you don’t have an SSH key on your system, you’ll need to generate one.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">“Check if you have an SSH key already”</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>-A<span class="w"> </span>~/.ssh
+<span class="go">id_rsa  id_rsa.pub  known_hosts</span>
+</pre></div>
+</div>
+</div>
+<p>You should see <code class="docutils literal notranslate"><span class="pre">id_rsa.pub</span></code> or <code class="docutils literal notranslate"><span class="pre">id_ed25519.pub</span></code> in the output.
+If you don’t, you’ll need to generate a new SSH key.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Be aware that existing SSH keys may be used by other applications. If you delete or overwrite an existing key,
+you may need to re-add it wherever it was used.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Generate a new SSH key</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh-keygen
+</pre></div>
+</div>
+</div>
+<p>Copy &amp; paste the contents of your <code class="docutils literal notranslate"><span class="pre">id_rsa.pub</span></code> or <code class="docutils literal notranslate"><span class="pre">id_ed25519.pub</span></code> file into your GitHub account’s SSH keys page.
+Make sure to give the key a descriptive title; you won’t be able to change it later.</p>
+<p><a class="sd-sphinx-override sd-btn sd-text-wrap sd-btn-secondary reference external" href="https://github.com/settings/ssh/new"><span><span class="fas fa-key"></span> Add <span class="fab fa-github"></span> GitHub SSH key <span class="fas fa-arrow-up-right-from-square"></span></span></a></p>
+<p>See the <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub documentation</a> for more information.</p>
+</section>
+<section id="python-installation">
+<h2>Python Installation<a class="headerlink" href="#python-installation" title="Link to this heading">#</a></h2>
+<p>If you’re on <span class="fab fa-ubuntu"></span> Ubuntu or a <span class="fab fa-debian"></span> Debian-based Linux distribution, you should use <code class="docutils literal notranslate"><span class="pre">pyenv</span></code>
+to install <span class="fab fa-python"></span> Python 3.11 or later.</p>
+<p>This allows you to install any Python version you want, without affecting your system Python installation.
+See the <a class="reference external" href="https://github.com/pyenv/pyenv#installation">pyenv installation instructions</a>.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Install &amp; switch to Python&gt;=3.11</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.13
+pyenv<span class="w"> </span>global<span class="w"> </span><span class="m">3</span>.13
+</pre></div>
+</div>
+</div>
+<p>Then, make sure we’re actually using the right version of Python.
+You should see something similar to this:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Check the python version and make sure <code class="docutils literal notranslate"><span class="pre">_ctypes</span></code> is available</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>which<span class="w"> </span>python
+<span class="go">/home/username/.pyenv/shims/python</span>
+<span class="gp">$ </span>python<span class="w"> </span>--version
+<span class="go">Python 3.13.0</span>
+<span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import _ctypes&quot;</span>
+<span class="gp">$ </span>pip<span class="w"> </span>--version
+<span class="go">pip 24.2 from /home/username/.pyenv/versions/3.13.0/lib/python3.13/site-packages/pip (python 3.13)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>This needs to be done before creating the virtual environment, as <code class="docutils literal notranslate"><span class="pre">venv</span></code> or <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>
+will use whatever version of Python it finds when you run it. Running <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">python</span></code> may help you know more.</p>
+<p>If you already made the virtual environment, the easiest way to fix this is to delete the virtual environment and start over.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>If you’re running Tennlab simulations on the <strong>Hopper cluster</strong>, please use the <a class="reference external" href="https://gitlab.orc.gmu.edu/kzhu4/neuromorphic_experiments/-/tree/master/scripts/hopper?ref_type=heads">hopper install scripts</a>.</p>
+</div>
+</section>
+<section id="downloading-installing-as-editable">
+<h2>Downloading &amp; Installing as editable<a class="headerlink" href="#downloading-installing-as-editable" title="Link to this heading">#</a></h2>
+<p>First, let’s make a project folder and <strong>virtual environment</strong>. Pick a place
+to store your virtual environment. In this example, we’ll use the <code class="docutils literal notranslate"><span class="pre">swarm/</span></code> folder.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Make a project folder and virtual environment</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>swarm
+<span class="nb">cd</span><span class="w"> </span>swarm
+pip<span class="w"> </span>install<span class="w"> </span>virtualenv
+virtualenv<span class="w"> </span>.
+</pre></div>
+</div>
+</div>
+<p>Then, let’s <cite>git clone</cite> the RobotSwarmSimulator repository.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">git clone the RobotSwarmSimulator repository and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into it</span><a class="headerlink" href="#id6" title="Link to this code">#</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:kenblu24/RobotSwarmSimulator.git
+<span class="nb">cd</span><span class="w"> </span>RobotSwarmSimulator
+</pre></div>
+</div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">--editable</span></code> install allows you to make changes to the code and see the effects immediately.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-secondary sd-bg-text-secondary">
+<span class="sd-summary-text">Install UV for faster installs</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">You can preface most <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> commands with <code class="docutils literal notranslate"><span class="pre">uv</span></code> for <em>much</em> faster installation.</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Install <code class="docutils literal notranslate"><span class="pre">uv</span></code> &lt;<a class="github reference external" href="https://github.com/pyuv/uv">pyuv/uv</a>&gt; for faster installs</span><a class="headerlink" href="#id7" title="Link to this code">#</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>uv
+</pre></div>
+</div>
+</div>
+<p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span></code> may not work for some packages. If you get an error, try using regular <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> first.</p>
+</div>
+</details><p>It’s finally time to install RobotSwarmSimulator into our virtual environment:</p>
+<div class="sd-tab-set sd-width-content-min docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="uv" data-sync-id="uv" for="sd-tab-item-0">
+uv</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev,<span class="w"> </span>docs<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="uv" data-sync-id="pip" for="sd-tab-item-1">
+pip</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev,<span class="w"> </span>docs<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If the installation was successful, you should be able to open a <code class="docutils literal notranslate"><span class="pre">python</span></code> shell and import the package:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">python</span></code></span><a class="headerlink" href="#id8" title="Link to this code">#</a></div>
+<div class="highlight-python-console notranslate"><div class="highlight"><pre><span></span><span class="go">Python 3.11.0 (or newer)</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">novel_swarms</span>
+<span class="gp">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="sd-card sd-sphinx-override sd-m-3 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Finished installing? Check out the <a class="reference internal" href="../guide/firstrun.html"><span class="doc">Basic Usage</span></a> tutorial.  <span class="fas fa-circle-chevron-right float-right font-size-1_7em"></span></p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="../guide/firstrun.html"><span class="doc">First Run Tutorial</span></a></div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Development</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-git">Installing git</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-keys">SSH keys</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-installation">Python Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-installing-as-editable">Downloading &amp; Installing as editable</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/kenblu24/RobotSwarmSimulator/edit/docs-live/doc/build/html/devel/install.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/devel/install.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Connor Mattson, Kevin Zhu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last built Feb 21, 2025.
+  <br/>
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
