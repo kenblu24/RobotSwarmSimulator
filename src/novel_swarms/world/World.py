@@ -165,6 +165,7 @@ class World:
         self._screen_cache = None
         self.seed = config.seed
         self.set_seed(self.seed)
+        self.events = []
         #: Random number generator.
         #: Also may be used to seed RNG for agents, spawners, etc.
         self.rng: np.random.Generator
