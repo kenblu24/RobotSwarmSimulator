@@ -51,14 +51,17 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         # I think you won't need to make your own agent type, but if you do, you can register it here
         from RunnerAgent import RunnerAgent, RunnerAgentConfig
+        from BetterHumanAgent import HumanAgent, HumanAgentConfig
         # register agent types before building any configs
         register_agent_type("RunnerAgent", RunnerAgent, RunnerAgentConfig)
+        register_agent_type("HumanAgent", HumanAgent, HumanAgentConfig)
 
         # from RelativePositionSensor import RelativePositionSensor
         # register_dictlike_type('sensors', 'RelativePositionSensor', RelativePositionSensor)
 
         # you can probably implement all the logic in the controller without needing to make a whole new agent type
         from RunnerController import RunnerController
+        from HumanController import HumanController
         # register_dictlike_type('controller', 'RunnerController', RunnerController)  # for loading RunnerController from yaml
 
         # load turbopi config
@@ -77,6 +80,16 @@ def get_world_generator(n_agents, horizon, round_genome=False):
             team="attackers",
             body_color=(255, 0, 0),
             controller=RunnerController(),
+            body_filled=True,
+        )
+
+        human_config = HumanAgentConfig(
+            agent_radius=0.1,
+            position=(3, 1),  # x, y in meters where 0, 0 is the top left corner
+            name="i'm Alive",
+            team="attackers",
+            body_color=(0, 255, 0),
+            controller=HumanController(),
             body_filled=True,
         )
 
@@ -106,7 +119,8 @@ def get_world_generator(n_agents, horizon, round_genome=False):
         world_config.stop_at = horizon
 
         # add our agents and spawners
-        world_config.agents.append(runner_config)
+        # world_config.agents.append(runner_config)
+        world_config.agents.append(human_config)
         world_config.spawners.append(spawner_config)
 
         world_config.metadata = {"hash": hash(tuple(list(hash_val)))}
