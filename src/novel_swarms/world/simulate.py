@@ -130,8 +130,8 @@ def main(
                             round(max(steps_per_frame, 1))
                         else:
                             slowdown_level += 1
-                    elif event.key == pygame.K_w:
-                        draw_world = not draw_world
+                    # elif event.key == pygame.K_w:
+                    #     draw_world = not draw_world
                     elif event.key == pygame.K_F3:
                         from .WorldIO import WorldIO
                         WorldIO.save_world(world)
