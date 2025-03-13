@@ -7,7 +7,8 @@ TwoConstantOutputValues = tuple[ConstantOutputValues, ConstantOutputValues] | np
 
 
 class BinaryController(AbstractController):
-    def __init__(self, parent, a: TwoConstantOutputValues | ConstantOutputValues, b: ConstantOutputValues | None = None, agent=None,  sensor_id=0, **kwargs):
+    def __init__(self, a: TwoConstantOutputValues | ConstantOutputValues, b: ConstantOutputValues | None = None,
+                 parent=None, agent=None, sensor_id=0, **kwargs):
         super().__init__(agent=agent, parent=parent, **kwargs)
         self.sensor_id = sensor_id  # use this to determine which sensor on the agent to use
 
@@ -29,7 +30,7 @@ class BinaryController(AbstractController):
         else:
             raise ValueError("Expected argument(s) to be 1D arrays of same length or single 2D array")
 
-        print(self.a, self.b)
+        # print(self.a, self.b)
 
     def get_actions(self, agent):
         """

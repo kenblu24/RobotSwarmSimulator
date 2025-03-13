@@ -5,11 +5,11 @@ shared_controllers = {}
 
 
 class StaticController(Controller):
-    def __init__(self, agent=None, parent=None, output=(0, 0)):
+    def __init__(self, parent=None, agent=None, output=(0, 0)):
         self.list_based = False
         self.output = output
         self.controller_as_method = self.control_method
-        super().__init__(agent=agent, parent=parent, controller=self.control_method)
+        super().__init__(parent=parent, agent=agent, controller=self.control_method)
 
     def control_method(self, *args, **kwargs):
         """
