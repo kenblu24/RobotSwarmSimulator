@@ -3,14 +3,14 @@ import numpy as np
 import math
 from .Collider import CircularCollider
 
+
 class AngleSensitiveCC(CircularCollider):
-    def __init__(self, x, y, r, theta, action, sensitivity=30):
+    def __init__(self, x, y, r, theta, sensitivity=30):
         super().__init__(x, y, r)
         self.v_to_o = np.array([0, 0])
         self.theta = theta
         self.s = sensitivity  # In Degrees
         self.within_range = False
-        self.action = action
         self.v_f = np.array([0, 0])
         self.v_c = np.array([0, 0])
 

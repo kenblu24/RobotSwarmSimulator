@@ -1,0 +1,33 @@
+---
+type: "MazeAgent"
+sensors:
+  custom_state_decision: "Linear"
+  sensors:
+    # this was originally defined in
+    # novel_swarms.config.defaults.ConfigurationDefaults.FLOCKBOT_SENSOR_SET
+    - type: "BinaryFOVSensor"
+      theta: !np radians(0.2) / 2   # Vision Angle / 2 (Radians)
+      agent_sensing_range: !np 15.1 * 13.25  # (meters). DOESN'T MATCH MILLING RANGE
+      show: true
+      use_goal_state: false
+      detect_goal_with_added_state: true
+      goal_sensing_range: !np 15.1 * 29.13
+      wall_sensing_range: !np 15.1 * 4
+      walls: null
+      time_step_between_sensing: 1
+      fn: 0.10
+      fp: 0.05
+      bias: 4  # Angle Bias for Sensor
+      store_history: false
+      seed: 10
+controller: "self"
+agent_radius: 0.075
+stop_at_goal: false
+dt: 0.13
+scale_forward_speed: 0.2  # m/s
+scale_turning_rates: 2.0  # m/s
+body_color:
+  - 255
+  - 0
+  - 0
+body_filled: true

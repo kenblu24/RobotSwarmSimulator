@@ -1,3 +1,23 @@
+"""An Agent Class and Config for a non-moving agent.
+
+.. rubric:
+
+    Inheritance Diagram
+
+.. inheritance-diagram:: novel_swarms.agent.StaticAgent.StaticAgent
+    :parts: 1
+
+.. autoclass:: novel_swarms.agent.StaticAgent.StaticAgentConfig
+    :members:
+    :inherited-members:
+    :undoc-members:
+
+.. autoclass:: novel_swarms.agent.StaticAgent.StaticAgent
+    :members:
+    :inherited-members:
+    :undoc-members:
+"""
+
 from functools import lru_cache, cached_property
 
 import pygame
@@ -23,12 +43,19 @@ from ..world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 class StaticAgentConfig(BaseAgentConfig):
     seed: int | None | str = 'unspecified'
     # world_config: RectangularWorldConfig | None = None
+    #: float: The radius of the agent.
     agent_radius: float = 0.
+    #: tuple[int, int, int]: The body color of the agent.
     body_color: tuple[int, int, int] = (255, 255, 255)
+    #: bool: Whether the body is filled.
     body_filled: bool = False
+    #: bool | int: Whether the agent collides with other agents.
     collides: bool | int = True
+    #: list[tuple[float, float]] | np.ndarray | str: The points of the agent shape.
+    #: If points is empty, the agent will be a circle.
     points: list[tuple[float, float]] | np.ndarray | str = field(default_factory=list)
     anchor_point: None | tuple[float, float] | str = None
+    #: bool: Whether to draw the agent's AABB in debug mode.
     debug: bool = False
 
     def attach_world_config(self, world_config):
@@ -81,25 +108,29 @@ class StaticAgent(Agent):
                 self.shift = np.asarray(config.anchor_point, dtype=np.float64)
                 self.points += self.shift
             elif config.anchor_point is not None:
-                raise ValueError(f"Unknown points_shift type: {config.anchor_point}")
+                msg = f"Unknown points_shift type: {config.anchor_point}"
+                raise ValueError(msg)
 
+        #: float: The radius of the agent.
         self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
-        self.dt = world.dt
+        self.dt = world.dt  #: float: Copy the world's dt at agent creation.
         self.is_highlighted = False
         self.agent_in_sight = None
         self.body_filled = config.body_filled
         self.body_color = config.body_color
         self.debug = config.debug or self.DEBUG
         self.rotmat = self.rotmat2d()
+        #: AABB: The agent's cached AABB.
         self.aabb = self.make_aabb()
+        self.collider = None
 
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
 
     @override
-    def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-        super().step()
+    def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
+        super().step(world=world)
 
         self.rotmat = self.rotmat2d()
         self.aabb = self.make_aabb()
@@ -164,8 +195,10 @@ class StaticAgent(Agent):
 
     def build_collider(self):
         if self.is_poly:
-            return PolyCollider(self.poly_rotated + self.pos)
-        return CircularCollider(*self.pos, self.radius)
+            self.collider = PolyCollider(self.poly_rotated + self.pos)
+        else:
+            self.collider = CircularCollider(*self.pos, self.radius)
+        return self.collider
 
     def debug_draw(self, screen, offset):
         self.make_aabb().draw(screen, offset)
@@ -183,8 +216,9 @@ class StaticAgent(Agent):
 
     def get_simple_poly_radius(self):
         if self.is_poly:
-            return max(np.linalg.norm(p) for p in self.points)
+            return max(np.linalg.norm(p) for p in self.points)  # pyright: ignore[reportArgumentType]
 
+    @override
     def __str__(self) -> str:
         x, y = self.pos
         return f"(x: {x}, y: {y}, r: {self.radius}, θ: {self.angle})"

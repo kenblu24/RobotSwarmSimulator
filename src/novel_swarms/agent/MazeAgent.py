@@ -1,29 +1,61 @@
+"""MazeAgent has Unicycle Dynamics and can move based on sensor info.
+
+.. inheritance-diagram:: novel_swarms.agent.MazeAgent.MazeAgent
+    :parts: 1
+
+.. autoclass:: novel_swarms.agent.MazeAgent.MazeAgentConfig
+    :members:
+    :inherited-members:
+
+.. autoclass:: novel_swarms.agent.MazeAgent.MazeAgent
+    :members:
+    :inherited-members:
+    :undoc-members:
+
+.. py:class:: State
+
+    A :py:class:`typing.NamedTuple` for recording the state of the agent.
+
+    Args:
+        x : float
+            The agent's x position in the world.
+        y : float
+            The agent's y position in the world.
+        angle : float
+            The agent's heading. (radians)
+
+.. py:class:: SPA
+
+    A :py:func:`collections.namedtuple` for recording the **S**\\ tate, **P**\\ erception, **A**\\ ction of the agent.
+
+    Args:
+        state : State | tuple[float, ...] | np.ndarray
+            The agent's position and heading.
+        perception : tuple[Any, ...] | np.ndarray
+            The sensor readings.
+        action : tuple[float, ...] | np.ndarray
+            The action to take.
+"""
+
 import math
 import random
 from copy import deepcopy
 from typing import NamedTuple
 from dataclasses import dataclass, field
-from collections import namedtuple
+from collections import namedtuple, deque
 
 import pygame
 import numpy as np
 
 from ..config import filter_unexpected_fields, associated_type
 from .StaticAgent import StaticAgent, StaticAgentConfig
-from ..sensors.GenomeDependentSensor import GenomeBinarySensor
-from ..util.collider.AABB import AABB
-from ..util.timer import Timer
 from ..util import statistics_tools as st
 from .control.Controller import Controller
-from ..world.RectangularWorld import RectangularWorldConfig
 
 # # typing
 from typing import Any, override
-from ..world.World import World
-# try:
-#     from ..config.AgentConfig import MazeAgentConfig
-# except ImportError:
-#     pass
+# from ..world.World import World
+# from ..world.RectangularWorld import RectangularWorldConfig
 
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
 State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
@@ -35,21 +67,26 @@ State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 class MazeAgentConfig(StaticAgentConfig):
     # world: World | None = None
     # world_config: RectangularWorldConfig | None = None
+    #: list[Sensor]: The sensors used by the agent. Emtpy list by default.
     sensors: list = field(default_factory=list)
+    #: AbstractController: The controller used by the agent. Zero controller by default.
     controller: Any = None
-    # sensors: SensorSet | None = None
-    idiosyncrasies: Any = False
-    delay: str | int | float = 0
+
     sensing_avg: int = 1
     stop_on_collision: bool = False
     stop_at_goal: bool = False
     body_color: tuple[int, int, int] = (255, 255, 255)
     body_filled: bool = False
     catastrophic_collisions: bool = False
-    trace_length: tuple[int, int, int] | None = None
-    trace_color: tuple[int, int, int] | None = None
+    trace_length: int | None = 0
+    trace_color: tuple[int, int, int] = (255, 255, 255)
     controller: Controller | None = None
     track_io: bool = False
+
+    idiosyncrasies: Any = False
+    #: dict[str, float]: The idiosyncrasies of the agent. False by default.
+
+    delay: str | int | float = 0
 
     def __post_init__(self):
         # super().__post_init__()
@@ -60,14 +97,9 @@ class MazeAgentConfig(StaticAgentConfig):
     def __badvars__(self):
         return super().__badvars__() + ["world", "world_config"]
 
+    @override
     def attach_world_config(self, world_config):
         self.world = world_config
-
-    # @staticmethod
-    # def from_dict(d):
-    #     # if isinstance(d["sensors"], dict):
-    #     #     d["sensors"] = SensorFactory.create(d["sensors"])
-    #     return MazeAgentConfig(**d)
 
     def rescale(self, zoom):
         self.agent_radius *= zoom
@@ -85,15 +117,42 @@ class MazeAgent(StaticAgent):
     SEED = -1
 
     def __init__(self, config: MazeAgentConfig, world, name=None, initialize=True) -> None:
+        """Agent w/ Unicycle Dynamics which can move based on sensor info.
 
-        # if hasattr(config.controller, 'get_actions'):
-        #     self.controller = config.controller
-        # else:
-        #     self.controller = Controller(config.controller)
+        Parameters
+        ----------
+        config : MazeAgentConfig
+            Agent will be initialized with this config.
+        world : RectangularWorld
+            Back-reference to the world instance.
+        name : str, optional
+            Name of the agent, by default None
+        initialize : bool, optional
+            If True, run post-init procedure (setup controller and sensors from config).
+
+            Leave this as True if it's the last call to the constructor.
+
+        .. dropdown:: Inheritance Tree
+            :color: primary
+
+            .. inheritance-diagram:: novel_swarms.agent.MazeAgent.MazeAgent
+
+        .. toggle:: Why is it called ``MazeAgent``?
+
+            You might be wondering why it's called ``MazeAgent``, or rather, why
+            this agent is so commonly used. It's also the subclass of a lot of other
+            agent types, such as the nearly identical :py:class:`UnicycleAgent <novel_swarms.agent.UnicycleAgent>`.
+            So why not have ``UnicycleAgent`` be the base?
+
+            The reason is largely historical. One of the research directions was to
+            discover behaviors that could allow a swarm to navigate a maze faster.
+            Research then shifted to multi-agent search-and-rendezvous, but this
+            being so early in the sim's development, the name ``MazeAgent`` had
+            been developed just enough to be used as a base for other agent types.
+        """
 
         super().__init__(config, world, name=name, initialize=False)
 
-        self.radius = config.agent_radius
         self.is_highlighted = False
         self.agent_in_sight = None
         if config.idiosyncrasies:
@@ -103,8 +162,8 @@ class MazeAgent(StaticAgent):
             self.idiosyncrasies = [1.0, 1.0]
         # I1_MEAN, I1_SD = 0.93, 0.08
         # I2_MEAN, I2_SD = 0.95, 0.06
-        self.delay_1 = st.Delay(delay=config.delay)
-        self.delay_2 = st.Delay(delay=config.delay)
+        self.delay_1 = st.Delay(delay=config.delay)  # type: ignore[reportArgumentType]
+        self.delay_2 = st.Delay(delay=config.delay)  # type: ignore[reportArgumentType]
         self.sensing_avg = st.Average(config.sensing_avg)
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
@@ -114,18 +173,15 @@ class MazeAgent(StaticAgent):
         self.stop_at_goal = config.stop_at_goal
         self.config = config
 
-        # self.sensors = deepcopy(config.sensors)
-        # for sensor in self.sensors:
-        #     if isinstance(sensor, GenomeBinarySensor):
-        #         sensor.augment_from_genome(config.controller)
-
-        # self.attach_agent_to_sensors()
-
         self.body_filled = config.body_filled
         if config.body_color == "Random":
             self.body_color = self.get_random_color()
         else:
             self.body_color = config.body_color
+
+        # Set Trace Settings if a trace was assigned to this object.
+        self.trace_color = config.trace_color
+        self.trace_path = deque(maxlen=config.trace_length)
 
         self.history = []
         self.track_io = getattr(config, "track_io", False)
@@ -135,13 +191,13 @@ class MazeAgent(StaticAgent):
             self.setup_sensors_from_config()
 
     @override
-    def step(self, check_for_world_boundaries=None, world=None, check_for_agent_collisions=None) -> None:
-
+    def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
+        world = world or self.world
         if world is None:
             raise Exception("Expected a Valid value for 'World' in step method call - Unicycle Agent")
 
         # timer = Timer("Calculations")
-        super().step()
+        super().step(world)
 
         if self.dead:
             return
@@ -190,6 +246,7 @@ class MazeAgent(StaticAgent):
 
         self.collision_flag = False
         if check_for_world_boundaries is not None:
+            # TODO: remove this
             check_for_world_boundaries(self)
 
         self.handle_collisions(world)
@@ -206,25 +263,10 @@ class MazeAgent(StaticAgent):
 
     @override
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
-        pan, zoom = np.asarray(offset[0]), offset[1]
+        pan, zoom = np.asarray(offset[0]), offset[1]  # type:ignore[reportUnusedVariable]
         super().draw(screen, offset)
         for sensor in self.sensors:
             sensor.draw(screen, offset)
-
-    # def interpretSensors(self) -> Tuple:
-    #     """
-    #     Deprecated: See Controller Class (novel_swarms.agent.control.Controller)
-    #     """
-    #     sensor_state = self.sensors.getState()
-    #     sensor_detection_id = self.sensors.getDetectionId()
-    #     # self.set_color_by_id(sensor_detection_id)
-    #
-    #     # if sensor_state == 2:
-    #     #     return 12, 0
-    #
-    #     v = self.controller[sensor_state * 2]
-    #     omega = self.controller[(sensor_state * 2) + 1]
-    #     return v, omega
 
     def set_color_by_id(self, id):
         if id == 0:
@@ -279,4 +321,3 @@ class MazeAgent(StaticAgent):
 
         else:
             return True
-

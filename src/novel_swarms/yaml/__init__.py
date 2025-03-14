@@ -1,11 +1,53 @@
-import yaml
-import pathlib
+"""
+YAML support for novel swarms
 
-import numpy as np
+This module provides a custom YAML loader that defines some nice tags.
+
+.. seealso::
+    See :doc:`/guide/yaml` for how to use the custom YAML tags.
+
+Functions
+=========
+
+.. autofunction:: novel_swarms.yaml.load
+
+    By default, this function uses our :py:class:`~novel_swarms.yaml.IncludeLoader` class
+    which processes ``!include``, ``!relpath``, and ``!np`` tags.
+
+.. autofunction:: novel_swarms.yaml.safe_load
+
+    This loads YAML similarly to how ``ruamel.yaml``'s safe loader does, in that it ignores
+    non-standard tags. It also handles recursively defined anchors/aliases.
+
+.. autofunction:: novel_swarms.yaml.dump
+
+    By default, this function uses our :py:class:`~novel_swarms.yaml.CustomDumper` class
+    which provides a more human-readable representation of :py:class:`pathlib.Path`
+    and certain small :py:class:`numpy.ndarray` objects.
+
+Examples
+========
+
+.. code-block:: python
+
+   import novel_swarms.yaml as yaml
+
+   # load a YAML file
+   with open('foo.yaml', 'r') as f:
+       data = yaml.load(f)
+
+   # dump a YAML file
+   with open('foo.yaml', 'w') as f:
+       yaml.dump(data, f)
+"""
+
+import yaml
 
 from .mathexpr import construct_numexpr
 from .include import IncludeLoader, construct_include
 from .unknown import Tagged, construct_undefined, register_undefined
+from .pathlib_representer import pathlib, represent_path
+from .np_representer import numpy, represent_ndarray
 
 from functools import partial
 
@@ -28,56 +70,14 @@ class CustomDumper(yaml.Dumper):
     pass
 
 
-def NDArrayRepresenter(dumper: yaml.Dumper, data: np.ndarray):
-    is_vector = data.ndim == 1
-    short_vector = is_vector and len(data) < 11
-    very_short_vector = is_vector and len(data) < 3
-    small_matrix = data.ndim <= 2 and np.prod(data.shape) <= 9
-    if not (short_vector or small_matrix):
-        # for big matrices, use the default representation
-        return dumper.represent_object(data)
-    # if short vector or small_matrix, use a more human-readable representation
-    flow_style = False if very_short_vector else True  # use block style for very short vectors
-    array_node = dumper.represent_sequence('tag:yaml.org,2002:seq', data.tolist(), flow_style=flow_style)
-    tag = "tag:yaml.org,2002:python/object/apply:"
-    function = np.ndarray
-    function_name = f"{function.__module__}.{function.__name__}"
-    value = {
-        'kwargs': {
-            'dtype': str(data.dtype),
-            # 'order': 'F' if data.flags['F_CONTIGUOUS'] else 'C',
-        },
-        'args': (),
-    }
-    node = dumper.represent_mapping(tag + function_name, value)
-    subnode = None
-    for subnodes in node.value:
-        if subnodes[0].value == 'args':
-            subnodes[1].value = (array_node,)
-    return node
+CustomDumper.add_representer(numpy.ndarray, represent_ndarray)
 
-
-def PathRepresenter(dumper: yaml.Dumper, data: pathlib.Path):
-    tag = "tag:yaml.org,2002:python/object/apply:"
-    function = type(data)
-    function_name = f"{function.__module__}.{function.__name__}"
-    value = {'args': [str(data)],}
-    if isinstance(data, pathlib.Path):
-        try:
-            value['resolved'] = str(data.expanduser().resolve())
-        except (FileNotFoundError, NotADirectoryError, OSError, RuntimeError):
-            value['resolved'] = str(data.expanduser())
-    return dumper.represent_mapping(tag + function_name, value)
-
-
-CustomDumper.add_representer(np.ndarray, NDArrayRepresenter)
-
-CustomDumper.add_representer(pathlib.Path, PathRepresenter)
-CustomDumper.add_representer(pathlib.WindowsPath, PathRepresenter)
-CustomDumper.add_representer(pathlib.PosixPath, PathRepresenter)
-CustomDumper.add_representer(pathlib.PurePath, PathRepresenter)
-CustomDumper.add_representer(pathlib.PurePosixPath, PathRepresenter)
-CustomDumper.add_representer(pathlib.PureWindowsPath, PathRepresenter)
+CustomDumper.add_representer(pathlib.Path, represent_path)
+CustomDumper.add_representer(pathlib.WindowsPath, represent_path)
+CustomDumper.add_representer(pathlib.PosixPath, represent_path)
+CustomDumper.add_representer(pathlib.PurePath, represent_path)
+CustomDumper.add_representer(pathlib.PurePosixPath, represent_path)
+CustomDumper.add_representer(pathlib.PureWindowsPath, represent_path)
 
 
 dump = partial(yaml.dump, Dumper=CustomDumper)

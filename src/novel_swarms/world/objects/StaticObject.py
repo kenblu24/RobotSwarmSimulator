@@ -1,3 +1,28 @@
+"""Module for StaticObject class.
+
+StaticObject is a class for objects that do not move.
+
+It is a subclass of :py:class:`~novel_swarms.agent.StaticAgent.StaticAgent`
+and is basically the same except it does not ``step()`` or
+:py:meth:`~novel_swarms.agent.StaticAgent.StaticAgent.draw_direction`\\ .
+
+Object Config Class
+-------------------
+
+.. autoclass:: StaticObjectConfig
+    :members:
+    :undoc-members:
+    :inherited-members:
+
+Object Class
+------------
+
+.. autoclass:: StaticObject
+    :members:
+    :undoc-members:
+
+"""
+
 from dataclasses import dataclass, field
 from ...config import filter_unexpected_fields, associated_type
 
