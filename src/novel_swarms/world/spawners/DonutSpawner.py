@@ -13,15 +13,16 @@ class DonutAgentSpawner(PointAgentSpawner):
             avoid_overlap=False, 
             seed='unspecified', 
             oneshot=False,
+            circle_centre=[5.0, 5.0],
+            inner_radius=4.0,
+            outer_radius=6.0,
             **kwargs
         ):
             super().__init__(world, n, agent, facing, avoid_overlap, seed, oneshot, **kwargs)
             
 
-    def generate_positions(self, n):
-        circle_centre = [5.0, 5.0]
-        inner_radius = 4.0
-        outer_radius = 6.0
+    def generate_positions(self, n, circle_centre, inner_radius, outer_radius):
+
         theta = random.uniform(0, 2*np.pi)
         radius = random.uniform(inner_radius, outer_radius)
 
