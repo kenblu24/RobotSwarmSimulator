@@ -106,7 +106,8 @@ def main(
             scroll_event = None
             scroll_event_up = None
             middle_mouse_events = []
-            for event in pygame.event.get():
+            events = pygame.event.get()
+            for event in events:
                 # Cancel the game loop if user quits the GUI
                 if event.type == pygame.QUIT:
                     return world
@@ -196,6 +197,7 @@ def main(
                 gui.speed = f"{steps_per_frame}x"
             gui.fps = (clock.get_fps(), eclock.get_fps())
             world.on_mouse(pygame.mouse.get_pos())
+            world.events = events
 
         skip = False
         if slowdown_level > 0:

@@ -2,11 +2,12 @@ from .Controller import Controller
 
 
 class HomogeneousController(Controller):
-    def __init__(self, parent, genome):
+    def __init__(self, agent=None, parent=None, genome=None, sensor_idx=0):
+        super().__init__(agent=agent, parent=parent, controller=self.control_method)
         self.list_based = False
         self.controller_as_method = self.control_method
-        self.genome = genome
-        super().__init__(parent, self.control_method)
+        self.genome = [.0, .0, .0, .0] if genome is None else genome
+        self.sensor_idx = sensor_idx
 
     def control_method(self, agent):
         """
@@ -16,7 +17,7 @@ class HomogeneousController(Controller):
         gamma = agent.agent_in_sight is not None  # Whether the agent detects another agent
         if hasattr(agent, "sensing_avg"):
             gamma = agent.sensing_avg(gamma)
-        wall_detected = not gamma and agent.sensors.sensors[0].current_state == 1
+        wall_detected = not gamma and agent.sensors[self.sensor_idx].current_state == 1
 
         u_1, u_2 = 0.0, 0.0  # Set these by default
         if not sigma:

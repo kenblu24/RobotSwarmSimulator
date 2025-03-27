@@ -11,7 +11,7 @@ class Controller(AbstractController):
     Given agent observations, return agent actions
     """
 
-    def __init__(self, agent=None, parent=None, controller="self"):  # type:ignore[reportMissingSuperCall]
+    def __init__(self, parent=None, agent=None, controller="self"):  # type:ignore[reportMissingSuperCall]
         """
         Controllers can take three forms
         First, a list of values where n states are mapped to n * k outputs, where k is the number of output values per state
