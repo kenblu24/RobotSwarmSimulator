@@ -11,10 +11,12 @@ if TYPE_CHECKING:
 else:
     World = None
 
+import warnings
+
 
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
-        'theta', 'distance', 'degrees', 'bias', 'false_positive', 'false_negative',
+        'theta', 'distance', 'bias', 'false_positive', 'false_negative',
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
         'store_history', 'detect_goal_with_added_state', 'show'
     ]
@@ -25,7 +27,6 @@ class BinaryFOVSensor(AbstractSensor):
         parent=None,
         theta=10,
         distance=100,
-        degrees=False,
         bias=0.0,
         false_positive=0.0,
         false_negative=0.0,
@@ -37,7 +38,8 @@ class BinaryFOVSensor(AbstractSensor):
         store_history=False,
         detect_goal_with_added_state=False,
         show=True,
-        seed=None
+        seed=None,
+        **kwargs
     ):
         super().__init__(agent=agent, parent=parent)
         self.angle = 0
@@ -58,9 +60,12 @@ class BinaryFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
-        if degrees:
-            self.theta = np.deg2rad(self.theta)
-            self.bias = np.deg2rad(self.bias)
+        NOTFOUND = object()
+        if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
+            warnings.warn("The 'degrees' kwarg is deprecated.", FutureWarning, stacklevel=1)
+            if degrees:
+                self.theta = np.radians(self.theta)
+
         self.r = distance
 
         self.seed = seed
@@ -94,7 +99,7 @@ class BinaryFOVSensor(AbstractSensor):
         consideration_set = []
         if self.walls is not None:
             # Get e_left, e_right line_segments
-            l = [sensor_origin, sensor_origin + (e_left[:2] * self.wall_sensing_range)]
+            l = [sensor_origin, sensor_origin + (e_left[:2] * self.wall_sensing_range)]  # noqa: E741
             r = [sensor_origin, sensor_origin + (e_right[:2] * self.wall_sensing_range)]
             wall_top = [self.walls[0], [self.walls[1][0], self.walls[0][1]]]
             wall_right = [[self.walls[1][0], self.walls[0][1]], self.walls[1]]
@@ -137,7 +142,7 @@ class BinaryFOVSensor(AbstractSensor):
 
         # consideration_set.sort()
         # print(consideration_set)
-        score, val = consideration_set.pop(0)
+        _score, val = consideration_set.pop(0)
         self.determineState(True, val, world)
 
     def check_goals(self, world):
@@ -239,6 +244,7 @@ class BinaryFOVSensor(AbstractSensor):
     def draw(self, screen, offset=((0, 0), 1.0)):
         super(BinaryFOVSensor, self).draw(screen, offset)
         pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
+        zoom: float
         if self.show:
             # Draw Sensory Vector (Vision Vector)
             sight_color = (255, 0, 0)

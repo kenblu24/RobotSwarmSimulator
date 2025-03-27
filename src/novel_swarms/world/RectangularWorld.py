@@ -1,3 +1,25 @@
+"""2D world module.
+
+The RectangularWorld is a 2D world.
+
+It is currently the only world type available.
+
+Config Class
+------------
+
+.. autoclass:: RectangularWorldConfig
+    :members:
+    :undoc-members:
+    :inherited-members:
+
+World Class
+-----------
+
+.. autoclass:: RectangularWorld
+    :members:
+    :undoc-members:
+"""
+
 import math
 from functools import partial
 
@@ -12,11 +34,6 @@ import pygame.draw
 
 from ..agent.Agent import Agent
 
-# from ..agent.DiffDriveAgent import DifferentialDriveAgent
-# from .. agent.HumanAgent import HumanDrivenAgent
-# from ..config.WorldConfig import RectangularWorldConfig
-# from ..agent.AgentFactory import AgentFactory
-# from ..config.HeterogenSwarmConfig import HeterogeneousSwarmConfig
 from .World import World, AbstractWorldConfig
 from ..config import associated_type, filter_unexpected_fields
 from ..util.timer import Timer
@@ -25,19 +42,28 @@ from .goals.Goal import CylinderGoal
 from .objects.Wall import Wall
 
 # typing
-from typing import List, Tuple
-
-COLLISION_CLASSES = ['nocollide', 'collide']
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..agent.StaticAgent import StaticAgent
+else:
+    StaticAgent = None  # prevent circular import
+type T_Vec2 = tuple[float, float] | np.ndarray[(2,), np.dtype[float]]
 
 min_zoom = 0.0001
 
 distance = math.dist
 
 
+#: words to put in SVG layer names to indicate if that object should collide
+COLLISION_CLASSES = ['nocollide', 'collide']
+
+#: removes certain words from the layer names
+#: such as 'Layer_1' from Illustrator SVGs.
 remove_special_classes = partial(remove_classes, classes=COLLISION_CLASSES + ['Layer_1'])
 
 
 def get_collision_config(collides: bool | str | None):
+    """Get collision config dict from string or bool."""
     if collides is None:
         return {}
     if isinstance(collides, str):
@@ -47,22 +73,38 @@ def get_collision_config(collides: bool | str | None):
             case 'nocollide':
                 collides = False
             case _:
-                raise ValueError(f"Unknown collision value: {collides}")
+                msg = f"Unknown collision value: {collides}"
+                raise ValueError(msg)
     return {'collides': collides}
 
 
-@associated_type("RectangularWorld")
+@associated_type('RectangularWorld')
 @filter_unexpected_fields
 @dataclass
 class RectangularWorldConfig(AbstractWorldConfig):
+    """Config dataclass for a RectangularWorld."""
+
+    #: size of the world.
     size: tuple[float, float] | np.ndarray = (5, 5)
-    show_walls: bool = True
-    collide_walls: bool = True
-    detectable_walls: bool = False
+    show_walls: bool = True  #: Currently unused.
+    collide_walls: bool = True  #: Currently unused.
+    detectable_walls: bool = False  #: Currently unused.
+
     time_step: float = 1 / 60
+    """float: :math:`\\Delta t` delta time (seconds)
+
+    The time step, or delta time, is used by simulated objects and agents
+    when calculating anything that depends on time, such as velocity.
+
+    It is stored into the world's :py:attr:`~.RectangularWorld.dt` attribute,
+    which should be used if an agent needs to know "how much time passed
+    **in the simulated world** since the last tick".
+
+    It does not directly determine how fast the simulation runs, or the FPS.
+    """
 
     def factor_zoom(self, zoom):
-        print("RectangularWorld Factor_Zoom called", zoom, self.size)
+        # print("RectangularWorld Factor_Zoom called", zoom, self.size)
         self.size = np.asarray(self.size) * zoom
         self.size *= zoom
         for goal in self.goals:
@@ -74,7 +116,7 @@ class RectangularWorldConfig(AbstractWorldConfig):
 
 
 class RectangularWorld(World):
-    def __init__(self, config: RectangularWorldConfig):
+    def __init__(self, config: RectangularWorldConfig, initialize=True):
         # if config is None:
         #     raise Exception("RectangularWorld must be instantiated with a WorldConfig class")
 
@@ -82,28 +124,40 @@ class RectangularWorld(World):
         self.config = config
         # self.padding = config.padding
         # self.population_size = config.population_size
+        #: float: current zoom level used when ``draw()``\\ ing.
         self.zoom = 1.0
+        #: float: original zoom level to reset to when :kbd:`Num0` is pressed.
         self._original_zoom = 1.0
+        #: np.ndarray[float, float]: current offset of the camera when ``draw()``\\ ing.
         self.pos = np.array([0.0, 0.0])
+        #: np.ndarray[int, int]: last mouse position in viewport pixel coordinates (UL 0,0).
         self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
-        self.dt = config.time_step
 
+        self.dt = config.time_step
+        """float: :math:`\\Delta t` delta time (seconds)
+
+        The time step, or delta time, is used by simulated objects and agents
+        when calculating anything that depends on time, such as velocity, or
+        any time an agent needs to know "how much time passed
+        **in the simulated world** since the last tick".
+
+        It does not directly determine how fast the simulation runs, or the FPS.
+        """
+
+        #: Agent : currently selected agent.
         self.selected = None
         self.highlighted_set = []
         self.human_controlled = []
 
-        if config.seed is not None:
-            # print(f"World Instantiated with Seed: {config.seed}")
-            # print(f"TESTING RAND: {random.random()}")
-            random.seed(config.seed)
-
         # self.heterogeneous = False
 
-        self.population = []
+        if initialize:
+            self.setup_objects(config.objects)
 
+    def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
-        for entry in config.objects:
+        for entry in objects:
             if not isinstance(entry, dict):
                 continue
             # check if entry contains a "type" key
@@ -114,7 +168,7 @@ class RectangularWorld(World):
                     agent_class, agent_config = get_agent_class(entry)
                     self.objects.append(agent_class.from_config(agent_config, self))
             # check if entry contains a "from_svg" key with a string value
-            elif isinstance((svg:=entry.get('svg_to_static_objects', None)), str):
+            elif isinstance((svg := entry.get('svg_to_static_objects', None)), str):
                 svg = SVG(svg)
                 paths = svg.get_polygons()
                 paths += svg.get_rects()
@@ -130,48 +184,22 @@ class RectangularWorld(World):
                     x, y, r = circle
                     collides = get_collision_config(first_match(classes, COLLISION_CLASSES))
                     classes = ' '.join(remove_special_classes(classes))
-                    agent_config = StaticObjectConfig(position=np.array([x, y]), agent_radius=r,
-                                                      team=classes, **collides)
+                    agent_config = StaticObjectConfig(position=np.array([x, y]), agent_radius=r, team=classes, **collides)
                     self.objects.append(StaticObject(agent_config, self))
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
-    def step(self):
-        """
-        Cycle through the entire population and take one step. Calculate Behavior if needed.
-        """
-        super().step()
-        # agent_step_timer = Timer("Population Step")
-
-        self.spawners = [s for s in self.spawners if not s.mark_for_deletion]
-        for spawner in self.spawners:
-            spawner.step()
-
+    def step_agents(self):
         for agent in self.population:
-            if not issubclass(type(agent), Agent):
-                msg = f"Agents must be subtype of Agent, not {type(agent)}"
-                raise Exception(msg)
-
             agent.step(
                 check_for_world_boundaries=self.withinWorldBoundaries if self.config.collide_walls else None,
                 check_for_agent_collisions=self.preventAgentCollisions,
                 world=self,
             )
             self.handleGoalCollisions(agent)
-        # agent_step_timer.check_watch()
-
-        for obj in self.objects:
-            obj.step()
-
-        # behavior_timer = Timer("Behavior Calculation Step")
-        for metric in self.metrics:
-            metric.calculate()
-        # behavior_timer.check_watch()
 
     def draw(self, screen, offset=None):
-        """
-        Cycle through the entire population and draw the agents. Draw Environment Walls if needed.
-        """
+        """Cycle through the entire population and draw the agents and objects."""
         if offset is None:
             offset = (self.pos, self.zoom)
         # pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]
@@ -192,7 +220,7 @@ class RectangularWorld(World):
         for agent in self.population:
             agent.draw(screen, offset)
 
-    def getNeighborsWithinDistance(self, center: Tuple, r, excluded=None) -> List:
+    def getNeighborsWithinDistance(self, center: T_Vec2, r, excluded=None) -> list:
         """
         Given the center of a circle, find all Agents located within the circumference defined by center and r
         """
@@ -207,16 +235,21 @@ class RectangularWorld(World):
         return filtered_agents
 
     def onClick(self, event) -> None:
+        """Handle mouse click events."""
         viewport_pos = np.asarray(event.pos)
         pos = (viewport_pos - self.pos) / self.zoom
-        d = self.population[0].radius * 1.1
-        neighborhood = self.getNeighborsWithinDistance(pos, d)
+
+        if self.population:
+            d = self.population[0].radius * 1.1
+            neighborhood = self.getNeighborsWithinDistance(pos, d)
+        else:
+            neighborhood = []
 
         # Remove Highlights from all agents
         if self.selected is not None:
             self.selected.is_highlighted = False
 
-        if len(neighborhood) == 0:
+        if not neighborhood:
             self.selected = None
             if self.gui is not None:
                 self.gui.set_selected(None)
@@ -228,6 +261,7 @@ class RectangularWorld(World):
             neighborhood[0].is_highlighted = True
 
     def onZoom(self, mouse_event, scroll_event):
+        """Handle mouse wheel events."""
         if not (mouse_event.type == pygame.MOUSEBUTTONUP and scroll_event.type == pygame.MOUSEWHEEL):
             raise TypeError("Expected a mouse button up and scroll event.")
 
@@ -235,8 +269,9 @@ class RectangularWorld(World):
         v = scroll_event.precise_y
         self.do_zoom(pos, v)
 
-    def do_zoom(self, point, v):
-        v *= 0.4
+    def do_zoom(self, point: np.ndarray[(2,), np.dtype[int]], v: int | float):
+        """zooms the camera around a point"""
+        v *= 0.4  # scroll speed multiplier
         old_zoom = self.zoom
         self.zoom = self.zoom * (2**v)
         self.zoom = max(self.zoom, min_zoom)
@@ -247,10 +282,12 @@ class RectangularWorld(World):
         self.pos = (self.pos - point) * self.zoom / old_zoom + point
 
     def zoom_reset(self):
+        """Reset the camera position and zoom level to the original zoom level."""
         self.zoom = self.original_zoom
         self.pos = np.array([0.0, 0.0])
 
     def on_mouse(self, pos):
+        """Handle mouse movement events."""
         viewport_pos = self.mouse_position = np.asarray(pos)
         pos = (viewport_pos - self.pos) / self.zoom
         if self.gui:
@@ -263,7 +300,7 @@ class RectangularWorld(World):
     @original_zoom.setter
     def original_zoom(self, value):
         self._original_zoom = value
-        self.zoom = value
+        self.zoom = value  # also set the current zoom
 
     def handle_middle_mouse_events(self, events):
         for event in events:
@@ -276,7 +313,7 @@ class RectangularWorld(World):
         self.pos += delta
         self._mouse_dragging_last_pos = pos
 
-    def withinWorldBoundaries(self, agent: Agent):
+    def withinWorldBoundaries(self, agent: StaticAgent):
         """
         Set agent position with respect to the world's boundaries and the bounding box of the agent
         """
@@ -311,7 +348,7 @@ class RectangularWorld(World):
                     agent.set_x_pos(agent.get_x_pos() + correction[0])
                     agent.set_y_pos(agent.get_y_pos() + correction[1])
 
-    def handleWallCollisions(self, agent: Agent):
+    def handleWallCollisions(self, agent: StaticAgent):
         # Check for distances between the agent and the line segments
         in_collision = False
         for obj in self.objects:
@@ -358,7 +395,7 @@ class RectangularWorld(World):
 
         return in_collision
 
-    def preventAgentCollisions(self, agent: Agent, forward_freeze=False) -> None:
+    def preventAgentCollisions(self, agent: StaticAgent, forward_freeze=False) -> None:
         agent.pos = agent.getPosition()
         minimum_distance = agent.radius * 2
         target_distance = minimum_distance + 0.001
@@ -368,8 +405,9 @@ class RectangularWorld(World):
         #     return
 
         for _ in range(10):  # limit attempts
-            collided_agents = [other for other in self.population if agent != other
-                               and agent.get_aabb().intersects_bb(other.get_aabb())]
+            collided_agents = [
+                other for other in self.population if agent != other and agent.get_aabb().intersects_bb(other.get_aabb())
+            ]
             if not collided_agents:
                 break
             # Check ALL Bagged agents for collisions
@@ -469,6 +507,7 @@ class RectangularWorld(World):
         return False
 
     def handle_key_press(self, event):
+        # events from pygame are passed from simulate.main() to the world here.
         for a in self.population:
             a.on_key_press(event)
 
@@ -499,7 +538,7 @@ class RectangularWorld(World):
                 agent.body_color = agent.config.body_color
             for agent in self.human_controlled:
                 i = self.population.index(agent)
-                new_bot = Agent(agent.config)
+                new_bot = agent.from_config(agent.config, self)
                 new_bot.x_pos = agent.get_x_pos()
                 new_bot.y_pos = agent.get_y_pos()
                 new_bot.angle = agent.angle

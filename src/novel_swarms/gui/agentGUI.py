@@ -1,12 +1,19 @@
 import pygame
-from ..agent.DiffDriveAgent import DifferentialDriveAgent
-from ..agent.MazeAgent import MazeAgent
 from .abstractGUI import AbstractGUI
-from ..world.World import World
 from functools import cache
 import numpy as np
 from importlib import resources
 from . import fonts
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..agent.DiffDriveAgent import DifferentialDriveAgent
+    from ..agent.MazeAgent import MazeAgent
+    from ..world.World import World
+else:
+    DifferentialDriveAgent = None
+    MazeAgent = None
+    World = None
 
 
 PI = np.pi

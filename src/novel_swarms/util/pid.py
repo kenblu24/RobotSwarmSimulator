@@ -1,14 +1,22 @@
+""" PID Controller class
+
+Example
+-------
+.. code-block:: python
+
+    from pid import PID
+    controller = PID(p=0.07, i=0, imax=90)
+    target = 100
+    state = 0
+    while(True):
+        error = target - state
+        state = controller(error)
+        # control value with output
+
+.. seealso::
+    This class was adapted from the following micropython code:
+    https://github.com/openmv/openmv/blob/master/scripts/libraries/pid.py
 """
-Example:
-from pid import PID
-pid1 = PID(p=0.07, i=0, imax=90)
-while(True):
-    error = 50 #error should be caculated, target - mesure
-    output=pid1.get_pid(error,1)
-    #control value with output
-"""
-# adapted from the following micropython code:
-# https://github.com/openmv/openmv/blob/master/scripts/libraries/pid.py
 
 import time
 from math import pi, isnan
@@ -23,7 +31,21 @@ class PID:
     d_smoothing = 1 / (2 * pi * 20)  # derivative smoothing (RC time constant)
     i_decay = 1 / (2 * pi * 20)  # decay time for integrator (RC time constant)
 
-    def __init__(self, p=0, i=0, d=0, imax=0):
+    def __init__(self, p: float = 0, i: float = 0, d: float = 0, imax: int = 0):
+        """PID Class
+
+        Parameters
+        ----------
+        p : float, optional
+            proportional gain, by default 0
+        i : float, optional
+            integrator gain, by default 0
+        d : float, optional
+            derivative gain, by default 0
+        imax : int, optional
+            integrator max value, by default 0
+            The integrator will be clamped to within ``[-imax, imax]``
+        """
         self._kp = float(p)
         self._ki = float(i)
         self._kd = float(d)
@@ -36,6 +58,22 @@ class PID:
         return self.get_pid(error, time, dt)
 
     def get_pid(self, error, time=None, dt=None):
+        """ Calculate the PID output
+
+        Parameters
+        ----------
+        error : float
+            The error value
+        time : float, optional
+            The current time. If you specify this, don't specify ``dt``.
+        dt : float, optional
+            Elapsed time since the last call. If you specify this, don't specify ``time``.
+
+        Returns
+        -------
+        float
+            The PID output
+        """
         # calculate dt, update time
         if time is not None and dt is not None:
             raise ValueError("time and dt cannot be set at the same time")

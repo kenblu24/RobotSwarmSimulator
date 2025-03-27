@@ -32,6 +32,7 @@ dependencies = [
     "thorpy",
     "circle_fit",
     "shapely",
+    "pandas",
 ]
 
 [project.optional-dependencies]
@@ -45,6 +46,16 @@ dev = [
     "pytest-xdist",
 ]
 shapes = ["pointpats"]
+docs = [
+    "pydata-sphinx-theme~=0.16.1",
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-copybutton",
+    "sphinx-togglebutton",
+    "sphinx-design",
+    "numpydoc",
+    "myst-parser",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"

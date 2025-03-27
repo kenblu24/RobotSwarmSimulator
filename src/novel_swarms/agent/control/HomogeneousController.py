@@ -1,5 +1,6 @@
 from .Controller import Controller
 
+
 class HomogeneousController(Controller):
     def __init__(self, parent, genome):
         self.list_based = False

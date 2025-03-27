@@ -11,7 +11,6 @@ objects:
 time_step: !np 1 / 40
 spawners:
   - type: PointAgentSpawner
-    oneshot: true
     n: 6
     facing: away
     avoid_overlap: true
