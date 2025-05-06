@@ -77,6 +77,8 @@ class Tangentness(RadialVarianceHelper):
 
 
 class Circliness(RadialVarianceHelper):
+    instantaneous = False
+
     def __init__(self, history=100, avg_history_max=100, regularize=False, name=None):
         if regularize:
             raise NotImplementedError
