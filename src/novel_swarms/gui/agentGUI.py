@@ -135,7 +135,6 @@ class DifferentialDriveGUI(AbstractGUI):
                 self.appendTextToGUI(screen, "Behavior", size=16)
                 for b in self.world.metrics:
                     out = b.out_current()
-                    b.draw(screen)
                     try:
                         self.appendTextToGUI(screen, "{} : {:0.3f}".format(out[0], out[1]))
                     except ValueError:

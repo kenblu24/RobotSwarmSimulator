@@ -5,9 +5,9 @@ User Guide
    :gutter: 3
 
    .. grid-item-card::
-      :link: /guide/firstrun
+      :link: /guide/install
       :link-type: doc
-      :link-alt: First Run Tutorial
+      :link-alt: Installation Guide
 
       **Installation Guide** :fas:`circle-chevron-right;float-right font-size-1_7em`
 

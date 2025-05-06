@@ -220,6 +220,9 @@ class RectangularWorld(World):
         for agent in self.population:
             agent.draw(screen, offset)
 
+        for metric in self.metrics:
+            metric.draw(screen, offset)
+
     def getNeighborsWithinDistance(self, center: T_Vec2, r, excluded=None) -> list:
         """
         Given the center of a circle, find all Agents located within the circumference defined by center and r
