@@ -55,6 +55,7 @@ docs = [
     "sphinx-design",
     "numpydoc",
     "myst-parser",
+    "tqdm",
 ]
 
 [project.urls]
