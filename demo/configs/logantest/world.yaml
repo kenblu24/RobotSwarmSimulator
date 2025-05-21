@@ -1,0 +1,95 @@
+# Units are MGS (Meters, Grams, Seconds) and radians unless otherwise specified
+---
+type: "RectangularWorld"
+size:  # in meters. 0, 0 is top left
+  - 10
+  - 10
+objects:
+  - type: DetectionRegion
+    position: [5, 5]
+    agent_radius: 0.1
+    name: Goal
+  # - svg_to_static_objects: !include world.svg
+time_step: !np 1 / 40
+spawners:
+  # - type: PointAgentSpawner
+  #   oneshot: true
+  #   n: 6
+  #   facing: away
+  #   avoid_overlap: true
+  #   agent: !include turbopi.yaml
+  # - type: UniformAgentSpawner
+  #   oneshot: true
+  #   n: 30
+  #   region: [[3, 3], [3, 6], [6, 6], [6, 3]]
+  #   facing: towards
+  #   agent:
+  #     type: MazeAgent
+  #     agent_radius: 0.15
+  #     controller:
+  #       type: StaticController
+  #       output: [0.01, 0]
+  #     debug: true
+  # - type: PointAgentSpawner
+  #   oneshot: true
+  #   n: 10
+  #   facing: away
+  #   avoid_overlap: true
+  #   agent:
+  #     type: MazeAgent
+  #     agent_radius: 0.15
+  #     position: [8, 8]
+  #     debug: true
+agents:
+  # # if you want to use this agent type, make sure it's registered with novel_swarms.config.register_agent_type
+  # - type: RunnerAgent
+  #   position: [0, 0]
+  #   agent_radius: 0.15
+  #   sensors:
+  #     - type: RelativePositionSensor
+  #       distance: 1.0
+  #       show: true
+#   - &agent1
+#     type: MazeAgent
+#     position: [4, 10]
+#     agent_radius: 0.15
+#     sensors:
+#       - type: BinaryFOVSensor
+#         theta: 0.45  # Vision Angle / 2 (Radians)
+#         degrees: false
+#         distance: 1.0  # meters. previously 2.55
+#         show: true
+#         goal_sensing_range: 1.0
+#         # use_goal_state: true
+#         wall_sensing_range: 1.0
+#         # fn: 0.10  # 0.10
+#         # fp: 0.05  # 0.05
+#         bias: 0
+#         store_history: false
+#         seed: 10
+#     controller:  # this is not a list (don't use the '-' character)
+#       type: StaticController
+#       output: [0.1, 0]
+#     # controller: {type: AgentMethodController}
+#     # controller:
+#     #   type: BinaryController
+#     #   a: [0.001, 0.001]
+#     #   b: [0.001, -0.001]
+#     angle: !np -radians(90)
+#   - <<: *agent1
+#     position: [0.5, 0.5]
+#     angle: !np radians(45)
+#   - type: StaticAgent
+#     # position: [3, 3]
+#     position: [0, 0]
+#     # agent_radius: 0.5
+#     # points: [[-0.1, 0], [0.1, 0], [-0.1, 0.1], [0.1, 0.1]]
+#     # points: !include rock.svg
+#     anchor_point: centroid inplace
+#     # angle: PI
+padding: 0
+collide_walls: false  # Use No Environment Walls for this problem
+show_walls: false  # Hide Default Walls,
+metadata:
+  hash: _hash
+stop_at: 1000000 # Upper Simulation Limit (timesteps)
