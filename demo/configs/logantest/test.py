@@ -61,7 +61,7 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         # you can probably implement all the logic in the controller without needing to make a whole new agent type
         from RunnerController import RunnerController
-        from HumanController import HumanController
+        from novel_swarms.agent.control.HumanController import HumanController
         # register_dictlike_type('controller', 'RunnerController', RunnerController)  # for loading RunnerController from yaml
 
         # load turbopi config
