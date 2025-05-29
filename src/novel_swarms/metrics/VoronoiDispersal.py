@@ -51,52 +51,46 @@ class VoronoiRelaxation(AbstractMetric):
         # self.allpairs = np.asarray(list(allpairs), dtype=np.int32)
         
         self.vor = vor = self.voronoi(points, bounding_box)
-        allpairs = set()
-        # allridgepoints = np.array([[]])
-        for region in self.vor.filtered_regions:
-            vertices = self.vor.vertices[region + [region[0]], :]
-        
-            allpairs.update([tuple(vertex) for vertex in vertices])
-            
-            # self.lines = np.asarray([[vertices[ridge_point[0]], vertices[ridge_point[1]]] for ridge_point in ridge_points], dtype=np.int32)
+      
+        allpairs = []
+        centroids = []
+        if self.vor != []:
+            for region in self.vor.filtered_regions:
+                vertices = self.vor.vertices[region + [region[0]], :]
+                centroid = self.centroid_region(vertices)
+                centroids.append(list(centroid[0, :]))
+                
+                for i in range(1, len(vertices)):
+                    allpairs.append([vertices[i-1], vertices[i]])
 
-        # # allpairs = [pair for pair in list(allpairs) if pair[0] != pair[1]]
-        self.allpairs = np.asarray(list(allpairs))
-        
-        # # ridgepoints = np.unique(np.concatenate([self.vor.vertices[region, :] for region in self.vor.filtered_regions]), axis=0)
-        # ridgepoints = np.concatenate([self.vor.vertices[region, :] for region in self.vor.filtered_regions])
-        # # ridgepoints = list(np.concatenate((ridgepoints[:])))
-        # # allridgepoints = list(ridgepoints)
-        
-        for i in range(len(self.allpairs)):
-            for j in range(len(self.allpairs)):
-                self.lines.append([self.allpairs[i, 0], self.allpairs[j, 1]])
-            
+        self.lines = np.asarray(allpairs)
+        self.centroids = np.asarray(centroids)
 
-        # for region in self.vor.filtered_regions:
-        #     ridge_points = self.vor.vertices[region, :]
-
-
-        # self.lines = np.asarray([[self.v.points[ridge_point[0]], self.v.points[ridge_point[1]]] for ridge_point in self.v.ridge_points], dtype=np.int32)
 
         # distances = np.array([d.plane_distance(p) for p in points])
-        distances = np.array([np.linalg.norm(a - b) for a, b in self.lines])
-        var = distances.var()
-        mean = distances.mean()
-        # bbox_size = (d.max_bound - d.min_bound)
-        # bbox_ratio = min(bbox_size) / max(bbox_size)
-        # self.set_value(bbox_area / 10 - ((1 + var * 10) * mean))
-        # dispersal = bbox_size.prod() * bbox_ratio / (1 + var * 10)
-        # self.set_value(dispersal if dispersal is not None else 0)
+        min_distances = []
+        # assert len(self.centroids) == len(points)
+        for centroid in self.centroids:
+            for a, b in zip(centroid, points):
+                distances = np.asarray([np.linalg.norm(a - b)])
+                min_distances.append(distances.min())
+        
+        
+        # distances = np.array([np.linalg.norm(a - b) for centroid in self.centroids for a, b in zip(centroid, points)])
+        # var = distances.var()
+        # mean = distances.mean()
+        self.set_value(-sum(min_distances))
+        
 
     def draw(self, screen, offset):
         pan, zoom = np.asarray(offset[0]), offset[1]
         super().draw(screen, offset)
 
-        
-
         for line in self.lines:
             pygame.draw.line(screen, (128, 128, 128), *line * zoom + pan, width=1)
+
+        for centroid in self.centroids:
+            pygame.draw.circle(screen, (128, 128, 128), centroid * zoom + pan, radius=5, width=1)
 
     # This is a modified version of the code from here:
     # https://stackoverflow.com/questions/28665491/getting-a-bounded-polygon-coordinates-from-voronoi-cells
@@ -132,7 +126,10 @@ class VoronoiRelaxation(AbstractMetric):
                                     axis=0),
                         axis=0)
         # Compute Voronoi
-        vor = spatial.Voronoi(points)
+        if len(points) != 0:
+            vor = spatial.Voronoi(points)
+        else:
+            return []
         # Filter regions
         regions = []
         for region in vor.regions:
@@ -153,3 +150,21 @@ class VoronoiRelaxation(AbstractMetric):
         vor.filtered_points = points_center
         vor.filtered_regions = regions
         return vor
+    
+    @staticmethod
+    def centroid_region(vertices):
+        # Polygon's signed area
+        A = 0
+        # Centroid's x
+        C_x = 0
+        # Centroid's y
+        C_y = 0
+        for i in range(0, len(vertices) - 1):
+            s = (vertices[i, 0] * vertices[i + 1, 1] - vertices[i + 1, 0] * vertices[i, 1])
+            A = A + s
+            C_x = C_x + (vertices[i, 0] + vertices[i + 1, 0]) * s
+            C_y = C_y + (vertices[i, 1] + vertices[i + 1, 1]) * s
+        A = 0.5 * A
+        C_x = (1.0 / (6.0 * A)) * C_x
+        C_y = (1.0 / (6.0 * A)) * C_y
+        return np.array([[C_x, C_y]])
