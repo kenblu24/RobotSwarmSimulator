@@ -71,15 +71,29 @@ class VoronoiRelaxation(AbstractMetric):
         min_distances = []
         # assert len(self.centroids) == len(points)
         for centroid in self.centroids:
-            for a, b in zip(centroid, points):
-                distances = np.asarray([np.linalg.norm(a - b)])
-                min_distances.append(distances.min())
+            distances = []
+            for point in points:
+                distances.append(np.linalg.norm(centroid - point))
+            
+            min_distances.append(min(distances))
+
+            # for a, b in zip(centroid, points):
+            #     distances = np.asarray([np.linalg.norm(a - b)])
+            
+            #     min_distances.append(distances.min())
         
         
         # distances = np.array([np.linalg.norm(a - b) for centroid in self.centroids for a, b in zip(centroid, points)])
         # var = distances.var()
         # mean = distances.mean()
-        self.set_value(-sum(min_distances))
+        # if len(self.centroids) == len(self.population):
+        #     self.set_value(-sum(min_distances))
+        # else:
+        #     self.set_value(-1000)
+        if np.all(VoronoiRelaxation.in_box(points, bounding_box)):
+            self.set_value(-sum(min_distances))
+        else:
+            self.set_value(-1000)
         
 
     def draw(self, screen, offset):
