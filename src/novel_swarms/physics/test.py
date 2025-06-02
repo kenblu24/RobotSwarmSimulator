@@ -2,7 +2,7 @@
 
 from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from novel_swarms.agent.control.StaticController import StaticController
-from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
+from novel_swarms.world.spawners.DonutSpawner import DonutAgentSpawner
 from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from novel_swarms.world.simulate import main as sim
 from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
@@ -19,7 +19,8 @@ agent.sensors.append(sensor)
 controller = BinaryController((0.02, -0.5), (0.02, 0.5))
 agent.controller = controller
 
-spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
+spawner = DonutAgentSpawner(world, n=6, agent=agent, facing="away", mode="oneshot", avoid_overlap=True, inner_radius=4, outer_radius=6)
+# spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
 world.spawners.append(spawner)
 
-sim(world)
+sim(world, start_paused=True)

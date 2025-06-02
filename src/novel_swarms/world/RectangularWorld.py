@@ -159,6 +159,10 @@ class RectangularWorld(World):
         if initialize:
             self.setup_objects(config.objects)
 
+    def addAgent(self, agent):
+        self.population.append(agent)
+        agent.physobj = self.physics.createAgentBody(agent)
+
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
         for entry in objects:

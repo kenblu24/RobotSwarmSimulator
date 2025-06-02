@@ -224,6 +224,7 @@ class MazeAgent(StaticAgent):
         omega = self.delay_2(omega)
 
         # for physics, v and omega done here
+        
 
         # Define Idiosyncrasies that may occur in actuation/sensing
         # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
@@ -243,10 +244,12 @@ class MazeAgent(StaticAgent):
                 return
         else:
             self.pos += delta
-
+        
         self.angle += self.dtheta
 
         # ask physics engine for position and use instead of above calculations
+
+
 
         self.collision_flag = False
         if check_for_world_boundaries is not None:
