@@ -38,8 +38,8 @@ class VoronoiRelaxation(AbstractMetric):
     def calculate(self):
         
 
-        bounding_box = np.array([0., self.world_size[0], 0., self.world_size[0]])  # [x_min, x_max, y_min, y_max]
-
+        bounding_box = np.array([0.0, self.world_size[0], 0.0, self.world_size[0]])  # [x_min, x_max, y_min, y_max]
+        
         points = np.array([agent.getPosition() for agent in self.population])
         # self.v = v = spatial.Voronoi(points)
         # allpairs = set()
@@ -57,6 +57,7 @@ class VoronoiRelaxation(AbstractMetric):
         if self.vor != []:
             for region in self.vor.filtered_regions:
                 vertices = self.vor.vertices[region + [region[0]], :]
+                # centroid_vertices = self.vor.vertices[]
                 centroid = self.centroid_region(vertices)
                 centroids.append(list(centroid[0, :]))
                 
@@ -117,7 +118,8 @@ class VoronoiRelaxation(AbstractMetric):
 
     @staticmethod
     def voronoi(towers, bounding_box):
-        eps = sys.float_info.epsilon
+        # eps = sys.float_info.epsilon
+        eps = 0.01
         # Select towers inside the bounding box
         i = VoronoiRelaxation.in_box(towers, bounding_box)
         # Mirror points
