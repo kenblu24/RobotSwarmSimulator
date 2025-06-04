@@ -31,13 +31,12 @@ class Physics:
             agent.angle = np.float64(agent.physobj.angle)
 
     def createAgentBody(self, agent):
-        # print("creating agent body", agent.detection_id)
         mass = 1
         radius = 0.1
         body = pymunk.Body(mass=mass, moment=pymunk.moment_for_circle(mass, 0, radius))
         shape = pymunk.shapes.Circle(body=body, radius=radius)
         shape.friction = 0.5
         body.position = copyCoords(body.position, agent.pos)
-        print(body.position)
+        body.angle = float(agent.angle)
         self.space.add(body, shape)
         return body
