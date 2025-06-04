@@ -57,6 +57,9 @@ from typing import Any, override
 # from ..world.World import World
 # from ..world.RectangularWorld import RectangularWorldConfig
 
+from ..physics.Physics import peakAgentForce, agentForces, peakAgentTorque, agentTorques, kineticFriction
+import pymunk
+
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
 State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
@@ -224,10 +227,26 @@ class MazeAgent(StaticAgent):
         omega = self.delay_2(omega)
 
         # for physics, v and omega done here
-        
+        print("instructed velocity", v)
+        peakVelocity = 0.02
+        peakOmega = 0.5
+        body: pymunk.Body = self.physobj
+
+        friction = kineticFriction(body, 1, self.dt)
+        body.apply_force_at_local_point(friction)
+
+        force = agentForces(body, v, omega, peakAgentForce(body, peakVelocity, peakOmega), self.dt, friction)
+        body.apply_force_at_local_point(force)
+
+        torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, self.dt), self.dt)
+        body.apply_force_at_local_point((0, torque), (1, 0))
+        body.apply_force_at_local_point((0, -torque))
+
+        print("body force", body.force, "ang.vel (last)", body.angular_velocity, "vel (last)", body.velocity.length)
 
         # Define Idiosyncrasies that may occur in actuation/sensing
         # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
+        comment = """
         self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
         dtheta2 = self.dtheta / 2
         self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
@@ -246,9 +265,9 @@ class MazeAgent(StaticAgent):
             self.pos += delta
         
         self.angle += self.dtheta
+        """
 
-        # ask physics engine for position and use instead of above calculations
-
+        # ask physics engine for position and use instead of above calculations        
 
 
         self.collision_flag = False
@@ -260,7 +279,7 @@ class MazeAgent(StaticAgent):
 
         # Calculate the 'real' dx, dy after collisions have been calculated.
         # This is what we use for velocity in our equations
-        self.dpos = self.pos - old_pos
+        # self.dpos = self.pos - old_pos
         # timer = timer.check_watch()
 
         for sensor in self.sensors:
