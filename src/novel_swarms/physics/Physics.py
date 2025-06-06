@@ -43,17 +43,17 @@ class Physics:
         self.space.add(body, shape)
         return body
 
-def kineticFriction(body: pymunk.Body, coof, dt): # body and coefficient of friction
-    g = 9.8
-    peakdv = g * coof * dt
-    effectiveFriction = body.mass * g * coof
-    if body.velocity.length < peakdv:
-        effectiveFriction *= body.velocity.length / peakdv
+# def kineticFriction(body: pymunk.Body, coof, dt): # body and coefficient of friction
+#     g = 9.8
+#     peakdv = g * coof * dt
+#     effectiveFriction = body.mass * g * coof
+#     if body.velocity.length < peakdv:
+#         effectiveFriction *= body.velocity.length / peakdv
     
-    unit = body.velocity.normalized()
-    if unit.length == 0:
-        return Vec2d.zero()
-    return unit.scale_to_length(-effectiveFriction)
+#     unit = body.velocity.normalized()
+#     if unit.length == 0:
+#         return Vec2d.zero()
+#     return unit.scale_to_length(-effectiveFriction)
 
 def getOrtho(vec: Vec2d, omega):
     # <-yo, xo, 0>
@@ -62,21 +62,21 @@ def getOrtho(vec: Vec2d, omega):
 def peakAgentForce(body: pymunk.Body, velocity, omega):
     fakeBody = pymunk.Body(mass=body.mass)
     fakeBody.velocity = Vec2d(velocity, 0)
-    kf = kineticFriction(fakeBody, 1, 0)
+    # kf = kineticFriction(fakeBody, 1, 0)
     fcmag = fakeBody.mass * velocity * omega
     fc = getOrtho(fakeBody.velocity, omega).scale_to_length(fcmag)
-    return (kf + fc).length
+    return (fc).length
 
-def agentForces(body: pymunk.Body, velocity, omega, peakForce, dt, friction):
-    kf = friction
+def agentForces(body: pymunk.Body, velocity, omega, peakForce, dt):
+    # kf = friction
     intendedVector = Vec2d(velocity, 0)
     vDiff = intendedVector - body.velocity
     vDirF = vDiff * (1/dt) * body.mass
     if peakForce < vDirF.length: # prioritize getting up to speed in the pointed direction
         return vDirF.scale_to_length(peakForce)
-    vDirF -= kf
-    if peakForce < vDirF.length: # next prioritize counteracting friction
-        return vDirF.scale_to_length(peakForce)
+    # vDirF -= kf
+    # if peakForce < vDirF.length: # next prioritize counteracting friction
+        # return vDirF.scale_to_length(peakForce)
     turnF = getOrtho(intendedVector, omega).scale_to_length(body.mass * velocity * omega)
     vDirF += turnF
     if peakForce < vDirF.length: # next prioritize turning force

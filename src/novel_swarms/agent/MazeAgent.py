@@ -57,7 +57,7 @@ from typing import Any, override
 # from ..world.World import World
 # from ..world.RectangularWorld import RectangularWorldConfig
 
-from ..physics.Physics import peakAgentForce, agentForces, peakAgentTorque, agentTorques, kineticFriction
+from ..physics.Physics import peakAgentForce, agentForces, peakAgentTorque, agentTorques
 import pymunk
 
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
@@ -227,22 +227,22 @@ class MazeAgent(StaticAgent):
         omega = self.delay_2(omega)
 
         # for physics, v and omega done here
-        print("instructed velocity", v)
+        # print("instructed velocity", v)
         peakVelocity = 0.02
         peakOmega = 0.5
         body: pymunk.Body = self.physobj
 
-        friction = kineticFriction(body, 1, self.dt)
-        body.apply_force_at_local_point(friction)
+        # friction = kineticFriction(body, 1, self.dt)
+        # body.apply_force_at_local_point(friction)
 
-        force = agentForces(body, v, omega, peakAgentForce(body, peakVelocity, peakOmega), self.dt, friction)
+        force = agentForces(body, v, omega, peakAgentForce(body, peakVelocity, peakOmega), self.dt)
         body.apply_force_at_local_point(force)
 
         torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, self.dt), self.dt)
         body.apply_force_at_local_point((0, torque), (1, 0))
         body.apply_force_at_local_point((0, -torque))
 
-        print("body force", body.force, "ang.vel (last)", body.angular_velocity, "vel (last)", body.velocity.length)
+        # print("body force", body.force, "ang.vel (last)", body.angular_velocity, "vel (last)", body.velocity.length)
 
         # Define Idiosyncrasies that may occur in actuation/sensing
         # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
