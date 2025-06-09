@@ -31,13 +31,19 @@ class Physics:
         for agent in self.world.population:
             newPos = copyCoords(agent.pos, agent.physobj.position)
             agent.dpos = newPos - agent.pos
+            agent.dtheta = agent.physobj.angular_velocity
             agent.pos = newPos
             agent.angle = np.float64(agent.physobj.angle)
+            
 
     def createAgentBody(self, agent):
         body = pymunk.Body(mass=self.mass, moment=pymunk.moment_for_circle(self.mass, 0, self.radius))
         shape = pymunk.shapes.Circle(body=body, radius=self.radius)
         shape.friction = 0.5
+        # linearFrictionEmulation = pymunk.PivotJoint(self.space.static_body, body, (0, 0), (0, 0))
+        # linearFrictionEmulation.max_bias = 0
+        # linearFrictionEmulation.max_force = 0.001
+        # self.space.add(linearFrictionEmulation)
         body.position = copyCoords(body.position, agent.pos)
         body.angle = float(agent.angle)
         self.space.add(body, shape)
@@ -70,7 +76,7 @@ def peakAgentForce(body: pymunk.Body, velocity, omega):
 def agentForces(body: pymunk.Body, velocity, omega, peakForce, dt):
     # kf = friction
     intendedVector = Vec2d(velocity, 0)
-    vDiff = intendedVector - body.velocity
+    vDiff = intendedVector - body.world_to_local(body.velocity + body.position)
     vDirF = vDiff * (1/dt) * body.mass
     if peakForce < vDirF.length: # prioritize getting up to speed in the pointed direction
         return vDirF.scale_to_length(peakForce)

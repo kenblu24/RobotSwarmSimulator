@@ -234,8 +234,8 @@ class MazeAgent(StaticAgent):
 
         # friction = kineticFriction(body, 1, self.dt)
         # body.apply_force_at_local_point(friction)
-
-        force = agentForces(body, v, omega, peakAgentForce(body, peakVelocity, peakOmega), self.dt)
+        peakForce = peakAgentForce(body, peakVelocity, peakOmega)
+        force = agentForces(body, v, omega, peakForce, self.dt)
         body.apply_force_at_local_point(force)
 
         torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, self.dt), self.dt)
