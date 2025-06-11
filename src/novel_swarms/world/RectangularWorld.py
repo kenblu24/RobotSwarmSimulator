@@ -136,6 +136,8 @@ class RectangularWorld(World):
         self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
 
+        self.usePhysics = True
+
         self.dt = config.time_step
 
         self.physics = Physics(self)
@@ -213,7 +215,8 @@ class RectangularWorld(World):
         self.step_agents()
         self.step_objects()
         
-        self.physics.step() # this is the difference from the superclass's step
+        if self.usePhysics:
+            self.physics.step() # this is the difference from the superclass's step
         
         self.step_metrics()
 

@@ -192,6 +192,7 @@ class MazeAgent(StaticAgent):
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
+        
 
     @override
     def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
@@ -227,55 +228,49 @@ class MazeAgent(StaticAgent):
         omega = self.delay_2(omega)
 
         # for physics, v and omega done here
-        # print("instructed velocity", v)
-        peakVelocity = 0.02
-        peakOmega = 0.5
-        body: pymunk.Body = self.physobj
+        if self.world.usePhysics:
+            peakVelocity = 0.02
+            peakOmega = 0.5
+            body: pymunk.Body = self.physobj
 
-        # friction = kineticFriction(body, 1, self.dt)
-        # body.apply_force_at_local_point(friction)
-        peakForce = peakAgentForce(body, peakVelocity, peakOmega)
-        force = agentForces(body, v, omega, peakForce, self.dt)
-        body.apply_force_at_local_point(force)
+            # friction = kineticFriction(body, 1, self.dt)
+            # body.apply_force_at_local_point(friction)
+            peakForce = peakAgentForce(body, peakVelocity, peakOmega)
+            force = agentForces(body, v, omega, peakForce, self.dt)
+            body.apply_force_at_local_point(force)
 
-        torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, self.dt), self.dt)
-        body.apply_force_at_local_point((0, torque), (1, 0))
-        body.apply_force_at_local_point((0, -torque))
+            torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, self.dt), self.dt)
+            body.apply_force_at_local_point((0, torque), (1, 0))
+            body.apply_force_at_local_point((0, -torque))
 
-        # print("body force", body.force, "ang.vel (last)", body.angular_velocity, "vel (last)", body.velocity.length)
-
-        # Define Idiosyncrasies that may occur in actuation/sensing
-        # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
-        comment = """
-        self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
-        dtheta2 = self.dtheta / 2
-        self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
-        s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
-        delta = s * self.orientation_uvec(offset=dtheta2) * self.idiosyncrasies
-
-        old_pos = self.pos.copy()
-
-        if self.stopped_duration > 0:
-            self.stopped_duration -= 1
-            if self.catastrophic_collisions:
-                self.dead = True
-                self.body_color = (200, 200, 200)
-                return
         else:
-            self.pos += delta
-        
-        self.angle += self.dtheta
-        """
+            # Define Idiosyncrasies that may occur in actuation/sensing
+            # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
+            self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
+            dtheta2 = self.dtheta / 2
+            self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
+            s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
+            delta = s * self.orientation_uvec(offset=dtheta2) * self.idiosyncrasies
 
-        # ask physics engine for position and use instead of above calculations        
+            old_pos = self.pos.copy()
 
+            if self.stopped_duration > 0:
+                self.stopped_duration -= 1
+                if self.catastrophic_collisions:
+                    self.dead = True
+                    self.body_color = (200, 200, 200)
+                    return
+            else:
+                self.pos += delta
+            
+            self.angle += self.dtheta
 
-        self.collision_flag = False
-        if check_for_world_boundaries is not None:
-            # TODO: remove this
-            check_for_world_boundaries(self)
+            self.collision_flag = False
+            if check_for_world_boundaries is not None:
+                # TODO: remove this
+                check_for_world_boundaries(self)
 
-        self.handle_collisions(world)
+            self.handle_collisions(world)
 
         # Calculate the 'real' dx, dy after collisions have been calculated.
         # This is what we use for velocity in our equations

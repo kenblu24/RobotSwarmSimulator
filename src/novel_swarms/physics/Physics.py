@@ -40,10 +40,6 @@ class Physics:
         body = pymunk.Body(mass=self.mass, moment=pymunk.moment_for_circle(self.mass, 0, self.radius))
         shape = pymunk.shapes.Circle(body=body, radius=self.radius)
         shape.friction = 0.5
-        # linearFrictionEmulation = pymunk.PivotJoint(self.space.static_body, body, (0, 0), (0, 0))
-        # linearFrictionEmulation.max_bias = 0
-        # linearFrictionEmulation.max_force = 0.001
-        # self.space.add(linearFrictionEmulation)
         body.position = copyCoords(body.position, agent.pos)
         body.angle = float(agent.angle)
         self.space.add(body, shape)
