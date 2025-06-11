@@ -139,14 +139,14 @@ You can preface most ``pip install`` commands with ``uv`` for *much* faster inst
       .. code-block:: bash
 
          pip install uv
-         uv pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         uv pip install git+https://github.com/kenblu24/RobotSwarmSimulator.git@main
 
    .. tab-item:: pip
       :sync: pip
 
       .. code-block:: bash
 
-         pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         pip install git+https://github.com/kenblu24/RobotSwarmSimulator.git@main
 
 
 If the installation was successful, you should be able to open a ``python`` shell and import the package:
