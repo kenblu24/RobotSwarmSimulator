@@ -154,6 +154,8 @@ def main(
                         world.usePhysics = not world.usePhysics
                         for agent in world.population:
                             agent.world.usePhysics = world.usePhysics
+                        if world.usePhysics:
+                            world.physicsSnap()
                     elif event.key == pygame.K_j:
                         pass
                     elif event.key == pygame.K_l and paused:

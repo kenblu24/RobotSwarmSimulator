@@ -77,6 +77,7 @@ class DifferentialDriveGUI(AbstractGUI):
             mx, my = self.mouse_pos
             mx, my = round(mx, 4), round(my, 4)
             self.appendTextToGUI(screen, timing)  # type: ignore[reportAttributeAccessIssue]
+            self.appendTextToGUI(screen, f"Physics: {self.world.usePhysics}")
             if self.selected:
                 a: MazeAgent = self.selected
                 heading = a.get_heading() % (2 * PI) / 2 / PI * 360

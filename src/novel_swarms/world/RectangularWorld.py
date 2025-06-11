@@ -165,6 +165,10 @@ class RectangularWorld(World):
         self.population.append(agent)
         agent.physobj = self.physics.createAgentBody(agent)
 
+    def physicsSnap(self):
+        for agent in self.population:
+            agent.physicsSnap()
+
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
         for entry in objects:
