@@ -181,7 +181,7 @@ Here's all of the code in one file:
    agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1,
                                      controller=controller), world)
    spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
-                               agent=agent, oneshot=True)
+                               agent=agent, mode="oneshot")
    world.spawners.append(spawner)
 
    sim(world)
@@ -307,7 +307,7 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
 
    There's a couple things going on here.
 
-   1. The ``Spawner()`` has the ``oneshot=True`` argument, which will set its ``spawner.mark_for_deletion``
+   1. The ``Spawner()`` has the ``mode='oneshot'`` argument, which will set its ``spawner.mark_for_deletion``
    flag to ``True`` after the first simulation step, otherwise it would create new agents
    on every ``step()`` (bad). This doesn't mean the spawner deletes itself,
    but the world will simply remove it from its :py:attr:`~novel_swarms.world.World.spawners` list.
@@ -366,7 +366,7 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
          controller = BinaryController(agent, (0.02, -0.5), (0.02, 0.5))
          agent.controller = controller
          spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
-                                     agent=agent, oneshot=True)
+                                     agent=agent, mode="oneshot")
          world.spawners.append(spawner)
 
          sim(world)
@@ -436,7 +436,7 @@ First, let's create a new file called ``world.yaml`` and add the following:
         n: 6
         facing: "away"
         avoid_overlap: true
-        oneshot: true
+        mode: oneshot
         agent:
           type: "MazeAgent"
           position: [5, 5]
