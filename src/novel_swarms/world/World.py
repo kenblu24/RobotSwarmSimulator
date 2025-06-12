@@ -23,14 +23,15 @@ import os
 
 import pygame
 import numpy as np
+from collections.abc import Callable
+from dataclasses import dataclass, field, replace
 
 from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
 from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class, _ERRMSG_MISSING_ASSOCIATED_TYPE
 
-from dataclasses import dataclass, field, replace
 from ..util.asdict import asdict
-from collections.abc import Callable
+from ..util.collections import FlagSet
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
@@ -60,6 +61,7 @@ class AbstractWorldConfig:
     #: If None, the world will be seeded based on system time.
     seed: int | None = None
     metadata: dict = field(default_factory=dict)
+    flags: dict[str, int] = field(default_factory=dict)
 
     def __post_init__(self):
         if self.agents is None:
@@ -169,6 +171,7 @@ class World:
         #: Random number generator.
         #: Also may be used to seed RNG for agents, spawners, etc.
         self.rng: np.random.Generator
+        self.flags = FlagSet(config.flags)
 
     def set_seed(self, seed):
         self.seed = np.random.randint(0, 2**31) if seed is None else seed
