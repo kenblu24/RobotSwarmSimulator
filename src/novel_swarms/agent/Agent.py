@@ -80,6 +80,8 @@ class BaseAgentConfig:
 
 class Agent:
 
+    _always_shallow_copy = ["world"]
+
     def __init__(self, config, world, name=None, group=0, initialize=True) -> None:
         self.marked_for_deletion = False
         #: Agent config.
@@ -321,3 +323,14 @@ class Agent:
             The new agent has the same type as the class/instance it was called from.
         """
         return cls(config, world)
+
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for key, value in self.__dict__.items():
+            if key in cls._always_shallow_copy:
+                setattr(result, key, value)  # keep reference to same world, etc.
+            else:
+                setattr(result, key, copy.deepcopy(value, memo))
+        return result

@@ -5,6 +5,12 @@ import numpy as np
 from scipy.spatial import Delaunay
 from .AbstractMetric import AbstractMetric
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..world.RectangularWorld import RectangularWorld
+else:
+    RectangularWorld = None
+
 
 class Dispersal(AbstractMetric):
     __badvars__ = AbstractMetric.__badvars__ + ['population']  # references to population may cause pickling errors
@@ -16,7 +22,7 @@ class Dispersal(AbstractMetric):
         self.allpairs = []
         self.lines = []
 
-    def attach_world(self, world):
+    def attach_world(self, world: RectangularWorld):
         super().attach_world(world)
         self.population = world.population
         self.world_radius = world.config.radius

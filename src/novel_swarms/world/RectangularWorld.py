@@ -47,9 +47,10 @@ from ..physics.Physics import Physics
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ..agent.StaticAgent import StaticAgent
+    type T_Vec2 = tuple[float, float] | np.ndarray[(2,), np.dtype[float]]
 else:
     StaticAgent = None  # prevent circular import
-type T_Vec2 = tuple[float, float] | np.ndarray[(2,), np.dtype[float]]
+    T_Vec2 = None
 
 min_zoom = 0.0001
 

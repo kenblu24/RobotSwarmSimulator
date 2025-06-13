@@ -152,13 +152,13 @@ class World:
         self.config = config
         config = replace(config)
         #: List of agents in the world.
-        self.population = []
+        self.population: list[Agent] = []
         #: List of spawners which create agents or objects.
-        self.spawners = []
+        self.spawners: list[Spawner] = []
         #: Metrics to calculate behaviors.
-        self.metrics = []
+        self.metrics: list[AbstractMetric] = []
         #: The list of world objects.
-        self.objects = []
+        self.objects: list[Agent] = []
         self.goals = config.goals
         self.meta = config.metadata
         self.gui = None
