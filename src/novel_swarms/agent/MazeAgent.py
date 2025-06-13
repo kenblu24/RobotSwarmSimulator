@@ -58,6 +58,7 @@ from typing import Any, override
 # from ..world.RectangularWorld import RectangularWorldConfig
 
 from ..physics.Physics import snapPhysicsToAgent, unicycleForces
+from ..physics.ControllerAnalysis import getControllerPeaks
 import pymunk
 
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
@@ -231,7 +232,8 @@ class MazeAgent(StaticAgent):
 
         # for physics, v and omega done here
         if self.world.usePhysics:
-            unicycleForces(self.physobj, v, omega, self.dt)
+            peakVelocity, peakOmega = getControllerPeaks(self.controller)
+            unicycleForces(self.physobj, v, omega, self.dt, peakVelocity, peakOmega)
 
         else:
             # Define Idiosyncrasies that may occur in actuation/sensing
