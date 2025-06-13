@@ -324,9 +324,10 @@ class Agent:
         """
         return cls(config, world)
 
-    def __deepcopy__(self, memo):
+    def copy(self):
         cls = self.__class__
         result = cls.__new__(cls)
+        memo = {}
         memo[id(self)] = result
         for key, value in self.__dict__.items():
             if key in cls._always_shallow_copy:
