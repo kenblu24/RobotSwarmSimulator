@@ -17,7 +17,7 @@ controller = StaticController(output=[0.01, 0])
 agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1, controller=controller), world)
 sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
 agent.sensors.append(sensor)
-controller = BinaryController((0.02, -0.5), (0.02, 0.5))
+controller = BinaryController((0.27, -0.6), (0.27, 0.6))
 agent.controller = controller
 
 # spawner = DonutAgentSpawner(world, n=6, agent=agent, facing="away", mode="oneshot", avoid_overlap=True, inner_radius=4, outer_radius=6, seed=1234)

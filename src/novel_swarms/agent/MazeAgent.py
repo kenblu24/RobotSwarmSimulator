@@ -231,8 +231,8 @@ class MazeAgent(StaticAgent):
 
         # for physics, v and omega done here
         if self.world.usePhysics:
-            peakVelocity = 0.02
-            peakOmega = 0.5
+            peakVelocity = 0.3
+            peakOmega = 2
             body: pymunk.Body = self.physobj
 
             # friction = kineticFriction(body, 1, self.dt)

@@ -96,3 +96,4 @@ def agentTorques(body: pymunk.Body, velocity, omega, peakTorque, dt):
 def snapPhysicsToAgent(agent):
     agent.physobj.position = copyCoords(agent.physobj.position, agent.pos)
     agent.physobj.angle = float(agent.angle)
+    agent.physobj.velocity = copyCoords(agent.physobj.velocity, agent.getVelocity())
