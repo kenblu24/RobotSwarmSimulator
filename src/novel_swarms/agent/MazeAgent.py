@@ -57,7 +57,7 @@ from typing import Any, override
 # from ..world.World import World
 # from ..world.RectangularWorld import RectangularWorldConfig
 
-from ..physics.Physics import peakAgentForce, agentForces, peakAgentTorque, agentTorques, snapPhysicsToAgent
+from ..physics.Physics import snapPhysicsToAgent, unicycleForces
 import pymunk
 
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
@@ -231,19 +231,7 @@ class MazeAgent(StaticAgent):
 
         # for physics, v and omega done here
         if self.world.usePhysics:
-            peakVelocity = 0.3
-            peakOmega = 2
-            body: pymunk.Body = self.physobj
-
-            # friction = kineticFriction(body, 1, self.dt)
-            # body.apply_force_at_local_point(friction)
-            peakForce = peakAgentForce(body, peakVelocity, peakOmega)
-            force = agentForces(body, v, omega, peakForce, self.dt)
-            body.apply_force_at_local_point(force)
-
-            torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, self.dt), self.dt)
-            body.apply_force_at_local_point((0, torque), (1, 0))
-            body.apply_force_at_local_point((0, -torque))
+            unicycleForces(self.physobj, v, omega, self.dt)
 
         else:
             # Define Idiosyncrasies that may occur in actuation/sensing

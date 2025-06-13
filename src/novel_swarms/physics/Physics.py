@@ -97,3 +97,17 @@ def snapPhysicsToAgent(agent):
     agent.physobj.position = copyCoords(agent.physobj.position, agent.pos)
     agent.physobj.angle = float(agent.angle)
     agent.physobj.velocity = copyCoords(agent.physobj.velocity, agent.getVelocity())
+
+def unicycleForces(body: pymunk.Body, v, omega, dt):
+    peakVelocity = 0.3
+    peakOmega = 2
+
+    # friction = kineticFriction(body, 1, self.dt)
+    # body.apply_force_at_local_point(friction)
+    peakForce = peakAgentForce(body, peakVelocity, peakOmega)
+    force = agentForces(body, v, omega, peakForce, dt)
+    body.apply_force_at_local_point(force)
+
+    torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, dt), dt)
+    body.apply_force_at_local_point((0, torque), (1, 0))
+    body.apply_force_at_local_point((0, -torque))
