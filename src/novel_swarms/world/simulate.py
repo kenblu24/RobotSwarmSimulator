@@ -152,10 +152,6 @@ def main(
                         pass
                     elif event.key == pygame.K_p:
                         world.usePhysics = not world.usePhysics
-                        print("simworld", world)
-                        for agent in world.population:
-                            agent.world.usePhysics = world.usePhysics
-                            print("agentworld", agent.world)
                         if world.usePhysics:
                             world.physicsSnap()
                     elif event.key == pygame.K_j:
