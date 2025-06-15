@@ -325,7 +325,7 @@ class Agent:
         return cls(config, world)
 
     def copy(self):
-        """Create a copy of this agent
+        """Create a copy of this agent.
 
 
         Returns
@@ -333,10 +333,11 @@ class Agent:
         Agent
             The new agent has the same type as the class/instance it was called from.
 
+
         Almost all attributes are deep-copied from this agent. However, some attributes
         do not get recursively deep-copied, such as the ``world`` attribute.
 
-        The :py:attr:`_always_shallow_copy` attribute is a list of agent attribute names
+        The :py:attr:`Agent._always_shallow_copy` attribute is a list of agent attribute names
         which determines which attributes do not get deep-copied. By default, this is ``['world']``.
 
         On the new agent, Attributes of **this** agent not in this list will be a deep-copy of those in the original agent.
