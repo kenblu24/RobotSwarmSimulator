@@ -80,6 +80,8 @@ class BaseAgentConfig:
 
 class Agent:
 
+    _always_shallow_copy = ["world"]
+
     def __init__(self, config, world, name=None, group=0, initialize=True) -> None:
         self.marked_for_deletion = False
         #: Agent config.
@@ -321,3 +323,43 @@ class Agent:
             The new agent has the same type as the class/instance it was called from.
         """
         return cls(config, world)
+
+    def copy(self):
+        """Create a copy of this agent.
+
+
+        Returns
+        -------
+        Agent
+            The new agent has the same type as the class/instance it was called from.
+
+
+        Almost all attributes are deep-copied from this agent. However, some attributes
+        do not get recursively deep-copied, such as the ``world`` attribute.
+
+        The :py:attr:`Agent._always_shallow_copy` attribute is a list of agent attribute names
+        which determines which attributes do not get deep-copied. By default, this is ``['world']``.
+
+        On the new agent, Attributes of **this** agent not in this list will be a deep-copy of those in the original agent.
+
+        Attributes of **this** agent in this list will share the same reference as the original agent.
+
+        Examples
+        --------
+        >>> agent = Agent(config, world)
+        >>> agent.copy().world is agent.world
+        True
+        >>> copy.deepcopy(agent).world is agent.world
+        False
+
+        """
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo = {}
+        memo[id(self)] = result
+        for key, value in self.__dict__.items():
+            if key in cls._always_shallow_copy:
+                setattr(result, key, value)  # keep reference to same world, etc.
+            else:
+                setattr(result, key, copy.deepcopy(value, memo))
+        return result

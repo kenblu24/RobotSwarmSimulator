@@ -53,7 +53,11 @@ class BaseAgentSpawner(Spawner):
             self.agent_class, self.agent_config = None, None  # pyright: ignore[reportAttributeAccessIssue]
 
     def generate_config(self):
-        return copy.deepcopy(self.agent_config)
+        if isinstance(self.agent_config, BaseAgentConfig):
+            return copy.deepcopy(self.agent_config)
+        elif isinstance(self.agent_config, Agent):
+            return self.agent_config.copy()
+            
 
     def make_agent(self, config):
         if isinstance(self.agent_config, Agent):
