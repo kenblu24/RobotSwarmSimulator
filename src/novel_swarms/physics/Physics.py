@@ -3,6 +3,7 @@ from pymunk import Vec2d
 import numpy as np
 # from ..world.RectangularWorld import RectangularWorld
 # from ..agent.Agent import Agent
+from ..world.objects.Wall import Wall
 
 def copyCoords(dest, src):
     coords = [0, 0]
@@ -44,6 +45,13 @@ class Physics:
         body.angle = float(agent.angle)
         self.space.add(body, shape)
         return body
+    
+    def createWallBody(self, wall: Wall):
+        shape = pymunk.shapes.Poly(body=self.space.static_body, vertices=((wall.x, wall.y), (wall.x + wall.w, wall.y), (wall.x, wall.y + wall.h), (wall.x + wall.w, wall.y + wall.h)))
+        shape.elasticity = 0.8
+        shape.friction = 0.5
+        self.space.add(shape)
+        # return body
 
 # def kineticFriction(body: pymunk.Body, coof, dt): # body and coefficient of friction
 #     g = 9.8

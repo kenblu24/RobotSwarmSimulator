@@ -165,6 +165,10 @@ class RectangularWorld(World):
     def addAgent(self, agent):
         self.population.append(agent)
         agent.physobj = self.physics.createAgentBody(agent)
+    
+    def addWall(self, wall):
+        self.objects.append(wall)
+        wall.physobj = self.physics.createWallBody(wall)
 
     def physicsSnap(self):
         for agent in self.population:
