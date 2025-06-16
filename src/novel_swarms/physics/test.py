@@ -24,7 +24,7 @@ agent.controller = controller
 spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
 world.spawners.append(spawner)
 
-w = Wall(world, 1, 3.5, 4, 2)
+w = Wall(world, 0.5, 3.5, 4, 2)
 
 world.addWall(w)
 
