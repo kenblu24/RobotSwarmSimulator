@@ -8,6 +8,7 @@ from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from novel_swarms.world.simulate import main as sim
 from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
 from novel_swarms.agent.control.BinaryController import BinaryController
+from novel_swarms.agent.control.HumanController import HumanController
 from novel_swarms.world.objects.Wall import Wall
 
 world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
@@ -23,6 +24,9 @@ agent.controller = controller
 # spawner = DonutAgentSpawner(world, n=6, agent=agent, facing="away", mode="oneshot", avoid_overlap=True, inner_radius=4, outer_radius=6, seed=1234)
 spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
 world.spawners.append(spawner)
+
+humanAgent = MazeAgent(MazeAgentConfig(position=(5, 1), agent_radius = 0.08, controller=HumanController()), world)
+world.addAgent(humanAgent)
 
 w = Wall(world, 0.5, 3.5, 4, 2)
 

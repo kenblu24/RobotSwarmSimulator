@@ -64,9 +64,13 @@ class Physics:
 #     if unit.length == 0:
 #         return Vec2d.zero()
 #     return unit.scale_to_length(-effectiveFriction)
+def lsq(vec: Vec2d):
+    return vec.x**2 + vec.y**2
 
 def getOrtho(vec: Vec2d, omega):
     # <-yo, xo, 0>
+    if lsq(vec) == 0:
+        return Vec2d.zero()
     return Vec2d(-vec.y * omega, vec.x * omega).normalized()
 
 def peakAgentForce(body: pymunk.Body, velocity, omega):
@@ -74,6 +78,8 @@ def peakAgentForce(body: pymunk.Body, velocity, omega):
     fakeBody.velocity = Vec2d(velocity, 0)
     # kf = kineticFriction(fakeBody, 1, 0)
     fcmag = fakeBody.mass * velocity * omega
+    if fcmag == 0:
+        return 0
     fc = getOrtho(fakeBody.velocity, omega).scale_to_length(fcmag)
     return (fc).length
 
@@ -87,7 +93,8 @@ def agentForces(body: pymunk.Body, velocity, omega, peakForce, dt):
     # vDirF -= kf
     # if peakForce < vDirF.length: # next prioritize counteracting friction
         # return vDirF.scale_to_length(peakForce)
-    turnF = getOrtho(intendedVector, omega).scale_to_length(body.mass * velocity * omega)
+    ortho = getOrtho(intendedVector, omega)
+    turnF = Vec2d.zero() if lsq(ortho) == 0 else ortho.scale_to_length(body.mass * velocity * omega)
     vDirF += turnF
     if peakForce < vDirF.length: # next prioritize turning force
         return vDirF.scale_to_length(peakForce)
@@ -116,6 +123,6 @@ def unicycleForces(body: pymunk.Body, v, omega, dt, peakV, peakOmega):
     force = agentForces(body, v, omega, peakForce, dt)
     body.apply_force_at_local_point(force)
 
-    torque = agentTorques(body, v, omega, peakAgentTorque(body, omega, dt), dt)
+    torque = agentTorques(body, v, omega, peakAgentTorque(body, peakOmega, dt), dt)
     body.apply_force_at_local_point((0, torque), (1, 0))
     body.apply_force_at_local_point((0, -torque))
