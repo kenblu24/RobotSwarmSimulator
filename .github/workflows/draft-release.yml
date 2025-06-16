@@ -1,0 +1,86 @@
+name: "Create Draft Release w/ Docs"
+
+# deploy the documentation to GitHub Pages via an artifact
+# does not create a branch or any commits
+
+# define triggers
+on:
+  push:
+    branches:
+      - release-test
+    tags:
+      - "v*"
+#   pull_request:
+#     branches:
+#       - main
+
+jobs:
+
+  # build the documentation
+  build-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+
+    - name: Setup Graphviz
+      uses: ts-graphviz/setup-graphviz@v2
+
+    - name: Set up Python  # use uv to install Python
+      run: uv python install
+
+    - name: Install RobotSwarmSimulator
+      run: |
+        uv venv venv
+        . venv/bin/activate
+        echo PATH=$PATH >> $GITHUB_ENV
+        uv pip install .[docs]
+        echo $PATH
+      # note: need to modify GITHUB_ENV path for the new venv to be used
+      # as each run step is a new shell
+    - name: List src directory for debugging
+      run: |
+         ls -R src
+         echo $PATH
+    - name: Verify installation
+      run: |
+        uv pip show novel_swarms
+    - name: Build HTML
+      run: |
+        cd doc
+        ./single html
+    - name: Add to archive
+      run: |
+        zip -r robotswarmsimulator-docs-${{ github.ref_name }}.zip doc/build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      id: deployment
+      with:
+        name: robotswarmsimulator-docs
+        path: robotswarmsimulator-docs-${{ github.ref_name }}.zip
+
+  # Deploy job
+  draft-release:
+    # Add a dependency to the build job
+    needs: build-docs
+    if: github.ref_type == 'tag'
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: robotswarmsimulator-docs
+          path: robotswarmsimulator-docs-${{ github.ref_name }}.zip
+      - name: Create Draft Release and attach artifacts
+        id: release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: robotswarmsimulator-docs-${{ github.ref_name }}.zip
+          generate_release_notes: true
