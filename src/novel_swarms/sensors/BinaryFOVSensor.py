@@ -39,6 +39,7 @@ class BinaryFOVSensor(AbstractSensor):
         detect_goal_with_added_state=False,
         show=True,
         seed=None,
+        target_team =None,
         **kwargs
     ):
         super().__init__(agent=agent, parent=parent)
@@ -59,6 +60,7 @@ class BinaryFOVSensor(AbstractSensor):
         self.invert = invert
         self.goal_detected = False
         self.detection_id = 0
+        self.target_team = target_team
 
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
@@ -131,6 +133,8 @@ class BinaryFOVSensor(AbstractSensor):
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
         for agent in bag:
+            if self.target_team and not agent.team == self.target_team:
+                continue
             u = agent.getPosition() - sensor_origin
             d = self.circle_interesect_sensing_cone(u, self.agent.radius)
             if d is not None:
