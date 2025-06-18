@@ -4,6 +4,7 @@ import numpy as np
 # from ..world.RectangularWorld import RectangularWorld
 # from ..agent.Agent import Agent
 from ..world.objects.Wall import Wall
+# from ..world.objects.StaticObject import StaticObject, StaticObjectConfig
 
 def copyCoords(dest, src):
     coords = [0, 0]
@@ -30,6 +31,8 @@ class Physics:
     def step(self):
         self.space.step(self.world.dt)
         for agent in self.world.population:
+            if not hasattr(agent, "physobj"):
+                continue
             newPos = copyCoords(agent.pos, agent.physobj.position)
             agent.dpos = newPos - agent.pos
             agent.dtheta = agent.physobj.angular_velocity
@@ -46,8 +49,8 @@ class Physics:
         self.space.add(body, shape)
         return body
     
-    def createWallBody(self, wall: Wall):
-        shape = pymunk.shapes.Poly(body=self.space.static_body, vertices=((wall.x, wall.y), (wall.x + wall.w, wall.y), (wall.x, wall.y + wall.h), (wall.x + wall.w, wall.y + wall.h)))
+    def createStaticBody(self, agent):
+        shape = pymunk.shapes.Poly(body=self.space.static_body, vertices=agent.points.tolist())
         shape.elasticity = 0.8
         shape.friction = 0.5
         self.space.add(shape)

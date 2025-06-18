@@ -194,9 +194,6 @@ class MazeAgent(StaticAgent):
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
         
-    def physicsSnap(self):
-        snapPhysicsToAgent(self)
-
     @override
     def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
         world = world or self.world

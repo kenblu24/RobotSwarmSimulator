@@ -10,6 +10,7 @@ from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
 from novel_swarms.agent.control.BinaryController import BinaryController
 from novel_swarms.agent.control.HumanController import HumanController
 from novel_swarms.agent.control.StaticController import StaticController
+from novel_swarms.world.objects.StaticObject import StaticObject, StaticObjectConfig
 from novel_swarms.world.objects.Wall import Wall
 
 # world
@@ -36,8 +37,8 @@ world.addAgent(humanAgent)
 staticAgent = MazeAgent(MazeAgentConfig(position=(6, 6), agent_radius = 0.12, controller=StaticController()), world)
 world.addAgent(staticAgent)
 
-# wall
-w = Wall(world, 0.5, 3.5, 4, 2)
-world.addWall(w)
+# static object
+staticObject = StaticObject(StaticObjectConfig(points=[(0.5, 3.5), (4.5, 3.5), (4.5, 5.5), (0.5, 5.5)]), world=world)
+world.addAgent(staticObject)
 
 sim(world, start_paused=True)

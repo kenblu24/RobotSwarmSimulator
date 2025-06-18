@@ -41,7 +41,7 @@ from ..util.collider.AABB import AABB
 from .goals.Goal import CylinderGoal
 from .objects.Wall import Wall
 
-from ..physics.Physics import Physics
+from ..physics.Physics import Physics, snapPhysicsToAgent
 
 # typing
 from typing import TYPE_CHECKING
@@ -164,15 +164,15 @@ class RectangularWorld(World):
 
     def addAgent(self, agent):
         self.population.append(agent)
-        agent.physobj = self.physics.createAgentBody(agent)
+        if agent.grounded:
+            self.physics.createStaticBody(agent)
+        else:
+            agent.physobj = self.physics.createAgentBody(agent)
     
-    def addWall(self, wall):
-        self.objects.append(wall)
-        wall.physobj = self.physics.createWallBody(wall)
-
     def physicsSnap(self):
         for agent in self.population:
-            agent.physicsSnap()
+            if hasattr(agent, "physobj"):
+                snapPhysicsToAgent(agent)
 
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
