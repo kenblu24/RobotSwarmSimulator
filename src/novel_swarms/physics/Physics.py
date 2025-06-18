@@ -40,18 +40,18 @@ class Physics:
             agent.pos = newPos
             agent.angle = np.float64(agent.physobj.angle)
 
-    def createAgentShape(self, agent, body):
+    def createAgentShape(self, agent):
         friction = 0.5
         if hasattr(agent, "friction"):
             friction = agent.friction
         mass = 1
         if hasattr(agent, "mass"):
             mass = agent.mass
-        shape: pymunk.Shape = pymunk.shapes.Circle(body=body, radius=0.001)
+        shape: pymunk.Shape = pymunk.shapes.Circle(body=None, radius=0.001)
         if hasattr(agent, "points") and 0 < agent.points.size:
-            shape = pymunk.shapes.Poly(body=body, vertices=agent.points.tolist())
+            shape = pymunk.shapes.Poly(body=None, vertices=agent.points.tolist())
         elif hasattr(agent, "radius"):
-            shape = pymunk.shapes.Circle(body=body, radius=agent.radius)
+            shape = pymunk.shapes.Circle(body=None, radius=agent.radius)
         
         shape.mass = mass
         shape.friction = friction
@@ -59,14 +59,16 @@ class Physics:
 
     def createAgentBody(self, agent):
         body = pymunk.Body()
-        shape = self.createAgentShape(agent, body)
+        shape = self.createAgentShape(agent)
+        shape.body = body
         body.position = copyCoords(body.position, agent.pos)
         body.angle = float(agent.angle)
         self.space.add(body, shape)
         return body
     
     def createStaticBody(self, agent):
-        shape = self.createAgentShape(agent, self.space.static_body)
+        shape = self.createAgentShape(agent)
+        shape.body = self.space.static_body
         shape.elasticity = 0.8
         self.space.add(shape)
         # return body
