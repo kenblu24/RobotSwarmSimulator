@@ -30,7 +30,7 @@ spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent
 world.spawners.append(spawner)
 
 # human controller agent
-humanAgent = MazeAgent(MazeAgentConfig(position=(5, 1), points=[(0.08, 0.08), (0.08, -0.08), (-0.08, -0.08), (-0.08, 0.08)], agent_radius = 0.08, controller=HumanController()), world)
+humanAgent = MazeAgent(MazeAgentConfig(position=(5, 1), points=[(0.16, 0), (-0.08, 0.08), (-0.08, -0.08)], agent_radius = 0.08, controller=HumanController()), world)
 world.addAgent(humanAgent)
 
 # static controller agent
