@@ -38,7 +38,7 @@ staticAgent = MazeAgent(MazeAgentConfig(position=(6, 6), agent_radius = 0.12, co
 world.addAgent(staticAgent)
 
 # static object
-staticObject = StaticObject(StaticObjectConfig(points=[(0.5, 3.5), (4.5, 3.5), (4.5, 5.5), (0.5, 5.5)]), world=world)
+staticObject = StaticObject(StaticObjectConfig(points=[(0.5, 3.5), (4.5, 3.5), (4.5, 5.5), (2.5, 6.5), (0.5, 5.5)]), world=world)
 world.addAgent(staticObject)
 
 sim(world, start_paused=True)
