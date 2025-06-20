@@ -159,7 +159,9 @@ class StaticAgent(Agent):
 
     @property
     def poly_rotated(self):
-        return self.points @ self.rotmat2d()
+        # transposing the rotation matrix here is a bit of a hack that fixes the fact that these are multiplied in the wrong order
+        # the proper way to do this is (self.rotmat2d() @ self.points.transpose()).transpose() but it is slower
+        return self.points @ self.rotmat2d().transpose() 
 
     @override
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
