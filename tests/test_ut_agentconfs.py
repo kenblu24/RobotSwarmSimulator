@@ -2,16 +2,18 @@ import unittest
 from unittest.mock import Mock
 
 import numpy as np
-from src.novel_swarms.agent.Agent import Agent, BaseAgentConfig
+from novel_swarms.agent.Agent import Agent, BaseAgentConfig
 from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-from src.novel_swarms.agent.control.BinaryController import BinaryController
-from src.novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
-from src.novel_swarms.world.RectangularWorld import RectangularWorld
+from novel_swarms.agent.control.BinaryController import BinaryController
+from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
+from novel_swarms.world.RectangularWorld import RectangularWorld
 
 
 class TestAgentConf(unittest.TestCase):
     def setUp(self) -> None:
         world = Mock(spec=RectangularWorld)
+        world.rng = np.random.default_rng()
+        world.dt = 1/40
         controller = Mock(spec=BinaryController)
         controller.agent = None
         sensor = Mock(spec=BinaryFOVSensor)
@@ -56,6 +58,8 @@ class TestMazeAgentConf(unittest.TestCase):
     def setUp(self) -> None:
         self.conf = MazeAgentConfig(position=(5, 5), agent_radius=0.1)
         world = Mock(spec=RectangularWorld)
+        world.rng = np.random.default_rng()
+        world.dt = 1/40
         self.agent = MazeAgent(self.conf, world)
         return super().setUp()
 
@@ -64,5 +68,5 @@ class TestMazeAgentConf(unittest.TestCase):
         self.assertEqual(self.agent.pos[0], self.conf.position[0])
         self.assertEqual(self.agent.pos[1], self.conf.position[1])
 
-    def test_agent(self):
+    def test_radius(self):
         self.assertEqual(self.agent.radius, self.conf.agent_radius)
