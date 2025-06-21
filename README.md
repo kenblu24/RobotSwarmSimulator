@@ -7,7 +7,7 @@ Contributors: Connor Mattson, Jeremy Clark, Daniel S. Brown, Kevin Zhu
 ## Setup
 Install RSS with pip
     
-    pip install --upgrade git+https://github.com/kenblu24/RobotSwarmSimulator.git@main
+    pip install --upgrade swarmsim
 
 or, for faster install with uv (`pip install uv`) preface any pip commands with `uv`, i.e. `uv pip install...`
 

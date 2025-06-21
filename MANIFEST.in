@@ -1,2 +1,2 @@
 include *.*
-recursive-include novel_swarms
+recursive-include swarmsims

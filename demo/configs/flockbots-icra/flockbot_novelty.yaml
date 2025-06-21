@@ -4,7 +4,7 @@ sensors:
   custom_state_decision: "Linear"
   sensors:
     # this was originally defined in
-    # novel_swarms.config.defaults.ConfigurationDefaults.FLOCKBOT_SENSOR_SET
+    # swarmsim.config.defaults.ConfigurationDefaults.FLOCKBOT_SENSOR_SET
     - type: "BinaryFOVSensor"
       theta: !np radians(0.2) / 2   # Vision Angle / 2 (Radians)
       agent_sensing_range: !np 15.1 * 13.25  # (meters). DOESN'T MATCH MILLING RANGE

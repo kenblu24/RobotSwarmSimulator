@@ -8,7 +8,7 @@ Configuration System
    config_store_api
    yaml
 
-This article will cover the :py:mod:`~novel_swarms.config` module and explain
+This article will cover the :py:mod:`~swarmsim.config` module and explain
 why it was created.
 
 .. seealso::
@@ -23,7 +23,7 @@ Why does the config system exist?
 RobotSwarmSimulator is designed for simulations to be definable with :fab:`python` Python code,
 but also for simulation objects to be modified easily in an object-oriented way.
 
-This is why :py:mod:`~novel_swarms.world` and :py:mod:`~novel_swarms.agent` must
+This is why :py:mod:`~swarmsim.world` and :py:mod:`~swarmsim.agent` must
 be created using dataclasses: it allows us to inherit properties from the base class
 in a much more manageable way. This also separates the configuration from the object
 itself, so the parameters of ``agent`` instance can be moved around, copied, or
@@ -38,11 +38,11 @@ Take this example from the :doc:`firstrun` guide:
 .. code-block:: python
    :caption: Run a simulation purely using Python
 
-   from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
-   from novel_swarms.agent.control.StaticController import StaticController
-   from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
-   from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-   from novel_swarms.world.simulate import main as sim
+   from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+   from swarmsim.agent.control.StaticController import StaticController
+   from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
+   from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
+   from swarmsim.world.simulate import main as sim
 
    world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
    world = RectangularWorld(world_config)
@@ -96,8 +96,8 @@ Then, we can run the simulation with:
 .. code-block:: python
     :caption: Run a simulation using ``world.yaml``
 
-    from novel_swarms.world.RectangularWorld import RectangularWorldConfig
-    from novel_swarms.world.simulate import main as sim
+    from swarmsim.world.RectangularWorld import RectangularWorldConfig
+    from swarmsim.world.simulate import main as sim
     
     world_config = RectangularWorldConfig.from_yaml('world.yaml')
 
@@ -106,7 +106,7 @@ Then, we can run the simulation with:
 Now, if we need to change the simulation, we only need to change the ``world.yaml`` file.
 And we can save different ``.yaml`` files for different simulations.
 
-Our :py:mod:`~novel_swarms.yaml` module also provides a custom YAML loader
+Our :py:mod:`~swarmsim.yaml` module also provides a custom YAML loader
 that defines some nice tags, such as the ``!np`` tag for numpy objects
 and the ``!include`` tag for including other YAML files as a mapping.
 
