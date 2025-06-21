@@ -139,14 +139,14 @@ You can preface most ``pip install`` commands with ``uv`` for *much* faster inst
       .. code-block:: bash
 
          pip install uv
-         uv pip install git+https://github.com/kenblu24/RobotSwarmSimulator.git@main
+         uv pip install swarmsim
 
    .. tab-item:: pip
       :sync: pip
 
       .. code-block:: bash
 
-         pip install git+https://github.com/kenblu24/RobotSwarmSimulator.git@main
+         pip install swarmsim
 
 
 If the installation was successful, you should be able to open a ``python`` shell and import the package:
@@ -162,7 +162,7 @@ If the installation was successful, you should be able to open a ``python`` shel
 Development Installations
 =========================
 
-If you intend to contribute to RobotSwarmSimulator, you should follow the
+If you intend to contribute to or modify RobotSwarmSimulator, you should follow the
 :doc:`installation guide for development </devel/install>` instead.
 
 .. button-ref:: /devel/install

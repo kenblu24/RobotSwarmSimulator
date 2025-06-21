@@ -26,13 +26,13 @@ Get Started
 
       .. code-block:: bash
 
-         pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         pip install swarmsim
 
    .. tab-item:: uv
 
       .. code-block:: bash
 
-         uv pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         uv pip install swarmsim
 
    .. tab-item:: other
 
