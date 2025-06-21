@@ -1,3 +1,12 @@
+"""This file contains sample unit tests for the Point spawner system.
+There are two different version of these unit tests. One developed using `unittest` and another
+developed using `pytest`.
+
+This file contains the implementation that uses `unittest`, a module from python's
+standard library.
+"""
+
+
 import unittest
 from unittest.mock import Mock
 

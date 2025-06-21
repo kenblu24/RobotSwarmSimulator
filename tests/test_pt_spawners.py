@@ -1,3 +1,12 @@
+"""This file contains sample unit tests for the Point spawner system.
+There are two different version of these unit tests. One developed using `unittest` and another
+developed using `pytest`.
+
+This file contains the implementation that uses `pytest`, a package from Python's
+Package Index (PyPI).
+"""
+
+
 import pytest
 from pytest_mock import MockerFixture
 
