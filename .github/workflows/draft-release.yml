@@ -58,10 +58,22 @@ jobs:
         zip -r robotswarmsimulator-${{ github.ref_name }}-docs.zip doc/build
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
-      id: deployment
+      id: docs-release
       with:
         name: robotswarmsimulator-docs
         path: robotswarmsimulator-${{ github.ref_name }}-docs.zip
+    - name: Upload pages artifacts
+      uses: actions/upload-pages-artifact@v3
+      id: docs-pages
+      with:
+        name: github-pages
+        path: doc/build/html/
+    # - name: Deploy
+    #   uses: peaceiris/actions-gh-pages@v3
+    #   if: github.ref == 'refs/heads/main'
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     publish_dir: docs/build/html
 
   # Deploy job
   draft-release:
@@ -80,6 +92,9 @@ jobs:
         with:
           name: robotswarmsimulator-docs
           path: robotswarmsimulator-${{ github.ref_name }}-docs.zip
+
+      - name: show files
+        run: ls -lAR
       - name: Create Draft Release and attach artifacts
         id: release
         uses: softprops/action-gh-release@v2
@@ -89,3 +104,27 @@ jobs:
           draft: true
           files: robotswarmsimulator-${{ github.ref_name }}-docs.zip
           generate_release_notes: true
+
+  # Deploy job
+  deploy-pages:
+    # Add a dependency to the build job
+    needs: build-docs
+    # only deploy pages if not a test tag
+    if: ! contains(github.ref_name, 'test') || github.ref_name == 'main'
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.docs-pages.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: docs-pages
+        uses: actions/deploy-pages@v4
