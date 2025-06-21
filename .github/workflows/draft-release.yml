@@ -55,13 +55,13 @@ jobs:
         ./single html
     - name: Add to archive
       run: |
-        zip -r robotswarmsimulator-docs-${{ github.ref_name }}.zip doc/build
+        zip -r robotswarmsimulator-${{ github.ref_name }}-docs.zip doc/build
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       id: deployment
       with:
         name: robotswarmsimulator-docs
-        path: robotswarmsimulator-docs-${{ github.ref_name }}.zip
+        path: robotswarmsimulator-${{ github.ref_name }}-docs.zip
 
   # Deploy job
   draft-release:
@@ -76,11 +76,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: robotswarmsimulator-docs
-          path: robotswarmsimulator-docs-${{ github.ref_name }}.zip
+          path: robotswarmsimulator-${{ github.ref_name }}-docs.zip
       - name: Create Draft Release and attach artifacts
         id: release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: robotswarmsimulator-docs-${{ github.ref_name }}.zip
+          files: robotswarmsimulator-${{ github.ref_name }}-docs.zip
           generate_release_notes: true
