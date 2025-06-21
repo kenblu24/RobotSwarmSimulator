@@ -80,6 +80,11 @@ jobs:
       - name: Create Draft Release and attach artifacts
         id: release
         uses: softprops/action-gh-release@v2
+        permissions:
+          contents: write
+          discussions: write
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           draft: true
           files: robotswarmsimulator-${{ github.ref_name }}-docs.zip
