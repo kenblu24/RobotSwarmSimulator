@@ -48,7 +48,7 @@ jobs:
          echo $PATH
     - name: Verify installation
       run: |
-        uv pip show novel_swarms
+        uv pip show swarmsim
     - name: Build HTML
       run: |
         cd doc
