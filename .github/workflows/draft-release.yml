@@ -105,9 +105,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           draft: true
+            # robotswarmsimulator-${{ github.ref_name }}-docs.zip
           files: |
             test.txt
-            robotswarmsimulator-${{ github.ref_name }}-docs.zip
           generate_release_notes: true
           fail_on_unmatched_files: true
 
@@ -116,7 +116,7 @@ jobs:
     # Add a dependency to the build job
     needs: build-docs
     # only deploy pages if not a test tag
-    if: ! contains(github.ref_name, 'test') || github.ref_name == 'main'
+    if: ${{! contains(github.ref_name, 'test')}}
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
