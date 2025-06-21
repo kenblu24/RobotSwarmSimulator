@@ -15,14 +15,14 @@ World Map
 Initialization Order
 ====================
 
-The initialization system machinery typically starts with the :py:func:`~novel_swarms.world.World.World_from_config` function.
+The initialization system machinery typically starts with the :py:func:`~swarmsim.world.World.World_from_config` function.
 Then, the world object runs its ``__init__()`` method.
 
-If using the :py:mod:`~novel_swarms.world.simulate` module, the simulation initializes the world by calling ``world.setup()``.
+If using the :py:mod:`~swarmsim.world.simulate` module, the simulation initializes the world by calling ``world.setup()``.
 
 Here is the order in which the initialization system runs:
 
-* :fas:`desktop` :py:mod:`~novel_swarms.world.simulate`
+* :fas:`desktop` :py:mod:`~swarmsim.world.simulate`
 
    First, the simulation initializes the world.
 
@@ -30,7 +30,7 @@ Here is the order in which the initialization system runs:
 
       The world then runs ``setup()``, which creates the following:
 
-      .. currentmodule:: novel_swarms.agent
+      .. currentmodule:: swarmsim.agent
 
       #. :fas:`users-viewfinder` :py:attr:`.World.population` :fas:`arrow-left` :far:`user` :py:func:`Agent.__init__`
 
@@ -81,9 +81,9 @@ Simulation Loop
 The simulator runs on a single thread. Let's take a look at the execution order
 inside the simulation loop. On each tick of the simulation, the following happens:
 
-.. card::  :py:mod:`~novel_swarms.world.simulate` :fas:`arrows-spin`
+.. card::  :py:mod:`~swarmsim.world.simulate` :fas:`arrows-spin`
 
-   The :py:func:`novel_swarms.world.simulate.main` function runs the main simulation loop.
+   The :py:func:`swarmsim.world.simulate.main` function runs the main simulation loop.
 
    .. card::  :far:`keyboard` :fas:`arrow-pointer` Event Handling
 
@@ -112,10 +112,10 @@ inside the simulation loop. On each tick of the simulation, the following happen
          For each agent in :fas:`users-viewfinder` :py:attr:`.World.population`\ :
          ^^^^
 
-         Each :far:`user` :py:mod:`~novel_swarms.agent` performs its ``step()`` method at this point.
+         Each :far:`user` :py:mod:`~swarmsim.agent` performs its ``step()`` method at this point.
 
-         Its ``step()`` method may call ``step()`` on its :far:`user` :fas:`brain` :py:attr:`~novel_swarms.agent.Agent.Agent.controller` 
-         or :far:`user` :fas:`group-arrows-rotate` :py:attr:`~novel_swarms.agent.Agent.Agent.sensors`.
+         Its ``step()`` method may call ``step()`` on its :far:`user` :fas:`brain` :py:attr:`~swarmsim.agent.Agent.Agent.controller` 
+         or :far:`user` :fas:`group-arrows-rotate` :py:attr:`~swarmsim.agent.Agent.Agent.sensors`.
 
          Here's the execution order for :py:meth:`.MazeAgent.step`\ :
 
@@ -125,7 +125,7 @@ inside the simulation loop. On each tick of the simulation, the following happen
 
          .. card::  :far:`user` :fas:`up-down-left-right` agent changes its state
 
-            The :far:`user` agent carries out the actions from the :far:`user` :fas:`brain` :py:attr:`~novel_swarms.agent.Agent.Agent.controller`\ ,
+            The :far:`user` agent carries out the actions from the :far:`user` :fas:`brain` :py:attr:`~swarmsim.agent.Agent.Agent.controller`\ ,
             moving according to its agent-specific dynamics.
 
          .. card::  :far:`compass` :py:func:`Sensor.step()` :fas:`arrows-spin`
@@ -133,7 +133,7 @@ inside the simulation loop. On each tick of the simulation, the following happen
             For each sensor in :far:`user` :fas:`group-arrows-rotate` :py:attr:`Agent.sensors`\ :
             ^^^^
 
-            The :far:`user` agent updates its sensors so that the new :far:`compass` :py:attr:`~novel_swarms.sensors.AbstractSensor.AbstractSensor.current_state`
+            The :far:`user` agent updates its sensors so that the new :far:`compass` :py:attr:`~swarmsim.sensors.AbstractSensor.AbstractSensor.current_state`
             will be available on the next :far:`user` ``step()``.
 
       .. card:: :fas:`draw-polygon` :py:meth:`WorldObject.step` :fas:`arrows-spin`
@@ -141,9 +141,9 @@ inside the simulation loop. On each tick of the simulation, the following happen
          For each object in :far:`object-group` :py:attr:`World.objects`\ :
          ^^^^
 
-         A world object is based on the :py:class:`~novel_swarms.agent.Agent.Agent` class, so its ``step()``
-         method may also call ``step()`` on its :far:`user` :fas:`brain` :py:attr:`~novel_swarms.world.objects.StaticObject.StaticObject.controller`
-         or :far:`user` :fas:`group-arrows-rotate` :py:attr:`~novel_swarms.world.objects.StaticObject.StaticObject.sensors`\ , if it has any.
+         A world object is based on the :py:class:`~swarmsim.agent.Agent.Agent` class, so its ``step()``
+         method may also call ``step()`` on its :far:`user` :fas:`brain` :py:attr:`~swarmsim.world.objects.StaticObject.StaticObject.controller`
+         or :far:`user` :fas:`group-arrows-rotate` :py:attr:`~swarmsim.world.objects.StaticObject.StaticObject.sensors`\ , if it has any.
 
       .. card::  :fas:`ruler-combined` :py:func:`.AbstractMetric.calculate()` :fas:`arrows-spin`
          
@@ -152,7 +152,7 @@ inside the simulation loop. On each tick of the simulation, the following happen
 
          Following the :fas:`earth-americas` ``step()`` :fas:`arrows-spin`\ , each metric takes an
          observation of the world's state and performs its calculations, storing the results in its
-         :py:attr:`~novel_swarms.metrics.AbstractMetric.AbstractMetric.value_history` attribute.
+         :py:attr:`~swarmsim.metrics.AbstractMetric.AbstractMetric.value_history` attribute.
 
 
    If the simulation is not operating headlessly, then the simulator calls ``draw()`` on the world object.
@@ -164,7 +164,7 @@ inside the simulation loop. On each tick of the simulation, the following happen
 
       When the simulation is sped up, some ``draw()`` calls will be skipped.
 
-   .. card::  :fas:`earth-americas` :py:mod:`~novel_swarms.world.World.RectangularWorld.draw` :fas:`pen-to-square`
+   .. card::  :fas:`earth-americas` :py:mod:`~swarmsim.world.World.RectangularWorld.draw` :fas:`pen-to-square`
 
       There is currently no layering system, so the first things that are drawn are the bottom-most 'layer'
       and succeeding ``draw()`` calls draw on top.

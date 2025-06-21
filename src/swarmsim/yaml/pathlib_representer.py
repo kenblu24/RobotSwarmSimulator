@@ -8,9 +8,9 @@ Examples
 
 .. code-block:: python-console
 
-    >>> import novel_swarms.yaml
+    >>> import swarmsim.yaml
     >>> import pathlib as pl
-    >>> novel_swarms.yaml.dump(pl.Path('foo/bar'), sys.stdout)
+    >>> swarmsim.yaml.dump(pl.Path('foo/bar'), sys.stdout)
 
 .. code-block:: yaml
 

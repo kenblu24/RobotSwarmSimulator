@@ -4,15 +4,15 @@
 
     Inheritance Diagram
 
-.. inheritance-diagram:: novel_swarms.agent.Agent.Agent
+.. inheritance-diagram:: swarmsim.agent.Agent.Agent
     :parts: 1
 
-.. autoclass:: novel_swarms.agent.Agent.BaseAgentConfig
+.. autoclass:: swarmsim.agent.Agent.BaseAgentConfig
     :members:
     :inherited-members:
     :undoc-members:
 
-.. autoclass:: novel_swarms.agent.Agent.Agent
+.. autoclass:: swarmsim.agent.Agent.Agent
     :members:
     :inherited-members:
     :undoc-members:
@@ -98,7 +98,7 @@ class Agent:
         self.dtheta = 0
         #: List of this agent's sensors.
         self.sensors: list = []
-        #: The :py:class:`Controller <novel_swarms.agent.control.Controller>` for this agent.
+        #: The :py:class:`Controller <swarmsim.agent.control.Controller>` for this agent.
         self.controller = zero_controller(2)
         #: Colliders should set to True if a collision was detected.
         self.collision_flag = False
@@ -107,7 +107,7 @@ class Agent:
         self.stop_on_collision = False
         self.stopped_duration = 0
         self.detection_id = 0
-        #: The agent's :py:class:`~novel_swarms.util.collider.AABB`.
+        #: The agent's :py:class:`~swarmsim.util.collider.AABB`.
         #: This gets built at least once on init.
         self.aabb = None
         self.group = group
@@ -126,11 +126,11 @@ class Agent:
         """Creates and adds the :py:attr:`AgentConfig.controller` to the agent.
 
         If ``config.controller`` is a dict with a ``type`` key, then it is created
-        through the :doc:`/guide/config` and set as the agent's :py:attr:`~novel_swarms.agent.Agent.Agent.controller`.
-        :py:class:`~novel_swarms.agent.control.AbstractController` instances copied and added to the list.
+        through the :doc:`/guide/config` and set as the agent's :py:attr:`~swarmsim.agent.Agent.Agent.controller`.
+        :py:class:`~swarmsim.agent.control.AbstractController` instances copied and added to the list.
 
         The controller is also given a back-reference to this agent via its
-        :py:meth:`~novel_swarms.agent.control.AbstractController.set_agent`.
+        :py:meth:`~swarmsim.agent.control.AbstractController.set_agent`.
 
         Raises
         ------
@@ -168,7 +168,7 @@ class Agent:
         copied and added to the list.
 
         The new sensor instances are also given a back-reference to this agent via their
-        :py:meth:`~novel_swarms.sensors.AbstractSensor.set_agent`.
+        :py:meth:`~swarmsim.sensors.AbstractSensor.set_agent`.
 
         Raises
         ------
@@ -197,20 +197,20 @@ class Agent:
         pass
 
     def get_sensors(self):
-        """Alias for :py:attr:`~novel_swarms.agent.Agent.Agent.sensors`."""
+        """Alias for :py:attr:`~swarmsim.agent.Agent.Agent.sensors`."""
         return self.sensors
 
     def getPosition(self):
-        """Alias for :py:attr:`~novel_swarms.agent.Agent.Agent.pos`."""
+        """Alias for :py:attr:`~swarmsim.agent.Agent.Agent.pos`."""
         return np.asarray(self.pos, dtype='float64')
 
     def getVelocity(self):
-        """Alias for :py:attr:`~novel_swarms.agent.Agent.Agent.dpos`."""
+        """Alias for :py:attr:`~swarmsim.agent.Agent.Agent.dpos`."""
         return np.asarray(self.dpos, dtype='float64')
 
     @property
     def position(self):
-        """Alias for :py:attr:`~novel_swarms.agent.Agent.Agent.pos`."""
+        """Alias for :py:attr:`~swarmsim.agent.Agent.Agent.pos`."""
         return self.pos
 
     @position.setter
@@ -256,7 +256,7 @@ class Agent:
             sensor.parent = self
 
     def get_aabb(self) -> AABB:
-        """Get the agent's :py:class:`AABB <novel_swarms.util.collider.AABB>`."""
+        """Get the agent's :py:class:`AABB <swarmsim.util.collider.AABB>`."""
         pass
 
     def get_x_pos(self) -> float:

@@ -15,8 +15,8 @@
 
         >>> import sys
         >>> import numpy as np
-        >>> import novel_swarms.yaml
-        >>> novel_swarms.yaml.dump({
+        >>> import swarmsim.yaml
+        >>> swarmsim.yaml.dump({
                 'small_array': np.array([8, 8]),
                 'big_array': np.ones((3, 3)),
                 'very_big_array': np.ones((10, 10)),

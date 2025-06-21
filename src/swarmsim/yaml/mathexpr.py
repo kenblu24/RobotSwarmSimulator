@@ -111,6 +111,6 @@ def construct_numexpr(loader: yaml.SafeLoader, node: yaml.Node) -> Any:
 if __name__ == '__main__':
     yaml.add_constructor('!np', construct_numexpr, yaml.SafeLoader)
 
-    with open('src/novel_swarms/util/yaml/test.yaml') as f:
+    with open('src/swarmsim/util/yaml/test.yaml') as f:
         d = yaml.load(f, yaml.SafeLoader)
     print(d)

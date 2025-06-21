@@ -1,13 +1,13 @@
 """MazeAgent has Unicycle Dynamics and can move based on sensor info.
 
-.. inheritance-diagram:: novel_swarms.agent.MazeAgent.MazeAgent
+.. inheritance-diagram:: swarmsim.agent.MazeAgent.MazeAgent
     :parts: 1
 
-.. autoclass:: novel_swarms.agent.MazeAgent.MazeAgentConfig
+.. autoclass:: swarmsim.agent.MazeAgent.MazeAgentConfig
     :members:
     :inherited-members:
 
-.. autoclass:: novel_swarms.agent.MazeAgent.MazeAgent
+.. autoclass:: swarmsim.agent.MazeAgent.MazeAgent
     :members:
     :inherited-members:
     :undoc-members:
@@ -135,13 +135,13 @@ class MazeAgent(StaticAgent):
         .. dropdown:: Inheritance Tree
             :color: primary
 
-            .. inheritance-diagram:: novel_swarms.agent.MazeAgent.MazeAgent
+            .. inheritance-diagram:: swarmsim.agent.MazeAgent.MazeAgent
 
         .. toggle:: Why is it called ``MazeAgent``?
 
             You might be wondering why it's called ``MazeAgent``, or rather, why
             this agent is so commonly used. It's also the subclass of a lot of other
-            agent types, such as the nearly identical :py:class:`UnicycleAgent <novel_swarms.agent.UnicycleAgent>`.
+            agent types, such as the nearly identical :py:class:`UnicycleAgent <swarmsim.agent.UnicycleAgent>`.
             So why not have ``UnicycleAgent`` be the base?
 
             The reason is largely historical. One of the research directions was to

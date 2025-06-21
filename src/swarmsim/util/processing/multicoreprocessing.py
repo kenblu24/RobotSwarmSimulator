@@ -24,7 +24,7 @@ def simulate_batch(world_config_list, terminate_function, show_gui=False):
 
 class MultiWorldSimulation:
     """
-    A Multi-Threaded Implementation of the novel_swarms.world.simulate package
+    A Multi-Threaded Implementation of the swarmsim.world.simulate package
     """
 
     def __init__(self, pool_size=None, single_step=False, with_gui=False, use_tqdm=False, hide_tqdm=True):

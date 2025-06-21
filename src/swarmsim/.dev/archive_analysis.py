@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 import matplotlib.pyplot as plot
-from novel_swarms.novelty.NoveltyArchive import NoveltyArchive
+from swarmsim.novelty.NoveltyArchive import NoveltyArchive
 
 def archive_selectivity_metric():
     ARCHIVE_CONTROLLERS = "/home/connor/Desktop/SwarmsResults/AugmentedTests/Experiment_1_Nov_3/controllers/1667430336_g__1667469434.csv"

@@ -9,19 +9,19 @@ This module provides a custom YAML loader that defines some nice tags.
 Functions
 =========
 
-.. autofunction:: novel_swarms.yaml.load
+.. autofunction:: swarmsim.yaml.load
 
-    By default, this function uses our :py:class:`~novel_swarms.yaml.IncludeLoader` class
+    By default, this function uses our :py:class:`~swarmsim.yaml.IncludeLoader` class
     which processes ``!include``, ``!relpath``, and ``!np`` tags.
 
-.. autofunction:: novel_swarms.yaml.safe_load
+.. autofunction:: swarmsim.yaml.safe_load
 
     This loads YAML similarly to how ``ruamel.yaml``'s safe loader does, in that it ignores
     non-standard tags. It also handles recursively defined anchors/aliases.
 
-.. autofunction:: novel_swarms.yaml.dump
+.. autofunction:: swarmsim.yaml.dump
 
-    By default, this function uses our :py:class:`~novel_swarms.yaml.CustomDumper` class
+    By default, this function uses our :py:class:`~swarmsim.yaml.CustomDumper` class
     which provides a more human-readable representation of :py:class:`pathlib.Path`
     and certain small :py:class:`numpy.ndarray` objects.
 
@@ -30,7 +30,7 @@ Examples
 
 .. code-block:: python
 
-   import novel_swarms.yaml as yaml
+   import swarmsim.yaml as yaml
 
    # load a YAML file
    with open('foo.yaml', 'r') as f:

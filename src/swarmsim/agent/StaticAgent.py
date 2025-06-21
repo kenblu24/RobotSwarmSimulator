@@ -4,15 +4,15 @@
 
     Inheritance Diagram
 
-.. inheritance-diagram:: novel_swarms.agent.StaticAgent.StaticAgent
+.. inheritance-diagram:: swarmsim.agent.StaticAgent.StaticAgent
     :parts: 1
 
-.. autoclass:: novel_swarms.agent.StaticAgent.StaticAgentConfig
+.. autoclass:: swarmsim.agent.StaticAgent.StaticAgentConfig
     :members:
     :inherited-members:
     :undoc-members:
 
-.. autoclass:: novel_swarms.agent.StaticAgent.StaticAgent
+.. autoclass:: swarmsim.agent.StaticAgent.StaticAgent
     :members:
     :inherited-members:
     :undoc-members:

@@ -103,7 +103,7 @@ class AbstractWorldConfig:
             name = self.__class__.__name__
             msg = f"""{name} requires an associated_type field to be set explicitly for world creation,
             even though it is likely {name.removesuffix('Config')}.\nRefusing to create world.\n
-            Use @novel_swarms.config.associated_type(ClassNameHere) on the config dataclass."""
+            Use @swarmsim.config.associated_type(ClassNameHere) on the config dataclass."""
             raise Exception(msg)
         if world_type not in store.world_types:
             msg = f"Unknown world type: {world_type}"
@@ -328,7 +328,7 @@ def World_from_config(config: dict):
 
         The config should either be a dict with a ``'type'`` key, or an instance
         of :py:class:`AbstractWorldConfig` with an ``associated_type`` field
-        (which can be set using :py:deco:`~novel_swarms.config.associated_type` ).
+        (which can be set using :py:deco:`~swarmsim.config.associated_type` ).
 
         The :doc:`/guide/config` will be used to lookup the class for the world type.
 

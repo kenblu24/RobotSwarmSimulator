@@ -15,12 +15,12 @@ It also provides the interface for registering third-party types/classes.
 .. autoclass:: LazyKnownModules
     :members: world_types, agent_types, dictlike_types, initialized_natives
 
-.. autodata:: novel_swarms.config.store
+.. autodata:: swarmsim.config.store
 
 Functions
 =========
 
-.. currentmodule:: novel_swarms.config
+.. currentmodule:: swarmsim.config
 
 .. autofunction:: get_agent_class
 .. autofunction:: get_class_from_dict
@@ -37,8 +37,8 @@ Decorators
 .. autofunction:: filter_unexpected_fields
 
 .. seealso::
-   There is no ``novel_swarms.config.get_world_class`` function,
-   world type lookup is handled inside :py:mod:`~novel_swarms.world.World.World_from_config`.
+   There is no ``swarmsim.config.get_world_class`` function,
+   world type lookup is handled inside :py:mod:`~swarmsim.world.World.World_from_config`.
 
 """
 
@@ -61,7 +61,7 @@ def associated_type(type_name: str):
        :caption: MyAgentConfig.py
 
        from dataclasses import dataclass
-       from novel_swarms.config import associated_type, filter_unexpected_fields
+       from swarmsim.config import associated_type, filter_unexpected_fields
 
        @associated_type("MyAgent")
        @filter_unexpected_fields  # optional
@@ -131,7 +131,7 @@ class LazyKnownModules:
     This class is used internally by the config system.
 
     .. caution:: Users should avoid adding new entries directly and instead use the functions in
-        the :py:mod:`~novel_swarms.config` module.
+        the :py:mod:`~swarmsim.config` module.
 
     The registry will be initialized with all the built-in classes
     just before the first access of any of its known types.
@@ -255,7 +255,7 @@ class LazyKnownModules:
 
 
 #: Holds the registry of known classes.
-#: Instance of :py:class:`~novel_swarms.config.LazyKnownModules`
+#: Instance of :py:class:`~swarmsim.config.LazyKnownModules`
 store = LazyKnownModules()
 
 
@@ -322,12 +322,12 @@ def register_dictlike_type(key: str, name: str, cls):
 
 _ERRMSG_MISSING_ASSOCIATED_TYPE = """
 Expected this config to have an associated_type field.
-Use @novel_swarms.config.associated_type(ClassNameHere) on the config dataclass.
+Use @swarmsim.config.associated_type(ClassNameHere) on the config dataclass.
 """
 
 
 def get_agent_class(config):
-    """Retrieve the :py:mod:`~novel_swarms.agent` class from the agent type registry
+    """Retrieve the :py:mod:`~swarmsim.agent` class from the agent type registry
 
     Parameters
     ----------
@@ -422,8 +422,8 @@ def get_class_from_dict(key: str, config: dict, copy=True, raise_errors=True) ->
 
     .. code-block:: python
 
-       from novel_swarms.config import get_class_from_dict
-       from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
+       from swarmsim.config import get_class_from_dict
+       from swarmsim.agent.StaticAgent import StaticAgent, StaticAgentConfig
 
        agent = StaticAgent(StaticAgentConfig(), world=None)
 

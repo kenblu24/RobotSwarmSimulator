@@ -46,12 +46,12 @@ For more detailed instructions, see the
 :doc:`installation guide <guide/install>`
 , which covers virtual environments, faster installation with uv, and more.
 
-Then, you can import the :py:mod:`novel_swarms` package:
+Then, you can import the :py:mod:`swarmsim` package:
 
 .. code-block:: python
    :caption: Python
 
-   import novel_swarms
+   import swarmsim
 
 
 .. toctree::

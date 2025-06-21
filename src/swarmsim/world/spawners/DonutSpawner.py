@@ -1,17 +1,17 @@
 import numpy as np
 import random
 
-from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
+from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 
 class DonutAgentSpawner(PointAgentSpawner):
     def __init__(
-            self, 
-            world, 
-            n=1, 
-            agent=None, 
-            facing=None, 
-            avoid_overlap=False, 
-            seed='unspecified', 
+            self,
+            world,
+            n=1,
+            agent=None,
+            facing=None,
+            avoid_overlap=False,
+            seed='unspecified',
             oneshot=False,
             circle_centre=[5.0, 5.0],
             inner_radius=4.0,
@@ -19,7 +19,7 @@ class DonutAgentSpawner(PointAgentSpawner):
             **kwargs
         ):
             super().__init__(world, n, agent, facing, avoid_overlap, seed, oneshot, **kwargs)
-            
+
 
     def generate_positions(self, n, circle_centre, inner_radius, outer_radius):
 
@@ -34,13 +34,12 @@ class DonutAgentSpawner(PointAgentSpawner):
             theta = random.uniform(0, 2*np.pi)
 
         return positions
-    
+
     def generate_config(self, name=None):
         config = super().generate_config(name)
         config.position = self.generate_positions(1).flatten()
         return config
-        
 
 
-            
-            
+
+

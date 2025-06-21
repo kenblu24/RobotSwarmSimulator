@@ -2,9 +2,9 @@
 
 StaticObject is a class for objects that do not move.
 
-It is a subclass of :py:class:`~novel_swarms.agent.StaticAgent.StaticAgent`
+It is a subclass of :py:class:`~swarmsim.agent.StaticAgent.StaticAgent`
 and is basically the same except it does not ``step()`` or
-:py:meth:`~novel_swarms.agent.StaticAgent.StaticAgent.draw_direction`\\ .
+:py:meth:`~swarmsim.agent.StaticAgent.StaticAgent.draw_direction`\\ .
 
 Object Config Class
 -------------------

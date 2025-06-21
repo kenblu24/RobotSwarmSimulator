@@ -2,11 +2,11 @@
 
 Worlds are the root of the simulation.
 
-All worlds must inherit from :py:class:`~novel_swarms.world.World.World`
+All worlds must inherit from :py:class:`~swarmsim.world.World.World`
 
-.. currentmodule:: novel_swarms.world
+.. currentmodule:: swarmsim.world
 
-The world is simulated by the :py:mod:`~novel_swarms.world.simulate` module.
+The world is simulated by the :py:mod:`~swarmsim.world.simulate` module.
 
 .. rubric:: Subpackages
 
@@ -21,16 +21,16 @@ The world is simulated by the :py:mod:`~novel_swarms.world.simulate` module.
 Functions
 =========
 
-.. autofunction:: novel_swarms.world.World.World_from_config
+.. autofunction:: swarmsim.world.World.World_from_config
    :noindex:
 
-.. autofunction:: novel_swarms.world.World.config_from_dict
+.. autofunction:: swarmsim.world.World.config_from_dict
    :noindex:
 
-.. autofunction:: novel_swarms.world.World.config_from_yaml
+.. autofunction:: swarmsim.world.World.config_from_yaml
    :noindex:
 
-.. autofunction:: novel_swarms.world.World.config_from_yamls
+.. autofunction:: swarmsim.world.World.config_from_yamls
    :noindex:
 
 

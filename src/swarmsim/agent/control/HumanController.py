@@ -1,8 +1,8 @@
 import numpy as np
 import pygame
 
-from novel_swarms.agent.control.AbstractController import AbstractController
-import novel_swarms.util.statistics_tools as st
+from swarmsim.agent.control.AbstractController import AbstractController
+import swarmsim.util.statistics_tools as st
 from math import copysign
 
 
