@@ -71,6 +71,9 @@ jobs:
 
     # Specify runner + deployment step
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      discussions: write
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -80,9 +83,6 @@ jobs:
       - name: Create Draft Release and attach artifacts
         id: release
         uses: softprops/action-gh-release@v2
-        permissions:
-          contents: write
-          discussions: write
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
