@@ -93,6 +93,9 @@ jobs:
           name: robotswarmsimulator-docs
           path: robotswarmsimulator-${{ github.ref_name }}-docs.zip
 
+      - name: test file
+        run: touch test.txt
+
       - name: show files
         run: ls -lAR
       - name: Create Draft Release and attach artifacts
@@ -102,8 +105,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           draft: true
-          files: robotswarmsimulator-${{ github.ref_name }}-docs.zip
+          files: |
+            test.txt
+            robotswarmsimulator-${{ github.ref_name }}-docs.zip
           generate_release_notes: true
+          fail_on_unmatched_files: true
 
   # Deploy job
   deploy-pages:
