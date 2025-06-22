@@ -19,7 +19,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "cma",
     "matplotlib",
     "numpy",
     "opencv-python",
