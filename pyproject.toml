@@ -5,12 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "swarmsim"
 version = "1.1.0-dev1"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
-  { name="Kevin Zhu", email="kzhu4@gmu.edu" },
+  { name="kenblu24", email="kenblu24@hotmail.com" },
 ]
-maintainers = [{ name="Kevin Zhu", email="kzhu4@gmu.edu" }]
+maintainers = [{ name="kenblu24", email="kenblu24@hotmail.com" }]
 description = "An agent-based swarm simulator."
 readme = {file = "README.md", content-type = "text/markdown"}
 classifiers = [
@@ -22,7 +22,6 @@ classifiers = [
 ]
 keywords = ["robotics", "swarm", "agent-based", "simulator"]
 dependencies = [
-    "cma",
     "matplotlib",
     "numpy",
     "opencv-python",
