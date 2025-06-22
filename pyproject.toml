@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "swarmsim"
+name = "novel_swarms"
 version = "1.0.0a"
 requires-python = ">=3.10"
 authors = [
