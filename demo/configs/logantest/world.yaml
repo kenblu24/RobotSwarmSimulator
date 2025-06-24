@@ -41,7 +41,7 @@ spawners:
   #     position: [8, 8]
   #     debug: true
 agents:
-  # # if you want to use this agent type, make sure it's registered with novel_swarms.config.register_agent_type
+  # # if you want to use this agent type, make sure it's registered with swarmsim.config.register_agent_type
   # - type: RunnerAgent
   #   position: [0, 0]
   #   agent_radius: 0.15

@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "novel_swarms"
-version = "1.0.0a"
+name = "swarmsim"
+version = "1.1.0-dev1"
 requires-python = ">=3.10"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
@@ -17,7 +17,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Topic :: Scientific/Engineering",
 ]
+keywords = ["robotics", "swarm", "agent-based", "simulator"]
 dependencies = [
     "matplotlib",
     "numpy",
@@ -36,10 +39,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    "flake8",
-    "isort",
-    "mypy",
+    "ruff",
     "pytest",
     "pytest-cov",
     "pytest-xdist",
@@ -60,3 +60,6 @@ docs = [
 [project.urls]
 "Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
 "Bug Tracker" = "https://github.com/kenblu24/RobotSwarmSimulator/issues"
+
+[project.license]
+file = "LICENSE"

@@ -1,7 +1,7 @@
 API Reference
 =============
 
-This is the API reference for the :py:mod:`novel_swarms` package.
+This is the API reference for the :py:mod:`swarmsim` package.
 
 .. include:: /guide/world_map.rst
 
@@ -11,19 +11,19 @@ This is the API reference for the :py:mod:`novel_swarms` package.
 
    .. grid-item-card:: config
 
-      The :mod:`~novel_swarms.config` module houses the initialization machinery and class registry.
+      The :mod:`~swarmsim.config` module houses the initialization machinery and class registry.
 
    .. grid-item-card:: yaml
 
-      The :mod:`~novel_swarms.yaml` module provides additional functionality on top of PyYAML's :py:mod:`yaml` module.
+      The :mod:`~swarmsim.yaml` module provides additional functionality on top of PyYAML's :py:mod:`yaml` module.
 
    .. grid-item-card:: util
 
-      The :mod:`~novel_swarms.util` module contains miscellaneous utility functions.
+      The :mod:`~swarmsim.util` module contains miscellaneous utility functions.
 
    .. grid-item-card:: gui
 
-      The :mod:`~novel_swarms.gui` module contains user interface 
+      The :mod:`~swarmsim.gui` module contains user interface 
       and other display code not related to the world simulation.
 
 
@@ -31,6 +31,6 @@ This is the API reference for the :py:mod:`novel_swarms` package.
    :toctree: _gen
    :recursive:
 
-   novel_swarms
+   swarmsim
 
    
