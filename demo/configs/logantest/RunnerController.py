@@ -2,9 +2,9 @@ from functools import cached_property
 
 import numpy as np
 
-from novel_swarms.agent.control.AbstractController import AbstractController
+from swarmsim.agent.control.AbstractController import AbstractController
 
-from novel_swarms.util.pid import PID
+from swarmsim.util.pid import PID
 
 
 class RunnerController(AbstractController):
@@ -22,13 +22,13 @@ class RunnerController(AbstractController):
     def get_actions(self, agent):
         v, omega = 0, 0
         goal_position = np.asarray(self.goal_object.pos)
-        
+
         dist_to_goal = np.linalg.norm(agent.pos - goal_position)
         radians_to_goal = np.arctan2(goal_position[1] - agent.pos[1], goal_position[0] - agent.pos[0]) - agent.angle
         if dist_to_goal > agent.radius:
             v = 0.03 # m/s
             omega = self.tracking_pid(np.clip(radians_to_goal, -2, 2))
-        
+
 
         return v, omega  # return the agent's desired velocity and omega here
 

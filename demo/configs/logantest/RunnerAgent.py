@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from novel_swarms.config import filter_unexpected_fields, associated_type
+from swarmsim.config import filter_unexpected_fields, associated_type
 
-from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
+from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
 
 # typing
 from typing import Any, override
