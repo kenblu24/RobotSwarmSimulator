@@ -42,7 +42,7 @@ class BinaryFOVSensor(AbstractSensor):
         **kwargs
     ):
         super().__init__(agent=agent, parent=parent)
-        self.angle = 0
+        self.angle = 0.0
         self.theta = theta
         self.bias = bias
         self.fp = false_positive

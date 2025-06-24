@@ -10,14 +10,16 @@ from typing import override
 
 
 class LevyController(AbstractController):
-    def __init__(self, parent,
+    def __init__(self,
         velocity: float,
         angular_velocity: float,
+        agent=None,
+        parent=None,
         levy_constant=None,
         curving=False,
         timeout=5.0,
         timeout_steps=None,
-        step_scale=1.0
+        step_scale=1.0,
     ):
         super().__init__(parent)
         if levy_constant is None:
