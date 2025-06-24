@@ -30,6 +30,8 @@ Get Started
 
    .. tab-item:: uv
 
+      We recommend using `uv`_ to install the package. If you don't have ``uv``, check out the more detailed :doc:`installation guide <guide/install.html>`.
+
       .. code-block:: bash
 
          uv pip install swarmsim

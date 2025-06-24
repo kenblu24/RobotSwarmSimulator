@@ -86,7 +86,7 @@ class RectangularWorldConfig(AbstractWorldConfig):
     """Config dataclass for a RectangularWorld."""
 
     #: size of the world.
-    size: tuple[float, float] | np.ndarray = (5, 5)
+    size: T_Vec2 = (5, 5)
     show_walls: bool = True  #: Currently unused.
     collide_walls: bool = True  #: Currently unused.
     detectable_walls: bool = False  #: Currently unused.

@@ -123,14 +123,14 @@ First, we need to create a :py:class:`~swarmsim.world.spawners.AgentSpawner.Poin
 .. code-block:: python
 
    from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
-   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
+   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
    world.spawners.append(spawner)
 
 Now, remove the existing agent from the :py:attr:`~swarmsim.world.World.World.population`
 and run the simulation again.
 
 When you run ``sim()``, during the :py:func:`.World.setup`\ , the spawner will create copies of the agent and
-controller and add the copies to the world's population. But because of the ``oneshot=True`` argument,
+controller and add the copies to the world's population. But because of the ``mode="oneshot"`` argument,
 the spawner will then delete itself.
 
 The agents will spawn in the same location, but get pushed apart as they spawn.
@@ -284,7 +284,7 @@ Now let's create a controller that will read the sensor data and change how the 
 
    from swarmsim.agent.control.BinaryController import BinaryController
 
-   controller = BinaryController(agent, (0.02, -0.5), (0.02, 0.5))
+   controller = BinaryController((0.02, -0.5), (0.02, 0.5), agent)
    agent.controller = controller
 
 Now, if you run ``sim(world)``\ , you should see some agents that turn left if one sees something and right if one doesn't!
@@ -455,7 +455,7 @@ Then, let's create a python file or open a new Python shell and run the followin
 .. code-block:: python
    :caption: ``run.py``
 
-   from swarmsim.world.RectangularWorld import RectangularWorld
+   from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
    from swarmsim.world.simulate import main as sim
 
    world_config = RectangularWorldConfig.from_yaml('world.yaml')
@@ -522,9 +522,10 @@ of an agent to a :py:mod:`~swarmsim.agent.control.BinaryController`\ :
       .. code-block:: python
          :caption: Python
 
-         agent.controller = BinaryController(agent
+         agent.controller = BinaryController(
              a=(0.02, -0.5),
-             b=(0.02, 0.5)
+             b=(0.02, 0.5),
+             agent=agent,
          )
 
    .. grid-item::
