@@ -10,8 +10,8 @@ from copy import deepcopy
 # from ..sensors.GenomeDependentSensor import GenomeBinarySensor
 # from ..util.collider.AABB import AABB
 
-from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-from novel_swarms.config import filter_unexpected_fields, associated_type
+from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
+from swarmsim.config import filter_unexpected_fields, associated_type
 from dataclasses import dataclass, field
 
 @associated_type("HumanAgent")

@@ -1,11 +1,11 @@
 import pygame
 import numpy as np
 
-from novel_swarms.sensors.AbstractSensor import AbstractSensor
+from swarmsim.sensors.AbstractSensor import AbstractSensor
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from novel_swarms.world.RectangularWorld import RectangularWorld
+    from swarmsim.world.RectangularWorld import RectangularWorld
 else:
     RectangularWorld = None
 

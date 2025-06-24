@@ -12,18 +12,18 @@ from tqdm import tqdm
 
 from copy import copy
 
-from novel_swarms import yaml
-from novel_swarms.config import get_agent_class
-from novel_swarms.agent.control.Controller import Controller
-from novel_swarms.world.spawners.AgentSpawner import UniformAgentSpawner, PointAgentSpawner
-from novel_swarms.world.RectangularWorld import RectangularWorldConfig
+from swarmsim import yaml
+from swarmsim.config import get_agent_class
+from swarmsim.agent.control.Controller import Controller
+from swarmsim.world.spawners.AgentSpawner import UniformAgentSpawner, PointAgentSpawner
+from swarmsim.world.RectangularWorld import RectangularWorldConfig
 
-from novel_swarms.metrics import Circliness
+from swarmsim.metrics import Circliness
 
-# from novel_swarms.world.simulate import main as sim
+# from swarmsim.world.simulate import main as sim
 
-# from novel_swarms.world.initialization.FixedInit import FixedInitialization
-# from novel_swarms.world.initialization.PredefInit import PredefinedInitialization
+# from swarmsim.world.initialization.FixedInit import FixedInitialization
+# from swarmsim.world.initialization.PredefInit import PredefinedInitialization
 
 SCALE = 1
 
@@ -47,7 +47,7 @@ def fitness(world_set):
 
 def get_world_generator(n_agents, horizon, round_genome=False):
     def gene_to_world(genome, hash_val):
-        from novel_swarms.config import register_agent_type, register_dictlike_type
+        from swarmsim.config import register_agent_type, register_dictlike_type
 
         # I think you won't need to make your own agent type, but if you do, you can register it here
         from RunnerAgent import RunnerAgent, RunnerAgentConfig
@@ -61,7 +61,7 @@ def get_world_generator(n_agents, horizon, round_genome=False):
 
         # you can probably implement all the logic in the controller without needing to make a whole new agent type
         from RunnerController import RunnerController
-        from novel_swarms.agent.control.HumanController import HumanController
+        from swarmsim.agent.control.HumanController import HumanController
         # register_dictlike_type('controller', 'RunnerController', RunnerController)  # for loading RunnerController from yaml
 
         # load turbopi config
@@ -145,7 +145,7 @@ def canon_to_metric(genome: tuple[float, float, float, float], body_length, scal
 
 
 def run(args, genome, callback=lambda x: x) -> float:
-    from novel_swarms.world.simulate import main as sim
+    from swarmsim.world.simulate import main as sim
     # from .milling_search import get_world_generator
 
     world_generator = get_world_generator(args.n, args.t)
