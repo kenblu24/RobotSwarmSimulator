@@ -149,6 +149,11 @@ class StaticAgent(Agent):
         return np.array([[np.cos(angle), -np.sin(angle)],
                          [np.sin(angle), np.cos(angle)]], dtype=np.float64)
 
+    def rotmat2dT(self, offset=0):  # small optimization over rotmat2d.T
+        angle = self.angle + offset
+        return np.array([[np.cos(angle), np.sin(angle)],
+                         [-np.sin(angle), np.cos(angle)]], dtype=np.float64)
+
     def rotmat3d(self, offset=None):
         angle = self.angle if offset is None else (self.angle + offset)
         return np.array([
@@ -159,7 +164,8 @@ class StaticAgent(Agent):
 
     @property
     def poly_rotated(self):
-        return self.points @ self.rotmat2d()
+        # the proper but less optimal way to do this is (self.rotmat2d() @ self.points.transpose()).transpose()
+        return self.points @ self.rotmat2dT()
 
     @override
     def draw(self, screen, offset=((0, 0), 1.0)) -> None:
