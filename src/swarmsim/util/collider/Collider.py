@@ -88,3 +88,11 @@ class PolyCollider(Collider):
         # self.points = np.asarray(points, dtype=np.float64)[::-1]  # CW -> CCW winding
         # self.points = np.flip(np.asarray(points, dtype=np.float64))
         self.points = np.asarray(points, dtype=np.float64)
+
+    def correction(self, other, rng=None):
+        if rng is None:
+            rng = np.random.default_rng(0)
+
+        pass  # TODO: implement this
+
+        return np.empty(2) * np.nan
