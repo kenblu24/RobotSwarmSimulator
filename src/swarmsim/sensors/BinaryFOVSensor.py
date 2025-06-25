@@ -148,6 +148,7 @@ class BinaryFOVSensor(AbstractSensor):
         _score, val = consideration_set.pop(0)
         self.determineState(True, val, world)
 
+    # this function does NOT work for FOVs greater than or equal to 180
     def getAARectContainingCone(self):
         angle: float = self.agent.angle + self.bias
         span: float = self.theta
