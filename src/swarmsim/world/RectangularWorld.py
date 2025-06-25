@@ -163,7 +163,7 @@ class RectangularWorld(World):
             self.setup_objects(config.objects)
 
     def addAgent(self, agent):
-        self.population.append(agent)
+        super().addAgent(agent)
         if agent.grounded:
             self.physics.createStaticBody(agent)
         else:

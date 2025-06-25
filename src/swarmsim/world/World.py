@@ -178,6 +178,9 @@ class World:
         self.rng = np.random.default_rng(self.seed)
         return self.seed
 
+    def addAgent(self, agent):
+        self.population.append(agent)
+
     def setup(self, step_spawners=True):
         # create agents, spawners, behaviors, objects, goals
         if self.initialized:
@@ -187,10 +190,10 @@ class World:
         # create agents
         for agent_config in self.config.agents:
             if isinstance(agent_config, Agent):  # if it's already an agent, just add it
-                self.population.append(agent_config)
+                self.addAgent(agent_config)
             else:  # otherwise, it's a config dict. find the class specified and create the agent
                 agent_class, agent_config = get_agent_class(agent_config)
-                self.population.append(agent_class.from_config(agent_config, self))
+                self.addAgent(agent_class.from_config(agent_config, self))
 
         for spawner_config in self.config.spawners:
             if isinstance(spawner_config, Spawner):  # if it's already a spawner, just add it
