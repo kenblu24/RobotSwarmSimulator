@@ -168,7 +168,7 @@ class RectangularWorld(World):
             self.physics.createStaticBody(agent)
         else:
             agent.physobj = self.physics.createAgentBody(agent)
-    
+
     def physicsSnap(self):
         for agent in self.population:
             if hasattr(agent, "physobj"):
@@ -182,10 +182,12 @@ class RectangularWorld(World):
             # check if entry contains a "type" key
             if 'type' in entry:
                 if isinstance(entry, Agent):  # if it's already an agent, just add it
-                    self.objects.append(entry)
+                    # self.objects.append(entry)
+                    self.addAgent(entry)
                 else:  # otherwise, it's a config dict. find the class specified and create the agent
                     agent_class, agent_config = get_agent_class(entry)
-                    self.objects.append(agent_class.from_config(agent_config, self))
+                    # self.objects.append(agent_class.from_config(agent_config, self))
+                    self.addAgent(agent_class.from_config(agent_config, self))
             # check if entry contains a "from_svg" key with a string value
             elif isinstance((svg := entry.get('svg_to_static_objects', None)), str):
                 svg = SVG(svg)
@@ -197,14 +199,16 @@ class RectangularWorld(World):
                     collides = get_collision_config(first_match(classes, COLLISION_CLASSES))
                     classes = ' '.join(remove_special_classes(classes))
                     agent_config = StaticObjectConfig(points=points, team=classes, **collides)
-                    self.objects.append(StaticObject(agent_config, self))
+                    # self.objects.append(StaticObject(agent_config, self))
+                    self.addAgent(StaticObject(agent_config, self))
                 circles = svg.get_circles()
                 for circle, classes in circles:
                     x, y, r = circle
                     collides = get_collision_config(first_match(classes, COLLISION_CLASSES))
                     classes = ' '.join(remove_special_classes(classes))
                     agent_config = StaticObjectConfig(position=np.array([x, y]), agent_radius=r, team=classes, **collides)
-                    self.objects.append(StaticObject(agent_config, self))
+                    # self.objects.append(StaticObject(agent_config, self))
+                    self.addAgent(StaticObject(agent_config, self))
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
@@ -216,17 +220,17 @@ class RectangularWorld(World):
                 world=self,
             )
             self.handleGoalCollisions(agent)
-    
+
     def step(self):
         self.total_steps += 1
 
         self.step_spawners()
         self.step_agents()
         self.step_objects()
-        
+
         if self.usePhysics:
             self.physics.step() # this is the difference from the superclass's step
-        
+
         self.step_metrics()
 
     def draw(self, screen, offset=None):
