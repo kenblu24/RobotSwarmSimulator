@@ -1,17 +1,17 @@
 # from https://kenblu24.github.io/RobotSwarmSimulator/guide/firstrun.html
 
-from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
-from novel_swarms.agent.control.StaticController import StaticController
-from novel_swarms.world.spawners.DonutSpawner import DonutAgentSpawner
-from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
-from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-from novel_swarms.world.simulate import main as sim
-from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
-from novel_swarms.agent.control.BinaryController import BinaryController
-from novel_swarms.agent.control.HumanController import HumanController
-from novel_swarms.agent.control.StaticController import StaticController
-from novel_swarms.world.objects.StaticObject import StaticObject, StaticObjectConfig
-from novel_swarms.world.objects.Wall import Wall
+from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+from swarmsim.agent.control.StaticController import StaticController
+from swarmsim.world.spawners.DonutSpawner import DonutAgentSpawner
+from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
+from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
+from swarmsim.world.simulate import main as sim
+from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
+from swarmsim.agent.control.BinaryController import BinaryController
+from swarmsim.agent.control.HumanController import HumanController
+from swarmsim.agent.control.StaticController import StaticController
+from swarmsim.world.objects.StaticObject import StaticObject, StaticObjectConfig
+from swarmsim.world.objects.Wall import Wall
 
 # world
 world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
