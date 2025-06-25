@@ -12,7 +12,7 @@ else:
     World = None
 
 import warnings
-
+import quads
 
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
@@ -87,7 +87,10 @@ class BinaryFOVSensor(AbstractSensor):
 
         # First, bag all agents that lie within radius r of the parent
         bag = []
-        for agent in world.population:
+        self.getAARectContainingCone()
+        quad: quads.QuadTree = world.quad
+        quadpoints = [point.data for point in quad.within_bb(quads.BoundingBox(*self.getAARectContainingCone()))]
+        for agent in quadpoints:
             if self.getDistance(sensor_origin, agent.getPosition()) < self.r:
                 bag.append(agent)
 
@@ -144,6 +147,53 @@ class BinaryFOVSensor(AbstractSensor):
         # print(consideration_set)
         _score, val = consideration_set.pop(0)
         self.determineState(True, val, world)
+
+    def getAARectContainingCone(self):
+        angle: float = self.agent.angle + self.bias
+        span: float = self.theta
+        radius: float = self.r
+        position: list[float] = self.agent.pos.tolist()
+
+        vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
+        turn = lambda p1, p2: p1[0] * p2[1] - p2[0] * p1[1]
+
+        center = vectorize(angle)
+        leftBorder = vectorize(angle + span) * radius
+        rightBorder = vectorize(angle - span) * radius
+        xaxis = (1, 0)
+        yaxis = (0, 1)
+
+        xt = turn(xaxis, center)
+        xlt = turn(xaxis, leftBorder)
+        xrt = turn(xaxis, rightBorder)
+        fovOverXAxis = np.sign(xlt) != np.sign(xrt)
+        
+        yt = turn(yaxis, center)
+        ylt = turn(yaxis, leftBorder)
+        yrt = turn(yaxis, rightBorder)
+        fovOverYAxis = np.sign(ylt) != np.sign(yrt)
+        
+        xvals = [0]
+        yvals = [0]
+
+        if fovOverXAxis:
+            xvals.append(radius * -np.sign(yt))
+        else:
+            xvals.extend((leftBorder[0], rightBorder[0]))
+
+        if fovOverYAxis:
+            yvals.append(radius * np.sign(xt))
+        else:
+            yvals.extend((leftBorder[1], rightBorder[1]))
+        
+        xmin = min(xvals)
+        xmax = max(xvals)
+        ymin = min(yvals)
+        ymax = max(yvals)
+
+        #positions relative until now, make them absolute for the return
+        return [position[0] + xmin, position[1] + ymin, position[0] + xmax, position[1] + ymax]
+
 
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors

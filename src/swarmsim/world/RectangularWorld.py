@@ -41,6 +41,8 @@ from ..util.collider.AABB import AABB
 from .goals.Goal import CylinderGoal
 from .objects.Wall import Wall
 
+import quads
+
 # typing
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -136,6 +138,9 @@ class RectangularWorld(World):
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
 
         self.dt = config.time_step
+
+        self.quadSettings = ((0, 0), 100, 100)
+        self.quad = quads.QuadTree(*self.quadSettings)
         """float: :math:`\\Delta t` delta time (seconds)
 
         The time step, or delta time, is used by simulated objects and agents
@@ -155,6 +160,20 @@ class RectangularWorld(World):
 
         if initialize:
             self.setup_objects(config.objects)
+
+    
+    def physicsSnap(self):
+        for agent in self.population:
+            if hasattr(agent, "physobj"):
+                snapPhysicsToAgent(agent)
+
+    def updateQuad(self):
+        newQuad = quads.QuadTree(*self.quadSettings)
+        for agent in self.population:
+            if hasattr(agent, "physobj"):
+                newQuad.insert(point=agent.pos.tolist(), data=agent)
+        self.quad = newQuad
+
 
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
@@ -198,6 +217,17 @@ class RectangularWorld(World):
                 world=self,
             )
             self.handleGoalCollisions(agent)
+    
+    def step(self):
+        self.total_steps += 1
+
+        self.step_spawners()
+        self.step_agents()
+        self.step_objects()
+        
+        self.updateQuad()
+
+        self.step_metrics()
 
     def draw(self, screen, offset=None):
         """Cycle through the entire population and draw the agents and objects."""
