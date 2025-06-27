@@ -380,15 +380,10 @@ class BinaryFOVSensor(AbstractSensor):
         return np.linalg.norm(b - a)
 
     def getLOSVector(self) -> List:
-        head = self.agent.getPosition()
-        tail = self.getFrontalPoint()
-        return [tail[0] - head[0], tail[1] - head[1]]
-
-    def getFrontalPoint(self):
         if self.angle is None:
-            return self.agent.getFrontalPoint()
+            return self.agent.orientation_uvec()
 
-        return self.agent.pos + [
+        return [
             math.cos(self.angle + self.agent.angle),
             math.sin(self.angle + self.agent.angle)
         ]
