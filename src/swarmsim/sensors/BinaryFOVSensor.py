@@ -155,6 +155,8 @@ class BinaryFOVSensor(AbstractSensor):
         radius: float = self.r
         position: list[float] = self.agent.pos.tolist()
 
+        over180 = np.pi <= span*2
+
         vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
         turn = lambda p1, p2: p1[0] * p2[1] - p2[0] * p1[1]
 
@@ -174,25 +176,26 @@ class BinaryFOVSensor(AbstractSensor):
         yrt = turn(yaxis, rightBorder)
         fovOverYAxis = np.sign(ylt) != np.sign(yrt)
         
-        xvals = [0]
-        yvals = [0]
+        xvals = [0, leftBorder[0], rightBorder[0]]
+        yvals = [0, leftBorder[1], rightBorder[1]]
 
         if fovOverXAxis:
             xvals.append(radius * -np.sign(yt))
-        else:
-            xvals.extend((leftBorder[0], rightBorder[0]))
+        elif over180:
+            xvals.extend((radius, -radius))
 
         if fovOverYAxis:
             yvals.append(radius * np.sign(xt))
-        else:
-            yvals.extend((leftBorder[1], rightBorder[1]))
+        elif over180:
+            yvals.extend((radius, -radius))
         
         xmin = min(xvals)
         xmax = max(xvals)
         ymin = min(yvals)
         ymax = max(yvals)
 
-        #positions relative until now, make them absolute for the return
+        # positions relative until now, make them absolute for the return
+        # xmin, ymin, xmax, ymax 
         return [position[0] + xmin, position[1] + ymin, position[0] + xmax, position[1] + ymax]
 
 
@@ -320,6 +323,13 @@ class BinaryFOVSensor(AbstractSensor):
                 pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
+                AAR = self.getAARectContainingCone()
+                AARtl = np.array(AAR[:2]) * zoom + pan
+                AARbr = np.array(AAR[2:]) * zoom + pan
+                pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
+                detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingCone()))]
+                for agent in detected:
+                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width*3)
 
     def circle_interesect_sensing_cone(self, u, r):
         e_left, e_right = self.getSectorVectors()
