@@ -14,6 +14,13 @@ else:
 import warnings
 import quads
 
+
+def vectorize(angle) -> None:
+    return np.array((np.cos(angle), np.sin(angle)))
+
+def turn(p1, p2):
+    return p1[0] * p2[1] - p2[0] * p1[1]
+
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
@@ -158,9 +165,6 @@ class BinaryFOVSensor(AbstractSensor):
         position: list[float] = self.agent.pos.tolist()
 
         over180 = np.pi <= span*2
-
-        vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
-        turn = lambda p1, p2: p1[0] * p2[1] - p2[0] * p1[1]
 
         center = vectorize(angle)
         leftBorder = vectorize(angle + span) * radius
@@ -391,16 +395,11 @@ class BinaryFOVSensor(AbstractSensor):
 
     def getBiasedSightAngle(self):
         angle: float = self.agent.angle + self.bias
-
-        vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
-
         return vectorize(angle)
 
     def getSectorVectors(self):
         angle: float = self.agent.angle + self.bias
         span: float = self.theta
-
-        vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
 
         leftBorder = vectorize(angle + span) 
         rightBorder = vectorize(angle - span)
