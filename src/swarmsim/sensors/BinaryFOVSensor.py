@@ -140,15 +140,38 @@ class BinaryFOVSensor(AbstractSensor):
         #             d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
-
-
+        center = self.getLOSVector()
+        leftTurn = turn(center, e_left)
+        rightTurn = turn(center, e_right)
+        
         for agent in bag:
             u = agent.getPosition() - sensor_origin
-            d = self.circle_interesect_sensing_cone(u, self.agent.radius)
-            if d is not None:
-                consideration_set.append((d, agent))
+            if u[0] == 0 and u[1] == 0:
+                continue # this is self
+            agentTurn = turn(center, u)
+            
+            if rightTurn <= agentTurn and agentTurn <= leftTurn:
+                print("BFS", "lt", leftTurn, "rt", rightTurn)
+                print("at", agentTurn)
                 self.determineState(True, agent, world)
                 return
+            else:
+                # circle whisker intercept correction
+                project = lambda a, b: b * (np.dot(a, b) / np.dot(b, b))
+                ldv = u - project(u, e_left[:2])
+                ldsq = np.dot(ldv, ldv)
+                rdv = u - project(u, e_right[:2])
+                rdsq = np.dot(rdv, rdv)
+                arsq = agent.radius**2
+                if ldsq <= arsq or rdsq <= arsq:
+                    self.determineState(True, agent, world)
+                    return
+
+            # d = self.circle_interesect_sensing_cone(u, self.agent.radius)
+            # if d is not None:
+            #     consideration_set.append((d, agent))
+            #     self.determineState(True, agent, world)
+            #     return
 
         if not consideration_set:
             self.determineState(False, None, world)
