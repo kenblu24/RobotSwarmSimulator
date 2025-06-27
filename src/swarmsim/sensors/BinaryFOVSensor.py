@@ -189,10 +189,12 @@ class BinaryFOVSensor(AbstractSensor):
         elif over180:
             yvals.extend((radius, -radius))
         
-        xmin = min(xvals)
-        xmax = max(xvals)
-        ymin = min(yvals)
-        ymax = max(yvals)
+        padding = self.agent.radius
+
+        xmin = min(xvals) - padding 
+        xmax = max(xvals) + padding
+        ymin = min(yvals) - padding
+        ymax = max(yvals) + padding
 
         # positions relative until now, make them absolute for the return
         # xmin, ymin, xmax, ymax 
