@@ -138,6 +138,8 @@ class BinaryFOVSensor(AbstractSensor):
             d = self.circle_interesect_sensing_cone(u, self.agent.radius)
             if d is not None:
                 consideration_set.append((d, agent))
+                self.determineState(True, agent, world)
+                return
 
         if not consideration_set:
             self.determineState(False, None, world)
@@ -388,34 +390,21 @@ class BinaryFOVSensor(AbstractSensor):
         ]
 
     def getBiasedSightAngle(self):
-        bias_transform = np.array([
-            [np.cos(self.bias), -np.sin(self.bias), 0],
-            [np.sin(self.bias), np.cos(self.bias), 0],
-            [0, 0, 1]
-        ])
-        v = np.append(self.getLOSVector(), [0])
-        return np.matmul(bias_transform, v)[:2]
+        angle: float = self.agent.angle + self.bias
+
+        vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
+
+        return vectorize(angle)
 
     def getSectorVectors(self):
-        theta_l = self.theta + self.bias
-        theta_r = -self.theta + self.bias
+        angle: float = self.agent.angle + self.bias
+        span: float = self.theta
 
-        rot_z_left = np.array([
-            [np.cos(theta_l), -np.sin(theta_l), 0],
-            [np.sin(theta_l), np.cos(theta_l), 0],
-            [0, 0, 1]
-        ])
+        vectorize = lambda a : np.array((np.cos(a), np.sin(a)))
 
-        rot_z_right = np.array([
-            [np.cos(theta_r), -np.sin(theta_r), 0],
-            [np.sin(theta_r), np.cos(theta_r), 0],
-            [0, 0, 1]
-        ])
-
-        v = np.append(self.getLOSVector(), [0])
-        e_left = np.matmul(rot_z_left, v)
-        e_right = np.matmul(rot_z_right, v)
-        return e_left, e_right
+        leftBorder = vectorize(angle + span) 
+        rightBorder = vectorize(angle - span)
+        return np.append(leftBorder, 0), np.append(rightBorder, 0)
 
     def as_config_dict(self):
         return {
