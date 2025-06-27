@@ -140,6 +140,8 @@ class BinaryFOVSensor(AbstractSensor):
         #             d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
+
+
         for agent in bag:
             u = agent.getPosition() - sensor_origin
             d = self.circle_interesect_sensing_cone(u, self.agent.radius)
@@ -157,7 +159,6 @@ class BinaryFOVSensor(AbstractSensor):
         _score, val = consideration_set.pop(0)
         self.determineState(True, val, world)
 
-    # this function does NOT work for FOVs greater than or equal to 180
     def getAARectContainingCone(self):
         angle: float = self.agent.angle + self.bias
         span: float = self.theta
