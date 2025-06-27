@@ -161,17 +161,11 @@ class RectangularWorld(World):
         if initialize:
             self.setup_objects(config.objects)
 
-    
-    def physicsSnap(self):
-        for agent in self.population:
-            if hasattr(agent, "physobj"):
-                snapPhysicsToAgent(agent)
 
     def updateQuad(self):
         newQuad = quads.QuadTree(*self.quadSettings)
         for agent in self.population:
-            if hasattr(agent, "physobj"):
-                newQuad.insert(point=agent.pos.tolist(), data=agent)
+            newQuad.insert(point=agent.pos.tolist(), data=agent)
         self.quad = newQuad
 
 
