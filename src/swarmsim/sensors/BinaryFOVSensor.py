@@ -21,6 +21,13 @@ def vectorize(angle) -> None:
 def turn(p1, p2):
     return p1[0] * p2[1] - p2[0] * p1[1]
 
+def project(a, b):
+    return b * (np.dot(a, b) / np.dot(b, b))
+
+def lineCircleIntersect(line, center, radius):
+    clDiffVec = center - project(center, line)
+    return np.dot(clDiffVec, clDiffVec) <= radius**2
+
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
@@ -158,13 +165,7 @@ class BinaryFOVSensor(AbstractSensor):
                 return
             elif not self.detectOnlyOrigins:
                 # circle whisker intercept correction
-                project = lambda a, b: b * (np.dot(a, b) / np.dot(b, b))
-                ldv = u - project(u, e_left[:2])
-                ldsq = np.dot(ldv, ldv)
-                rdv = u - project(u, e_right[:2])
-                rdsq = np.dot(rdv, rdv)
-                arsq = agent.radius**2
-                if ldsq <= arsq or rdsq <= arsq:
+                if (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius)) or (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius)):
                     self.determineState(True, agent, world)
                     return
 
