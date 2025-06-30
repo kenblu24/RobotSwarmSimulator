@@ -67,6 +67,8 @@ class BinaryFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
+        self.detectOnlyOrigins = False
+
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
             warnings.warn("The 'degrees' kwarg is deprecated.", FutureWarning, stacklevel=1)
@@ -140,22 +142,21 @@ class BinaryFOVSensor(AbstractSensor):
         #             d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
-        center = self.getLOSVector()
-        leftTurn = turn(center, e_left)
-        rightTurn = turn(center, e_right)
-        
+        l180 = self.theta * 2 < np.pi
+
         for agent in bag:
-            u = agent.getPosition() - sensor_origin
-            if u[0] == 0 and u[1] == 0:
-                continue # this is self
-            agentTurn = turn(center, u)
+            if agent is self.agent:
+                continue
             
-            if rightTurn <= agentTurn and agentTurn <= leftTurn:
-                print("BFS", "lt", leftTurn, "rt", rightTurn)
-                print("at", agentTurn)
+            u = agent.getPosition() - sensor_origin
+            leftTurn = turn(u, e_left)
+            rightTurn = turn(u, e_right)
+            
+            # if fov < 180 use between minor arc, otherwise use not between minor arc
+            if rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn):
                 self.determineState(True, agent, world)
                 return
-            else:
+            elif not self.detectOnlyOrigins:
                 # circle whisker intercept correction
                 project = lambda a, b: b * (np.dot(a, b) / np.dot(b, b))
                 ldv = u - project(u, e_left[:2])
@@ -173,9 +174,9 @@ class BinaryFOVSensor(AbstractSensor):
             #     self.determineState(True, agent, world)
             #     return
 
-        if not consideration_set:
-            self.determineState(False, None, world)
-            return
+        # if not consideration_set:
+        self.determineState(False, None, world)
+        return
 
         # consideration_set.sort()
         # print(consideration_set)
@@ -420,7 +421,7 @@ class BinaryFOVSensor(AbstractSensor):
         angle: float = self.agent.angle + self.bias
         span: float = self.theta
 
-        leftBorder = vectorize(angle + span) 
+        leftBorder = vectorize(angle + span)
         rightBorder = vectorize(angle - span)
         return np.append(leftBorder, 0), np.append(rightBorder, 0)
 
