@@ -12,7 +12,21 @@ else:
     World = None
 
 import warnings
+import quads
 
+
+def vectorize(angle) -> None:
+    return np.array((np.cos(angle), np.sin(angle)))
+
+def turn(p1, p2):
+    return p1[0] * p2[1] - p2[0] * p1[1]
+
+def project(a, b):
+    return b * (np.dot(a, b) / np.dot(b, b))
+
+def lineCircleIntersect(line, center, radius):
+    clDiffVec = center - project(center, line)
+    return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
@@ -60,6 +74,8 @@ class BinaryFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
+        self.detectOnlyOrigins = False
+
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
             warnings.warn("The 'degrees' kwarg is deprecated.", FutureWarning, stacklevel=1)
@@ -87,7 +103,10 @@ class BinaryFOVSensor(AbstractSensor):
 
         # First, bag all agents that lie within radius r of the parent
         bag = []
-        for agent in world.population:
+        self.getAARectContainingCone()
+        quad: quads.QuadTree = world.quad
+        quadpoints = [point.data for point in quad.within_bb(quads.BoundingBox(*self.getAARectContainingCone()))]
+        for agent in quadpoints:
             if self.getDistance(sensor_origin, agent.getPosition()) < self.r:
                 bag.append(agent)
 
@@ -130,20 +149,89 @@ class BinaryFOVSensor(AbstractSensor):
         #             d_to_inter = np.linalg.norm(np.array(self.line_seg_int_point(segment, r)) - np.array(sensor_origin))
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
-        for agent in bag:
-            u = agent.getPosition() - sensor_origin
-            d = self.circle_interesect_sensing_cone(u, self.agent.radius)
-            if d is not None:
-                consideration_set.append((d, agent))
+        l180 = self.theta * 2 < np.pi
 
-        if not consideration_set:
-            self.determineState(False, None, world)
-            return
+        for agent in bag:
+            if agent is self.agent:
+                continue
+            
+            u = agent.getPosition() - sensor_origin
+            leftTurn = turn(u, e_left)
+            rightTurn = turn(u, e_right)
+            
+            # if fov < 180 use between minor arc, otherwise use not between minor arc
+            if rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn):
+                self.determineState(True, agent, world)
+                return
+            elif not self.detectOnlyOrigins:
+                # circle whisker intercept correction
+                if (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius)) or (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius)):
+                    self.determineState(True, agent, world)
+                    return
+
+            # d = self.circle_interesect_sensing_cone(u, self.agent.radius)
+            # if d is not None:
+            #     consideration_set.append((d, agent))
+            #     self.determineState(True, agent, world)
+            #     return
+
+        # if not consideration_set:
+        self.determineState(False, None, world)
+        return
 
         # consideration_set.sort()
         # print(consideration_set)
         _score, val = consideration_set.pop(0)
         self.determineState(True, val, world)
+
+    def getAARectContainingCone(self):
+        angle: float = self.agent.angle + self.bias
+        span: float = self.theta
+        radius: float = self.r
+        position: list[float] = self.agent.pos.tolist()
+
+        over180 = np.pi <= span*2
+
+        center = vectorize(angle)
+        leftBorder = vectorize(angle + span) * radius
+        rightBorder = vectorize(angle - span) * radius
+        xaxis = (1, 0)
+        yaxis = (0, 1)
+
+        xt = turn(xaxis, center)
+        xlt = turn(xaxis, leftBorder)
+        xrt = turn(xaxis, rightBorder)
+        fovOverXAxis = np.sign(xlt) != np.sign(xrt)
+        
+        yt = turn(yaxis, center)
+        ylt = turn(yaxis, leftBorder)
+        yrt = turn(yaxis, rightBorder)
+        fovOverYAxis = np.sign(ylt) != np.sign(yrt)
+        
+        xvals = [0, leftBorder[0], rightBorder[0]]
+        yvals = [0, leftBorder[1], rightBorder[1]]
+
+        if fovOverXAxis:
+            xvals.append(radius * -np.sign(yt))
+        elif over180:
+            xvals.extend((radius, -radius))
+
+        if fovOverYAxis:
+            yvals.append(radius * np.sign(xt))
+        elif over180:
+            yvals.extend((radius, -radius))
+        
+        padding = self.agent.radius
+
+        xmin = min(xvals) - padding 
+        xmax = max(xvals) + padding
+        ymin = min(yvals) - padding
+        ymax = max(yvals) + padding
+
+        # positions relative until now, make them absolute for the return
+        # xmin, ymin, xmax, ymax 
+        return [position[0] + xmin, position[1] + ymin, position[0] + xmax, position[1] + ymax]
+
 
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors
@@ -269,6 +357,13 @@ class BinaryFOVSensor(AbstractSensor):
                 pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
+                AAR = self.getAARectContainingCone()
+                AARtl = np.array(AAR[:2]) * zoom + pan
+                AARbr = np.array(AAR[2:]) * zoom + pan
+                pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
+                detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingCone()))]
+                for agent in detected:
+                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width*3)
 
     def circle_interesect_sensing_cone(self, u, r):
         e_left, e_right = self.getSectorVectors()
@@ -311,48 +406,25 @@ class BinaryFOVSensor(AbstractSensor):
         return np.linalg.norm(b - a)
 
     def getLOSVector(self) -> List:
-        head = self.agent.getPosition()
-        tail = self.getFrontalPoint()
-        return [tail[0] - head[0], tail[1] - head[1]]
-
-    def getFrontalPoint(self):
         if self.angle is None:
-            return self.agent.getFrontalPoint()
+            return self.agent.orientation_uvec()
 
-        return self.agent.pos + [
+        return [
             math.cos(self.angle + self.agent.angle),
             math.sin(self.angle + self.agent.angle)
         ]
 
     def getBiasedSightAngle(self):
-        bias_transform = np.array([
-            [np.cos(self.bias), -np.sin(self.bias), 0],
-            [np.sin(self.bias), np.cos(self.bias), 0],
-            [0, 0, 1]
-        ])
-        v = np.append(self.getLOSVector(), [0])
-        return np.matmul(bias_transform, v)[:2]
+        angle: float = self.agent.angle + self.bias
+        return vectorize(angle)
 
     def getSectorVectors(self):
-        theta_l = self.theta + self.bias
-        theta_r = -self.theta + self.bias
+        angle: float = self.agent.angle + self.bias
+        span: float = self.theta
 
-        rot_z_left = np.array([
-            [np.cos(theta_l), -np.sin(theta_l), 0],
-            [np.sin(theta_l), np.cos(theta_l), 0],
-            [0, 0, 1]
-        ])
-
-        rot_z_right = np.array([
-            [np.cos(theta_r), -np.sin(theta_r), 0],
-            [np.sin(theta_r), np.cos(theta_r), 0],
-            [0, 0, 1]
-        ])
-
-        v = np.append(self.getLOSVector(), [0])
-        e_left = np.matmul(rot_z_left, v)
-        e_right = np.matmul(rot_z_right, v)
-        return e_left, e_right
+        leftBorder = vectorize(angle + span)
+        rightBorder = vectorize(angle - span)
+        return np.append(leftBorder, 0), np.append(rightBorder, 0)
 
     def as_config_dict(self):
         return {
