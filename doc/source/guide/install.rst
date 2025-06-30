@@ -25,6 +25,23 @@ Setting up your environment
    See :ref:`python:setting-envvars` or `How to Add Python to PATH <https://realpython.com/add-python-to-path/>`_.
    Or, uninstall and reinstall Python (You may need to re-\ ``pip install`` system Python packages).
 
+
+To install RobotSwarmSimulator, we recommend using ``uv``.
+
+.. dropdown:: Install UV for faster installs
+   :color: secondary
+   :open:
+
+   .. code-block:: bash
+      :caption: Install ``uv`` <https://github.com/pyuv/uv> for faster installs
+
+      pip install uv -U
+
+   The ``-U`` flag is shorthand for ``--upgrade``.
+   
+   You can preface most ``pip install`` commands with ``uv`` for *much* faster installation.
+   ``uv pip install`` may not work for some packages. If you get an error, try using regular ``pip install`` first.
+
 The recommended way to install RobotSwarmSimulator is with a **virtual environment**.
 
 Virtual environments are isolated Python environments that allow you to install
@@ -37,27 +54,32 @@ First, you need to choose a location to store your virtual environment.
     mkdir swarm
     cd swarm
 
-To create a virtual environment, we recommend using ``virtualenv``, but you can
-still use ``venv`` if you prefer.
-
 .. tab-set::
    :class: sd-width-content-min
-   :sync-group: venv
+   :sync-group: uv
 
-   .. tab-item:: virtualenv (recommended)
-
-      .. code-block:: bash
-
-        pip install virtualenv
-        virtualenv .
-
-   .. tab-item:: venv
+   .. tab-item:: uv
+      :sync: uv     
 
       .. code-block:: bash
+         :caption: Create a virtual environment
 
-        python -m venv .
+         uv venv
+         
 
-This will create a virtual environment in your current directory.
+   .. tab-item:: pip
+      :sync: pip
+
+      .. code-block:: bash
+         :caption: Create a virtual environment
+
+         pip install virtualenv
+         virtualenv .venv --prompt .
+
+
+This will create a virtual environment ``.venv`` folder in your current directory.
+
+Now, we need to activate the virtual environment.
 
 .. _activate-venv:
 
@@ -82,7 +104,7 @@ In this example we're in the ``swarms/`` folder.
 
       .. code-block:: bat
 
-         .\Scripts\activate
+         .venv\Scripts\activate
 
    .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
       :sync: posix
@@ -93,7 +115,54 @@ In this example we're in the ``swarms/`` folder.
 
       .. code-block:: bash
 
-         source bin/activate
+         source .venv/bin/activate
+
+
+.. admonition:: Activating fish, Nushell, or PowerShell
+
+   The above activation command is for the default shell environments, such as ``bash``, ``zsh``, or ``sh`` on Unix, or ``cmd`` and ``powershell`` on Windows.
+   If you're using a different shell, such as ``fish`` or ``Nushell``, or if you're using PowerShell and have activation issues, you may need to use a different activation file.
+
+   .. tab-set::
+      :class: sd-width-content-min
+      :sync-group: shell
+
+      .. tab-item:: fish
+         :sync: fish
+
+         .. code-block:: fish
+
+            source .venv/bin/activate.fish
+
+      .. tab-item:: PowerShell
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            .venv\bin\activate.ps1
+            
+
+      .. tab-item:: Nushell
+         :sync: nushell
+
+         .. tab-set::
+            :class: sd-width-content-min
+            :sync-group: os
+
+            .. tab-item:: :fab:`windows` Windows
+               :sync: windows
+
+               .. code-block:: powershell
+
+                  overlay use .venv\Scripts\activate.nu
+
+            .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
+               :sync: posix
+
+               .. code-block:: bash
+
+                  overlay use .venv/bin/activate.nu
+
 
 You should see the name of your virtual environment in parentheses at the beginning of your terminal prompt:
 
@@ -129,6 +198,10 @@ Installing RobotSwarmSimulator
 To install RobotSwarmSimulator, we recommend using ``uv``.
 You can preface most ``pip install`` commands with ``uv`` for *much* faster installation.
 
+.. admonition:: Don't forget to activate the virtual environment!
+
+   :ref:`activate-venv`
+
 .. tab-set::
    :class: sd-width-content-min
    :sync-group: uv
@@ -139,14 +212,41 @@ You can preface most ``pip install`` commands with ``uv`` for *much* faster inst
       .. code-block:: bash
 
          pip install uv
-         uv pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         uv pip install swarmsim
+
+      .. note::
+         
+         It's possible to install SuperNeuroMAT to the global system Python installation
+         with the ``--system`` flag. However, this is not recommended, as it may cause
+         conflicts with other packages.
 
    .. tab-item:: pip
       :sync: pip
 
       .. code-block:: bash
 
-         pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         pip install swarmsim
+
+
+While you're here, let's also install ``pyreadline3`` which makes the ``python`` shell much more user-friendly.
+
+.. tab-set::
+   :class: sd-width-content-min
+   :sync-group: uv
+
+   .. tab-item:: uv
+      :sync: uv
+
+      .. code-block:: bash
+
+         uv pip install pyreadline3
+
+   .. tab-item:: pip
+      :sync: pip
+
+      .. code-block:: bash
+
+         pip install pyreadline3
 
 
 If the installation was successful, you should be able to open a ``python`` shell and import the package:
@@ -156,13 +256,16 @@ If the installation was successful, you should be able to open a ``python`` shel
 
    Python 3.11.0 (or newer)
    Type "help", "copyright", "credits" or "license" for more information.
-   >>> import novel_swarms
+   >>> import swarmsim
    >>> 
+
+If you installed ``pyreadline3``, you can exit the ``python`` shell with :kbd:`Ctrl+C` to stop
+currently running commands and then :kbd:`Ctrl+D` or ``quit()`` to quit the python REPL.
 
 Development Installations
 =========================
 
-If you intend to contribute to RobotSwarmSimulator, you should follow the
+If you intend to contribute to or modify RobotSwarmSimulator, you should follow the
 :doc:`installation guide for development </devel/install>` instead.
 
 .. button-ref:: /devel/install

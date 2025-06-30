@@ -26,13 +26,15 @@ Get Started
 
       .. code-block:: bash
 
-         pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         pip install swarmsim
 
    .. tab-item:: uv
 
+      We recommend using `uv`_ to install the package. If you don't have ``uv``, check out the more detailed :doc:`installation guide <guide/install.html>`.
+
       .. code-block:: bash
 
-         uv pip install git+ssh://git@github.com/kenblu24/RobotSwarmSimulator.git@main
+         uv pip install swarmsim
 
    .. tab-item:: other
 
@@ -46,12 +48,12 @@ For more detailed instructions, see the
 :doc:`installation guide <guide/install>`
 , which covers virtual environments, faster installation with uv, and more.
 
-Then, you can import the :py:mod:`novel_swarms` package:
+Then, you can import the :py:mod:`swarmsim` package:
 
 .. code-block:: python
    :caption: Python
 
-   import novel_swarms
+   import swarmsim
 
 
 .. toctree::

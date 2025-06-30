@@ -10,18 +10,18 @@ from ctypes import ArgumentError
 import numpy as np
 from tqdm import tqdm
 
-from novel_swarms import yaml
-from novel_swarms.config import get_agent_class
-from novel_swarms.agent.control.Controller import Controller
-from novel_swarms.world.spawners.AgentSpawner import UniformAgentSpawner
-from novel_swarms.world.RectangularWorld import RectangularWorldConfig
+from swarmsim import yaml
+from swarmsim.config import get_agent_class
+from swarmsim.agent.control.Controller import Controller
+from swarmsim.world.spawners.AgentSpawner import UniformAgentSpawner
+from swarmsim.world.RectangularWorld import RectangularWorldConfig
 
-from novel_swarms.metrics import Circliness
+from swarmsim.metrics import Circliness
 
-# from novel_swarms.world.simulate import main as sim
+# from swarmsim.world.simulate import main as sim
 
-# from novel_swarms.world.initialization.FixedInit import FixedInitialization
-# from novel_swarms.world.spawners.ExcelSpawner import ExcelSpawner
+# from swarmsim.world.initialization.FixedInit import FixedInitialization
+# from swarmsim.world.spawners.ExcelSpawner import ExcelSpawner
 
 SCALE = 1
 
@@ -45,8 +45,8 @@ def fitness(world_set):
 
 def get_world_generator(n_agents, horizon, round_genome=False):
     def gene_to_world(genome, hash_val):
-        # from novel_swarms.config import register_agent_type, store
-        # from novel_swarms.agent.StaticAgent import StaticAgent, StaticAgentConfig
+        # from swarmsim.config import register_agent_type, store
+        # from swarmsim.agent.StaticAgent import StaticAgent, StaticAgentConfig
 
         # register_agent_type("StaticAgent", StaticAgent, StaticAgentConfig)
 
@@ -104,7 +104,7 @@ def canon_to_metric(genome: tuple[float, float, float, float], body_length, scal
 
 
 def run(args, genome, callback=lambda x: x) -> float:
-    from novel_swarms.world.simulate import main as sim
+    from swarmsim.world.simulate import main as sim
     # from .milling_search import get_world_generator
 
     world_generator = get_world_generator(args.n, args.t)
