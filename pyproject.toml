@@ -13,6 +13,8 @@ authors = [
 maintainers = [{ name="kenblu24", email="kenblu24@hotmail.com" }]
 description = "An agent-based swarm simulator."
 readme = {file = "README.md", content-type = "text/markdown"}
+license = "MIT"
+license-files = ["LICENSE"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -60,6 +62,3 @@ docs = [
 [project.urls]
 "Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
 "Bug Tracker" = "https://github.com/kenblu24/RobotSwarmSimulator/issues"
-
-[project.license]
-file = "LICENSE"
