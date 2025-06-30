@@ -22,21 +22,25 @@ class DistanceSizeRatio(RadialVarianceMetric):
             # https://gamedev.stackexchange.com/questions/44483/how-do-i-calculate-distance-between-a-point-and-an-axis-aligned-rectangle
             # clamp point to within rectangle, then calculate distance
             # slightly less optimized but MILES more readable
-            w, h, wd = world.w, world.h, np.asarray(world.config.size)
-            x, y = pos
-            is_inside_world = (pos >= np.zeros(2)).all() and (pos <= wd).all()
-            if is_inside_world:
-                nearest_wall_point = np.array((np.clip(x, 0, w), np.clip (x, 0, y)))
-                distance_to_wall = self.distance(pos, nearest_wall_point)
-                smallest_distance = min(distance_to_wall, *distances)
-            else:
-                smallest_distance = min(distances)
+            w, h, wd = world.config.size[0], world.config.size[1], world.config.size
+        
+            # x, y = pos
+            # is_inside_world = (pos >= np.zeros(2)).all() and (pos <= wd).all()
+            # if not is_inside_world:
+            #     # nearest_wall_point = np.array((np.clip(x, 0, w), np.clip(y, 0, h)))
+            #     # distance_to_wall = self.distance(pos, nearest_wall_point)
+            #     # smallest_distance = min(distance_to_wall, *distances)
+            #     smallest_distance = 0
+            # else:
+            #     smallest_distance = min(distances)
 
-            agent_radii.append(smallest_distance)
+            agent_radii.append(min(distances))
+            
 
-        agent_radii.sort()
+        diffusal_uneveness = np.std(agent_radii) # variability in distances
 
-        self.set_value(agent_radii[0] / agent_radii[-1])
+        self.set_value(-diffusal_uneveness)
+        # self.set_value(agent_radii[0])
 
     def distance(a, b):
         return np.linalg.norm(a - b)
