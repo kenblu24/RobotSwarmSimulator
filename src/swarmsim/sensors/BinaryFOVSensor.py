@@ -74,7 +74,7 @@ class BinaryFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
-        self.detectOnlyOrigins = False
+        self.detect_only_origins = False
 
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
@@ -163,7 +163,7 @@ class BinaryFOVSensor(AbstractSensor):
             if rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn):
                 self.determineState(True, agent, world)
                 return
-            elif not self.detectOnlyOrigins:
+            elif not self.detect_only_origins:
                 # circle whisker intercept correction
                 if (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius)) or (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius)):
                     self.determineState(True, agent, world)
@@ -199,38 +199,59 @@ class BinaryFOVSensor(AbstractSensor):
         yaxis = (0, 1)
 
         xt = turn(xaxis, center)
+        xts = np.sign(xt)
         xlt = turn(xaxis, leftBorder)
         xrt = turn(xaxis, rightBorder)
         fovOverXAxis = np.sign(xlt) != np.sign(xrt)
         
         yt = turn(yaxis, center)
+        yts = np.sign(yt)
         ylt = turn(yaxis, leftBorder)
         yrt = turn(yaxis, rightBorder)
         fovOverYAxis = np.sign(ylt) != np.sign(yrt)
         
-        xvals = [0, leftBorder[0], rightBorder[0]]
-        yvals = [0, leftBorder[1], rightBorder[1]]
-
+        xmin = 0
+        xmax = 0
+        ymin = 0
+        ymax = 0
+        def xadd(val):
+            nonlocal xmin
+            if val < xmin:
+                xmin = val
+            nonlocal xmax
+            if xmax < val:
+                xmax = val
+        def yadd(val):
+            nonlocal ymin
+            if val < ymin:
+                ymin = val
+            nonlocal ymax
+            if ymax < val:
+                ymax = val
+        
+        xadd(leftBorder[0])
+        xadd(rightBorder[0])
         if fovOverXAxis:
-            xvals.append(radius * -np.sign(yt))
-        elif over180:
-            xvals.extend((radius, -radius))
+            xadd(radius * -yts)
+            if over180:
+                yadd(radius * xts)
+                if not fovOverYAxis:
+                    yadd(radius * -xts)
 
+        yadd(leftBorder[1])
+        yadd(rightBorder[1])
         if fovOverYAxis:
-            yvals.append(radius * np.sign(xt))
-        elif over180:
-            yvals.extend((radius, -radius))
+            yadd(radius * xts)
+            if over180:
+                xadd(radius * -yts)
+                if not fovOverXAxis:
+                    xadd(radius * yts)
         
         padding = self.agent.radius
 
-        xmin = min(xvals) - padding 
-        xmax = max(xvals) + padding
-        ymin = min(yvals) - padding
-        ymax = max(yvals) + padding
-
         # positions relative until now, make them absolute for the return
         # xmin, ymin, xmax, ymax 
-        return [position[0] + xmin, position[1] + ymin, position[0] + xmax, position[1] + ymax]
+        return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
 
 
     def check_goals(self, world):
