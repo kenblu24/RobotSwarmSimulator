@@ -58,5 +58,6 @@ def test_setups():
     for file in os.listdir(dir):
         if file.endswith(".yaml"):
             yaml_path: str = os.path.join(dir, file)
+            print(yaml_path)
             result = setup_tester(yaml_path)
             assert result, f"[ERROR] Failed on '{yaml_path}'"
