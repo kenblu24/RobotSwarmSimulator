@@ -19,7 +19,7 @@
 
          .. code-block:: powershell
 
-            .venv\bin\activate.ps1
+            .venv\Scripts\activate.ps1
 
          Note\: Windows users may need to change their PowerShell script execution policy. See the dropdown below\:
 
