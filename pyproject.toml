@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "swarmsim"
 version = "1.1.0-dev1"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
   { name="kenblu24", email="kenblu24@hotmail.com" },
