@@ -16,8 +16,6 @@ class TestPointSpawners:
         self.world.spawners = [] # list[Spawner]
 
         agent = mocker.MagicMock(spec=MazeAgent)
-        # agent = mocker.Mock(spec=MazeAgent)
-        # mocker.patch("agent.pos", np.array((5, 5)))
         agent.pos = np.array((5, 5))
 
         self.n_objects: int = 6
@@ -25,7 +23,6 @@ class TestPointSpawners:
             self.world, n=self.n_objects, facing="away", avoid_overlap=True,
             agent=agent,
         )
-        spawner.agent_config.position = np.array((5, 5))
         self.world.spawners.append(spawner)
 
     def test_do_spawn(self):
