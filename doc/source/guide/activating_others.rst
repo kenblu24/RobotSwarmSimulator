@@ -19,7 +19,7 @@
 
          .. code-block:: powershell
 
-            .venv\bin\activate.ps1
+            .venv\Scripts\activate.ps1
 
          Note\: Windows users may need to change their PowerShell script execution policy. See the dropdown below\:
 
@@ -31,13 +31,15 @@
 
             .. code-block:: powershell
 
-               PS> .venv\bin\activate.ps1
-               New-Item : Access to the path 'C:\Users\<username>\.venv\Scripts' is denied.
+               PS > .\.venv\Scripts\activate.ps1
+               .\.venv\Scripts\activate.ps1 : File .venv\Scripts\activate.ps1 cannot be loaded because running
+               scripts is disabled on this system. For more information, see about_Execution_Policies at
+               https:/go.microsoft.com/fwlink/?LinkID=135170 .
                At line:1 char:1
-               + .venv\bin\activate.ps1
-               + ~~~~~~~~~~~~~~~~~~~~~~~
-                   + CategoryInfo          : PermissionDenied: (C:\Users\<username>\.venv\Scripts:String) [New-Item], UnauthorizedAccessException
-                   + FullyQualifiedErrorId : System.UnauthorizedAccessException,Microsoft.PowerShell.Commands.NewItemCommand
+               + .\.venv\Scripts\activate.ps1
+               + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+                   + FullyQualifiedErrorId : UnauthorizedAccess
 
             Your script execution policy may be set to ``Restricted`` (check with ``Get-ExecutionPolicy``).
 
