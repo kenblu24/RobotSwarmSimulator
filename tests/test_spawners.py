@@ -15,9 +15,10 @@ class TestPointSpawners:
         self.world.rng = np.random.default_rng() # np.random.Generator
         self.world.spawners = [] # list[Spawner]
 
-        agent = mocker.Mock(spec=MazeAgent)
+        agent = mocker.MagicMock(spec=MazeAgent)
+        # agent = mocker.Mock(spec=MazeAgent)
+        # mocker.patch("agent.pos", np.array((5, 5)))
         agent.pos = np.array((5, 5))
-        print(type(agent.pos))
 
         self.n_objects: int = 6
         spawner = PointAgentSpawner(
