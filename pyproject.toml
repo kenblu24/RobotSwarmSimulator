@@ -43,6 +43,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "pytest-xdist",
+    "pytest-mock",
 ]
 shapes = ["pointpats"]
 docs = [
