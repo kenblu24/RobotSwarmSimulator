@@ -67,7 +67,7 @@ html_context = {
     "github_user": "kenblu24",
     "github_repo": "RobotSwarmSimulator",
     "github_version": "main",
-    "doc_path": "doc/build/html/",
+    "doc_path": "doc/source",
 }
 
 github_project_url = "https://github.com/kenblu24/RobotSwarmSimulator"
