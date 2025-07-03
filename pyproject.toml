@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "swarmsim"
-version = "1.1.0-dev1"
-requires-python = ">=3.10"
+version = "1.1.0"
+requires-python = ">=3.11"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
   { name="kenblu24", email="kenblu24@hotmail.com" },
@@ -13,9 +13,10 @@ authors = [
 maintainers = [{ name="kenblu24", email="kenblu24@hotmail.com" }]
 description = "An agent-based swarm simulator."
 readme = {file = "README.md", content-type = "text/markdown"}
+license = "MIT"
+license-files = ["LICENSE"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Development Status :: 3 - Alpha",
     "Topic :: Scientific/Engineering",
@@ -61,6 +62,3 @@ docs = [
 [project.urls]
 "Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
 "Bug Tracker" = "https://github.com/kenblu24/RobotSwarmSimulator/issues"
-
-[project.license]
-file = "LICENSE"

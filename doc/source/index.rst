@@ -30,7 +30,7 @@ Get Started
 
    .. tab-item:: uv
 
-      We recommend using `uv`_ to install the package. If you don't have ``uv``, check out the more detailed :doc:`installation guide <guide/install.html>`.
+      We recommend using `uv <https://docs.astral.sh/uv/>`_ to install the package. If you don't have ``uv``, check out the more detailed :doc:`installation guide <guide/install>`.
 
       .. code-block:: bash
 
