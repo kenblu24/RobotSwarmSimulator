@@ -54,6 +54,7 @@ from functools import partial
 yaml.add_constructor("!np", construct_numexpr, IncludeLoader)
 
 load = partial(yaml.load, Loader=IncludeLoader)
+load_all = partial(yaml.load_all, Loader=IncludeLoader)
 
 
 class NaiveLoader(yaml.SafeLoader):
