@@ -1,3 +1,5 @@
+import pathlib as pl
+
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from swarmsim.world.simulate import main as sim
@@ -16,6 +18,7 @@ agent_config: MazeAgentConfig = MazeAgentConfig()
 agent: MazeAgent = MazeAgent(agent_config, world)
 controller: StaticController = StaticController()
 
+
 def code_block_simulate(w: RectangularWorld | RectangularWorldConfig, limit_steps: bool = True) -> None:
     """ Starting the simulation """
     def stop_after_n_frames(world: RectangularWorld, n_frames: int = 500):
@@ -26,9 +29,10 @@ def code_block_simulate(w: RectangularWorld | RectangularWorldConfig, limit_step
     else:
         sim(world, show_gui=False)
 
+
 def code_block_01() -> None:
     """ Creating a world """
-    world_config = RectangularWorldConfig(size=[10, 10], time_step=1 / 40)
+    world_config = RectangularWorldConfig(size=[10, 10], time_step=1 / 40)  # pyright: ignore[reportArgumentType]
     world = RectangularWorld(world_config)
 
     """ Creating an agent """
@@ -50,7 +54,7 @@ def code_block_01() -> None:
     world.spawners.append(spawner)
 
     del world.population[-1]
-    code_block_simulate(world) # simulate world
+    code_block_simulate(world)  # simulate world
 
     """ Sensors & Controllers """
     sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
@@ -62,7 +66,8 @@ def code_block_01() -> None:
     del world.population[:]  # Delete all agents
     spawner.mark_for_deletion = False  # Re-enable the spawner
     world.spawners.append(spawner)
-    code_block_simulate(world) # simulate world
+    code_block_simulate(world)  # simulate world
+
 
 def code_block_02() -> None:
     world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
@@ -74,12 +79,15 @@ def code_block_02() -> None:
                                 agent=agent, mode="oneshot")
     world.spawners.append(spawner)
 
-    code_block_simulate(world) # simulate world
+    code_block_simulate(world)  # simulate world
+
 
 def code_block_03() -> None:
-    world_config = RectangularWorldConfig.from_yaml("tutorial_world.yaml")
+    wd = pl.Path(__file__).parent
+    world_config = RectangularWorldConfig.from_yaml(wd / "tutorial_world.yaml")
 
     code_block_simulate(world_config)
+
 
 def test_01() -> None:
     code_block_01()
