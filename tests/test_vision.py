@@ -15,8 +15,8 @@ def stop_after_one_step(world: RectangularWorld) -> bool:
 
 def load_custom_yaml(path: PathLike) -> tuple[bool, dict]:
     with open(path, "r") as yf:
-        d = ssyaml.load(yf)
-        return d["expected"], d["world_setup"]
+        spec, world_setup = ssyaml.load_all(yf)
+        return spec, world_setup
 
 
 def setup_common_world(world_setup: dict) -> RectangularWorld:
@@ -56,11 +56,11 @@ path = wd / "vision_setup"
 yaml_files = path.glob("*.yaml")
 
 
-@pytest.mark.parametrize("yaml_path", yaml_files)
+@pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
 def test_yaml_file(yaml_path: PathLike) -> bool:
-    expected_collided, world_setup = load_custom_yaml(yaml_path)
+    spec, world_setup = load_custom_yaml(yaml_path)
     world: RectangularWorld = setup_common_world(world_setup)
     bfovs: BinaryFOVSensor = setup_common_agent(world)
 
     collided = bfovs.current_state == 1
-    assert collided == expected_collided
+    assert collided == spec['expected']
