@@ -52,7 +52,7 @@ yaml_files = path.glob("*.yaml")
 
 
 @pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
-def test_yaml_file(yaml_path: PathLike) -> bool:
+def test_yaml_file(yaml_path: PathLike):
     spec, world_setup = load_custom_yaml(yaml_path)
     world: RectangularWorld = setup_common_world(world_setup)
     bfovs: BinaryFOVSensor = setup_common_agent(world)
