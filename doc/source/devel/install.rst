@@ -188,50 +188,7 @@ Now, we need to activate the virtual environment.
 
          source .venv/bin/activate
 
-.. admonition:: Activating fish, Nushell, or PowerShell
-
-   The above activation command is for the default shell environments, such as ``bash``, ``zsh``, or ``sh`` on Unix, or ``cmd`` and ``powershell`` on Windows.
-   If you're using a different shell, such as ``fish`` or ``Nushell``, or if you're using PowerShell and have activation issues, you may need to use a different activation file.
-
-   .. tab-set::
-      :class: sd-width-content-min
-      :sync-group: shell
-
-      .. tab-item:: fish
-         :sync: fish
-
-         .. code-block:: fish
-
-            source .venv/bin/activate.fish
-
-      .. tab-item:: PowerShell
-         :sync: powershell
-
-         .. code-block:: powershell
-
-            .venv\bin\activate.ps1
-            
-
-      .. tab-item:: Nushell
-         :sync: nushell
-
-         .. tab-set::
-            :class: sd-width-content-min
-            :sync-group: os
-
-            .. tab-item:: :fab:`windows` Windows
-               :sync: windows
-
-               .. code-block:: powershell
-
-                  overlay use .venv\Scripts\activate.nu
-
-            .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
-               :sync: posix
-
-               .. code-block:: bash
-
-                  overlay use .venv/bin/activate.nu
+.. include:: /guide/activating_others.rst
 
 You can deactivate the virtual environment with the ``deactivate`` command.
 

@@ -2,9 +2,9 @@ import pytest
 from pytest_mock import MockerFixture
 
 import numpy as np
-from src.swarmsim.agent.MazeAgent import MazeAgent
-from src.swarmsim.world.RectangularWorld import RectangularWorld
-from src.swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
+from swarmsim.agent.MazeAgent import MazeAgent
+from swarmsim.world.RectangularWorld import RectangularWorld
+from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 
 
 class TestPointSpawners:
@@ -12,8 +12,8 @@ class TestPointSpawners:
     def spawner_setup(self, mocker: MockerFixture):
         self.world = mocker.Mock(spec=RectangularWorld)
         self.world.population = []
-        self.world.rng = np.random.default_rng() # np.random.Generator
-        self.world.spawners = [] # list[Spawner]
+        self.world.rng = np.random.default_rng()  # np.random.Generator
+        self.world.spawners = []  # list[Spawner]
 
         agent = mocker.MagicMock(spec=MazeAgent)
         agent.pos = np.array((5, 5))

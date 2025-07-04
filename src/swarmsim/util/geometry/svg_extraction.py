@@ -9,9 +9,9 @@ SVG_NS = 'http://www.w3.org/2000/svg'
 
 IDENTITY = np.identity(4)
 
-RE_TRANSLATE = re.compile(r'translate\s*\(\s*(?P<x>[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?P<y>(?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)?\s*\)')
-RE_SCALE = re.compile(r'scale\s*\(\s*(?P<x>[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?P<y>(?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)?\s*\)')
-RE_ROTATE = re.compile(r'rotate\s*\(\s*([+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?:((?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)((?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?))?\s*\)')
+RE_TRANSLATE = re.compile(r'translate\s*\(\s*(?P<x>[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?P<y>(?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)?\s*\)')  # noqa
+RE_SCALE = re.compile(r'scale\s*\(\s*(?P<x>[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?P<y>(?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)?\s*\)')  # noqa
+RE_ROTATE = re.compile(r'rotate\s*\(\s*([+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)(?:((?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?)((?:\s+,?\s*|,\s*)?[+-]?(?:\d+\.\d+|\d+|\.\d+)(?:[eE][+-]?\d+)?))?\s*\)')  # noqa
 
 
 def rect_from_wh(x, y, w, h):  # clockwise winding
@@ -35,7 +35,7 @@ def get_transform(transform):
     scales = RE_SCALE.findall(transform)
     if translates:
         translation = [float(x) for x in translates[-1] if x]
-        match(translation):
+        match (translation):
             case (x, y):
                 x, y = x, y
             case (x,):
@@ -44,7 +44,7 @@ def get_transform(transform):
         shift[0:2, 3] = [x, y]
     if rotates:
         rotates = [float(x) for x in rotates[-1] if x]
-        match(rotates):
+        match (rotates):
             case (_x, _y, _z):
                 raise NotImplementedError("Rotation in more than 1 axis not supported.")
             case (angle,):
@@ -56,7 +56,7 @@ def get_transform(transform):
                 dtype=np.float64)
     if scales:
         scales = [float(x) for x in scales[-1] if x]
-        match(scales):
+        match (scales):
             case (x, y):
                 x, y = x, y
             case (x,):
@@ -158,5 +158,3 @@ class SVG:
     #                                           linewidths=linewidths,
     #                                           facecolors=facecolors)
     #     return collection
-
-

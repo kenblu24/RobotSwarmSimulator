@@ -2,11 +2,11 @@ import pytest
 from pytest_mock import MockerFixture
 
 import numpy as np
-from src.swarmsim.agent.Agent import Agent, BaseAgentConfig
-from src.swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
-from src.swarmsim.agent.control.BinaryController import BinaryController
-from src.swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
-from src.swarmsim.world.RectangularWorld import RectangularWorld
+from swarmsim.agent.Agent import Agent, BaseAgentConfig
+from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
+from swarmsim.agent.control.BinaryController import BinaryController
+from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
+from swarmsim.world.RectangularWorld import RectangularWorld
 
 
 class TestAgentConf:
@@ -14,7 +14,7 @@ class TestAgentConf:
     def agent_conf_setup(self, mocker: MockerFixture):
         world = mocker.Mock(spec=RectangularWorld)
         world.rng = np.random.default_rng()
-        world.dt = 1/40
+        world.dt = 1 / 40
         controller = mocker.Mock(spec=BinaryController)
         controller.agent = None
         sensor = mocker.Mock(spec=BinaryFOVSensor)
@@ -59,7 +59,7 @@ class TestMazeAgentConf:
         self.conf = MazeAgentConfig(position=(5, 5), agent_radius=0.1)
         world = mocker.Mock(spec=RectangularWorld)
         world.rng = np.random.default_rng()
-        world.dt = 1/40
+        world.dt = 1 / 40
         self.agent = MazeAgent(self.conf, world)
 
     def test_radius(self):
