@@ -1,6 +1,7 @@
 from os import PathLike
 import pathlib as pl
 import pytest
+from ..util import load_custom_yaml
 
 from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 from swarmsim.world.simulate import main
@@ -11,12 +12,6 @@ from swarmsim import yaml as ssyaml
 
 def stop_after_one_step(world: RectangularWorld) -> bool:
     return world.total_steps == 1
-
-
-def load_custom_yaml(path: PathLike) -> tuple[bool, dict]:
-    with open(path, "r") as yf:
-        spec, world_setup = ssyaml.load_all(yf)
-        return spec, world_setup
 
 
 def setup_common_world(world_setup: dict) -> RectangularWorld:
