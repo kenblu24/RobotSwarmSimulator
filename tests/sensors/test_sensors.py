@@ -52,7 +52,7 @@ def setup_common_agent(world: RectangularWorld) -> BinaryFOVSensor:
 
 
 wd = pl.Path(__file__).parent
-path = wd / "vision_setup"
+path = wd / "configs"
 yaml_files = path.glob("*.yaml")
 
 
