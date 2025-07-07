@@ -39,6 +39,6 @@ world.population.append(staticAgent)
 
 # static object
 staticObject = StaticObject(StaticObjectConfig(points=[(0.5, 3.5), (4.5, 3.5), (4.5, 5.5), (2.5, 6.5), (0.5, 5.5)]), world=world)
-world.population.append(staticObject)
+world.objects.append(staticObject)
 
 sim(world, start_paused=True)
