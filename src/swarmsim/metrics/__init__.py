@@ -24,6 +24,7 @@ from .BerlingerCircularity import (
 )
 from .DistanceSizeRatio import DistanceSizeRatio
 from .DelaunayDispersal import Dispersal
+from .VoronoiDispersal import VoronoiRelaxation
 
 __all__ = [
     "AbstractMetric",
@@ -56,4 +57,5 @@ __all__ = [
     "InstantKMHCircularity",
     "DistanceSizeRatio",
     "Dispersal",
+    "VoronoiRelaxation",
 ]
