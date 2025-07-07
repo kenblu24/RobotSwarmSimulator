@@ -410,7 +410,8 @@ train Spiking Neural Networks [#snnicons]_, and even train real robots [#snnnice
 
 .. note::
 
-   That's also why the package is called :py:mod:`swarmsim`\ .
+   This package used to be called :py:mod:`novel_swarms`\ . This is because the simulator https://github.com/Connor-Mattson/RobotSwarmSimulator
+   was originally developed to discover novel swarm behaviors.
 
 
 YAML Configuration
@@ -491,7 +492,7 @@ We cover the order that things are initialized in :ref:`initialization_order`\ .
    Try changing the parameters in the ``world.yaml`` file and see what happens.
 
    You can also try adding a single agent to the ``world.population`` list
-   adding the ``agents: `` sequence to the ``world.yaml`` file.
+   adding the ``agents:`` sequence to the ``world.yaml`` file.
 
    If you've never used YAML before, check out `Learn YAML in Y minutes <https://learnxinyminutes.com/docs/yaml/>`_
 
@@ -502,11 +503,11 @@ What can I change?
 If you tried the exercise above, you might be wondering what the parameters are
 called and what they do. This information can be gleaned from the :doc:`/api/index`\ .
 
-For example, the options for configuring ``RectangularWorld`` are the parameters
+For example, the options for configuring :py:class:`~swarmsim.world.RectangularWorld.RectangularWorld` are the parameters
 for the :py:class:`~swarmsim.world.RectangularWorld.RectangularWorldConfig` class, which
 also inherits options and defaults from the :py:class:`~swarmsim.world.World.AbstractWorldConfig` class.
 
-Similarly, the options for configuring ``MazeAgent`` are the parameters
+Similarly, the options for configuring :py:class:`~swarmsim.agent.MazeAgent.MazeAgent` are the parameters
 for the :py:class:`~swarmsim.agent.MazeAgent.MazeAgentConfig` class, and so on.
 
 For objects that don't use Config classes, such as sensors, controllers, and spawners,

@@ -26,7 +26,7 @@ Setting up your environment
    Or, uninstall and reinstall Python (You may need to re-\ ``pip install`` system Python packages).
 
 
-To install RobotSwarmSimulator, we recommend using ``uv``.
+To install RobotSwarmSimulator, we recommend using `uv <https://docs.astral.sh/uv/>`_.
 
 .. dropdown:: Install UV for faster installs
    :color: secondary
@@ -118,50 +118,7 @@ In this example we're in the ``swarms/`` folder.
          source .venv/bin/activate
 
 
-.. admonition:: Activating fish, Nushell, or PowerShell
-
-   The above activation command is for the default shell environments, such as ``bash``, ``zsh``, or ``sh`` on Unix, or ``cmd`` and ``powershell`` on Windows.
-   If you're using a different shell, such as ``fish`` or ``Nushell``, or if you're using PowerShell and have activation issues, you may need to use a different activation file.
-
-   .. tab-set::
-      :class: sd-width-content-min
-      :sync-group: shell
-
-      .. tab-item:: fish
-         :sync: fish
-
-         .. code-block:: fish
-
-            source .venv/bin/activate.fish
-
-      .. tab-item:: PowerShell
-         :sync: powershell
-
-         .. code-block:: powershell
-
-            .venv\bin\activate.ps1
-            
-
-      .. tab-item:: Nushell
-         :sync: nushell
-
-         .. tab-set::
-            :class: sd-width-content-min
-            :sync-group: os
-
-            .. tab-item:: :fab:`windows` Windows
-               :sync: windows
-
-               .. code-block:: powershell
-
-                  overlay use .venv\Scripts\activate.nu
-
-            .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
-               :sync: posix
-
-               .. code-block:: bash
-
-                  overlay use .venv/bin/activate.nu
+.. include:: activating_others.rst
 
 
 You should see the name of your virtual environment in parentheses at the beginning of your terminal prompt:
@@ -195,7 +152,7 @@ To deactivate the virtual environment, use the ``deactivate`` command:
 Installing RobotSwarmSimulator
 ==============================
 
-To install RobotSwarmSimulator, we recommend using ``uv``.
+To install RobotSwarmSimulator, we recommend using `uv <https://docs.astral.sh/uv/>`_.
 You can preface most ``pip install`` commands with ``uv`` for *much* faster installation.
 
 .. admonition:: Don't forget to activate the virtual environment!
@@ -216,7 +173,7 @@ You can preface most ``pip install`` commands with ``uv`` for *much* faster inst
 
       .. note::
          
-         It's possible to install SuperNeuroMAT to the global system Python installation
+         It's possible to install RobotSwarmSimulator to the global system Python installation
          with the ``--system`` flag. However, this is not recommended, as it may cause
          conflicts with other packages.
 
