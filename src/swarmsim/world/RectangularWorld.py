@@ -139,8 +139,6 @@ class RectangularWorld(World):
 
         self.dt = config.time_step
 
-        self.quadSettings = ((0, 0), 1000, 1000)
-        self.quad = quads.QuadTree(*self.quadSettings)
         """float: :math:`\\Delta t` delta time (seconds)
 
         The time step, or delta time, is used by simulated objects and agents
@@ -161,9 +159,26 @@ class RectangularWorld(World):
         if initialize:
             self.setup_objects(config.objects)
 
-
+    # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
     def updateQuad(self):
-        newQuad = quads.QuadTree(*self.quadSettings)
+        # procedure to find the bounds of the quad
+        def minMax(arr):
+            minimum = arr[0]
+            maximum = arr[0]
+            for e in arr:
+                if e < minimum:
+                    minimum = e
+                if maximum < e:
+                    maximum = e
+            return minimum, maximum
+        xMin, xMax = minMax([agent.pos[0] for agent in self.population])
+        yMin, yMax = minMax([agent.pos[1] for agent in self.population])
+        middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
+
+        # create quad that nicely contains the current population
+        newQuad = quads.QuadTree(middle, np.ceil(xMax - xMin) + 4, np.ceil(yMax - yMin) + 4)
+        
+        # add the agents to the quad
         for agent in self.population:
             newQuad.insert(point=agent.pos.tolist(), data=agent)
         self.quad = newQuad
@@ -203,6 +218,11 @@ class RectangularWorld(World):
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
+    # override the inherited setup function to call updateQuad() after setup
+    def setup(self, step_spawners=True):
+        super().setup(step_spawners)
+        self.updateQuad()
+
     def step_agents(self):
         for agent in self.population:
             agent.step(
@@ -219,7 +239,7 @@ class RectangularWorld(World):
         self.step_agents()
         self.step_objects()
         
-        self.updateQuad()
+        self.updateQuad() # update the position of agents in the quad tree
 
         self.step_metrics()
 
