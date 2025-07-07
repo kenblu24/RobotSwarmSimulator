@@ -139,7 +139,7 @@ class PointAgentSpawner(BaseAgentSpawner):
         self.set_angle_post_spawn(agent)
         self.spawned += 1
 
-        self.world.addAgent(agent) # this is only implemented in RectangularWorld
+        self.world.population.append(agent) # this is only implemented in RectangularWorld
         return agent
 
 

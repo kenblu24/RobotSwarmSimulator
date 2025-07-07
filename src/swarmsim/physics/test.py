@@ -31,14 +31,14 @@ world.spawners.append(spawner)
 
 # human controller agent
 humanAgent = MazeAgent(MazeAgentConfig(position=(5, 1), points=[(0.16, 0), (-0.08, 0.08), (-0.08, -0.08)], agent_radius = 0.08, controller=HumanController()), world)
-world.addAgent(humanAgent)
+world.population.append(humanAgent)
 
 # static controller agent
 staticAgent = MazeAgent(MazeAgentConfig(position=(6, 6), agent_radius = 0.12, controller=StaticController()), world)
-world.addAgent(staticAgent)
+world.population.append(staticAgent)
 
 # static object
 staticObject = StaticObject(StaticObjectConfig(points=[(0.5, 3.5), (4.5, 3.5), (4.5, 5.5), (2.5, 6.5), (0.5, 5.5)]), world=world)
-world.addAgent(staticObject)
+world.population.append(staticObject)
 
 sim(world, start_paused=True)

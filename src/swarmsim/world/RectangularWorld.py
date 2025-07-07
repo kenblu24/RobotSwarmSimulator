@@ -142,6 +142,8 @@ class RectangularWorld(World):
         self.dt = config.time_step
 
         self.physics = Physics(self)
+
+        self.population.addListener("append", self.addAgent)
         """float: :math:`\\Delta t` delta time (seconds)
 
         The time step, or delta time, is used by simulated objects and agents
@@ -163,7 +165,6 @@ class RectangularWorld(World):
             self.setup_objects(config.objects)
 
     def addAgent(self, agent):
-        super().addAgent(agent)
         if agent.grounded:
             self.physics.createStaticBody(agent)
         else:
@@ -183,11 +184,11 @@ class RectangularWorld(World):
             if 'type' in entry:
                 if isinstance(entry, Agent):  # if it's already an agent, just add it
                     # self.objects.append(entry)
-                    self.addAgent(entry)
+                    self.population.append(entry)
                 else:  # otherwise, it's a config dict. find the class specified and create the agent
                     agent_class, agent_config = get_agent_class(entry)
                     # self.objects.append(agent_class.from_config(agent_config, self))
-                    self.addAgent(agent_class.from_config(agent_config, self))
+                    self.population.append(agent_class.from_config(agent_config, self))
             # check if entry contains a "from_svg" key with a string value
             elif isinstance((svg := entry.get('svg_to_static_objects', None)), str):
                 svg = SVG(svg)
@@ -200,7 +201,7 @@ class RectangularWorld(World):
                     classes = ' '.join(remove_special_classes(classes))
                     agent_config = StaticObjectConfig(points=points, team=classes, **collides)
                     # self.objects.append(StaticObject(agent_config, self))
-                    self.addAgent(StaticObject(agent_config, self))
+                    self.population.append(StaticObject(agent_config, self))
                 circles = svg.get_circles()
                 for circle, classes in circles:
                     x, y, r = circle
@@ -208,7 +209,7 @@ class RectangularWorld(World):
                     classes = ' '.join(remove_special_classes(classes))
                     agent_config = StaticObjectConfig(position=np.array([x, y]), agent_radius=r, team=classes, **collides)
                     # self.objects.append(StaticObject(agent_config, self))
-                    self.addAgent(StaticObject(agent_config, self))
+                    self.population.append(StaticObject(agent_config, self))
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
