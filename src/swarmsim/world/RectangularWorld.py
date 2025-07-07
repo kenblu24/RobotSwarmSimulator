@@ -139,7 +139,7 @@ class RectangularWorld(World):
 
         self.dt = config.time_step
 
-        self.quadSettings = ((0, 0), 100, 100)
+        self.quadSettings = ((0, 0), 1000, 1000)
         self.quad = quads.QuadTree(*self.quadSettings)
         """float: :math:`\\Delta t` delta time (seconds)
 
