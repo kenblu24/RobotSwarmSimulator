@@ -60,14 +60,14 @@ html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 html_title = "RobotSwarmSimulator"
 
-github_version = "docs-live"
+github_version = "main"
 
 html_context = {
     # "github_url": "https://github.com", # or your GitHub Enterprise site
     "github_user": "kenblu24",
     "github_repo": "RobotSwarmSimulator",
-    "github_version": "docs-live",
-    "doc_path": "doc/build/html/",
+    "github_version": "main",
+    "doc_path": "doc/source",
 }
 
 github_project_url = "https://github.com/kenblu24/RobotSwarmSimulator"
