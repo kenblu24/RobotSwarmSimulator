@@ -1,17 +1,16 @@
 from os import PathLike
 import pathlib as pl
 import pytest
-from ..util import load_custom_yaml
 
 from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 from swarmsim.world.simulate import main
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
+from ..util import load_custom_yaml
 
 
 def stop_after_one_step(world: RectangularWorld) -> bool:
     return world.total_steps == 1
-
 
 def setup_common_world(world_setup: dict) -> RectangularWorld:
     world_config = RectangularWorldConfig(**world_setup)
@@ -48,7 +47,6 @@ def setup_common_agent(world: RectangularWorld) -> BinaryFOVSensor:
 wd = pl.Path(__file__).parent
 path = wd / "configs"
 yaml_files = path.glob("*.yaml")
-
 
 @pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
 def test_yaml_file(yaml_path: PathLike):
