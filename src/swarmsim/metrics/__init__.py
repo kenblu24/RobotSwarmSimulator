@@ -25,6 +25,7 @@ from .BerlingerCircularity import (
 from .DistanceSizeRatio import DistanceSizeRatio
 from .DelaunayDispersal import Dispersal
 from .VoronoiDispersal import VoronoiRelaxation
+from .ShapeMaker import ShapeMaker
 
 __all__ = [
     "AbstractMetric",
@@ -58,4 +59,5 @@ __all__ = [
     "DistanceSizeRatio",
     "Dispersal",
     "VoronoiRelaxation",
+    "ShapeMaker",
 ]

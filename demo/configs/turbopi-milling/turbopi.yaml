@@ -4,7 +4,7 @@ sensors:
   custom_state_decision: "Linear"
   sensors:
     - type: "BinaryFOVSensor"
-      theta: 0.45   # Vision Angle / 2 (Radians)
+      theta: 0.9   # Vision Angle / 2 (Radians)
       agent_sensing_range: 1.0 # meters. previously 2.55
       show: true
       goal_sensing_range: 1.0
