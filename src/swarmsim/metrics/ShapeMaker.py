@@ -28,6 +28,15 @@ class ShapeMaker(AbstractMetric):
         self.world_size = world.config.size
         self.world_radius = world.config.radius    
 
+    # By taking the centroid of the population and finding the vectors from the centroid to each agent, we can find the angles between the vectors.
+    # We then sort the vectors by angle and take the difference between the angles between each vector and the next to get every angle between each vector.
+    # We then take the difference between each vector to get a vector from each agent to the next closest agent.
+    # Finally, we take the deviation of the vector differences and the view distance of the agents.
+    # And the standard deviation of the angle differences. Returning the sum of these two.
+    # This gives a value describing the relationship between the distance between an agent and its closest neightbor.
+    # By trying to maximize this value, it will try to make the agents for a polygon/shape with as many sides as agents, 
+    # with each side length being just under their view distance.
+    # i.e. 4 agents = square like shape, 5 agents = pentagon, etc.
     def calculate(self):
         side_distance = 0.9
         positions = [agent.getPosition() for agent in self.population]
@@ -55,7 +64,7 @@ class ShapeMaker(AbstractMetric):
         
         vector_deviation = get_deviation(vector_differences, side_distance)
         angle_deviation = np.std(np.asarray(angle_differences))
-        
+
         total_deviation = -1 * (vector_deviation + angle_deviation)
         self.set_value(total_deviation)
        
