@@ -163,6 +163,10 @@ class RectangularWorld(World):
 
     # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
     def updateQuad(self):
+        # prevent issues with no population
+        if not self.population:
+            return
+        
         # procedure to find the bounds of the quad
         def minMax(arr):
             minimum = arr[0]
