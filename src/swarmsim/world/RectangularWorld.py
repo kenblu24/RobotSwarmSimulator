@@ -163,7 +163,7 @@ class RectangularWorld(World):
 
     # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
     def updateQuad(self):
-        # prevent issues with no population
+        # we don't need to do all this if there are no agents
         if not self.population:
             return
         
