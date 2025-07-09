@@ -119,6 +119,7 @@ class RectangularWorldConfig(AbstractWorldConfig):
 
 
 class RectangularWorld(World):
+    maxAgentRadius = 0
     def __init__(self, config: RectangularWorldConfig, initialize=True):
         # if config is None:
         #     raise Exception("RectangularWorld must be instantiated with a WorldConfig class")
@@ -148,6 +149,7 @@ class RectangularWorld(World):
 
         It does not directly determine how fast the simulation runs, or the FPS.
         """
+        self.population.addListener("append", self.updateMaxRadius)
 
         #: Agent : currently selected agent.
         self.selected = None
@@ -161,6 +163,10 @@ class RectangularWorld(World):
 
     # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
     def updateQuad(self):
+        # we don't need to do all this if there are no agents
+        if not self.population:
+            return
+        
         # procedure to find the bounds of the quad
         def minMax(arr):
             minimum = arr[0]
@@ -222,6 +228,10 @@ class RectangularWorld(World):
     def setup(self, step_spawners=True):
         super().setup(step_spawners)
         self.updateQuad()
+
+    def updateMaxRadius(self, agent):
+        if hasattr(agent, "radius") and self.maxAgentRadius < agent.radius:
+            self.maxAgentRadius = agent.radius
 
     def step_agents(self):
         for agent in self.population:

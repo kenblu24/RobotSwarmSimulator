@@ -1,3 +1,4 @@
+from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
 import math
@@ -106,7 +107,7 @@ class BinaryFOVSensor(AbstractSensor):
         sensor_origin = self.agent.getPosition()
 
         # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
-        quadpoints = [point.data for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector()))]
+        quadpoints = [point.data for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector(world)))]
         # filter agents to those within the sensing radius        
         bag = [agent for agent in quadpoints if self.withinRadiusExclusiveFast(sensor_origin, agent.getPosition(), self.r)]
 
@@ -197,7 +198,7 @@ class BinaryFOVSensor(AbstractSensor):
         self.determineState(True, val, world)
 
     # get the smallest rectangle that contains the sensor fov sector
-    def getAARectContainingSector(self):
+    def getAARectContainingSector(self, world: RectangularWorld):
         angle: float = self.agent.angle + self.bias # global sensor angle
         span: float = self.theta # angle fov sweeps to either side
         radius: float = self.r # view radius
@@ -257,7 +258,7 @@ class BinaryFOVSensor(AbstractSensor):
                     xadd(radius * yts)
         
         # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
-        padding = 0 if self.detect_only_origins else self.agent.radius
+        padding = 0 if self.detect_only_origins else world.maxAgentRadius
 
         # positions are relative until now, make them absolute for the return
         return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
@@ -387,7 +388,7 @@ class BinaryFOVSensor(AbstractSensor):
                 pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
-                AAR = self.getAARectContainingSector()
+                AAR = self.getAARectContainingSector(self.agent.world)
                 AARtl = np.array(AAR[:2]) * zoom + pan
                 AARbr = np.array(AAR[2:]) * zoom + pan
                 pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
