@@ -1,6 +1,6 @@
 ---
 canSee_agent2: true
-canSee_agent3: true
+canSee_agent3: false
 ---
 type: "RectangularWorld"
 size: [5, 5]
