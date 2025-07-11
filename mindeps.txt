@@ -12,3 +12,4 @@ thorpy~=2.1.7  # used in 1 file
 circle_fit~=0.2.1
 pointpats~=2.5.1
 shapely~=2.0.6
+quads~=1.1.0
