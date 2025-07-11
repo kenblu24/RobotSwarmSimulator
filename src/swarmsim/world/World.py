@@ -169,7 +169,7 @@ class World:
         #: Metrics to calculate behaviors.
         self.metrics: list[AbstractMetric] = []
         #: The list of world objects.
-        self.objects: list[Agent] = []
+        self.objects: HookList[Agent] = HookList()
         self.goals = config.goals
         self.meta = config.metadata
         self.gui = None
