@@ -147,10 +147,8 @@ class AbstractWorldConfig:
 class HookList(list):
     def __init__(self):
         super().__init__()
-        self.listeners = {}
+        self.listeners = {"append": []}
     def addListener(self, target, listener):
-        if target not in self.listeners:
-            self.listeners[target] = []
         self.listeners[target].append(listener)
     def append(self, item):
         super().append(item)
