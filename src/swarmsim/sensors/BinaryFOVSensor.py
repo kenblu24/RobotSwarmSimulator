@@ -16,7 +16,7 @@ import warnings
 import quads
 
 # convert an angle to a representative unit vector
-def vectorize(angle) -> None:
+def vectorize(angle):
     return np.array((np.cos(angle), np.sin(angle)))
 
 # compute the vector turn value from origin→p1 to origin→p2
