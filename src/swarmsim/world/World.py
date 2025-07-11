@@ -144,6 +144,17 @@ class AbstractWorldConfig:
     #         goal.range *= zoom
     #     # self.init_type.rescale(zoom)
 
+class HookList(list):
+    listeners = {}
+    def addListener(self, target, listener):
+        if target not in self.listeners:
+            self.listeners[target] = []
+        self.listeners[target].append(listener)
+    def append(self, item):
+        super().append(item)
+        for listener in self.listeners["append"]:
+            listener(item)
+
 
 class World:
     """Base world class.
@@ -152,13 +163,13 @@ class World:
         self.config = config
         config = replace(config)
         #: List of agents in the world.
-        self.population: list[Agent] = []
+        self.population: HookList[Agent] = HookList()
         #: List of spawners which create agents or objects.
         self.spawners: list[Spawner] = []
         #: Metrics to calculate behaviors.
         self.metrics: list[AbstractMetric] = []
         #: The list of world objects.
-        self.objects: list[Agent] = []
+        self.objects: HookList[Agent] = HookList()
         self.goals = config.goals
         self.meta = config.metadata
         self.gui = None
