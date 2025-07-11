@@ -119,8 +119,9 @@ class RectangularWorldConfig(AbstractWorldConfig):
 
 
 class RectangularWorld(World):
-    maxAgentRadius = 0
+    
     def __init__(self, config: RectangularWorldConfig, initialize=True):
+        self.maxAgentRadius = 0
         # if config is None:
         #     raise Exception("RectangularWorld must be instantiated with a WorldConfig class")
 
