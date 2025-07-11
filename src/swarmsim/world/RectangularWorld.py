@@ -41,6 +41,8 @@ from ..util.collider.AABB import AABB
 from .goals.Goal import CylinderGoal
 from .objects.Wall import Wall
 
+import quads
+
 from ..physics.Physics import Physics, snapPhysicsToAgent
 
 # typing
@@ -119,7 +121,9 @@ class RectangularWorldConfig(AbstractWorldConfig):
 
 
 class RectangularWorld(World):
+    
     def __init__(self, config: RectangularWorldConfig, initialize=True):
+        self.maxAgentRadius = 0
         # if config is None:
         #     raise Exception("RectangularWorld must be instantiated with a WorldConfig class")
 
@@ -154,6 +158,7 @@ class RectangularWorld(World):
 
         It does not directly determine how fast the simulation runs, or the FPS.
         """
+        self.population.addListener("append", self.updateMaxRadius)
 
         #: Agent : currently selected agent.
         self.selected = None
@@ -164,6 +169,35 @@ class RectangularWorld(World):
 
         if initialize:
             self.setup_objects(config.objects)
+
+    # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
+    def updateQuad(self):
+        # we don't need to do all this if there are no agents
+        if not self.population:
+            return
+        
+        # procedure to find the bounds of the quad
+        def minMax(arr):
+            minimum = arr[0]
+            maximum = arr[0]
+            for e in arr:
+                if e < minimum:
+                    minimum = e
+                if maximum < e:
+                    maximum = e
+            return minimum, maximum
+        xMin, xMax = minMax([agent.pos[0] for agent in self.population])
+        yMin, yMax = minMax([agent.pos[1] for agent in self.population])
+        middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
+
+        # create quad that nicely contains the current population
+        newQuad = quads.QuadTree(middle, np.ceil(xMax - xMin) + 4, np.ceil(yMax - yMin) + 4)
+        
+        # add the agents to the quad
+        for agent in self.population:
+            newQuad.insert(point=agent.pos.tolist(), data=agent)
+        self.quad = newQuad
+
 
     def connectPhysicsObject(self, agent):
         if agent.grounded:
@@ -210,6 +244,15 @@ class RectangularWorld(World):
             else:
                 raise TypeError("Expected a string value for 'from_svg' key in 'objects' list.")
 
+    # override the inherited setup function to call updateQuad() after setup
+    def setup(self, step_spawners=True):
+        super().setup(step_spawners)
+        self.updateQuad()
+
+    def updateMaxRadius(self, agent):
+        if hasattr(agent, "radius") and self.maxAgentRadius < agent.radius:
+            self.maxAgentRadius = agent.radius
+
     def step_agents(self):
         for agent in self.population:
             agent.step(
@@ -218,6 +261,17 @@ class RectangularWorld(World):
                 world=self,
             )
             self.handleGoalCollisions(agent)
+    
+    def step(self):
+        self.total_steps += 1
+
+        self.step_spawners()
+        self.step_agents()
+        self.step_objects()
+        
+        
+
+        self.step_metrics()
 
     def step(self):
         self.total_steps += 1
@@ -228,6 +282,8 @@ class RectangularWorld(World):
 
         if self.usePhysics:
             self.physics.step() # this is the difference from the superclass's step
+
+        self.updateQuad() # update the position of agents in the quad tree
 
         self.step_metrics()
 

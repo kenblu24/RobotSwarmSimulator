@@ -36,6 +36,7 @@ dependencies = [
     "circle_fit",
     "shapely",
     "pandas",
+    "quads",
 ]
 
 [project.optional-dependencies]
