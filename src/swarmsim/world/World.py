@@ -145,7 +145,9 @@ class AbstractWorldConfig:
     #     # self.init_type.rescale(zoom)
 
 class HookList(list):
-    listeners = {}
+    def __init__(self):
+        super().__init__()
+        self.listeners = {}
     def addListener(self, target, listener):
         if target not in self.listeners:
             self.listeners[target] = []
