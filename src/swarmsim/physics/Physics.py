@@ -93,14 +93,23 @@ def getOrtho(vec: Vec2d, omega):
         return Vec2d.zero()
     return Vec2d(-vec.y * omega, vec.x * omega).normalized()
 
-def peakAgentForce(body: pymunk.Body, velocity, omega):
-    fakeBody = pymunk.Body(mass=body.mass)
+peakAgentForceCache = {}
+
+def peakAgentForce(mass, velocity, omega):
+    #caching here!
+    argTup = (mass, velocity, omega)
+    if argTup in peakAgentForceCache:
+        return peakAgentForceCache[argTup]
+
+    fakeBody = pymunk.Body(mass=mass)
     fakeBody.velocity = Vec2d(velocity, 0)
     # kf = kineticFriction(fakeBody, 1, 0)
     fcmag = fakeBody.mass * velocity * omega
     if fcmag == 0:
         return 0
     fc = getOrtho(fakeBody.velocity, omega).scale_to_length(fcmag)
+    
+    peakAgentForceCache[argTup] = (fc).length # caching
     return (fc).length
 
 def agentForces(body: pymunk.Body, velocity, omega, peakForce, dt):
@@ -139,7 +148,7 @@ def unicycleForces(body: pymunk.Body, v, omega, dt, peakV, peakOmega):
 
     # friction = kineticFriction(body, 1, self.dt)
     # body.apply_force_at_local_point(friction)
-    peakForce = peakAgentForce(body, peakVelocity, peakOmega)
+    peakForce = peakAgentForce(body.mass, peakVelocity, peakOmega)
     force = agentForces(body, v, omega, peakForce, dt)
     body.apply_force_at_local_point(force)
 
