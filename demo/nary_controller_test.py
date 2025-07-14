@@ -14,19 +14,22 @@ agent1_sensors = [
     BinaryFOVSensor(theta=0.45, distance=2, bias=0),
     BinaryFOVSensor(theta=0.45, distance=2, bias=np.pi / -2)
 ]
-agent1_controller = NaryController(on_nothing=(0.05, 0.0), on_detect=[
-    (0.0, 0.05), (0.0, 0.5)
-])
+agent1_controller = NaryController(on_nothing=(0.1, 0.0), on_detect=[
+    (0.0, 0.2), (0.0, -0.2)
+], mode="first")
 agent1_config = MazeAgentConfig(
-    position=(2, 5), agent_radius=0.175, controller=agent1_controller, sensors=agent1_sensors
+    position=(3, 5), agent_radius=0.175, controller=agent1_controller, sensors=agent1_sensors
 )
 agent1 = MazeAgent(agent1_config, world)
 
-agent2_config = MazeAgentConfig(position=(5, 5), agent_radius=0.175)
+agent2_config = MazeAgentConfig(position=(5, 4), agent_radius=0.175)
 agent2 = MazeAgent(agent2_config, world)
 
+agent3_config = MazeAgentConfig(position=(6, 5), agent_radius=0.175)
+agent3 = MazeAgent(agent3_config, world)
 
 world.population.append(agent1)
 world.population.append(agent2)
+world.population.append(agent3)
 
 sim(world)
