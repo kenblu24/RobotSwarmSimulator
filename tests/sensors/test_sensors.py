@@ -4,7 +4,6 @@ import pytest
 
 from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 from swarmsim.world.simulate import main
-from swarmsim.world.World import HookList
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
 from ..util import load_custom_yaml

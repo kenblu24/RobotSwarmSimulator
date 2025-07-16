@@ -34,8 +34,7 @@ class TestAgentConf:
 
     def test_position(self):
         assert len(self.agent.pos) == len(self.bac.position)
-        assert self.agent.pos[0] == self.bac.position[0]
-        assert self.agent.pos[1] == self.bac.position[1]
+        assert (self.agent.pos == self.bac.position).all()
 
     def test_angle(self):
         assert self.agent.angle == self.bac.angle

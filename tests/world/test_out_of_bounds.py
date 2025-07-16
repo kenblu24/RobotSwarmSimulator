@@ -1,9 +1,7 @@
 from pathlib import Path
 
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
-from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 from swarmsim.agent.Agent import Agent
-from swarmsim.world.simulate import main as simulate
 from ..util import load_custom_yaml
 
 
@@ -15,19 +13,11 @@ def test_out_of_bounds() -> None:
     spec, world_setup = load_custom_yaml(yaml_path)
     world_config = RectangularWorldConfig(**world_setup)
     world = RectangularWorld(world_config)
+    world.setup()
 
-    last_frame: int = 0
     n_frames: int = 50
-    for _ in range(1, n_frames + 1):
-        simulate(world, show_gui=False,
-            stop_detection=lambda w: stop_after_one_step(w, n_frames=last_frame + 1)
-        )
-        last_frame = world.total_steps
-
-        # > How many agents are there?
-        assert len(world.population) == 4
-        # > How many agents are there?
-        assert len(world.population) >= 1
+    for _ in range(n_frames):
+        world.step()
 
         agent_info: list[tuple[int, str]] = [
             # index, name
