@@ -268,17 +268,6 @@ class RectangularWorld(World):
         self.step_spawners()
         self.step_agents()
         self.step_objects()
-        
-        
-
-        self.step_metrics()
-
-    def step(self):
-        self.total_steps += 1
-
-        self.step_spawners()
-        self.step_agents()
-        self.step_objects()
 
         if self.usePhysics:
             self.physics.step() # this is the difference from the superclass's step
