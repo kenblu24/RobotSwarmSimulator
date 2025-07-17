@@ -2,7 +2,8 @@ import pytest
 from pytest_mock import MockerFixture
 
 import numpy as np
-from swarmsim.agent.MazeAgent import MazeAgent
+from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
+from swarmsim.agent.StaticAgent import RectangularWorldConfig
 from swarmsim.world.RectangularWorld import RectangularWorld
 from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 
@@ -10,25 +11,25 @@ from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 class TestPointSpawners:
     @pytest.fixture(autouse=True)
     def spawner_setup(self, mocker: MockerFixture):
-        self.world = mocker.Mock(spec=RectangularWorld)
-        self.world.population = []
-        self.world.rng = np.random.default_rng()  # np.random.Generator
-        self.world.spawners = []  # list[Spawner]
+        rwc = RectangularWorldConfig(size=(5, 5))
+        self.world: RectangularWorld = RectangularWorld(rwc)
+        self.world.setup()
 
-        agent = mocker.MagicMock(spec=MazeAgent)
+        agentconf = MazeAgentConfig(position=(2, 2))
+        agent = MazeAgent(agentconf, self.world)
         agent.pos = np.array((5, 5))
 
-        self.n_objects: int = 6
         spawner = PointAgentSpawner(
-            self.world, n=self.n_objects, facing="away", avoid_overlap=True,
+            self.world, n=6, facing="away", avoid_overlap=True,
             agent=agent,
         )
         self.world.spawners.append(spawner)
 
     def test_do_spawn(self):
-        self.world.spawners[0].do_spawn()
+        assert len(self.world.population) == 0
+        self.world.spawners[0].do_spawn() # type: ignore
         assert len(self.world.population) == 1
 
-    # def test_step(self):
-    #     self.spawner.step()
-    #     assert len(self.world.population), self.n_objects
+        agent = self.world.population[0] # type: ignore
+        assert type(agent).__name__ == "MazeAgent"
+
