@@ -1,0 +1,33 @@
+---
+canSee_agent2: true
+canSee_agent3: false
+---
+type: "RectangularWorld"
+size: [5, 5]
+time_step: !np 1 / 40
+agents:
+  - type: "MazeAgent"
+    position: [2.5, 2.5]
+    name: "agent1"
+    angle: 0.0
+    agent_radius: 0.175
+    sensors:
+      - type: "BinaryFOVSensor"
+        theta: !np deg2rad(30)
+        bias: !np deg2rad(30)
+        distance: 1.5
+
+  # Agent that can be seen by 'agent1'
+  - type: "MazeAgent"
+    position: [!np 2.5 + 1.2 * cos(deg2rad(30)), !np 2.5 + 1.2 * sin(deg2rad(30))]
+    name: "agent2"
+    angle: 0.0
+    agent_radius: 0.175
+
+  # Agent that can NOT be seen by 'agent1'
+  - type: "MazeAgent"
+    position: [3.125, 2.25]
+    name: "agent3"
+    angle: 0.0
+    agent_radius: 0.175
+...

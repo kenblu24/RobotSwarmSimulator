@@ -1,0 +1,21 @@
+---
+expected: false
+---
+type: "RectangularWorld"
+size: [5, 5]
+time_step: !np 1 / 40
+agents:
+    - type: "MazeAgent"
+      position: [2.5, 2.5]
+      name: "agent1"
+      angle: 0.0
+      agent_radius: 0.175
+      sensors:
+        - type: "BinaryFOVSensor"
+          theta: 0.45
+          distance: 1
+    - type: "MazeAgent"
+      # position: [agent.pos + dcos(theta), agent.pos + dsin(theta)]
+      position: [!np 2.5 + 1.3 * cos(-0.45), !np 2.5 + 1.3 * sin(-0.45)]
+      agent_radius: 0.175
+      angle: 0.0
