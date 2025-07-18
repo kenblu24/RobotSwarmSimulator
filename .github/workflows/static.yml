@@ -51,7 +51,6 @@ jobs:
     - name: Verify installation
       run: |
         python -c "import sys; print(sys.exec_prefix)"
-        python -c "import swarmsim"
         uv pip list
         uv pip show swarmsim
     - name: Build HTML

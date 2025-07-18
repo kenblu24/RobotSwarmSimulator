@@ -29,6 +29,8 @@ jobs:
 
     - name: Setup Graphviz
       uses: ts-graphviz/setup-graphviz@v2
+      with:
+        enable-cache: true
 
     - name: Set up Python  # use uv to install Python
       run: uv python install
@@ -38,6 +40,7 @@ jobs:
         uv venv venv
         . venv/bin/activate
         echo PATH=$PATH >> $GITHUB_ENV
+        echo VIRTUAL_ENV=$VIRTUAL_ENV >> $GITHUB_ENV
         uv pip install .[docs]
         echo $PATH
       # note: need to modify GITHUB_ENV path for the new venv to be used
@@ -48,6 +51,7 @@ jobs:
          echo $PATH
     - name: Verify installation
       run: |
+        python -c "import sys; print(sys.exec_prefix)"
         uv pip show swarmsim
     - name: Build HTML
       run: |
