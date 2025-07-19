@@ -33,13 +33,13 @@ class Fatness2(RadialVarianceHelper):
         rmax = np.max(distances)
 
         # calculate Fatness but opposite (0 is fat, 1 is perfect circle formation)
-        return (rmin ** 2) / (rmax ** 2)
+        return (rmin ** 2) / (rmax ** 2) * self.scale
 
 
 class Fatness(Fatness2):
     def _calculate(self):
         # calculate Fatness (eq(6) from C. Taylor, The impact of catastrophic collisions..., 2021)
-        return 1 - super()._calculate()
+        return 1 - super()._calculate() * self.scale
 
 
 class Tangentness(RadialVarianceHelper):
@@ -74,7 +74,7 @@ class Tangentness(RadialVarianceHelper):
         n = len(self.population)
 
         # calculate Tangentness
-        return np.sum([self.tangentness_inner(agent, mu) for agent in self.population]) / n
+        return np.sum([self.tangentness_inner(agent, mu) for agent in self.population]) / n * self.scale
 
 
 class Circliness(RadialVarianceHelper):
@@ -113,7 +113,7 @@ class Circliness(RadialVarianceHelper):
         _, tau_ = self.tangentness.out_average()
         _, phi_ = self.fatness.out_average()
 
-        return 1 - max(phi_, tau_)
+        return 1 - max(phi_, tau_) * self.scale
 
     def calculate(self):
         self.tangentness.calculate()
@@ -136,4 +136,4 @@ class RoutRin(RadialVarianceHelper):
         rin = np.min(distances)
         rout = np.max(distances)
 
-        return rout - rin
+        return (rout - rin) * self.scale
