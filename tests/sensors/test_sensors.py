@@ -12,6 +12,7 @@ from ..util import load_custom_yaml
 def stop_after_one_step(world: RectangularWorld) -> bool:
     return world.total_steps == 1
 
+
 def setup_common_world(world_setup: dict) -> RectangularWorld:
     world_config = RectangularWorldConfig(**world_setup)
     world = RectangularWorld(world_config)
@@ -46,9 +47,11 @@ def setup_common_agent(world: RectangularWorld) -> BinaryFOVSensor:
 
 wd = pl.Path(__file__).parent
 path = wd / "configs"
-yaml_files = path.glob("*.yaml")
 
-@pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
+binary_fov_yaml_files = (path / "BinaryFOV").glob("*.yaml")
+
+
+@pytest.mark.parametrize("yaml_path", binary_fov_yaml_files, ids=lambda x: x.stem)
 def test_yaml_file(yaml_path: PathLike):
     spec, world_setup = load_custom_yaml(yaml_path)
     world: RectangularWorld = setup_common_world(world_setup)
@@ -58,9 +61,8 @@ def test_yaml_file(yaml_path: PathLike):
     assert collided == spec["expected"]
 
 
-wd = pl.Path(__file__).parent
-path = wd / "configs" / "180degFOV"
-large_fov_yaml_files = path.glob("*.yaml")
+large_fov_yaml_files = (path / "180degFOV").glob("*.yaml")
+
 
 @pytest.mark.parametrize("yaml_path", large_fov_yaml_files, ids=lambda x: x.stem)
 def test_180degFOV_yaml_file(yaml_path: PathLike):
