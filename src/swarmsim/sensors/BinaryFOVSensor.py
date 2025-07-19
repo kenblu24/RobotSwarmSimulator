@@ -110,7 +110,7 @@ class BinaryFOVSensor(AbstractSensor):
 
         # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
         quadpoints = [point.data for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector(world)))]
-        # filter agents to those within the sensing radius        
+        # filter agents to those within the sensing radius
         bag = [agent for agent in quadpoints if self.withinRadiusExclusiveFast(sensor_origin, agent.getPosition(), self.r)]
 
         # get left and right whiskers
@@ -154,7 +154,7 @@ class BinaryFOVSensor(AbstractSensor):
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
 
-        
+
         # true if the sensor fov is less than 180°
         l180 = self.theta * 2 < np.pi
 
@@ -164,11 +164,11 @@ class BinaryFOVSensor(AbstractSensor):
 
             if self.target_team and not agent.team == self.target_team:
             continue
-            
+
             u = agent.getPosition() - sensor_origin # vector to agent
             leftTurn = turn(u, e_left)
             rightTurn = turn(u, e_right)
-            
+
             # if fov < 180 use between minor arc, otherwise use not between minor arc
             if rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn):
                 self.determineState(True, agent, world)
@@ -219,10 +219,10 @@ class BinaryFOVSensor(AbstractSensor):
 
         xts = np.sign(turn(xaxis, center)) # sign of turn from x axis to look direction
         fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker)) # true if turns from x axis to whiskers have different signs
-        
+
         yts = np.sign(turn(yaxis, center)) # sign of turn from y axis to look direction
         fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker)) # true if turns from y axis to whiskers have different signs
-        
+
         xmin = 0
         xmax = 0
         ymin = 0
@@ -241,7 +241,7 @@ class BinaryFOVSensor(AbstractSensor):
             nonlocal ymax
             if ymax < val:
                 ymax = val
-        
+
         # consider the x coordinates of the whisker ends
         xadd(leftWhisker[0] * radius)
         xadd(rightWhisker[0] * radius)
@@ -261,13 +261,13 @@ class BinaryFOVSensor(AbstractSensor):
                 xadd(radius * -yts)
                 if not fovOverXAxis: # if over y axis, over 180, and not over x axis, x range is maximized in both directions
                     xadd(radius * yts)
-        
+
         # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
         padding = 0 if self.detect_only_origins else world.maxAgentRadius
 
         # positions are relative until now, make them absolute for the return
         return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
-        # xmin, ymin, xmax, ymax 
+        # xmin, ymin, xmax, ymax
 
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors
