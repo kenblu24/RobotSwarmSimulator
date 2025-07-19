@@ -15,23 +15,28 @@ else:
 import warnings
 import quads
 
+
 # convert an angle to a representative unit vector
 def vectorize(angle):
     return np.array((np.cos(angle), np.sin(angle)))
+
 
 # compute the vector turn value from origin→p1 to origin→p2
 # this value is positive if a left turn is the fastest way to go from p1 to p2, zero if p1 and p2 are colinear, and negative otherwise
 def turn(p1, p2):
     return p1[0] * p2[1] - p2[0] * p1[1]
 
+
 # project vector a onto vector b
 def project(a, b):
     return b * (np.dot(a, b) / np.dot(b, b))
+
 
 # determine if the line in the direction of the first arugment intersects the circle defined by the second and third arguments
 def lineCircleIntersect(line, center, radius):
     clDiffVec = center - project(center, line)
     return np.dot(clDiffVec, clDiffVec) <= radius**2
+
 
 class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
@@ -58,7 +63,7 @@ class BinaryFOVSensor(AbstractSensor):
         detect_goal_with_added_state=False,
         show=True,
         seed=None,
-        target_team =None,
+        target_team=None,
         **kwargs
     ):
         super().__init__(agent=agent, parent=parent)
@@ -154,18 +159,17 @@ class BinaryFOVSensor(AbstractSensor):
         #             consideration_set.append((d_to_inter, None))
         # Detect Other Agents
 
-
         # true if the sensor fov is less than 180°
         l180 = self.theta * 2 < np.pi
 
         for agent in bag:
-            if agent is self.agent: # skip the agent the sensor is attached to
+            if agent is self.agent:  # skip the agent the sensor is attached to
                 continue
 
             if self.target_team and not agent.team == self.target_team:
                 continue
 
-            u = agent.getPosition() - sensor_origin # vector to agent
+            u = agent.getPosition() - sensor_origin  # vector to agent
             leftTurn = turn(u, e_left)
             rightTurn = turn(u, e_right)
 
@@ -204,37 +208,39 @@ class BinaryFOVSensor(AbstractSensor):
 
     # get the smallest rectangle that contains the sensor fov sector
     def getAARectContainingSector(self, world: RectangularWorld):
-        angle: float = self.agent.angle + self.bias # global sensor angle
-        span: float = self.theta # angle fov sweeps to either side
-        radius: float = self.r # view radius
-        position: list[float] = self.agent.pos.tolist() # agent global position
+        angle: float = self.agent.angle + self.bias  # global sensor angle
+        span: float = self.theta  # angle fov sweeps to either side
+        radius: float = self.r  # view radius
+        position: list[float] = self.agent.pos.tolist()  # agent global position
 
-        over180 = np.pi <= span*2 # true if 180 <= FOV
+        over180 = np.pi <= span * 2  # true if 180 <= FOV
 
-        center = vectorize(angle) # vector representing absolute look direction
-        leftWhisker = vectorize(angle + span) # vector representing left whisker
-        rightWhisker = vectorize(angle - span) # vector representing right whisker
-        xaxis = (1, 0) # vector representing positive x axis
-        yaxis = (0, 1) # vector representing positive y axis
+        center = vectorize(angle)  # vector representing absolute look direction
+        leftWhisker = vectorize(angle + span)  # vector representing left whisker
+        rightWhisker = vectorize(angle - span)  # vector representing right whisker
+        xaxis = (1, 0)  # vector representing positive x axis
+        yaxis = (0, 1)  # vector representing positive y axis
 
-        xts = np.sign(turn(xaxis, center)) # sign of turn from x axis to look direction
-        fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker)) # true if turns from x axis to whiskers have different signs
+        xts = np.sign(turn(xaxis, center))  # sign of turn from x axis to look direction
+        fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker))  # true if turns from x axis to whiskers have different signs
 
-        yts = np.sign(turn(yaxis, center)) # sign of turn from y axis to look direction
-        fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker)) # true if turns from y axis to whiskers have different signs
+        yts = np.sign(turn(yaxis, center))  # sign of turn from y axis to look direction
+        fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker))  # true if turns from y axis to whiskers have different signs
 
         xmin = 0
         xmax = 0
         ymin = 0
         ymax = 0
-        def xadd(val): # extend either xmin or xmax if outside current range
+
+        def xadd(val):  # extend either xmin or xmax if outside current range
             nonlocal xmin
             if val < xmin:
                 xmin = val
             nonlocal xmax
             if xmax < val:
                 xmax = val
-        def yadd(val): # extend either ymin or ymax if outside current range
+
+        def yadd(val):  # extend either ymin or ymax if outside current range
             nonlocal ymin
             if val < ymin:
                 ymin = val
@@ -245,21 +251,21 @@ class BinaryFOVSensor(AbstractSensor):
         # consider the x coordinates of the whisker ends
         xadd(leftWhisker[0] * radius)
         xadd(rightWhisker[0] * radius)
-        if fovOverXAxis: # if over x axis, x range is maximized to radius either left or right
-            xadd(radius * -yts) # left or right is determined by the negated sign of the turn from the positive y axis to the look direction
-            if over180: # if also over 180, then y range is maximized to radius in the direction closer to the look direction
+        if fovOverXAxis:  # if over x axis, x range is maximized to radius either left or right
+            xadd(radius * -yts)  # left or right is determined by the negated sign of the turn from the positive y axis to the look direction
+            if over180:  # if also over 180, then y range is maximized to radius in the direction closer to the look direction
                 yadd(radius * xts)
-                if not fovOverYAxis: # if over x axis, over 180, and not over y axis, y range is maximized in both directions
+                if not fovOverYAxis:  # if over x axis, over 180, and not over y axis, y range is maximized in both directions
                     yadd(radius * -xts)
 
         # consider the y coordinates of the whisker ends
         yadd(leftWhisker[1] * radius)
         yadd(rightWhisker[1] * radius)
-        if fovOverYAxis: # if over y axis, y range is maximized to radius either up or down
-            yadd(radius * xts) # up or down is determined by the sign of the turn from the positive x axis to the look direction
-            if over180: # if also over 180, then x range is maximized to radius in the direction closer to the look direction
+        if fovOverYAxis:  # if over y axis, y range is maximized to radius either up or down
+            yadd(radius * xts)  # up or down is determined by the sign of the turn from the positive x axis to the look direction
+            if over180:  # if also over 180, then x range is maximized to radius in the direction closer to the look direction
                 xadd(radius * -yts)
-                if not fovOverXAxis: # if over y axis, over 180, and not over x axis, x range is maximized in both directions
+                if not fovOverXAxis:  # if over y axis, over 180, and not over x axis, x range is maximized in both directions
                     xadd(radius * yts)
 
         # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
@@ -399,7 +405,7 @@ class BinaryFOVSensor(AbstractSensor):
                 pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
                 detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
                 for agent in detected:
-                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width*3)
+                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width * 3)
 
     # this function has been replaced by a more efficient procedure in checkForLOSCollisions and is no longer called there
     def circle_interesect_sensing_cone(self, u, r):
