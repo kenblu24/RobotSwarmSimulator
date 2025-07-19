@@ -23,7 +23,8 @@ from .BerlingerCircularity import (
     InstantKMHCircularity,
 )
 from .DistanceSizeRatio import DistanceSizeRatio
-from .DelaunayDispersal import Dispersal
+from .DelaunayDiffusion import DelaunayDiffusion
+from .Dispersion import InteragentDispersion, ExplodingDispersion
 
 __all__ = [
     "AbstractMetric",
@@ -55,5 +56,7 @@ __all__ = [
     "InstantHyperSVDCircularity",
     "InstantKMHCircularity",
     "DistanceSizeRatio",
-    "Dispersal",
+    "DelaunayDiffusion",
+    "InteragentDispersion",
+    "ExplodingDispersion",
 ]

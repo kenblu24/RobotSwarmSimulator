@@ -4,11 +4,12 @@ from .RadialVariance import RadialVarianceMetric
 
 
 class RadialVarianceHelper(RadialVarianceMetric):
-    def __init__(self, history=100, regularize=False, name=None):
+    def __init__(self, history=100, regularize=False, name=None, scale=1.0):
         if regularize:
             raise NotImplementedError
         super().__init__(history=history, regularize=False)
         self.name = self.__class__.__name__ if name is None else name
+        self.scale = scale
 
     def _calculate(self):
         pass
