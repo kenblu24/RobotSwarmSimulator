@@ -1,9 +1,9 @@
-from RobotSwarmSimulator.src.novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
-from RobotSwarmSimulator.src.novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-from RobotSwarmSimulator.src.novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
-from RobotSwarmSimulator.src.novel_swarms.world.simulate import main as sim
-from RobotSwarmSimulator.src.novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
-from RobotSwarmSimulator.src.novel_swarms.agent.control.BinaryController import BinaryController
+from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
+from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
+from swarmsim.world.simulate import main as sim
+from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
+from swarmsim.agent.control.BinaryController import BinaryController
 
 
 controller = BinaryController((0.4, 0), (0.4, 0.2))
