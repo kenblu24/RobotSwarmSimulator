@@ -163,7 +163,7 @@ class BinaryFOVSensor(AbstractSensor):
                 continue
 
             if self.target_team and not agent.team == self.target_team:
-            continue
+                continue
 
             u = agent.getPosition() - sensor_origin # vector to agent
             leftTurn = turn(u, e_left)
