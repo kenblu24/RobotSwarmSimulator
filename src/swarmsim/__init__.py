@@ -4,7 +4,7 @@
 
 try:
     import importlib.metadata
-    __version__ = importlib.metadata.version("superneuromat")
+    __version__ = importlib.metadata.version(__package__ or "swarmsim")
 except (ImportError, StopIteration):
     __version__ = "unknown"
 
