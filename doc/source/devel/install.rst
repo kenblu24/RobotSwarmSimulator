@@ -10,9 +10,9 @@ This page describes how to install RobotSwarmSimulator for development.
    and uses **SSH URLs** for git. External contributors should fork the repository <https://github.com/kenblu24/RobotSwarmSimulator/fork>
 
 .. seealso::
-   This guide assumes you're using a Unix-like operating system, such as :fab:`linux` Linux or :fab:`apple` macOS.
-   If you're on :fab:`windows` Windows, please use WSL :doc:`/guide/install-wsl` and then follow this guide
-   as if you were on Linux (because you are). Then, see :ref:`wsl-post-install` for further setup.
+   This guide was written with a Unix-like operating system in mind, such as :fab:`linux` Linux or :fab:`apple` macOS.
+   If you're on :fab:`windows` Windows, consider using WSL :doc:`/guide/install-wsl` which allows you to follow this guide
+   as if you were on Linux. Then, see :ref:`wsl-post-install` for further setup.
 
 
 Installing git
@@ -28,6 +28,8 @@ If you're contributing to RobotSwarmSimulator, you should probably be using :fab
    :fab:`git-alt` Download git :fas:`arrow-up-right-from-square`
 
 Once you have git, make sure you can run ``git`` from the command line. If not, you may need to restart your terminal.
+
+.. _rss-install-ssh-keys:
 
 SSH keys
 ========
@@ -70,7 +72,7 @@ See the `GitHub documentation <https://docs.github.com/en/authentication/connect
 Python Installation
 ===================
 
-If you're on :fab:`ubuntu` Ubuntu or a :fab:`debian` Debian-based Linux distribution, you should use ``pyenv``
+If you're on :fab:`ubuntu` Ubuntu or a :fab:`debian` Debian-based Linux distribution (including :fab:`windows` :fab:`linux` WSL), you should use ``pyenv``
 to install :fab:`python` Python 3.11 or later.
 
 This allows you to install any Python version you want, without affecting your system Python installation.
@@ -97,17 +99,41 @@ You should see something similar to this:
    pip 24.2 from /home/username/.pyenv/versions/3.13.0/lib/python3.13/site-packages/pip (python 3.13)
 
 
+:fab:`windows` Native Windows users can use a Python installer from `Python.org <https://www.python.org/downloads/>`_.
+Make sure to check the box to add Python to PATH.
+
+
 .. hint::
-   This needs to be done before creating the virtual environment, as ``venv`` or ``virtualenv``
+   This needs to be done before creating the virtual environment, as ``uv venv`` or ``virtualenv``
    will use whatever version of Python it finds when you run it. Running ``which python`` may help you know more.
 
    If you already made the virtual environment, the easiest way to fix this is to delete the virtual environment and start over.
 
 .. seealso::
-   If you're running Tennlab simulations on the **Hopper cluster**, please use the `hopper install scripts <https://gitlab.orc.gmu.edu/kzhu4/neuromorphic_experiments/-/tree/master/scripts/hopper?ref_type=heads>`_.
+   If you're running Tennlab simulations on the **Hopper cluster**, please use the `hopper install scripts <https://github.com/GMU-ASRC/neuroswarm/tree/main/scripts/hopper>`_.
+
+
+.. _rss-install-editable:
 
 Downloading & Installing as editable
 ====================================
+
+We recommend using UV which provides environment tools and faster installs.
+
+.. dropdown:: Install UV for faster installs
+   :color: secondary
+   :open:
+
+   .. code-block:: bash
+      :caption: Install ``uv`` <https://github.com/pyuv/uv> for faster installs
+
+      pip install uv -U
+
+   The ``-U`` flag is shorthand for ``--upgrade``.
+   
+   You can preface most ``pip install`` commands with ``uv`` for *much* faster installation.
+   ``uv pip install`` may not work for some packages. If you get an error, try using regular ``pip install`` first.
+
 
 First, let's make a project folder and **virtual environment**. Pick a place
 to store your virtual environment. In this example, we'll use the ``swarm/`` folder.
@@ -117,16 +143,83 @@ to store your virtual environment. In this example, we'll use the ``swarm/`` fol
 
    mkdir swarm
    cd swarm
-   pip install virtualenv
-   virtualenv .
+
+Next, we can create the virtual environment.
+
+.. tab-set::
+   :class: sd-width-content-min
+   :sync-group: uv
+
+   .. tab-item:: uv
+      :sync: uv     
+
+      .. code-block:: bash
+         :caption: Create a virtual environment
+
+         uv venv
+         
+
+   .. tab-item:: pip
+      :sync: pip
+
+      .. code-block:: bash
+         :caption: Create a virtual environment
+
+         pip install virtualenv
+         virtualenv .venv --prompt .
+
+Now, we need to activate the virtual environment.
+
+.. tab-set::
+   :class: sd-width-content-min
+   :sync-group: os
+
+   .. tab-item:: :fab:`windows` Windows
+      :sync: windows
+
+      .. code-block:: bat
+
+         .venv\Scripts\activate
+
+   .. tab-item:: :fab:`linux` Linux / :fab:`apple` macOS / :fab:`windows`\ :fab:`linux` WSL
+      :sync: posix
+
+      .. code-block:: bash
+
+         source .venv/bin/activate
+
+.. include:: /guide/activating_others.rst
+
+You can deactivate the virtual environment with the ``deactivate`` command.
 
 Then, let's `git clone` the RobotSwarmSimulator repository.
 
 .. code-block:: bash
    :caption: git clone the RobotSwarmSimulator repository and ``cd`` into it
 
-   git clone git@github.com:kenblu24/RobotSwarmSimulator.git
+   git clone https://github.com/kenblu24/RobotSwarmSimulator.git
    cd RobotSwarmSimulator
+
+.. admonition:: SSH URLs
+
+   If you're contributing to or modifying RobotSwarmSimulator, you should use SSH URLs for git.
+   See :ref:`rss-install-ssh-keys` for more information.
+
+   GitHub won't let you push to HTTPS remote URLs using password authentication. If you choose to use the HTTPS URL as shown above,
+   you'll need to create a `personal access token <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>`_
+   and use that as the password every time you push.
+
+   However, if you successfully set up your SSH key in the `section above <snm-install-ssh-keys>`_, and have contributor-level permissions on GitHub,
+   you can use the SSH URL instead.
+
+   .. code-block:: bash
+      :caption: git clone the RobotSwarmSimulator repository (using SSH URL) and ``cd`` into it
+
+      git clone git@github.com:kenblu24/RobotSwarmSimulator.git
+      cd RobotSwarmSimulator
+
+   Again, if you're not an internal contributor, you'll need to fork the <https://github.com/kenblu24/RobotSwarmSimulator/fork> repository and use the URL for your fork.
+
 
 A ``pip --editable`` install allows you to make changes to the code and see the effects immediately.
 
@@ -143,7 +236,16 @@ A ``pip --editable`` install allows you to make changes to the code and see the 
 
    ``uv pip install`` may not work for some packages. If you get an error, try using regular ``pip install`` first.
 
-It's finally time to install RobotSwarmSimulator into our virtual environment:
+It's finally time to install RobotSwarmSimulator into our virtual environment!
+
+We'll use a ``pip --editable`` install allows you to make changes to the code and see the effects immediately.
+
+.. hint::
+
+   Don't forget to activate the virtual environment,
+   and make sure you're in the RobotSwarmSimulator folder before running this command!
+
+   (The ``.`` refers to the current directory. If you're one level above, you can do something like ``pip install -e RobotSwarmSimulator[dev,docs]``.)
 
 .. tab-set::
    :class: sd-width-content-min
@@ -154,14 +256,42 @@ It's finally time to install RobotSwarmSimulator into our virtual environment:
 
       .. code-block:: bash
 
-         uv pip install -e .[dev, docs]
+         uv pip install -e .[dev,docs]
 
    .. tab-item:: pip
       :sync: pip
 
       .. code-block:: bash
 
-         pip install -e .[dev, docs]
+         pip install -e .[dev,docs]
+         
+The ``.`` refers to the current directory, and the ``[docs,dev]`` refers to the optional dependencies.
+``[docs]`` refers to the dependencies for building the documentation, and ``[dev]`` refers to development and testing dependencies.
+
+All these dependencies are specified in the ``RobotSwarmSimulator/pyproject.toml`` file, in the ``[project]`` ``dependencies`` section,
+and the ``[project.optional-dependencies]`` section.
+
+
+
+While you're here, let's also install ``pyreadline3`` which makes the ``python`` shell much more user-friendly.
+
+.. tab-set::
+   :class: sd-width-content-min
+   :sync-group: uv
+
+   .. tab-item:: uv
+      :sync: uv
+
+      .. code-block:: bash
+
+         uv pip install pyreadline3
+
+   .. tab-item:: pip
+      :sync: pip
+
+      .. code-block:: bash
+
+         pip install pyreadline3
 
 If the installation was successful, you should be able to open a ``python`` shell and import the package:
 
@@ -170,9 +300,12 @@ If the installation was successful, you should be able to open a ``python`` shel
 
    Python 3.11.0 (or newer)
    Type "help", "copyright", "credits" or "license" for more information.
-   >>> import novel_swarms
+   >>> import swarmsim
    >>> 
 
+
+If you installed ``pyreadline3`` or are using Python 3.13 or newer, you can exit the ``python`` shell with :kbd:`Ctrl+C` to stop
+currently running commands and then :kbd:`Ctrl+D`. Or you can type ``quit()`` to quit the python REPL.
 
 -----
 

@@ -2,7 +2,7 @@
 Our YAML module
 ***************
 
-The :py:mod:`novel_swarms.yaml` module provides a custom YAML loader
+The :py:mod:`swarmsim.yaml` module provides a custom YAML loader
 that defines some convenience tags. This article will explain how
 the YAML files are loaded and how to use the custom tags.
 
@@ -10,7 +10,7 @@ the YAML files are loaded and how to use the custom tags.
 .. seealso::
 
    Looking for how to load or dump YAML files with our custom tags?
-   See :py:mod:`novel_swarms.yaml`
+   See :py:mod:`swarmsim.yaml`
 
    Or for information on how to use your custom class in a YAML file,
    see :doc:`/guide/config_store_api`.
@@ -46,7 +46,7 @@ example of standard tags are type specifiers, such as ``!!str`` and ``!!int``.
    explicitly-typed-value: !!int 42
 
 RobotSwarmSimulator uses a custom PyYAML loader to allow for some nice features.
-The custom YAML tags are defined in the :py:mod:`~novel_swarms.yaml` module.
+The custom YAML tags are defined in the :py:mod:`~swarmsim.yaml` module.
 
 .. _yaml_crazy_tag_example:
 
@@ -71,7 +71,7 @@ In this example, the following YAML files are in the same directory:
 
    example: !np complex('2+2j')
 
-See the :py:mod:`~novel_swarms.yaml.mathexpr` module for more information on what you can do.
+See the :py:mod:`~swarmsim.yaml.mathexpr` module for more information on what you can do.
 
 .. _yaml-tags-include:
 
@@ -110,7 +110,7 @@ For example, see the following YAML files:
       .. code-block:: python
          :caption: Result
 
-         >>> from novel_swarms.yaml import load
+         >>> from swarmsim.yaml import load
          >>> mapping = load('foo.yaml')
 
          >>> print(mapping)
@@ -118,7 +118,7 @@ For example, see the following YAML files:
 
 The file extension of what you're including affects the behavior of the ``!include`` tag:
 
-* ``.yaml`` files will be loaded using the :py:func:`~novel_swarms.yaml.load` function
+* ``.yaml`` files will be loaded using the :py:func:`~swarmsim.yaml.load` function
 * ``.json`` files will be loaded using ``json.load``
 * All other files are read as text and returned as a string
 
