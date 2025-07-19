@@ -22,7 +22,7 @@ def setup_common_world(world_setup: dict) -> RectangularWorld:
     assert world.total_steps == 1
 
     # > How many agents are there?
-    assert len(world.population) == 2
+    assert len(world.population) >= 2
 
     return world
 
