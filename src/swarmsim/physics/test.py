@@ -7,6 +7,7 @@ from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from swarmsim.world.simulate import main as sim
 from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
+from swarmsim.sensors.ObjectFOVSensor import ObjectFOVSensor
 from swarmsim.agent.control.BinaryController import BinaryController
 from swarmsim.agent.control.HumanController import HumanController
 from swarmsim.agent.control.StaticController import StaticController
@@ -31,6 +32,7 @@ world.spawners.append(spawner)
 
 # human controller agent
 humanAgent = MazeAgent(MazeAgentConfig(position=(5, 1), points=[(0.16, 0), (-0.08, 0.08), (-0.08, -0.08)], agent_radius = 0.08, controller=HumanController()), world)
+humanAgent.sensors.append(ObjectFOVSensor(humanAgent, theta=0.5, distance=1.5))
 world.population.append(humanAgent)
 
 # static controller agent
