@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from .AbstractMetric import AbstractMetric
+import pygame
 
 # typing
 from typing import TYPE_CHECKING
@@ -49,16 +50,20 @@ class ShapeMaker(AbstractMetric):
         angle_tups = [a for a in zip(angles, vectors)]
 
         sorted_angle_tups = sorted(angle_tups, key=lambda x: x[0])
-        
+
         angle_differences = []
         vector_differences = []
+        lines = []
         for i in range(len(sorted_angle_tups) - 1):
             
             angle_differences.append(sorted_angle_tups[i + 1][0] - sorted_angle_tups[i][0])
             vector_differences.append(np.linalg.norm(sorted_angle_tups[i + 1][1] - sorted_angle_tups[i][1]))
+            lines.append([sorted_angle_tups[i][1], sorted_angle_tups[i + 1][1]])
 
         angle_differences.append(2 * np.pi - sorted_angle_tups[-1][0] + sorted_angle_tups[0][0])
         vector_differences.append(np.linalg.norm(sorted_angle_tups[-1][1] - sorted_angle_tups[0][1]))
+        lines.append([sorted_angle_tups[-1][1], sorted_angle_tups[0][1]])
+        self.lines = np.asarray(lines + centroid)
 
         get_deviation = lambda arr, val: np.sqrt(np.sum(np.square(np.asarray(arr) - val)) / (len(arr) - 1))
         
@@ -68,5 +73,27 @@ class ShapeMaker(AbstractMetric):
         total_deviation = -1 * (vector_deviation + angle_deviation)
         self.set_value(total_deviation)
        
+    def draw(self, screen, offset):
+        pan, zoom = np.asarray(offset[0]), offset[1]
+        super().draw(screen, offset)
+
+        for line in self.lines:
+            pygame.draw.line(screen, (128, 128, 128), *line * zoom + pan, width=1)
+
+        # for centroid in self.centroids:
+        #     pygame.draw.circle(screen, (128, 128, 128), centroid * zoom + pan, radius=5, width=1)
     
+
+                
+
+        
+                    
+                
+        
+            
+            
+            
+            
+
+
     
