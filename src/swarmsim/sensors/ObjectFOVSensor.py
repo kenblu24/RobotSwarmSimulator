@@ -1,3 +1,4 @@
+from swarmsim.world.objects.StaticObject import StaticObject
 from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
@@ -33,16 +34,27 @@ def lineCircleIntersect(line, center, radius):
     clDiffVec = center - project(center, line)
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
-# determine if the sector defined by the first four arguments intersects the fifth argument point 
+# determine if the sector of an infinite circle defined by the first three arguments intersects the fourth argument point
 def sectorPointIntersect(center, radius, angleLeft, angleRight, point):
     u = point - center # vector to agent
     leftTurn = turn(u, vectorize(angleLeft))
     rightTurn = turn(u, vectorize(angleRight))
     
-    l180 = (angleLeft - angleRight) % np.pi * 2 < np.pi
+    l180 = (angleLeft - angleRight) % (np.pi * 2) < np.pi
 
     # if fov < 180 use between minor arc, otherwise use not between minor arc
     return rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn)
+
+def lineCircleIntersectionPoints(line: np.ndarray, center: np.ndarray, radius):
+    unitLine = line / np.linalg.norm(line)
+    projectCenterToLine = project(center, line)
+    clDiffVec = center - projectCenterToLine
+    clDiffVecMagsq = np.dot(clDiffVec, clDiffVec)
+    if radius**2 < clDiffVecMagsq:
+        return []
+    midDist = np.sqrt(radius**2 - clDiffVecMagsq)
+    return [projectCenterToLine + midDist * unitLine, projectCenterToLine - midDist * unitLine]
+    
 
 class ObjectFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
@@ -120,23 +132,8 @@ class ObjectFOVSensor(AbstractSensor):
         l180 = self.theta * 2 < np.pi
 
         for obj in world.objects:
+            pass
             
-            u = agent.getPosition() - sensor_origin # vector to agent
-            leftTurn = turn(u, e_left)
-            rightTurn = turn(u, e_right)
-            
-            # if fov < 180 use between minor arc, otherwise use not between minor arc
-            if rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn):
-                self.determineState(True, agent, world)
-                return
-            elif not self.detect_only_origins:
-                # circle whisker intercept correction
-                # for left and right, check that vector u to the agent is in the correct direction and if the line of the whisker intersects the agent circle
-                leftWhisker = (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius))
-                rightWhisker = (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius))
-                if leftWhisker or rightWhisker:
-                    self.determineState(True, agent, world)
-                    return
 
         # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
         self.determineState(False, None, world)
@@ -145,7 +142,7 @@ class ObjectFOVSensor(AbstractSensor):
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors
         if self.use_goal_state:
-            
+            pass
         self.goal_detected = False
         return self.goal_detected
 
@@ -256,6 +253,16 @@ class ObjectFOVSensor(AbstractSensor):
                 pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
+                
+                #test code for lineCircleIntersectionPoints
+                for obj in self.agent.world.objects:
+                    for i in range(-1, len(obj.points) - 1):
+                        o = obj.points[i]
+                        l = obj.points[i + 1]
+                        ips = lineCircleIntersectionPoints(l - o, self.agent.getPosition() - o, self.r)
+                        for p in ips:
+                            gp = p + o
+                            pygame.draw.circle(screen, sight_color + (50,), gp * zoom + pan, 0.05 * zoom, width)
 
     def withinRadiusExclusiveFast(self, origin, other, radius):
         diff = origin - other
