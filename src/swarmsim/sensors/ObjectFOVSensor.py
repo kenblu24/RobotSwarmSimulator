@@ -35,7 +35,8 @@ def lineCircleIntersect(line, center, radius):
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 # determine if the sector of an infinite circle defined by the first three arguments intersects the fourth argument point
-def sectorPointIntersect(center, radius, angleLeft, angleRight, point):
+def sectorPointIntersect(center, angleLeft, angleRight, point):
+
     u = point - center # vector to agent
     leftTurn = turn(u, vectorize(angleLeft))
     rightTurn = turn(u, vectorize(angleRight))
@@ -55,7 +56,19 @@ def lineCircleIntersectionPoints(line: np.ndarray, center: np.ndarray, radius):
     midDist = np.sqrt(radius**2 - clDiffVecMagsq)
     return [projectCenterToLine + midDist * unitLine, projectCenterToLine - midDist * unitLine]
     
+def segmentCircleIntersectionPoints(segPs: np.ndarray, center: np.ndarray, radius):
+    origin = segPs[0]
+    line = segPs[1] - origin
+    intersectionPoints = lineCircleIntersectionPoints(line, center - origin, radius)
+    lineSq = np.dot(line, line)
+    def segmentCheck(p):
+        ldp = np.dot(line, p)
+        return 0 <= ldp and ldp <= lineSq
+    onSegmentIntersectionPoints = [p for p in intersectionPoints if segmentCheck(p)]
+    globalIntersectionPoints = [p + origin for p in onSegmentIntersectionPoints]
+    return globalIntersectionPoints
 
+                        
 class ObjectFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
@@ -124,6 +137,8 @@ class ObjectFOVSensor(AbstractSensor):
         self.time_since_last_sensing = 0
         sensor_origin = self.agent.getPosition()
 
+        angle: float = self.agent.angle + self.bias
+
         # get left and right whiskers
         e_left, e_right = self.getSectorVectors()
 
@@ -131,8 +146,19 @@ class ObjectFOVSensor(AbstractSensor):
         # true if the sensor fov is less than 180°
         l180 = self.theta * 2 < np.pi
 
+
+
         for obj in world.objects:
-            pass
+            gips = []
+            for i in range(-1, len(obj.points) - 1):
+                newGips = segmentCircleIntersectionPoints(np.array([obj.points[i], obj.points[i + 1]]), self.agent.getPosition(), self.r)
+                for p in newGips:
+                    if sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p):
+                        self.determineState(True, None, world)
+                        return            
+                gips.extend(newGips)
+            if len(gips) == 2:
+                pass
             
 
         # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
@@ -257,12 +283,9 @@ class ObjectFOVSensor(AbstractSensor):
                 #test code for lineCircleIntersectionPoints
                 for obj in self.agent.world.objects:
                     for i in range(-1, len(obj.points) - 1):
-                        o = obj.points[i]
-                        l = obj.points[i + 1]
-                        ips = lineCircleIntersectionPoints(l - o, self.agent.getPosition() - o, self.r)
-                        for p in ips:
-                            gp = p + o
-                            pygame.draw.circle(screen, sight_color + (50,), gp * zoom + pan, 0.05 * zoom, width)
+                        gips = segmentCircleIntersectionPoints(np.array([obj.points[i], obj.points[i + 1]]), self.agent.getPosition(), self.r)
+                        for p in gips:
+                            pygame.draw.circle(screen, sight_color + (50,), p * zoom + pan, 0.05 * zoom, width)
 
     def withinRadiusExclusiveFast(self, origin, other, radius):
         diff = origin - other
