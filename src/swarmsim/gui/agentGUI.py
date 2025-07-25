@@ -77,6 +77,7 @@ class DifferentialDriveGUI(AbstractGUI):
             mx, my = self.mouse_pos
             mx, my = round(mx, 4), round(my, 4)
             self.appendTextToGUI(screen, timing)  # type: ignore[reportAttributeAccessIssue]
+            self.appendTextToGUI(screen, f"Physics: {self.world.usePhysics}")
             if self.selected:
                 a: MazeAgent = self.selected
                 heading = a.get_heading() % (2 * PI) / 2 / PI * 360
@@ -100,6 +101,9 @@ class DifferentialDriveGUI(AbstractGUI):
                 self.appendTextToGUI(screen, f"dt: {round(a.dt, 12): > }")
                 self.appendTextToGUI(screen, f"|v| (m/s): {round(np.linalg.norm(a.getVelocity()) / a.dt, 12): > }")
                 self.appendTextToGUI(screen, f"ω (rad/s): {round(a.dtheta / a.dt, 12): > }")
+                if hasattr(a, "physobj"):
+                    self.appendTextToGUI(screen, f"mass (kg): {a.physobj.mass}")
+                    self.appendTextToGUI(screen, f"moment (N·m): {round(a.physobj.moment, 6)}")
                 self.appendTextToGUI(screen, f"sensors: {[sensor.state_pretty() for sensor in a.sensors[:7]]}")
                 for i, sensor in enumerate(a.sensors[:7]):
                     name = sensor.__class__.__name__.removesuffix('Sensor')

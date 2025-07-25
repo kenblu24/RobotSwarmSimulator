@@ -151,7 +151,9 @@ def main(
                     elif event.key == pygame.K_o:
                         pass
                     elif event.key == pygame.K_p:
-                        pass
+                        world.usePhysics = not world.usePhysics
+                        if world.usePhysics:
+                            world.physicsSnap()
                     elif event.key == pygame.K_j:
                         pass
                     elif event.key == pygame.K_l and paused:

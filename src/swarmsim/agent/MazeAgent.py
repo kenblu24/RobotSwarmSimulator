@@ -57,6 +57,10 @@ from typing import Any, override
 # from ..world.World import World
 # from ..world.RectangularWorld import RectangularWorldConfig
 
+from ..physics.Physics import snapPhysicsToAgent, unicycleForces
+from ..physics.ControllerAnalysis import getControllerPeaks
+import pymunk
+
 SPA = namedtuple("SPA", ['state', 'perception', 'action'])
 State = NamedTuple("State", [('x', float), ('y', float), ('angle', float)])
 
@@ -189,7 +193,7 @@ class MazeAgent(StaticAgent):
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
-
+        
     @override
     def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:
         world = world or self.world
@@ -223,37 +227,43 @@ class MazeAgent(StaticAgent):
         v = self.delay_1(v)
         omega = self.delay_2(omega)
 
-        # Define Idiosyncrasies that may occur in actuation/sensing
-        # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
-        self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
-        dtheta2 = self.dtheta / 2
-        self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
-        s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
-        delta = s * self.orientation_uvec(offset=dtheta2) * self.idiosyncrasies
+        # for physics, v and omega done here
+        if self.world.usePhysics:
+            peakVelocity, peakOmega = getControllerPeaks(self.controller)
+            unicycleForces(self.physobj, v, omega, self.dt, peakVelocity, peakOmega)
 
-        old_pos = self.pos.copy()
-
-        if self.stopped_duration > 0:
-            self.stopped_duration -= 1
-            if self.catastrophic_collisions:
-                self.dead = True
-                self.body_color = (200, 200, 200)
-                return
         else:
-            self.pos += delta
+            # Define Idiosyncrasies that may occur in actuation/sensing
+            # using midpoint rule from https://books.google.com/books?id=iEYnnQeOaaIC&pg=PA29
+            self.dtheta = omega * self.idiosyncrasies[-1] * self.dt
+            dtheta2 = self.dtheta / 2
+            self.iD = abs(v / omega) * 2 if abs(omega) > 1e-9 else float("inf")
+            s = 2 * math.sin(dtheta2) * v / omega if abs(omega) > 1e-9 else v * self.dt
+            delta = s * self.orientation_uvec(offset=dtheta2) * self.idiosyncrasies
 
-        self.angle += self.dtheta
+            old_pos = self.pos.copy()
 
-        self.collision_flag = False
-        if check_for_world_boundaries is not None:
-            # TODO: remove this
-            check_for_world_boundaries(self)
+            if self.stopped_duration > 0:
+                self.stopped_duration -= 1
+                if self.catastrophic_collisions:
+                    self.dead = True
+                    self.body_color = (200, 200, 200)
+                    return
+            else:
+                self.pos += delta
+            
+            self.angle += self.dtheta
 
-        self.handle_collisions(world)
+            self.collision_flag = False
+            if check_for_world_boundaries is not None:
+                # TODO: remove this
+                check_for_world_boundaries(self)
+
+            self.handle_collisions(world)
 
         # Calculate the 'real' dx, dy after collisions have been calculated.
         # This is what we use for velocity in our equations
-        self.dpos = self.pos - old_pos
+        # self.dpos = self.pos - old_pos
         # timer = timer.check_watch()
 
         for sensor in self.sensors:

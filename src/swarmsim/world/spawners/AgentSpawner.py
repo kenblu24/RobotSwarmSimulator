@@ -130,13 +130,16 @@ class PointAgentSpawner(BaseAgentSpawner):
     def do_spawn(self, name=None):
         config = self.generate_config(name)
         agent = self.make_agent(config)
-        self.world.population.append(agent)  # make world aware of the new agent. necessary for collision handling
+        # self.world.population.append(agent)  # make world aware of the new agent. necessary for collision handling
+        
         if self.avoid_overlap and isinstance(agent, MazeAgent):
             agent.handle_collisions(self.world, max_attempts=5, nudge_amount=0.4, rng=self.rng, refresh=True)
             agent.handle_collisions(self.world, max_attempts=10, nudge_amount=1.0, rng=self.rng, refresh=True)
 
         self.set_angle_post_spawn(agent)
         self.spawned += 1
+
+        self.world.population.append(agent) # this is only implemented in RectangularWorld
         return agent
 
 

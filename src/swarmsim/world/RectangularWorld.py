@@ -43,6 +43,8 @@ from .objects.Wall import Wall
 
 import quads
 
+from ..physics.Physics import Physics, snapPhysicsToAgent
+
 # typing
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -139,8 +141,14 @@ class RectangularWorld(World):
         self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
 
+        self.usePhysics = True
+
         self.dt = config.time_step
 
+        self.physics = Physics(self)
+
+        self.population.addListener("append", self.connectPhysicsObject)
+        self.objects.addListener("append", self.connectPhysicsObject)
         """float: :math:`\\Delta t` delta time (seconds)
 
         The time step, or delta time, is used by simulated objects and agents
@@ -190,6 +198,17 @@ class RectangularWorld(World):
             newQuad.insert(point=agent.pos.tolist(), data=agent)
         self.quad = newQuad
 
+
+    def connectPhysicsObject(self, agent):
+        if agent.grounded:
+            self.physics.createStaticBody(agent)
+        else:
+            agent.physobj = self.physics.createAgentBody(agent)
+
+    def physicsSnap(self):
+        for agent in self.population:
+            if hasattr(agent, "physobj"):
+                snapPhysicsToAgent(agent)
 
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
@@ -249,7 +268,10 @@ class RectangularWorld(World):
         self.step_spawners()
         self.step_agents()
         self.step_objects()
-        
+
+        if self.usePhysics:
+            self.physics.step() # this is the difference from the superclass's step
+
         self.updateQuad() # update the position of agents in the quad tree
 
         self.step_metrics()

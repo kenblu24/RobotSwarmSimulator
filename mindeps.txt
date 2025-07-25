@@ -13,3 +13,4 @@ circle_fit~=0.2.1
 pointpats~=2.5.1
 shapely~=2.0.6
 quads~=1.1.0
+pymunk~=6.11.1
