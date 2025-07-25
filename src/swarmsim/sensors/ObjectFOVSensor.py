@@ -34,6 +34,26 @@ def lineCircleIntersect(line, center, radius):
     clDiffVec = center - project(center, line)
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
+def colinearPointSegmentIntersect(seg: np.ndarray, point: np.ndarray, segsq = None):
+    if not segsq:
+        segsq = np.dot(seg, seg)
+    sdp = np.dot(seg, point)
+    return 0 <= sdp and sdp < segsq
+
+def segSegIntersect(seg1: np.ndarray, seg2: np.ndarray):
+    s1l = seg1[1] - seg1[0]
+    s2l = seg2[1] - seg2[0]
+    t12_0 = turn(s1l, seg2[0] - seg1[0])
+    t12_1 = turn(s1l, seg2[1] - seg1[0])
+    t21_0 = turn(s2l, seg1[0] - seg2[0])
+    t21_1 = turn(s2l, seg1[1] - seg2[0])
+    return ((((t12_0 < 0 and 0 < t12_1) or (t12_1 < 0 and 0 < t12_0)) and
+        ((t21_0 < 0 and 0 < t21_1) or (t21_1 < 0 and 0 < t21_0))) or
+        (t12_0 == 0 and colinearPointSegmentIntersect(s1l, seg2[0] - seg1[0])) or 
+        (t12_1 == 0 and colinearPointSegmentIntersect(s1l, seg2[1] - seg1[0])) or 
+        (t21_0 == 0 and colinearPointSegmentIntersect(s2l, seg1[0] - seg2[0])) or 
+        (t21_1 == 0 and colinearPointSegmentIntersect(s2l, seg1[1] - seg2[0])))
+
 # determine if the sector of an infinite circle defined by the first three arguments intersects the fourth argument point
 def sectorPointIntersect(center, angleLeft, angleRight, point):
 
@@ -61,10 +81,7 @@ def segmentCircleIntersectionPoints(segPs: np.ndarray, center: np.ndarray, radiu
     line = segPs[1] - origin
     intersectionPoints = lineCircleIntersectionPoints(line, center - origin, radius)
     lineSq = np.dot(line, line)
-    def segmentCheck(p):
-        ldp = np.dot(line, p)
-        return 0 <= ldp and ldp <= lineSq
-    onSegmentIntersectionPoints = [p for p in intersectionPoints if segmentCheck(p)]
+    onSegmentIntersectionPoints = [p for p in intersectionPoints if colinearPointSegmentIntersect(line, p, lineSq)]
     globalIntersectionPoints = [p + origin for p in onSegmentIntersectionPoints]
     return globalIntersectionPoints
 
@@ -146,20 +163,24 @@ class ObjectFOVSensor(AbstractSensor):
         # true if the sensor fov is less than 180°
         l180 = self.theta * 2 < np.pi
 
-
+        radiusSq = self.r**2
 
         for obj in world.objects:
-            gips = []
             for i in range(-1, len(obj.points) - 1):
-                newGips = segmentCircleIntersectionPoints(np.array([obj.points[i], obj.points[i + 1]]), self.agent.getPosition(), self.r)
-                for p in newGips:
+                p1 = obj.points[i]
+                p2 = obj.points[i + 1]
+                segment = np.array([p1, p2])
+                for p in segmentCircleIntersectionPoints(segment, self.agent.getPosition(), self.r):
                     if sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p):
                         self.determineState(True, None, world)
                         return            
-                gips.extend(newGips)
-            if len(gips) == 2:
-                pass
-            
+                if segSegIntersect(segment, np.array([sensor_origin, sensor_origin + e_left[:2] * self.r])): # or segSegIntersect(segment, np.array([sensor_origin, sensor_origin + e_right[:2] * self.r])):
+                    self.determineState(True, None, world)
+                    return
+                p2Dist = sensor_origin - p2
+                if np.dot(p2Dist, p2Dist) <= radiusSq and sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p2):
+                    self.determineState(True, None, world)
+                    return
 
         # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
         self.determineState(False, None, world)
