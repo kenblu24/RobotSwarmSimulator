@@ -12,7 +12,7 @@ else:
     RectangularWorld = None
 
 
-class Dispersal(AbstractMetric):
+class DelaunayDiffusion(AbstractMetric):
     __badvars__ = AbstractMetric.__badvars__ + ['population']  # references to population may cause pickling errors
 
     def __init__(self, history=100, regularize=True):
