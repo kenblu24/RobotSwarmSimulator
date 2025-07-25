@@ -43,4 +43,7 @@ world.population.append(staticAgent)
 staticObject = StaticObject(StaticObjectConfig(points=[(0.5, 3.5), (4.5, 3.5), (4.5, 5.5), (2.5, 6.5), (0.5, 5.5)]), world=world)
 world.objects.append(staticObject)
 
+staticTriangle = StaticObject(StaticObjectConfig(points=[(0.5, 0.5), (1, 1), (0.5, 1)]), world=world)
+world.objects.append(staticTriangle)
+
 sim(world, start_paused=True)
