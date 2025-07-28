@@ -140,9 +140,23 @@ class ObjectFOVSensor(AbstractSensor):
 
         self.r = distance
 
+        self.binaryMode = True
+
+        self.sensedObjects = []
+
         self.seed = seed
         if self.seed is not None:
             np.random.seed(self.seed)
+
+    def senseObject(self, obj, world) -> bool:
+        if self.binaryMode:
+            self.determineState(True, None, world)
+            return True
+        else:
+            if not self.sensedObjects:
+                self.determineState(True, None, world)
+            self.sensedObjects.append(obj)
+            return False
 
     def checkForLOSCollisions(self, world: World) -> None:
         self.time_since_last_sensing += 1
@@ -165,26 +179,39 @@ class ObjectFOVSensor(AbstractSensor):
 
         radiusSq = self.r**2
 
+        self.sensedObjects = []
+
+        # let the sensing state be initially false, it is changed to true in senseObject when proper
+        self.determineState(False, None, world)
+
         for obj in world.objects:
+
             for i in range(-1, len(obj.points) - 1):
                 p1 = obj.points[i]
                 p2 = obj.points[i + 1]
                 segment = np.array([p1, p2])
+                cont = False
                 for p in segmentCircleIntersectionPoints(segment, self.agent.getPosition(), self.r):
                     if sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p):
-                        self.determineState(True, None, world)
-                        return            
+                        if self.senseObject(obj, world):
+                            return
+                        else:
+                            cont = True
+                            break
+                if cont:
+                    break
                 if segSegIntersect(segment, np.array([sensor_origin, sensor_origin + e_left[:2] * self.r])): # or segSegIntersect(segment, np.array([sensor_origin, sensor_origin + e_right[:2] * self.r])):
-                    self.determineState(True, None, world)
-                    return
+                    if self.senseObject(obj, world):
+                        return
+                    else:
+                        break
                 p2Dist = sensor_origin - p2
                 if np.dot(p2Dist, p2Dist) <= radiusSq and sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p2):
-                    self.determineState(True, None, world)
-                    return
+                    if self.senseObject(obj, world):
+                        return
+                    else:
+                        break
 
-        # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
-        self.determineState(False, None, world)
-        return
 
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors
@@ -301,12 +328,11 @@ class ObjectFOVSensor(AbstractSensor):
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
                 
-                #test code for lineCircleIntersectionPoints
-                for obj in self.agent.world.objects:
+                #test code for self.sensedObjects
+                for obj in self.sensedObjects:
                     for i in range(-1, len(obj.points) - 1):
-                        gips = segmentCircleIntersectionPoints(np.array([obj.points[i], obj.points[i + 1]]), self.agent.getPosition(), self.r)
-                        for p in gips:
-                            pygame.draw.circle(screen, sight_color + (50,), p * zoom + pan, 0.05 * zoom, width)
+                        pygame.draw.line(screen, (255, 0, 255, 50), obj.points[i] * zoom + pan, obj.points[i + 1] * zoom + pan, width=3)
+                        
 
     def withinRadiusExclusiveFast(self, origin, other, radius):
         diff = origin - other

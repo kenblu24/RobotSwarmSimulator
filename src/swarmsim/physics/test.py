@@ -32,7 +32,9 @@ world.spawners.append(spawner)
 
 # human controller agent
 humanAgent = MazeAgent(MazeAgentConfig(position=(5, 1), points=[(0.16, 0), (-0.08, 0.08), (-0.08, -0.08)], agent_radius = 0.08, controller=HumanController()), world)
-humanAgent.sensors.append(ObjectFOVSensor(humanAgent, theta=0.5, distance=1.5))
+objectSensor = ObjectFOVSensor(humanAgent, theta=0.5, distance=1.5)
+objectSensor.binaryMode = False
+humanAgent.sensors.append(objectSensor)
 world.population.append(humanAgent)
 
 # static controller agent
