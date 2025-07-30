@@ -133,7 +133,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
-        
+        self.detect_only_origins = True
 
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
@@ -191,9 +191,6 @@ class OccludedAgentFOVSensor(AbstractSensor):
 
         for agent in bag:
             if agent is self.agent:  # skip the agent the sensor is attached to
-                continue
-
-            if self.target_team and not agent.team == self.target_team:
                 continue
 
             u = agent.getPosition() - sensor_origin  # vector to agent
@@ -379,7 +376,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
                 self.detection_id = 0
 
     def step(self, world, only_check_goals=False):
-        super(ObjectFOVSensor, self).step(world=world)
+        super(OccludedAgentFOVSensor, self).step(world=world)
         goal_detected = self.check_goals(world=world)
         if not goal_detected and not only_check_goals:
             self.checkForLOSCollisions(world=world)
@@ -390,7 +387,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
                 self.history.append(-1)
 
     def draw(self, screen, offset=((0, 0), 1.0)):
-        super(ObjectFOVSensor, self).draw(screen, offset)
+        super(OccludedAgentFOVSensor, self).draw(screen, offset)
         pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
         zoom: float
         if self.show:
@@ -419,7 +416,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
                 
                 #test code for self.sensedObjects
-                for obj in self.sensedObjects:
+                for obj in self.objectSensor.sensedObjects:
                     for i in range(-1, len(obj.points) - 1):
                         pygame.draw.line(screen, (255, 0, 255, 50), obj.points[i] * zoom + pan, obj.points[i + 1] * zoom + pan, width=3)
                         
@@ -451,7 +448,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
 
     def as_config_dict(self):
         return {
-            "type": "ObjectFOVSensor",
+            "type": "OccludedAgentFOVSensor",
             "theta": self.theta,
             "bias": self.bias,
             "fp": self.fp,
@@ -467,7 +464,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
 
     @staticmethod
     def from_dict(d):
-        return ObjectFOVSensor(
+        return OccludedAgentFOVSensor(
             parent=None,
             theta=d["theta"],
             distance=d["agent_sensing_range"],
