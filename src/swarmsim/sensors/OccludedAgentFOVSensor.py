@@ -1,3 +1,4 @@
+from swarmsim.sensors.ObjectFOVSensor import ObjectFOVSensor
 from swarmsim.world.objects.StaticObject import StaticObject
 from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
@@ -86,7 +87,7 @@ def segmentCircleIntersectionPoints(segPs: np.ndarray, center: np.ndarray, radiu
     return globalIntersectionPoints
 
                         
-class ObjectFOVSensor(AbstractSensor):
+class OccludedAgentFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
@@ -132,6 +133,8 @@ class ObjectFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
 
+        self.detect_only_origins = True
+
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
             warnings.warn("The 'degrees' kwarg is deprecated.", FutureWarning, stacklevel=1)
@@ -140,22 +143,27 @@ class ObjectFOVSensor(AbstractSensor):
 
         self.r = distance
 
-        self.binaryMode = True
-
-        self.sensedObjects = []
+        self.objectSensor = ObjectFOVSensor(bias=self.bias, theta=self.theta, distance=self.r, agent=self.agent)
+        self.objectSensor.binaryMode = False
 
         self.seed = seed
         if self.seed is not None:
             np.random.seed(self.seed)
 
-    def senseObject(self, obj, world) -> bool:
-        if self.binaryMode:
+    def checkOccludedVision(self, agent, world):
+        viewSeg = np.array([self.agent.getPosition(), agent.getPosition()])
+        for obj in self.objectSensor.sensedObjects:
+            for i in range(len(obj.points)):
+                if segSegIntersect(viewSeg, np.array([obj.points[i - 1], obj.points[i]])):
+                    return False
+        return True
+
+
+    def senseAgent(self, agent, world) -> bool:
+        if self.checkOccludedVision(agent, world):
             self.determineState(True, None, world)
             return True
         else:
-            if not self.sensedObjects:
-                self.determineState(True, None, world)
-            self.sensedObjects.append(obj)
             return False
 
     def checkForLOSCollisions(self, world: World) -> None:
@@ -168,50 +176,129 @@ class ObjectFOVSensor(AbstractSensor):
         self.time_since_last_sensing = 0
         sensor_origin = self.agent.getPosition()
 
-        angle: float = self.agent.angle + self.bias
+        self.objectSensor.checkForLOSCollisions(world)
+
+        # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
+        quadpoints = [point.data for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector(world)))]
+        # filter agents to those within the sensing radius
+        bag = [agent for agent in quadpoints if self.withinRadiusExclusiveFast(sensor_origin, agent.getPosition(), self.r)]
 
         # get left and right whiskers
         e_left, e_right = self.getSectorVectors()
 
-        
         # true if the sensor fov is less than 180°
         l180 = self.theta * 2 < np.pi
 
-        radiusSq = self.r**2
+        for agent in bag:
+            if agent is self.agent:  # skip the agent the sensor is attached to
+                continue
 
-        self.sensedObjects = []
+            u = agent.getPosition() - sensor_origin  # vector to agent
+            leftTurn = turn(u, e_left)
+            rightTurn = turn(u, e_right)
 
-        # let the sensing state be initially false, it is changed to true in senseObject when proper
+            # if fov < 180 use between minor arc, otherwise use not between minor arc
+            if rightTurn <= 0 and 0 <= leftTurn if l180 else not (leftTurn < 0 and 0 < rightTurn):
+                if self.senseAgent(agent, world):
+                    return
+            elif not self.detect_only_origins:
+                # circle whisker intercept correction
+                # for left and right, check that vector u to the agent is in the correct direction and if the line of the whisker intersects the agent circle
+                leftWhisker = (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius))
+                rightWhisker = (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius))
+                if leftWhisker or rightWhisker:
+                    if self.senseAgent(agent, world):
+                        return
+
+        # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
         self.determineState(False, None, world)
+        return
 
-        for obj in world.objects:
+    # get the smallest rectangle that contains the sensor fov sector
+    def getAARectContainingSector(self, world: RectangularWorld):
+        angle: float = self.agent.angle + self.bias  # global sensor angle
+        span: float = self.theta  # angle fov sweeps to either side
+        radius: float = self.r  # view radius
+        position: list[float] = self.agent.pos.tolist()  # agent global position
 
-            for i in range(-1, len(obj.points) - 1):
-                p1 = obj.points[i]
-                p2 = obj.points[i + 1]
-                segment = np.array([p1, p2])
-                cont = False
-                for p in segmentCircleIntersectionPoints(segment, self.agent.getPosition(), self.r):
-                    if sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p):
-                        if self.senseObject(obj, world):
-                            return
-                        else:
-                            cont = True
-                            break
-                if cont:
-                    break
-                if segSegIntersect(segment, np.array([sensor_origin, sensor_origin + e_left[:2] * self.r])): # or segSegIntersect(segment, np.array([sensor_origin, sensor_origin + e_right[:2] * self.r])):
-                    if self.senseObject(obj, world):
-                        return
-                    else:
-                        break
-                p2Dist = sensor_origin - p2
-                if np.dot(p2Dist, p2Dist) <= radiusSq and sectorPointIntersect(sensor_origin, angle + self.theta, angle - self.theta, p2):
-                    if self.senseObject(obj, world):
-                        return
-                    else:
-                        break
+        over180 = np.pi <= span * 2  # true if 180 <= FOV
 
+        center = vectorize(angle)  # vector representing absolute look direction
+        leftWhisker = vectorize(angle + span)  # vector representing left whisker
+        rightWhisker = vectorize(angle - span)  # vector representing right whisker
+        xaxis = (1, 0)  # vector representing positive x axis
+        yaxis = (0, 1)  # vector representing positive y axis
+
+        xts = np.sign(turn(xaxis, center))  # sign of turn from x axis to look direction
+        fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker))  # true if turns from x axis to whiskers have different signs
+
+        yts = np.sign(turn(yaxis, center))  # sign of turn from y axis to look direction
+        fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker))  # true if turns from y axis to whiskers have different signs
+
+        xmin = 0
+        xmax = 0
+        ymin = 0
+        ymax = 0
+
+        def xadd(val):  # extend either xmin or xmax if outside current range
+            nonlocal xmin
+            if val < xmin:
+                xmin = val
+            nonlocal xmax
+            if xmax < val:
+                xmax = val
+
+        def yadd(val):  # extend either ymin or ymax if outside current range
+            nonlocal ymin
+            if val < ymin:
+                ymin = val
+            nonlocal ymax
+            if ymax < val:
+                ymax = val
+
+        # consider the x coordinates of the whisker ends
+        xadd(leftWhisker[0] * radius)
+        xadd(rightWhisker[0] * radius)
+        if fovOverXAxis:  # if over x axis, x range is maximized to radius either left or right
+            xadd(radius * -yts)  # left or right is determined by the negated sign of the turn from the positive y axis to the look direction
+            if over180:  # if also over 180, then y range is maximized to radius in the direction closer to the look direction
+                yadd(radius * xts)
+                if not fovOverYAxis:  # if over x axis, over 180, and not over y axis, y range is maximized in both directions
+                    yadd(radius * -xts)
+
+        # consider the y coordinates of the whisker ends
+        yadd(leftWhisker[1] * radius)
+        yadd(rightWhisker[1] * radius)
+        if fovOverYAxis:  # if over y axis, y range is maximized to radius either up or down
+            yadd(radius * xts)  # up or down is determined by the sign of the turn from the positive x axis to the look direction
+            if over180:  # if also over 180, then x range is maximized to radius in the direction closer to the look direction
+                xadd(radius * -yts)
+                if not fovOverXAxis:  # if over y axis, over 180, and not over x axis, x range is maximized in both directions
+                    xadd(radius * yts)
+
+        # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
+        padding = 0 if self.detect_only_origins else world.maxAgentRadius
+
+        # positions are relative until now, make them absolute for the return
+        return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
+        # xmin, ymin, xmax, ymax
+
+    def check_goals(self, world):
+        # Add this to its own class later -- need to separate the binary from the trinary sensors
+        if self.use_goal_state:
+            sensor_origin = self.agent.getPosition()
+            for world_goal in world.goals:
+                if isinstance(world_goal, CylinderGoal):
+                    u = np.array(world_goal.center) - sensor_origin
+                    if np.linalg.norm(u) < self.goal_sensing_range + world_goal.r:
+                        d = self.circle_interesect_sensing_cone(u, world_goal.r)
+                        if d is not None:
+                            self.agent.agent_in_sight = None
+                            self.current_state = 2
+                            self.goal_detected = True
+                            return self.goal_detected
+        self.goal_detected = False
+        return self.goal_detected
 
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors
@@ -289,7 +376,7 @@ class ObjectFOVSensor(AbstractSensor):
                 self.detection_id = 0
 
     def step(self, world, only_check_goals=False):
-        super(ObjectFOVSensor, self).step(world=world)
+        super(OccludedAgentFOVSensor, self).step(world=world)
         goal_detected = self.check_goals(world=world)
         if not goal_detected and not only_check_goals:
             self.checkForLOSCollisions(world=world)
@@ -300,7 +387,7 @@ class ObjectFOVSensor(AbstractSensor):
                 self.history.append(-1)
 
     def draw(self, screen, offset=((0, 0), 1.0)):
-        super(ObjectFOVSensor, self).draw(screen, offset)
+        super(OccludedAgentFOVSensor, self).draw(screen, offset)
         pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
         zoom: float
         if self.show:
@@ -329,7 +416,7 @@ class ObjectFOVSensor(AbstractSensor):
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
                 
                 #test code for self.sensedObjects
-                for obj in self.sensedObjects:
+                for obj in self.objectSensor.sensedObjects:
                     for i in range(-1, len(obj.points) - 1):
                         pygame.draw.line(screen, (255, 0, 255, 50), obj.points[i] * zoom + pan, obj.points[i + 1] * zoom + pan, width=3)
                         
@@ -361,7 +448,7 @@ class ObjectFOVSensor(AbstractSensor):
 
     def as_config_dict(self):
         return {
-            "type": "ObjectFOVSensor",
+            "type": "OccludedAgentFOVSensor",
             "theta": self.theta,
             "bias": self.bias,
             "fp": self.fp,
@@ -377,7 +464,7 @@ class ObjectFOVSensor(AbstractSensor):
 
     @staticmethod
     def from_dict(d):
-        return ObjectFOVSensor(
+        return OccludedAgentFOVSensor(
             parent=None,
             theta=d["theta"],
             distance=d["agent_sensing_range"],
