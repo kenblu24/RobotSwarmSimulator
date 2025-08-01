@@ -3,33 +3,37 @@ import numpy as np
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
-from swarmsim.agent.control.BinaryController import BinaryController
+from swarmsim.sensors.ObjectFOVSensor import ObjectFOVSensor
+from swarmsim.world.objects.StaticObject import StaticObject, StaticObjectConfig
 from swarmsim.agent.control.NaryController import NaryController
 from swarmsim.world.simulate import main as sim
 
-world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
+world_config = RectangularWorldConfig(size=(10, 10), time_step=1/40)
 world = RectangularWorld(world_config)
 
-agent1_sensors = [
-    BinaryFOVSensor(theta=0.45, distance=2, bias=0),
-    BinaryFOVSensor(theta=0.45, distance=2, bias=np.pi / -2)
+sensors = [
+    ObjectFOVSensor(theta=np.pi/8, distance=1.5, bias=np.pi/-8),
+    ObjectFOVSensor(theta=np.pi/8, distance=1.5, bias=np.pi/8)
+    # BinaryFOVSensor(theta=0.45, distance=2, bias=0),
+    # BinaryFOVSensor(theta=0.45, distance=2, bias=np.pi / -2)
 ]
-agent1_controller = NaryController(on_nothing=(0.1, 0.0), on_detect=[
-    (0.0, 0.2), (0.0, -0.2)
+controller = NaryController(on_nothing=(0.1, 0.0), on_detect=[
+    (0.5, 0.2), (0.5, -0.2)
+    # (0.0, 0.2), (0.0, -0.2)
 ], mode="first")
-agent1_config = MazeAgentConfig(
-    position=(3, 5), agent_radius=0.175, controller=agent1_controller, sensors=agent1_sensors
+pos = (5, 8)
+agent_config = MazeAgentConfig(
+    position=pos, agent_radius=0.175, controller=controller, sensors=sensors, angle=-np.pi/2
 )
-agent1 = MazeAgent(agent1_config, world)
+agent = MazeAgent(agent_config, world)
+world.population.append(agent)
 
-agent2_config = MazeAgentConfig(position=(5, 4), agent_radius=0.175)
-agent2 = MazeAgent(agent2_config, world)
+dx = 1
+static_objs = [
+    StaticObject(StaticObjectConfig(points=[(pos[0]-dx, 10), (pos[0]-dx, 3), (pos[0]-dx-1, 3), (pos[0]-dx-1, 10)]), world=world),
+    StaticObject(StaticObjectConfig(points=[(pos[0]+dx, 10), (pos[0]+dx, 3), (pos[0]+dx+1, 3), (pos[0]+dx+1, 10)]), world=world)
+]
+for obj in static_objs:
+    world.objects.append(obj)
 
-agent3_config = MazeAgentConfig(position=(6, 5), agent_radius=0.175)
-agent3 = MazeAgent(agent3_config, world)
-
-world.population.append(agent1)
-world.population.append(agent2)
-world.population.append(agent3)
-
-sim(world)
+sim(world, start_paused=True)

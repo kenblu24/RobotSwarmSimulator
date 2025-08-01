@@ -26,7 +26,8 @@ class NaryController(AbstractController):
     ) -> None:
         super().__init__(agent=agent, parent=parent, **kwargs)
         # use this to determine which sensor on the agent to use
-        self.sensor_ids: list[int] = [i for i in range(len(on_detect))]
+        self.n_sensors = len(on_detect)
+        self.sensor_ids: list[int] = [i for i in range(self.n_sensors)]
         self.mode: Literal["first", "last", "average"] = mode
         self.on_nothing: LinearAngularVel = on_nothing
         self.on_detect: list[LinearAngularVel] = on_detect
