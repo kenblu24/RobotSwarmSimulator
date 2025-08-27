@@ -150,6 +150,13 @@ class OccludedAgentFOVSensor(AbstractSensor):
         if self.seed is not None:
             np.random.seed(self.seed)
 
+    # make sure that self.objectSensor always gets its agent set even when self is initialized in a different order
+    def __setattr__(self, name, value):
+        if name == "agent" and value:
+            self.__dict__["objectSensor"].agent = value
+        super().__setattr__(name, value)
+
+
     def checkOccludedVision(self, agent, world):
         viewSeg = np.array([self.agent.getPosition(), agent.getPosition()])
         for obj in self.objectSensor.sensedObjects:
