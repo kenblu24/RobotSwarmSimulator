@@ -1,6 +1,7 @@
 from ..agent.control.BinaryController import BinaryController
 from ..agent.control.HumanController import HumanController
 from ..agent.control.StaticController import StaticController
+from ..agent.control.NaryController import NaryController
 
 def getBinaryControllerPeaks(bc: BinaryController):
     peakV = max(bc.a[0], bc.b[0])
@@ -17,6 +18,15 @@ def getStaticControllerPeaks(sc: StaticController):
     peakOmega = 3
     return peakV, peakOmega
 
+def getNaryControllerPeaks(nc: NaryController):
+    peak_v, peak_omega = nc.on_detect[0][0], abs(nc.on_detect[0][1])
+
+    for i in range(1, nc.n_sensors):
+        v, omega = nc.on_detect[i]
+        peak_v, peak_omega = max(peak_v, v), max(peak_omega, abs(omega))
+
+    return peak_v, peak_omega
+
 def getControllerPeaks(controller):
     if isinstance(controller, BinaryController):
         return getBinaryControllerPeaks(controller)
@@ -24,5 +34,7 @@ def getControllerPeaks(controller):
         return getHumanControllerPeaks(controller)
     elif isinstance(controller, StaticController):
         return getStaticControllerPeaks(controller)
-    print("ERROR", "controller type unanalyzable:", controller)
-    return None, None
+    elif isinstance(controller, NaryController):
+        return getNaryControllerPeaks(controller)
+
+    raise TypeError(f"ERROR: controller type unanalyzable: {type(controller)}")

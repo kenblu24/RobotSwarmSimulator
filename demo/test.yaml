@@ -1,0 +1,5 @@
+type: "RectangularWorld"
+size: [10, 10]
+time_step: !np 1/40
+objects:
+  - svg_to_static_objects: !include "./out-maze.svg"
