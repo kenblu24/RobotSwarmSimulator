@@ -57,17 +57,17 @@ def NTangleIntersect(a: NTangle, b: NTangle):
     return True
 
 class RectDNode:
-    def __init__(self, boundingBox: NTangle, capacity = 2):
+    def __init__(self, boundingBox: NTangle, capacity = 4):
         self.boundingBox = boundingBox
         self.capacity = capacity
         self.count = 0
         self.contents: list(PolygonBox) = []
         self.children: list(RectDNode) = None
-    def subdivide(self):
-        xls = sorted([rect.minimum[0] for rect in self.contents])
-        xrs = sorted([rect.maximum[0] for rect in self.contents])
-        yts = sorted([rect.minimum[1] for rect in self.contents])
-        ybs = sorted([rect.maximum[1] for rect in self.contents])
+    def bestSplit(self):
+        xls = sorted([max(rect.minimum[0], self.boundingBox.minimum[0]) for rect in self.contents])
+        xrs = sorted([min(rect.maximum[0], self.boundingBox.maximum[0]) for rect in self.contents])
+        yts = sorted([max(rect.minimum[1], self.boundingBox.minimum[1]) for rect in self.contents])
+        ybs = sorted([min(rect.maximum[1], self.boundingBox.maximum[1]) for rect in self.contents])
 
         xf = findOptimalSplit(xls, xrs)
         xb = findOptimalSplit(xls, xrs, False)
@@ -75,7 +75,10 @@ class RectDNode:
         yb = findOptimalSplit(yts, ybs, False)
 
         options = [xf, xb, yf, yb]
-        best = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
+        return = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
+
+    def subdivide(self):
+        best = self.bestSplit()
         splitDimension = best[2] // 2 # for the x options which occupy indicies 0 and 1, this will be zero, but for the y options it will be 1
         splitByY = splitDimension == 1
         backward = best[2] % 2 # for the forward options which occupy indicies 0 and 2, this will be zero, but for the forward options it will be 1
@@ -104,13 +107,11 @@ class RectDNode:
         if self.children:
             for child in self.children:
                 child.insert([rect for rect in rects if child.intersect(rect)])
-            return
-        
-        self.contents.extend(rects)
-        # Check to ensure we're not going to go over capacity.
-        if len(self.contents) > self.capacity:
-            # We're over capacity. Subdivide, then insert into the new child.
-            self.subdivide()
+            
+        else: 
+            self.contents.extend(rects)
+            if self.bestSplit()[1] > self.capacity:
+                self.subdivide()
         return
     def intersect(self, other: NTangle):
         return NTangleIntersect(self.boundingBox, other)
