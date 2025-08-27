@@ -7,51 +7,6 @@
 # d = min(n - i + e, l * 2, r * 2)
 
 
-
-class PolygonBox:
-    def __init__(self, poly, points):
-        self.poly = poly
-        self.points = points
-        self.minX = min([p[0] for p in points])
-        self.maxX = max([p[0] for p in points])
-        self.minY = min([p[1] for p in points])
-        self.maxY = max([p[1] for p in points])
-
-class RectDNode:
-    def __init__(self, xMax, xMin, yMax, yMin, capacity = 2):
-        self.xMax = xMax
-        self.xMin = xMin
-        self.yMax = yMax
-        self.yMin = yMin
-        self.capacity = capacity
-        self.count = 0
-        self.contents: list(PolygonBox) = []
-    def subdivide(self):
-        xls = sorted([rect.minX for rect in self.contents])
-        xrs = sorted([rect.maxX for rect in self.contents])
-        yts = sorted([rect.maxY for rect in self.contents])
-        ybs = sorted([rect.minY for rect in self.contents])
-    def insert(self, point):
-        # Check to ensure we're not going to go over capacity.
-        if (len(self.points) + 1) > self.capacity:
-            # We're over capacity. Subdivide, then insert into the new child.
-            self.subdivide()
-
-        if self.ul is not None:
-            if self.is_ul(point):
-                self.ul.insert(point)
-            if self.is_ur(point):
-                self.ur.insert(point)
-            if self.is_ll(point):
-                self.ll.insert(point)
-            if self.is_lr(point):
-                self.lr.insert(point)
-
-        # There are no child nodes & we're under capacity. Add it to `points`.
-        self.points.append(point)
-        return True
-
-
 def findOptimalSplit(starts, ends, forward=True):
     if not forward:
         starts.reverse()
@@ -77,4 +32,88 @@ def findOptimalSplit(starts, ends, forward=True):
             bestSplit = i
     
     return bestSplit, bestScore
+
+class NTangle:
+    def __init__(self, n, minimum, maximum):
+        self.n = n
+        self.minimum = minimum
+        self.maximum = maximum
+    def clone(self):
+        return NTangle(self.n, [v for v in self.minimum], [v for v in self.maximum])
+    def validate(self):
+        if len(self.minimum) != self.n or len(self.maximum) != self.n or any([self.maximum[i] < self.minimum[i] for i in range(self.n)]):
+            raise ValueError("invalid NTangle")
+
+class PolygonBox(NTangle):
+    def __init__(self, poly, points):
+        self.poly = poly
+        self.points = points
+        super().__init__(self, 2, (min([p[0] for p in points]), min([p[1] for p in points])), (max([p[0] for p in points]), max([p[1] for p in points])))
+
+def NTangleIntersect(a: NTangle, b: NTangle):
+    for i in range(len(a.minimum)):
+        if b.maximum[i] < a.minimum[i] or a.maximum[i] < b.minimum[i]:
+            return False
+    return True
+
+class RectDNode:
+    def __init__(self, boundingBox: NTangle, capacity = 2):
+        self.boundingBox = boundingBox
+        self.capacity = capacity
+        self.count = 0
+        self.contents: list(PolygonBox) = []
+        self.children: list(RectDNode) = None
+    def subdivide(self):
+        xls = sorted([rect.minimum[0] for rect in self.contents])
+        xrs = sorted([rect.maximum[0] for rect in self.contents])
+        yts = sorted([rect.minimum[1] for rect in self.contents])
+        ybs = sorted([rect.maximum[1] for rect in self.contents])
+
+        xf = findOptimalSplit(xls, xrs)
+        xb = findOptimalSplit(xls, xrs, False)
+        yf = findOptimalSplit(yts, ybs)
+        yb = findOptimalSplit(yts, ybs, False)
+
+        options = [xf, xb, yf, yb]
+        best = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
+        splitDimension = best[2] // 2 # for the x options which occupy indicies 0 and 1, this will be zero, but for the y options it will be 1
+        splitByY = splitDimension == 1
+        backward = best[2] % 2 # for the forward options which occupy indicies 0 and 2, this will be zero, but for the forward options it will be 1
+        splitIdx = best[0] if backward == 0 else len(self.contents) - 1 - best[0] # if forward just take the index, but if backwards reverse the index
+        splitVal = [xls, xrs, yts, ybs][2 * splitByY + backward][splitIdx]
+
+        lessBB = self.boundingBox.clone()
+        lessBB.maximum[splitDimension] = splitVal
+
+        moreBB = self.boundingBox.clone()
+        moreBB.minimum[splitDimension] = splitVal
+
+        less = RectDNode(lessBB)
+        more = RectDNode(moreBB)
+
+        lessContents = [rect for rect in self.contents if rect.minimum[splitDimension] < splitVal]
+        moreContents = [rect for rect in self.contents if splitVal < rect.maximum[splitDimension]]
+
+        self.contents = []
+
+        less.insert(lessContents)
+        more.insert(moreContents)
+
+        self.children = [less, more]
+    def insert(self, rects):
+        if self.children:
+            for child in self.children:
+                child.insert([rect for rect in rects if child.intersect(rect)])
+            return
+        
+        self.contents.extend(rects)
+        # Check to ensure we're not going to go over capacity.
+        if len(self.contents) > self.capacity:
+            # We're over capacity. Subdivide, then insert into the new child.
+            self.subdivide()
+        return
+    def intersect(self, other: NTangle):
+        return NTangleIntersect(self.boundingBox, other)
+
+
 
