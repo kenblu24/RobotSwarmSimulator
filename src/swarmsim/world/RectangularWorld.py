@@ -44,6 +44,7 @@ from .objects.Wall import Wall
 import quads
 
 from ..physics.Physics import Physics, snapPhysicsToAgent
+from .RectDTree import RectDNode, NTangle, PolygonBox
 
 # typing
 from typing import TYPE_CHECKING
@@ -120,6 +121,16 @@ class RectangularWorldConfig(AbstractWorldConfig):
         # self.init_type.rescale(zoom)
 
 
+def minMax(arr):
+    minimum = arr[0]
+    maximum = arr[0]
+    for e in arr:
+        if e < minimum:
+            minimum = e
+        if maximum < e:
+            maximum = e
+    return minimum, maximum
+
 class RectangularWorld(World):
     
     def __init__(self, config: RectangularWorldConfig, initialize=True):
@@ -177,15 +188,6 @@ class RectangularWorld(World):
             return
         
         # procedure to find the bounds of the quad
-        def minMax(arr):
-            minimum = arr[0]
-            maximum = arr[0]
-            for e in arr:
-                if e < minimum:
-                    minimum = e
-                if maximum < e:
-                    maximum = e
-            return minimum, maximum
         xMin, xMax = minMax([agent.pos[0] for agent in self.population])
         yMin, yMax = minMax([agent.pos[1] for agent in self.population])
         middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
@@ -198,6 +200,17 @@ class RectangularWorld(World):
             newQuad.insert(point=agent.pos.tolist(), data=agent)
         self.quad = newQuad
 
+    # call this method AFTER self.objects is finalized
+    def createObjectTree(self):
+        xVals = []
+        yVals = []
+        for obj in self.objects:
+            xVals.extend([p[0] for p in obj.points])
+            yVals.extend([p[1] for p in obj.points])
+        xmm = minMax(xVals)
+        ymm = minMax(yVals)
+        self.objectTree = RectDNode(NTangle(2, (xmm[0], ymm[0]), (xmm[1], ymm[1])), capacity=4)
+        self.objectTree.insert([PolygonBox(obj, obj.points) for obj in self.objects])
 
     def connectPhysicsObject(self, agent):
         if agent.grounded:
@@ -248,6 +261,7 @@ class RectangularWorld(World):
     def setup(self, step_spawners=True):
         super().setup(step_spawners)
         self.updateQuad()
+        self.createObjectTree()
 
     def updateMaxRadius(self, agent):
         if hasattr(agent, "radius") and self.maxAgentRadius < agent.radius:
@@ -300,6 +314,8 @@ class RectangularWorld(World):
 
         for metric in self.metrics:
             metric.draw(screen, offset)
+        
+        self.objectTree.draw(screen, offset)
 
     def getNeighborsWithinDistance(self, center: T_Vec2, r, excluded=None) -> list:
         """

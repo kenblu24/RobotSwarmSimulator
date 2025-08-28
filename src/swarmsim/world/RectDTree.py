@@ -1,3 +1,5 @@
+import pygame
+import numpy as np
 # split choosing procedure for one dimension and one direction:
 # n = number of segments
 # i = index of start of current segment
@@ -43,12 +45,14 @@ class NTangle:
     def validate(self):
         if len(self.minimum) != self.n or len(self.maximum) != self.n or any([self.maximum[i] < self.minimum[i] for i in range(self.n)]):
             raise ValueError("invalid NTangle")
+    def __repr__(self):
+        return "{" + str(self.minimum) + " -> " + str(self.maximum) + "}"
 
 class PolygonBox(NTangle):
     def __init__(self, poly, points):
         self.poly = poly
         self.points = points
-        super().__init__(self, 2, (min([p[0] for p in points]), min([p[1] for p in points])), (max([p[0] for p in points]), max([p[1] for p in points])))
+        super().__init__(2, (min([p[0] for p in points]), min([p[1] for p in points])), (max([p[0] for p in points]), max([p[1] for p in points])))
 
 def NTangleIntersect(a: NTangle, b: NTangle):
     for i in range(len(a.minimum)):
@@ -75,27 +79,27 @@ class RectDNode:
         yb = findOptimalSplit(yts, ybs, False)
 
         options = [xf, xb, yf, yb]
-        return = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
+        best = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
 
-    def subdivide(self):
-        best = self.bestSplit()
         splitDimension = best[2] // 2 # for the x options which occupy indicies 0 and 1, this will be zero, but for the y options it will be 1
         splitByY = splitDimension == 1
         backward = best[2] % 2 # for the forward options which occupy indicies 0 and 2, this will be zero, but for the forward options it will be 1
         splitIdx = best[0] if backward == 0 else len(self.contents) - 1 - best[0] # if forward just take the index, but if backwards reverse the index
         splitVal = [xls, xrs, yts, ybs][2 * splitByY + backward][splitIdx]
+        return {"difference": best[1], "dimension": splitDimension, "value": splitVal}
 
+    def subdivide(self, split):
         lessBB = self.boundingBox.clone()
-        lessBB.maximum[splitDimension] = splitVal
+        lessBB.maximum[split["dimension"]] = split["value"]
 
         moreBB = self.boundingBox.clone()
-        moreBB.minimum[splitDimension] = splitVal
+        moreBB.minimum[split["dimension"]] = split["value"]
 
-        less = RectDNode(lessBB)
-        more = RectDNode(moreBB)
+        less = RectDNode(lessBB, self.capacity)
+        more = RectDNode(moreBB, self.capacity)
 
-        lessContents = [rect for rect in self.contents if rect.minimum[splitDimension] < splitVal]
-        moreContents = [rect for rect in self.contents if splitVal < rect.maximum[splitDimension]]
+        lessContents = [rect for rect in self.contents if rect.minimum[split["dimension"]] < split["value"]]
+        moreContents = [rect for rect in self.contents if split["value"] < rect.maximum[split["dimension"]]]
 
         self.contents = []
 
@@ -110,11 +114,34 @@ class RectDNode:
             
         else: 
             self.contents.extend(rects)
-            if self.bestSplit()[1] > self.capacity:
-                self.subdivide()
+            split = self.bestSplit()
+            # print(split)
+            if split["difference"] > self.capacity:
+                self.subdivide(split)
+                
         return
     def intersect(self, other: NTangle):
         return NTangleIntersect(self.boundingBox, other)
+    def draw(self, screen, offset):
+        pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
+        xMin = self.boundingBox.minimum[0]
+        yMin = self.boundingBox.minimum[1]
+        xMax = self.boundingBox.maximum[0]
+        yMax = self.boundingBox.maximum[1]
+        boundingPoints = np.array([[xMin, yMin], [xMax, yMin], [xMax, yMax], [xMin, yMax]])
+        for i in range(len(boundingPoints)):
+            pygame.draw.line(screen, (100, 0, 255, 50), boundingPoints[i - 1] * zoom + pan, boundingPoints[i] * zoom + pan, width=1)
+        
+        if self.children:
+            for child in self.children:
+                child.draw(screen, offset)
+    def print(self, indt=0):
+        print("  "*indt + str(self.boundingBox))
+        if self.children:
+            for child in self.children:
+                child.print(indt + 1)
+        for rect in self.contents:
+            print("  "*indt + "--" + str(rect))
 
 
 
