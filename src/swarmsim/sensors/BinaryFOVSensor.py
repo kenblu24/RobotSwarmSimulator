@@ -100,7 +100,7 @@ class BinaryFOVSensor(AbstractSensor):
         if self.seed is not None:
             np.random.seed(self.seed)
 
-    def checkForLOSCollisions(self, world: World) -> None:
+    def checkForLOSCollisions(self, world: RectangularWorld) -> None:
         # Mathematics obtained from Sundaram Ramaswamy
         # https://legends2k.github.io/2d-fov/design.html
         # See section 3.1.1.2
@@ -399,13 +399,13 @@ class BinaryFOVSensor(AbstractSensor):
                 pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
-                AAR = self.getAARectContainingSector(self.agent.world)
-                AARtl = np.array(AAR[:2]) * zoom + pan
-                AARbr = np.array(AAR[2:]) * zoom + pan
-                pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
-                detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
-                for agent in detected:
-                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width * 3)
+                # AAR = self.getAARectContainingSector(self.agent.world)
+                # AARtl = np.array(AAR[:2]) * zoom + pan
+                # AARbr = np.array(AAR[2:]) * zoom + pan
+                # pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
+                # detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
+                # for agent in detected:
+                #     pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width * 3)
 
     # this function has been replaced by a more efficient procedure in checkForLOSCollisions and is no longer called there
     def circle_interesect_sensing_cone(self, u, r):
