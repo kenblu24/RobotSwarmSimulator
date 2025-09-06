@@ -5,6 +5,7 @@ import math
 from .AbstractSensor import AbstractSensor
 from typing import List
 from ..world.goals.Goal import CylinderGoal
+from ..util.collider.AABB import AABB
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -396,9 +397,13 @@ class BinaryFOVSensor(AbstractSensor):
             pygame.draw.line(screen, sight_color, head, tail_r)
             if self.agent.is_highlighted:
                 width = max(1, round(0.01 * zoom))
-                pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
-                if self.wall_sensing_range:
-                    pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
+                # pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
+                range_bbox = AABB.from_center_wh(head, self.r * 2 * zoom)
+                langle = self.agent.angle + self.angle + self.theta
+                rangle = self.agent.angle + self.angle - self.theta
+                pygame.draw.arc(screen, sight_color + (50,), range_bbox.to_rect(), -langle, -rangle, width)
+                # if self.wall_sensing_range:
+                #     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
                 # AAR = self.getAARectContainingSector(self.agent.world)
                 # AARtl = np.array(AAR[:2]) * zoom + pan
                 # AARbr = np.array(AAR[2:]) * zoom + pan

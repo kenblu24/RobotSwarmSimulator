@@ -58,6 +58,15 @@ class AABB:
         size = np.asarray(size, dtype=np.float64)
         return cls([p, p + size])
 
+    @classmethod
+    def from_center_wh(cls, p, size):
+        p = np.asarray(p, dtype=np.float64)
+        size = np.asarray(size, dtype=np.float64)
+        return cls([p - size / 2, p + size / 2])
+
+    def to_rect(self):
+        return pygame.Rect(*self._min, *self._size)
+
     def draw(self, screen, offset=((0, 0), 1.0), color=(255, 255, 0)):
         pan, zoom = np.asarray(offset[0]), offset[1]
         if self.is_intersected:
