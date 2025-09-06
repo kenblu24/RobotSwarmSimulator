@@ -5,6 +5,7 @@ import math
 from .AbstractSensor import AbstractSensor
 from typing import List
 from ..world.goals.Goal import CylinderGoal
+from ..util.collider.AABB import AABB
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -44,6 +45,8 @@ class BinaryFOVSensor(AbstractSensor):
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
         'store_history', 'detect_goal_with_added_state', 'show', 'target_team'
     ]
+
+    DEBUG = False
 
     def __init__(
         self,
@@ -100,7 +103,7 @@ class BinaryFOVSensor(AbstractSensor):
         if self.seed is not None:
             np.random.seed(self.seed)
 
-    def checkForLOSCollisions(self, world: World) -> None:
+    def checkForLOSCollisions(self, world: RectangularWorld) -> None:
         # Mathematics obtained from Sundaram Ramaswamy
         # https://legends2k.github.io/2d-fov/design.html
         # See section 3.1.1.2
@@ -383,6 +386,8 @@ class BinaryFOVSensor(AbstractSensor):
             if self.current_state == 2:
                 sight_color = (255, 255, 0)
 
+            # draw the whiskers
+            # length = actual sensor range if agent is selected/highlighted, otherwise draw relative to agent radius
             magnitude = self.r if self.agent.is_highlighted else self.agent.radius * 5
 
             head = np.asarray(self.agent.getPosition()) * zoom + pan
@@ -396,7 +401,16 @@ class BinaryFOVSensor(AbstractSensor):
             pygame.draw.line(screen, sight_color, head, tail_r)
             if self.agent.is_highlighted:
                 width = max(1, round(0.01 * zoom))
-                pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
+                # pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
+                # draw the arc of the sensor cone
+                range_bbox = AABB.from_center_wh(head, self.r * 2 * zoom)
+                langle = self.agent.angle + self.angle + self.theta
+                rangle = self.agent.angle + self.angle - self.theta
+                pygame.draw.arc(screen, sight_color + (50,), range_bbox.to_rect(), -langle, -rangle, width)
+
+                if not self.DEBUG:
+                    return
+                # DEBUG DRAWINGS:
                 if self.wall_sensing_range:
                     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
                 AAR = self.getAARectContainingSector(self.agent.world)
