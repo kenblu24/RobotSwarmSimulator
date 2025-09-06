@@ -46,6 +46,8 @@ class BinaryFOVSensor(AbstractSensor):
         'store_history', 'detect_goal_with_added_state', 'show', 'target_team'
     ]
 
+    DEBUG = False
+
     def __init__(
         self,
         agent=None,
@@ -384,6 +386,8 @@ class BinaryFOVSensor(AbstractSensor):
             if self.current_state == 2:
                 sight_color = (255, 255, 0)
 
+            # draw the whiskers
+            # length = actual sensor range if agent is selected/highlighted, otherwise draw relative to agent radius
             magnitude = self.r if self.agent.is_highlighted else self.agent.radius * 5
 
             head = np.asarray(self.agent.getPosition()) * zoom + pan
@@ -398,19 +402,24 @@ class BinaryFOVSensor(AbstractSensor):
             if self.agent.is_highlighted:
                 width = max(1, round(0.01 * zoom))
                 # pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
+                # draw the arc of the sensor cone
                 range_bbox = AABB.from_center_wh(head, self.r * 2 * zoom)
                 langle = self.agent.angle + self.angle + self.theta
                 rangle = self.agent.angle + self.angle - self.theta
                 pygame.draw.arc(screen, sight_color + (50,), range_bbox.to_rect(), -langle, -rangle, width)
-                # if self.wall_sensing_range:
-                #     pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
-                # AAR = self.getAARectContainingSector(self.agent.world)
-                # AARtl = np.array(AAR[:2]) * zoom + pan
-                # AARbr = np.array(AAR[2:]) * zoom + pan
-                # pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
-                # detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
-                # for agent in detected:
-                #     pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width * 3)
+
+                if not self.DEBUG:
+                    return
+                # DEBUG DRAWINGS:
+                if self.wall_sensing_range:
+                    pygame.draw.circle(screen, (150, 150, 150, 50), head, self.wall_sensing_range * zoom, width)
+                AAR = self.getAARectContainingSector(self.agent.world)
+                AARtl = np.array(AAR[:2]) * zoom + pan
+                AARbr = np.array(AAR[2:]) * zoom + pan
+                pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
+                detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
+                for agent in detected:
+                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width * 3)
 
     # this function has been replaced by a more efficient procedure in checkForLOSCollisions and is no longer called there
     def circle_interesect_sensing_cone(self, u, r):
