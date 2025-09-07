@@ -9,20 +9,35 @@ import numpy as np
 # d = min(n - i + e, l * 2, r * 2)
 
 
-def findOptimalSplit(starts, ends, forward=True):
+def findOptimalSplit(starts, ends, forward=True, debug=False):
     if not forward:
-        starts.reverse()
-        ends.reverse()
-        starts, ends = ends, starts
+        starts, ends = list(reversed(ends)), list(reversed(starts))
     
     bestScore = 0
     bestSplit = 0
 
     n = len(starts)
+
+    # create l map
+    # lMap = list(range(n))
+    # for i in range(1, n):
+
+    if debug:
+        print([str(v) for v in starts], [str(v) for v in ends], "forward=", forward, "n=", n)
     e = 0
     for i in range(n):
-        while ends[e] < starts[i] if forward else starts[i] < ends[e]:
+        if debug:
+            print("i=", i, f"({str(starts[i])})", "e=", e, f"({str(ends[e])})")
+        
+        while e < i and (ends[e] <= starts[i] if forward else starts[i] <= ends[e]):
             e += 1
+            if debug:
+                print("e=", e, f"({str(ends[e])})")
+            
+            if len(ends) <= e:
+                print("oboe")
+                print([str(v) for v in starts], [str(v) for v in ends], "forward=", forward, "n=", n)
+                print("i=", i, f"({str(starts[i])})", "e=", e, f"({str(ends[e])})")
         
         l = i # number of segments left of split
         r = n - e # number of segments right of split
@@ -30,9 +45,12 @@ def findOptimalSplit(starts, ends, forward=True):
         score = min(d, l * 2, r * 2)
 
         if bestScore < score:
+            if debug:
+                print("l", l, "r", r, "d", d, "score", score)
             bestScore = score
             bestSplit = i
-    
+    if debug:
+        print("bestSplit", bestSplit, "bestScore", bestScore)
     return bestSplit, bestScore
 
 class NTangle:
@@ -46,7 +64,7 @@ class NTangle:
         if len(self.minimum) != self.n or len(self.maximum) != self.n or any([self.maximum[i] < self.minimum[i] for i in range(self.n)]):
             raise ValueError("invalid NTangle")
     def __repr__(self):
-        return "{" + str(self.minimum) + " -> " + str(self.maximum) + "}"
+        return "{" + str([str(v) for v in self.minimum]) + " -> " + str([str(v) for v in self.maximum]) + "}"
 
 class PolygonBox(NTangle):
     def __init__(self, poly, points):
@@ -61,31 +79,39 @@ def NTangleIntersect(a: NTangle, b: NTangle):
     return True
 
 class RectDNode:
-    def __init__(self, boundingBox: NTangle, capacity = 4):
+    def __init__(self, boundingBox: NTangle, capacity = 4, depth = 5):
         self.boundingBox = boundingBox
         self.capacity = capacity
         self.count = 0
+        self.depth = depth
         self.contents: list(PolygonBox) = []
         self.children: list(RectDNode) = None
     def bestSplit(self):
+        if not self.contents:
+            return {"difference": 0} # empty
+        
         xls = sorted([max(rect.minimum[0], self.boundingBox.minimum[0]) for rect in self.contents])
         xrs = sorted([min(rect.maximum[0], self.boundingBox.maximum[0]) for rect in self.contents])
         yts = sorted([max(rect.minimum[1], self.boundingBox.minimum[1]) for rect in self.contents])
         ybs = sorted([min(rect.maximum[1], self.boundingBox.maximum[1]) for rect in self.contents])
 
-        xf = findOptimalSplit(xls, xrs)
-        xb = findOptimalSplit(xls, xrs, False)
-        yf = findOptimalSplit(yts, ybs)
-        yb = findOptimalSplit(yts, ybs, False)
+        xf = findOptimalSplit(xls, xrs, debug=(self.depth < 1))
+        xb = findOptimalSplit(xls, xrs, False, debug=(self.depth < 1))
+        yf = findOptimalSplit(yts, ybs, debug=(self.depth < 1))
+        yb = findOptimalSplit(yts, ybs, False, debug=(self.depth < 1))
 
         options = [xf, xb, yf, yb]
         best = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
-
+        if self.depth < 1:
+            print("best", best)
         splitDimension = best[2] // 2 # for the x options which occupy indicies 0 and 1, this will be zero, but for the y options it will be 1
         splitByY = splitDimension == 1
         backward = best[2] % 2 # for the forward options which occupy indicies 0 and 2, this will be zero, but for the forward options it will be 1
         splitIdx = best[0] if backward == 0 else len(self.contents) - 1 - best[0] # if forward just take the index, but if backwards reverse the index
-        splitVal = [xls, xrs, yts, ybs][2 * splitByY + backward][splitIdx]
+        
+        splitVal = [xls, xrs, yts, ybs][2 * splitDimension + backward][splitIdx]
+        if self.depth < 1:
+            print("splitVal", splitVal, "listChoice", 2 * splitDimension + backward, "chosenList", [str(v) for v in [xls, xrs, yts, ybs][2 * splitDimension + backward]], "splitIdx", splitIdx)
         return {"difference": best[1], "dimension": splitDimension, "value": splitVal}
 
     def subdivide(self, split):
@@ -95,8 +121,8 @@ class RectDNode:
         moreBB = self.boundingBox.clone()
         moreBB.minimum[split["dimension"]] = split["value"]
 
-        less = RectDNode(lessBB, self.capacity)
-        more = RectDNode(moreBB, self.capacity)
+        less = RectDNode(lessBB, self.capacity, self.depth - 1)
+        more = RectDNode(moreBB, self.capacity, self.depth - 1)
 
         lessContents = [rect for rect in self.contents if rect.minimum[split["dimension"]] < split["value"]]
         moreContents = [rect for rect in self.contents if split["value"] < rect.maximum[split["dimension"]]]
@@ -114,9 +140,11 @@ class RectDNode:
             
         else: 
             self.contents.extend(rects)
+            if not self.contents:
+                self.print()
             split = self.bestSplit()
             # print(split)
-            if split["difference"] > self.capacity:
+            if 0 < self.depth and split["difference"] > self.capacity:
                 self.subdivide(split)
                 
         return
