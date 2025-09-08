@@ -20,7 +20,7 @@ class VoronoiController(AbstractController):
         self.agent_memory = None
         self.active_agents = None
         self.working_memory = None
-        self.v_max = 0.3
+        self.v_max = 0.3 # maybe change to 0.03
         self.once = False
 
         super().__init__(agent=agent, parent=parent)
@@ -41,13 +41,20 @@ class VoronoiController(AbstractController):
             self.once = True
 
         working_memory = self.
+
         #TODO: once done with initial memory stuff, figure out how to update position of self after movement from inside the controller
         
-        points = np.array([agent.getPosition() for agent in self.population])
-        points = np.delete(points, agent.getPosition())
+        #TODO: Replace goal_position with value calculated from working_memory
+        # points = np.array([agent.getPosition() for agent in self.population])
+        # points = np.delete(points, agent.getPosition())
         
-        
-        return v, w
+        # dist_to_goal = self.distance(agent.pos, goal_position)
+        # radians_to_goal = np.arctan2(goal_position[1] - agent.pos[1], goal_position[0] - agent.pos[0]) - agent.angle
+        # if dist_to_goal > agent.radius:
+        #     v = 0.03 # m/s
+        #     omega = self.tracking_pid(np.clip(radians_to_goal, -2, 2))
+
+        return v, omega
     
     
     @staticmethod
