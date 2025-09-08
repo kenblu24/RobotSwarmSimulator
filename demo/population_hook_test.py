@@ -30,6 +30,7 @@ spawner = PointAgentSpawner(world, n=10, facing="away", avoid_overlap=True, agen
 world.spawners.append(spawner)
 
 # this is the part we are testing
-world.population.addListener("append", print)
+world.population.register_add_callback(lambda x: print(f"added {x}"))
+world.population.register_del_callback(lambda x: print(f"deleted {x}"))
 
 sim(world, start_paused=True)
