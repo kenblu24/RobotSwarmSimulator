@@ -1,123 +1,155 @@
 import numpy as np
 import pygame
-from scipy import spatial
+from dataclasses import dataclass
+from shapely.geometry import Point, Polygon, box
 
 from swarmsim.agent.control.AbstractController import AbstractController
 import swarmsim.util.statistics_tools as st
-from math import copysign
 
+# typing
+from typing import TYPE_CHECKING
 
-trigger_remap = st.Remap([-1, 1], [0, 1])
-
-
-def decay(x, decay=0.1):
-    magnitude = np.clip(abs(x) - decay, 0., None)
-    return copysign(magnitude, x)
-
+if TYPE_CHECKING:
+    from ...world.RectangularWorld import RectangularWorld
+else:
+    RectangularWorld = None
 
 class VoronoiController(AbstractController):
-    def __init__(
-        self, agent=None, parent=None,
+    def __init__(self, agent=None, parent=None):
+        self.bounding_box = Polygon([(0, 0), (0, self.world_size[0]), (self.world_size[1], self.world_size[0]), (self.world_size[1], 0)])
+        self.agent_memory = None
+        self.active_agents = None
+        self.working_memory = None
+        self.v_max = 0.3
+        self.once = False
 
-        agent_memory= None,
-        
-    ):
         super().__init__(agent=agent, parent=parent)
 
-
+    def attach_world(self, world: RectangularWorld):
+        super().attach_world(world)
+        self.population = world.population
+        self.world_size = world.config.size
+        self.world_radius = world.config.radius
+        self.world_dt = world.dt
 
     def get_actions(self, agent):
-        
+        if not self.once:
+            self.active_agents = np.array([[agent.getPosition(), 0.0]])
+            voronoi_poly, neighbors, refreshed = self.voronoi_refresh(agent, self.agent_memory, bounds_poly=self.bounding_box)
+            np.append(self.active_agents, neighbors)
+            self.agent_memory = np.array(refreshed)
+            self.once = True
 
+        working_memory = self.
+        #TODO: once done with initial memory stuff, figure out how to update position of self after movement from inside the controller
+        
+        points = np.array([agent.getPosition() for agent in self.population])
+        points = np.delete(points, agent.getPosition())
+        
+        
         return v, w
     
     
-    
-    
-    # def draw(self, screen, offset):
-    #     pan, zoom = np.asarray(offset[0]), offset[1]
-    #     super().draw(screen, offset)
-
-    #     for line in self.lines:
-    #         pygame.draw.line(screen, (128, 128, 128), *line * zoom + pan, width=1)
-
-    #     for centroid in self.centroids:
-    #         pygame.draw.circle(screen, (128, 128, 128), centroid * zoom + pan, radius=5, width=1)
-
-    # This is a modified version of the code from here:
-    # https://stackoverflow.com/questions/28665491/getting-a-bounded-polygon-coordinates-from-voronoi-cells
     @staticmethod
-    def in_box(towers, bounding_box):
-        return np.logical_and(np.logical_and(bounding_box[0] <= towers[:, 0],
-                                            towers[:, 0] <= bounding_box[1]),
-                            np.logical_and(bounding_box[2] <= towers[:, 1],
-                                            towers[:, 1] <= bounding_box[3]))
+    def distance(a, b):
+        return np.linalg.norm(a - b)
+    
+    def closer_to_me_halfspace(self, pi, pj, bounds_poly, eps=1e-12):
+        a = pj - pi
+        nrm = np.linalg.norm(a)
+        if nrm < eps:
+            return bounds_poly
 
-    @staticmethod
-    def voronoi(towers, bounding_box):
-        # eps = sys.float_info.epsilon
-        eps = 0.01
-        # Select towers inside the bounding box
-        i = VoronoiController.in_box(towers, bounding_box)
-        # Mirror points
-        points_center = towers[i, :]
-        points_left = np.copy(points_center)
-        points_left[:, 0] = bounding_box[0] - (points_left[:, 0] - bounding_box[0])
-        points_right = np.copy(points_center)
-        points_right[:, 0] = bounding_box[1] + (bounding_box[1] - points_right[:, 0])
-        points_down = np.copy(points_center)
-        points_down[:, 1] = bounding_box[2] - (points_down[:, 1] - bounding_box[2])
-        points_up = np.copy(points_center)
-        points_up[:, 1] = bounding_box[3] + (bounding_box[3] - points_up[:, 1])
-        points = np.append(points_center,
-                        np.append(np.append(points_left,
-                                            points_right,
-                                            axis=0),
-                                    np.append(points_down,
-                                            points_up,
-                                            axis=0),
-                                    axis=0),
-                        axis=0)
-        # Compute Voronoi
-        if len(points) != 0:
-            vor = spatial.Voronoi(points)
-        else:
-            return []
-        # Filter regions
-        regions = []
-        for region in vor.regions:
-            flag = True
-            for index in region:
-                if index == -1:
-                    flag = False
+        a_hat = a / nrm
+        c = 0.5 * (np.dot(pj, pj) - np.dot(pi, pi))
+
+        # Find a point q0 on the line a·q = c by shifting the bounds centroid along a_hat
+        center = np.asarray(bounds_poly.centroid.coords[0])
+        # because a_hat is unit, denominator is 1:
+        q0 = center + (c - np.dot(a_hat, center)) * a_hat
+
+        # Build a long segment along the line direction (perpendicular to a_hat)
+        t = np.array([-a_hat[1], a_hat[0]])  # unit vector along the line
+        minx, miny, maxx, maxy = bounds_poly.bounds
+        diag = np.hypot(maxx - minx, maxy - miny)
+
+        L = 2.0 * diag + 1.0  # length along the line
+        H = 2.0 * diag + 1.0  # depth away from the line
+
+        p1 = q0 - L * t
+        p2 = q0 + L * t
+
+        # Half-plane for a·q <= c is the side in the -a direction (since a·(q - q0) <= 0)
+        halfplane = Polygon([tuple(p1),
+                            tuple(p2),
+                            tuple(p2 - H * a_hat),
+                            tuple(p1 - H * a_hat)])
+        
+        return bounds_poly.intersection(halfplane)
+
+    def max_rad_from_me(poly, pi, samples=200):
+        # Approximate max_{q in poly} ||q - pi|| by sampling boundary
+        if poly.is_empty:
+            return 0.0
+        boundary = poly.boundary
+        # Sample equidistant points along boundary length
+        L = boundary.length
+        if L == 0:
+            return np.linalg.norm(np.array(boundary.coords[0]) - pi)
+        ts = np.linspace(0, L, samples, endpoint=False)
+        dmax = 0.0
+        for t in ts:
+            q = np.array(boundary.interpolate(t).coords[0])
+            dmax = max(dmax, np.linalg.norm(q - pi))
+        return dmax
+    
+
+    def voronoi_refresh(self, agent, agent_memory, vmax, dt, bounds_poly, eps=1e-9):
+        pi = agent.getPosition()
+        candidates = np.array([])
+
+        for pos, radius in agent_memory:
+            if pos == pi:
+                continue
+            d = self.distance(pos, pi) + radius
+            np.append(candidates, d)
+        R = np.min(candidates)
+
+        def provisional_cell(Ri):
+            disk_region = Point(pi[0], pi[1]).buffer(Ri)
+            W = disk_region.intersection(bounds_poly)
+            in_radius = [[pj, rad] for pj, rad in agent_memory if pj != pi and self.distance(pj, pi) <= Ri + eps]
+
+
+            for pj, rad in in_radius:
+                halfplane_poly = VoronoiController.closer_to_me_halfspace(pi, pj, bounds_poly)
+                W = W.intersection(halfplane_poly)
+                if W.is_empty:
                     break
-                else:
-                    x = vor.vertices[index, 0]
-                    y = vor.vertices[index, 1]
-                    if not(bounding_box[0] - eps <= x and x <= bounding_box[1] + eps and
-                        bounding_box[2] - eps <= y and y <= bounding_box[3] + eps):
-                        flag = False
-                        break
-            if region != [] and flag:
-                regions.append(region)
-        vor.filtered_points = points_center
-        vor.filtered_regions = regions
-        return vor
-    
-    @staticmethod
-    def centroid_region(vertices):
-        # Polygon's signed area
-        A = 0
-        # Centroid's x
-        C_x = 0
-        # Centroid's y
-        C_y = 0
-        for i in range(0, len(vertices) - 1):
-            s = (vertices[i, 0] * vertices[i + 1, 1] - vertices[i + 1, 0] * vertices[i, 1])
-            A = A + s
-            C_x = C_x + (vertices[i, 0] + vertices[i + 1, 0]) * s
-            C_y = C_y + (vertices[i, 1] + vertices[i + 1, 1]) * s
-        A = 0.5 * A
-        C_x = (1.0 / (6.0 * A)) * C_x
-        C_y = (1.0 / (6.0 * A)) * C_y
-        return np.array([[C_x, C_y]])
+            return W, in_radius
+
+        W, contacts = provisional_cell(R)
+
+        while True:
+            rad_needed = 2.0 * self.max_rad_from_me(W, pi)
+            if R + eps >= rad_needed:
+                break
+            R *= 2.0
+            W, contacts = provisional_cell(R)
+
+        voronoi_poly = W
+        
+        neighbors = np.array([])
+
+        W_full = Point(pi[0], pi[1]).buffer(R).intersection(bounds_poly)
+        for j in contacts:
+            H = self.closer_to_me_halfspace(pi, j[0], bounds_poly)
+            W_new = W_full.intersection(H)
+            # If intersecting with H shrinks W_full and the boundary intersects S, j is a neighbor.
+            if not W_new.equals(W_full) and not W_new.is_empty:
+                np.append(neighbors, j) # might be a problem later on with how index of agents are found and stored
+            W_full = W_new  # progressively build as in the loop
+
+        refreshed = np.array([[pj, 0.0] for pj, rad in neighbors])
+
+        return voronoi_poly, neighbors, refreshed
