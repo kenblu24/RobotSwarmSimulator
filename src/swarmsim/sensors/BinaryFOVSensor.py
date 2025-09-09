@@ -113,10 +113,12 @@ class BinaryFOVSensor(AbstractSensor):
             #   only check for LOS collisions every n timesteps.
             return
 
+        self.time_since_last_sensing = 0
+
         if not world.quad:
+            self.determineState(False, None, world)
             return
 
-        self.time_since_last_sensing = 0
         sensor_origin = self.agent.getPosition()
 
         # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
