@@ -267,6 +267,8 @@ class HookList(list):
         return super().pop(index)
 
     def remove(self, value):
+        for func in self._del_callbacks:
+            func(value)
         return super().remove(value)
 
     def __setitem__(self, key, value):
