@@ -13,7 +13,8 @@ import numpy as np
 class AbstractSensor:
     config_vars = ['static_position', 'n_possible_states', 'show']
 
-    def __init__(self, agent=None, parent=None, static_position=None, n_possible_states=0, draw=True, **kwargs):
+    def __init__(self, agent=None, parent=None, static_position=None, n_possible_states=0,
+                 draw=True, seed=None, **kwargs):
         """Sensor class for the agent.
 
         Sensors should typically have a parent that is assigned to them that must be of subclass 'Agent'
@@ -31,6 +32,7 @@ class AbstractSensor:
         self.current_state = 0
         self.detection_id = 0
         self.goal_detected = False
+        self.set_seed(seed)
 
     def step(self, world):
         if self.agent is None and self.static_position is None:
@@ -62,3 +64,16 @@ class AbstractSensor:
             self.parent = parent
         elif self.parent is None or parent is ...:
             self.parent = agent
+
+    def set_seed(self, seed):
+        if seed is None:
+            if hasattr(self.parent, 'rng'):
+                self.seed = self.parent.rng.integers(0, 2**31)
+            elif hasattr(self.agent, 'rng'):
+                self.seed = self.agent.rng.integers(0, 2**31)
+            else:
+                self.seed = int(np.random.randint(0, 2**31))
+        else:
+            self.seed = seed
+        self.rng = np.random.default_rng(self.seed)
+        return self.seed
