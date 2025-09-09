@@ -69,7 +69,7 @@ class BinaryFOVSensor(AbstractSensor):
         target_team=None,
         **kwargs
     ):
-        super().__init__(agent=agent, parent=parent)
+        super().__init__(agent=agent, parent=parent, seed=seed, **kwargs)
         self.angle = 0.0
         self.theta = theta
         self.bias = bias
@@ -98,10 +98,6 @@ class BinaryFOVSensor(AbstractSensor):
                 self.theta = np.radians(self.theta)
 
         self.r = distance
-
-        self.seed = seed
-        if self.seed is not None:
-            np.random.seed(self.seed)
 
     def checkForLOSCollisions(self, world: RectangularWorld) -> None:
         # Mathematics obtained from Sundaram Ramaswamy
@@ -347,7 +343,7 @@ class BinaryFOVSensor(AbstractSensor):
         invert = self.invert
         if real_value:
             # Consider Reporting False Negative
-            if np.random.random_sample() < self.fn:
+            if self.rng.random() < self.fn:
                 self.agent_in_sight = None
                 self.current_state = 1 if invert else 0
                 self.detection_id = 0
@@ -359,7 +355,7 @@ class BinaryFOVSensor(AbstractSensor):
 
         else:
             # Consider Reporting False Positive
-            if np.random.random_sample() < self.fp:
+            if self.rng.random() < self.fp:
                 self.agent_in_sight = None
                 self.detection_id = 0
                 self.current_state = 0 if invert else 1
