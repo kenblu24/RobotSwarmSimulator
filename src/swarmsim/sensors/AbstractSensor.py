@@ -72,7 +72,8 @@ class AbstractSensor:
             elif hasattr(self.agent, 'rng'):
                 self.seed = self.agent.rng.integers(0, 2**31)
             else:
-                self.seed = int(np.random.randint(0, 2**31))
+                temp_rng = np.random.default_rng(None)
+                self.seed = int(temp_rng.integers(0, 2**31))
         else:
             self.seed = seed
         self.rng = np.random.default_rng(self.seed)
