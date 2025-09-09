@@ -110,6 +110,11 @@ class BinaryFOVSensor(AbstractSensor):
             return
 
         self.time_since_last_sensing = 0
+
+        if not world.quad:
+            self.determineState(False, None, world)
+            return
+
         sensor_origin = self.agent.getPosition()
 
         # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
@@ -268,7 +273,7 @@ class BinaryFOVSensor(AbstractSensor):
                     xadd(radius * yts)
 
         # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
-        padding = 0 if self.detect_only_origins else world.maxAgentRadius
+        padding = 0 if self.detect_only_origins else world.max_agent_r
 
         # positions are relative until now, make them absolute for the return
         return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
