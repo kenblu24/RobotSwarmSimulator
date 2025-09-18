@@ -113,7 +113,7 @@ class BinaryFOVSensor(AbstractSensor):
 
         sensor_origin = self.agent.pos
 
-        if not world.quad:
+        if world.quad:
             # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
             quadpoints = [point.data for point in world.quad.within_bb(
                 quads.BoundingBox(*self.getAARectContainingSector(world)))]
