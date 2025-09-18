@@ -111,16 +111,23 @@ class BinaryFOVSensor(AbstractSensor):
 
         self.time_since_last_sensing = 0
 
-        if not world.quad:
-            self.determineState(False, None, world)
-            return
+        sensor_origin = self.agent.pos
 
-        sensor_origin = self.agent.getPosition()
-
-        # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
-        quadpoints = [point.data for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector(world)))]
+        if world.quad:
+            # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
+            quadpoints = [point.data for point in world.quad.within_bb(
+                quads.BoundingBox(*self.getAARectContainingSector(world)))]
+            agents = np.array([agent for data in quadpoints for agent in data], dtype=object)
+        else:
+            agents = np.array(world.population, dtype=object)
         # filter agents to those within the sensing radius
-        bag = [agent for agent in quadpoints if self.withinRadiusExclusiveFast(sensor_origin, agent.getPosition(), self.r)]
+        if agents.size:
+            positions = np.array([agent.pos for agent in agents])
+            distances = np.linalg.norm(positions - sensor_origin, axis=1)
+            is_close = distances < self.r
+            bag = agents[is_close]
+        else:
+            bag = []
 
         # get left and right whiskers
         e_left, e_right = self.getSectorVectors()
@@ -200,15 +207,6 @@ class BinaryFOVSensor(AbstractSensor):
         # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
         self.determineState(False, None, world)
         return
-
-        # OLD CODE (below is unreachable)
-        if not consideration_set:
-            self.determineState(False, None, world)
-            return
-        # consideration_set.sort()
-        # print(consideration_set)
-        _score, val = consideration_set.pop(0)
-        self.determineState(True, val, world)
 
     # get the smallest rectangle that contains the sensor fov sector
     def getAARectContainingSector(self, world: RectangularWorld):

@@ -170,28 +170,39 @@ class RectangularWorld(World):
             self.quad = None
             return
 
+        positions = np.array([agent.pos for agent in self.population])
+        mins = np.min(positions, axis=0)
+        maxs = np.max(positions, axis=0)
+        wh = maxs - mins
+        quadsize = np.ceil(wh) + 4
+        middle = (mins + maxs) / 2
+        quadcenter = np.ceil(middle)
+
         # procedure to find the bounds of the quad
-        def minMax(arr):
-            minimum = arr[0]
-            maximum = arr[0]
-            for e in arr:
-                if e < minimum:
-                    minimum = e
-                if maximum < e:
-                    maximum = e
-            return minimum, maximum
-        xMin, xMax = minMax([agent.pos[0] for agent in self.population])
-        yMin, yMax = minMax([agent.pos[1] for agent in self.population])
-        middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
+        # def minMax(arr):
+        #     minimum = arr[0]
+        #     maximum = arr[0]
+        #     for e in arr:
+        #         if e < minimum:
+        #             minimum = e
+        #         if maximum < e:
+        #             maximum = e
+        #     return minimum, maximum
+        # xMin, xMax = minMax([agent.pos[0] for agent in self.population])
+        # yMin, yMax = minMax([agent.pos[1] for agent in self.population])
+        # middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
 
         # create quad that nicely contains the current population
-        newQuad = quads.QuadTree(middle, np.ceil(xMax - xMin) + 4, np.ceil(yMax - yMin) + 4)
+        qt = quads.QuadTree(quadcenter.tolist(), *quadsize)
 
         # add the agents to the quad
         for agent in self.population:
-            newQuad.insert(point=agent.pos.tolist(), data=agent)
-        self.quad = newQuad
-
+            pos = agent.pos.tolist()
+            if (existing := qt.find(pos)):
+                existing.data.append(agent)
+            else:
+                qt.insert(point=pos, data=[agent])
+        self.quad = qt
 
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
