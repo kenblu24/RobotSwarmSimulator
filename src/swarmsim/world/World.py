@@ -32,6 +32,7 @@ from ..config import store, filter_unexpected_fields, get_class_from_dict, get_a
 
 from ..util.asdict import asdict
 from ..util.collections import FlagSet
+from ..util.collections import HookList
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
@@ -144,16 +145,16 @@ class AbstractWorldConfig:
     #         goal.range *= zoom
     #     # self.init_type.rescale(zoom)
 
-class HookList(list):
-    listeners = {}
-    def addListener(self, target, listener):
-        if target not in self.listeners:
-            self.listeners[target] = []
-        self.listeners[target].append(listener)
-    def append(self, item):
-        super().append(item)
-        for listener in self.listeners["append"]:
-            listener(item)
+# class HookList(list):
+#     def __init__(self):
+#         super().__init__()
+#         self.listeners = {"append": []}
+#     def addListener(self, target, listener):
+#         self.listeners[target].append(listener)
+#     def append(self, item):
+#         super().append(item)
+#         for listener in self.listeners["append"]:
+#             listener(item)
 
 
 class World:
@@ -163,13 +164,13 @@ class World:
         self.config = config
         config = replace(config)
         #: List of agents in the world.
-        self.population: HookList[Agent] = HookList()
+        self._population: HookList[Agent] = HookList()
         #: List of spawners which create agents or objects.
         self.spawners: list[Spawner] = []
         #: Metrics to calculate behaviors.
         self.metrics: list[AbstractMetric] = []
         #: The list of world objects.
-        self.objects: list[Agent] = []
+        self._objects: HookList[Agent] = HookList()
         self.goals = config.goals
         self.meta = config.metadata
         self.gui = None
@@ -183,6 +184,22 @@ class World:
         #: Also may be used to seed RNG for agents, spawners, etc.
         self.rng: np.random.Generator
         self.flags = FlagSet(config.flags)
+
+    @property
+    def population(self):
+        return self._population
+
+    @population.setter
+    def population(self, value):
+        self._population[:] = value
+
+    @property
+    def objects(self):
+        return self._objects
+
+    @objects.setter
+    def objects(self, value):
+        self._objects[:] = value
 
     def set_seed(self, seed):
         self.seed = np.random.randint(0, 2**31) if seed is None else seed

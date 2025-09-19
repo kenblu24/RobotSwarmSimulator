@@ -204,3 +204,86 @@ class FlagSet(set):
             return set(self.flags) < set(other.flags)
         elif isinstance(other, set):
             return set(self.flags) < other
+
+
+def slice_indices(s: slice, max_len: int = 0) -> list[int]:
+    if s.step is None or s.step >= 0 or s.stop is None:
+        stop = max_len if s.stop is None else min(s.stop, max_len)
+    else:  # step is negative, stop is not None. Ignore stop
+        stop = max_len
+    return list(range(stop))[s]
+
+
+class HookList(list):
+    def __init__(self, iterable=None, add_callbacks=None, del_callbacks=None):
+        if iterable is None:
+            iterable = []
+        super().__init__(iterable)
+        self._add_callbacks = [] if add_callbacks is None else add_callbacks
+        self._del_callbacks = [] if del_callbacks is None else del_callbacks
+        for func in self._add_callbacks:
+            for obj in self:
+                func(obj)
+
+    def register_add_callback(self, func):
+        self._add_callbacks.append(func)
+
+    def register_del_callback(self, func):
+        self._del_callbacks.append(func)
+
+    def append(self, obj):
+        for func in self._add_callbacks:
+            func(obj)
+        return super().append(obj)
+
+    def extend(self, iterable):
+        li = list(iterable)
+        for func in self._add_callbacks:
+            for obj in li:
+                func(obj)
+        return super().extend(li)
+
+    def insert(self, index, obj):
+        super().insert(index, obj)
+        for func in self._add_callbacks:
+            func(obj)
+
+    def __iadd__(self, value):
+        for func in self._add_callbacks:
+            for obj in value:
+                func(obj)
+        return super().__iadd__(value)
+
+    def __imul__(self, value):
+        for func in self._add_callbacks:
+            for _i in range(value):
+                for obj in self:
+                    func(obj)
+        return super().__imul__(value)
+
+    def pop(self, index=-1):
+        for func in self._del_callbacks:
+            func(self[index])
+        return super().pop(index)
+
+    def remove(self, value):
+        for func in self._del_callbacks:
+            func(value)
+        return super().remove(value)
+
+    def __setitem__(self, key, value):
+        n = len(self)
+        if isinstance(key, slice):
+            indices = slice_indices(key, n)
+            for func in self._del_callbacks:
+                for i in indices:
+                    func(self[i])
+            for func in self._add_callbacks:
+                for obj in value:
+                    func(obj)
+        else:
+            for func in self._del_callbacks:
+                func(self[key])
+            for func in self._add_callbacks:
+                func(value)
+        super().__setitem__(key, value)

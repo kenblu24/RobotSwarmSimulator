@@ -23,7 +23,8 @@ from .BerlingerCircularity import (
     InstantKMHCircularity,
 )
 from .DistanceSizeRatio import DistanceSizeRatio
-from .DelaunayDispersal import Dispersal
+from .DelaunayDiffusion import DelaunayDiffusion
+from .Dispersion import InteragentDispersion, ExplodingDispersion
 from .VoronoiDispersal import VoronoiRelaxation
 from .ShapeMaker import ShapeMaker
 
@@ -57,7 +58,5 @@ __all__ = [
     "InstantHyperSVDCircularity",
     "InstantKMHCircularity",
     "DistanceSizeRatio",
-    "Dispersal",
-    "VoronoiRelaxation",
-    "ShapeMaker",
+
 ]

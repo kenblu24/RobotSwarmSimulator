@@ -119,8 +119,9 @@ class RectangularWorldConfig(AbstractWorldConfig):
 
 
 class RectangularWorld(World):
-    maxAgentRadius = 0
+
     def __init__(self, config: RectangularWorldConfig, initialize=True):
+        self.max_agent_r = 0
         # if config is None:
         #     raise Exception("RectangularWorld must be instantiated with a WorldConfig class")
 
@@ -149,7 +150,7 @@ class RectangularWorld(World):
 
         It does not directly determine how fast the simulation runs, or the FPS.
         """
-        self.population.addListener("append", self.updateMaxRadius)
+        self.population.register_add_callback(self.update_max_agent_r)
 
         #: Agent : currently selected agent.
         self.selected = None
@@ -160,35 +161,48 @@ class RectangularWorld(World):
 
         if initialize:
             self.setup_objects(config.objects)
+            self.update_quadtree()
 
     # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
-    def updateQuad(self):
+    def update_quadtree(self):
         # we don't need to do all this if there are no agents
         if not self.population:
+            self.quad = None
             return
-        
+
+        positions = np.array([agent.pos for agent in self.population])
+        mins = np.min(positions, axis=0)
+        maxs = np.max(positions, axis=0)
+        wh = maxs - mins
+        quadsize = np.ceil(wh) + 4
+        middle = (mins + maxs) / 2
+        quadcenter = np.ceil(middle)
+
         # procedure to find the bounds of the quad
-        def minMax(arr):
-            minimum = arr[0]
-            maximum = arr[0]
-            for e in arr:
-                if e < minimum:
-                    minimum = e
-                if maximum < e:
-                    maximum = e
-            return minimum, maximum
-        xMin, xMax = minMax([agent.pos[0] for agent in self.population])
-        yMin, yMax = minMax([agent.pos[1] for agent in self.population])
-        middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
+        # def minMax(arr):
+        #     minimum = arr[0]
+        #     maximum = arr[0]
+        #     for e in arr:
+        #         if e < minimum:
+        #             minimum = e
+        #         if maximum < e:
+        #             maximum = e
+        #     return minimum, maximum
+        # xMin, xMax = minMax([agent.pos[0] for agent in self.population])
+        # yMin, yMax = minMax([agent.pos[1] for agent in self.population])
+        # middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
 
         # create quad that nicely contains the current population
-        newQuad = quads.QuadTree(middle, np.ceil(xMax - xMin) + 4, np.ceil(yMax - yMin) + 4)
-        
+        qt = quads.QuadTree(quadcenter.tolist(), *quadsize)
+
         # add the agents to the quad
         for agent in self.population:
-            newQuad.insert(point=agent.pos.tolist(), data=agent)
-        self.quad = newQuad
-
+            pos = agent.pos.tolist()
+            if (existing := qt.find(pos)):
+                existing.data.append(agent)
+            else:
+                qt.insert(point=pos, data=[agent])
+        self.quad = qt
 
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
@@ -227,11 +241,11 @@ class RectangularWorld(World):
     # override the inherited setup function to call updateQuad() after setup
     def setup(self, step_spawners=True):
         super().setup(step_spawners)
-        self.updateQuad()
+        self.update_quadtree()
 
-    def updateMaxRadius(self, agent):
-        if hasattr(agent, "radius") and self.maxAgentRadius < agent.radius:
-            self.maxAgentRadius = agent.radius
+    def update_max_agent_r(self, agent):
+        if hasattr(agent, "radius") and self.max_agent_r < agent.radius:
+            self.max_agent_r = agent.radius
 
     def step_agents(self):
         for agent in self.population:
@@ -241,15 +255,15 @@ class RectangularWorld(World):
                 world=self,
             )
             self.handleGoalCollisions(agent)
-    
+
     def step(self):
         self.total_steps += 1
 
         self.step_spawners()
         self.step_agents()
         self.step_objects()
-        
-        self.updateQuad() # update the position of agents in the quad tree
+
+        self.update_quadtree() # update the position of agents in the quad tree
 
         self.step_metrics()
 
