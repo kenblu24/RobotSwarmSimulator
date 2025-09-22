@@ -15,6 +15,7 @@ else:
 
 import warnings
 import quads
+from ..world.RectDTree import NTangle
 
 # convert an angle to a representative unit vector
 def vectorize(angle):
@@ -184,7 +185,10 @@ class ObjectFOVSensor(AbstractSensor):
         # let the sensing state be initially false, it is changed to true in senseObject when proper
         self.determineState(False, None, world)
 
-        for obj in world.objects:
+        pts = self.getAARectContainingSector()
+
+        for obj in world.objectTree.query(NTangle(2, pts[:2], pts[2:])):
+        # for obj in world.objects:
 
             for i in range(-1, len(obj.points) - 1):
                 p1 = obj.points[i]
@@ -212,7 +216,74 @@ class ObjectFOVSensor(AbstractSensor):
                     else:
                         break
 
+    def getAARectContainingSector(self):
+        angle: float = self.agent.angle + self.bias  # global sensor angle
+        span: float = self.theta  # angle fov sweeps to either side
+        radius: float = self.r  # view radius
+        position: list[float] = self.agent.pos.tolist()  # agent global position
 
+        over180 = np.pi <= span * 2  # true if 180 <= FOV
+
+        center = vectorize(angle)  # vector representing absolute look direction
+        leftWhisker = vectorize(angle + span)  # vector representing left whisker
+        rightWhisker = vectorize(angle - span)  # vector representing right whisker
+        xaxis = (1, 0)  # vector representing positive x axis
+        yaxis = (0, 1)  # vector representing positive y axis
+
+        xts = np.sign(turn(xaxis, center))  # sign of turn from x axis to look direction
+        fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker))  # true if turns from x axis to whiskers have different signs
+
+        yts = np.sign(turn(yaxis, center))  # sign of turn from y axis to look direction
+        fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker))  # true if turns from y axis to whiskers have different signs
+
+        xmin = 0
+        xmax = 0
+        ymin = 0
+        ymax = 0
+
+        def xadd(val):  # extend either xmin or xmax if outside current range
+            nonlocal xmin
+            if val < xmin:
+                xmin = val
+            nonlocal xmax
+            if xmax < val:
+                xmax = val
+
+        def yadd(val):  # extend either ymin or ymax if outside current range
+            nonlocal ymin
+            if val < ymin:
+                ymin = val
+            nonlocal ymax
+            if ymax < val:
+                ymax = val
+
+        # consider the x coordinates of the whisker ends
+        xadd(leftWhisker[0] * radius)
+        xadd(rightWhisker[0] * radius)
+        if fovOverXAxis:  # if over x axis, x range is maximized to radius either left or right
+            xadd(radius * -yts)  # left or right is determined by the negated sign of the turn from the positive y axis to the look direction
+            if over180:  # if also over 180, then y range is maximized to radius in the direction closer to the look direction
+                yadd(radius * xts)
+                if not fovOverYAxis:  # if over x axis, over 180, and not over y axis, y range is maximized in both directions
+                    yadd(radius * -xts)
+
+        # consider the y coordinates of the whisker ends
+        yadd(leftWhisker[1] * radius)
+        yadd(rightWhisker[1] * radius)
+        if fovOverYAxis:  # if over y axis, y range is maximized to radius either up or down
+            yadd(radius * xts)  # up or down is determined by the sign of the turn from the positive x axis to the look direction
+            if over180:  # if also over 180, then x range is maximized to radius in the direction closer to the look direction
+                xadd(radius * -yts)
+                if not fovOverXAxis:  # if over y axis, over 180, and not over x axis, x range is maximized in both directions
+                    xadd(radius * yts)
+
+        # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
+        padding = 0
+
+        # positions are relative until now, make them absolute for the return
+        return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
+        # xmin, ymin, xmax, ymax
+    
     def check_goals(self, world):
         # Add this to its own class later -- need to separate the binary from the trinary sensors
         if self.use_goal_state:

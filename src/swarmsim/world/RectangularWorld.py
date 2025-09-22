@@ -211,7 +211,7 @@ class RectangularWorld(World):
         ymm = minMax(yVals)
         self.objectTree = RectDNode(NTangle(2, (xmm[0], ymm[0]), (xmm[1], ymm[1])), capacity=3, depth=7)
         self.objectTree.insert([PolygonBox(obj, obj.points) for obj in self.objects])
-        self.objectTree.print()
+        # self.objectTree.print()
 
     def connectPhysicsObject(self, agent):
         if agent.grounded:

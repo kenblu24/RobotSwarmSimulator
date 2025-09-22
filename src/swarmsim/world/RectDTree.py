@@ -34,7 +34,7 @@ def findOptimalSplit(starts, ends, forward=True, debug=False):
             if debug:
                 print("e=", e, f"({str(ends[e])})")
             
-            if len(ends) <= e:
+            if debug and len(ends) <= e:
                 print("oboe")
                 print([str(v) for v in starts], [str(v) for v in ends], "forward=", forward, "n=", n)
                 print("i=", i, f"({str(starts[i])})", "e=", e, f"({str(ends[e])})")
@@ -95,23 +95,23 @@ class RectDNode:
         yts = sorted([max(rect.minimum[1], self.boundingBox.minimum[1]) for rect in self.contents])
         ybs = sorted([min(rect.maximum[1], self.boundingBox.maximum[1]) for rect in self.contents])
 
-        xf = findOptimalSplit(xls, xrs, debug=(self.depth < 1))
-        xb = findOptimalSplit(xls, xrs, False, debug=(self.depth < 1))
-        yf = findOptimalSplit(yts, ybs, debug=(self.depth < 1))
-        yb = findOptimalSplit(yts, ybs, False, debug=(self.depth < 1))
+        xf = findOptimalSplit(xls, xrs)#, debug=(self.depth < 1))
+        xb = findOptimalSplit(xls, xrs, False)#, debug=(self.depth < 1))
+        yf = findOptimalSplit(yts, ybs)#, debug=(self.depth < 1))
+        yb = findOptimalSplit(yts, ybs, False)#, debug=(self.depth < 1))
 
         options = [xf, xb, yf, yb]
         best = max([(*options[i], i) for i in range(len(options))], key=lambda p : p[1])
-        if self.depth < 1:
-            print("best", best)
+        # if self.depth < 1:
+            # print("best", best)
         splitDimension = best[2] // 2 # for the x options which occupy indicies 0 and 1, this will be zero, but for the y options it will be 1
         splitByY = splitDimension == 1
         backward = best[2] % 2 # for the forward options which occupy indicies 0 and 2, this will be zero, but for the forward options it will be 1
         splitIdx = best[0] if backward == 0 else len(self.contents) - 1 - best[0] # if forward just take the index, but if backwards reverse the index
         
         splitVal = [xls, xrs, yts, ybs][2 * splitDimension + backward][splitIdx]
-        if self.depth < 1:
-            print("splitVal", splitVal, "listChoice", 2 * splitDimension + backward, "chosenList", [str(v) for v in [xls, xrs, yts, ybs][2 * splitDimension + backward]], "splitIdx", splitIdx)
+        # if self.depth < 1:
+            # print("splitVal", splitVal, "listChoice", 2 * splitDimension + backward, "chosenList", [str(v) for v in [xls, xrs, yts, ybs][2 * splitDimension + backward]], "splitIdx", splitIdx)
         return {"difference": best[1], "dimension": splitDimension, "value": splitVal}
 
     def subdivide(self, split):
@@ -133,6 +133,7 @@ class RectDNode:
         more.insert(moreContents)
 
         self.children = [less, more]
+        self.splitDimension = split["dimension"]
     def insert(self, rects):
         if self.children:
             for child in self.children:
@@ -140,8 +141,8 @@ class RectDNode:
             
         else: 
             self.contents.extend(rects)
-            if not self.contents:
-                self.print()
+            # if not self.contents:
+                # self.print()
             split = self.bestSplit()
             # print(split)
             if 0 < self.depth and split["difference"] > self.capacity:
@@ -150,6 +151,19 @@ class RectDNode:
         return
     def intersect(self, other: NTangle):
         return NTangleIntersect(self.boundingBox, other)
+    def query(self, area: NTangle):
+        if self.children:
+            less = self.children[0]
+            more = self.children[1]
+            results = []
+            if area.minimum[self.splitDimension] < less.boundingBox.maximum[self.splitDimension]:
+                results.extend(less.query(area))
+            if more.boundingBox.minimum[self.splitDimension] < area.maximum[self.splitDimension]:
+                results.extend(more.query(area))
+            return results
+        else:
+            return [rect for rect in self.contents if NTangleIntersect(area, rect)]
+
     def draw(self, screen, offset):
         pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
         xMin = self.boundingBox.minimum[0]
