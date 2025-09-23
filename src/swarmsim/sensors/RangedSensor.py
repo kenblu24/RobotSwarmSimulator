@@ -83,7 +83,7 @@ class RangedSensor(AbstractSensor):
         if self.target_team:
             bag = [agent for agent in bag if agent.team == self.target_team]
         else:
-            bag = agents.tolist()
+            bag = [agent for agent in bag]
 
         self.agents_within_range = bag
         return bag
