@@ -45,6 +45,7 @@ class RelativeAgentSensor(RangedSensor):
         self.store_history = False
         self.show = show
         self.target_team = target_team
+        self.current_state = []
 
         self.detect_only_origins = False
 
