@@ -16,7 +16,7 @@ def stop_after_one_step(world: RectangularWorld) -> bool:
 def setup_common_world(world_setup: dict) -> RectangularWorld:
     world_config = RectangularWorldConfig(**world_setup)
     world = RectangularWorld(world_config)
-    main(world, show_gui=False, stop_detection=stop_after_one_step)
+    main(world, show_gui=False, stop_detection=stop_after_one_step, start_paused=False)
 
     # > Did world step only once?
     assert world.total_steps == 1
