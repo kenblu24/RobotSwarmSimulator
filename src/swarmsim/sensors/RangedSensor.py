@@ -107,9 +107,9 @@ class RangedSensor(AbstractSensor):
                 if not self.DEBUG:
                     return
                 # DEBUG DRAWINGS:
-                AAR = self.make_bounding_box() * zoom + pan
-                AARtl = AAR[:2]
-                AARbr = AAR[2:]
+                AAR = self.make_bounding_box() * zoom
+                AARtl = AAR[:2] + pan
+                AARbr = AAR[2:] + pan
                 pygame.draw.rect(screen, color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
                 detected = self.agents_within_range
                 for agent in detected:
