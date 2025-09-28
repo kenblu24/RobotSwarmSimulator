@@ -1,12 +1,13 @@
-import numpy as np
+import itertools
+
 import pygame
-from dataclasses import dataclass
-from shapely.geometry import Point, Polygon, box
-from shapely.ops import unary_union, nearest_points
-
-
+import numpy as np
 from swarmsim.agent.control.AbstractController import AbstractController
-import swarmsim.util.statistics_tools as st
+from swarmsim.agent.MazeAgent import MazeAgent
+
+import scipy as sp
+from scipy import spatial
+import sys
 from swarmsim.util.pid import PID
 
 # typing
@@ -17,386 +18,336 @@ if TYPE_CHECKING:
 else:
     RectangularWorld = None
 
+
 class VoronoiController(AbstractController):
-    def __init__(self, agent=None, parent=None, world: RectangularWorld = None):
+    def __init__(self, agent=None, parent=None):
+        self.world = None
+        self.population = None
+        self.world_size = None
+        self.world_radius = None
+        self.world_dt = None
+        self.allpairs = []
+        self.lines = []
+        self.centroids = []
+        
+        # Visualization control
+        self.show_mode = "guaranteed"  # Options: "guaranteed", "dual_guaranteed", "all", always shows the regular
+        self.uncertainty_radius = 0.2  # Fixed uncertainty radius for visualization
+        
+        # Store computed boundaries
+        self.guaranteed_boundaries = []
+        self.dual_guaranteed_boundaries = []
+        
+        self.tracking_pid = PID(p=0.3, i=0.005, d=0.1)
+        super().__init__(agent=agent, parent=parent)
+
+    def attach_world(self, world: RectangularWorld):
+        self.world = world
         self.population = world.population
         self.world_size = world.config.size
         self.world_radius = world.config.radius
         self.world_dt = world.dt
 
-        self.bounding_box = Polygon([(0, 0), (0, self.world_size[0]), (self.world_size[1], self.world_size[0]), (self.world_size[1], 0)])
-
-        self.agent_memory = None
-        self.active_agents = np.array([0], dtype=int) # row indices of agents in agent_memory, starting with self (0)
-        self.working_memory = None
-        
-        self.v_max = 0.3 # maybe change to 0.03
-        self.grid_dx = 0.1 # good enough for the 8 by 8 world maybe change to min(0.5 * agent_radius, vmax * world_dt) 
-        self.grid_dy = 0.1 # since you dont need a higher resolution than the smallest meaningful change in one timestep
-        self.tracking_pid = PID(p=1.0, i=0.01, d=0.0)
-        self.once = False
-
-        
-
-        super().__init__(agent=agent, parent=parent)
-
-
-        
+    
 
     def get_actions(self, agent):
-        if not self.once:
-            self.agent_memory = np.array([[np.asarray(agent.getPosition(), dtype=float), 0.0]], dtype=object)
+        if not self.world or not hasattr(self.world, 'population'):
+            return 0, 0
+        
+        # Compute boundaries for visualization
+        self.compute_guaranteed_dual_boundaries()
+        
+        # Standard Voronoi computation for control
+        bounding_box = np.array([0.0, self.world_size[0], 0.0, self.world_size[0]])
+        
+        agent_positions = []
+        position_to_agent_id = {}
+        
+        for pop_agent in self.population:
+            pos = pop_agent.getPosition()
+            agent_id = int(pop_agent.name)
+            agent_positions.append(pos)
+            position_to_agent_id[tuple(pos)] = agent_id
+        
+        points = np.array(agent_positions)
+        self.vor = vor = self.voronoi(points, bounding_box)
 
-            _, _, refreshed = self.voronoi_refresh(agent, self.agent_memory, bounds_poly=self.bounding_box)
+        allpairs = []
+        centroids = []
+        current_agent_centroid = None
+        
+        if self.vor != []:
+            current_agent_id = int(agent.name)
             
-            self_row = [np.asarray(agent.getPosition(), dtype=float), 0.0]
-            mem_rows = [self_row] + (refreshed.tolist() if refreshed.size else [])
-            
-            self.agent_memory = np.array(mem_rows, dtype=object)
-            self.active_agents = np.arange(self.agent_memory.shape[0], dtype=int)
-            self.once = True
-
-        self.agent_memory[0] = [np.asarray(agent.getPosition(), dtype=float), 0.0]
-        gVi_poly, dgVi_poly = self.guaranteed_and_dual_gauranteed_cells(self.agent_memory, self.bounding_box, self.grid_dx, self.grid_dy)
-        target_pt, bound = self.centroid_and_bound(gVi_poly, dgVi_poly, self.grid_dx, self.grid_dy)
-        
-        if self.self_trigger(agent.getPosition(), target_pt, bound):
-            _, _, refreshed = self.voronoi_refresh(agent, self.agent_memory, bounds_poly=self.bounding_box)
-
-            self_row = [np.asarray(agent.getPosition(), dtype=float), 0.0]
-            mem_rows = [self_row] + (refreshed.tolist() if refreshed.size else [])
-            self.agent_memory = np.array(mem_rows, dtype=object)
-            self.active_agents = np.arange(self.agent_memory.shape[0], dtype=int)
-            
-            wm = [self.agent_memory[i] for i in self.active_agents]
-            self.working_memory = np.array(wm, dtype=object)
-            
-            gVi_poly, dgVi_poly = self.guaranteed_and_dual_gauranteed_cells(self.working_memory, self.bounding_box, self.grid_dx, self.grid_dy)
-            
-            target_pt, bound = self.centroid_and_bound(gVi_poly, dgVi_poly, self.grid_dx, self.grid_dy)
-        
-        v, omega = self.tbb_controller(agent.getPosition(), agent.angle, target_pt, bound, self.v_max, self.world_dt)
-
-        for i in range(1, len(self.agent_memory)):
-            self.agent_memory[i][1] += self.v_max * self.world_dt
-
-        
-        v, omega = 0.0, 0.0
-        return v, omega
-    
-    
-    @staticmethod
-    def distance(a, b):
-        return np.linalg.norm(a - b)
-    
-    def closer_to_me_halfspace(self, pi, pj, bounds_poly, eps=1e-12):
-        """
-        Parameters:
-            pi: np.ndarray shape (2,)
-            pj: np.ndarray shape (2,)
-            bounds_poly: shapely Polygon
-            eps: float
-        Returns:
-            halfplane: shapely Polygon
-        """
-        a = pj - pi
-        nrm = np.linalg.norm(a)
-        if nrm < eps:
-            return bounds_poly
-
-        a_hat = a / nrm
-        c = 0.5 * (np.dot(pj, pj) - np.dot(pi, pi))
-
-        # Find a point q0 on the line a·q = c by shifting the bounds centroid along a_hat
-        center = np.asarray(bounds_poly.centroid.coords[0])
-        # because a_hat is unit, denominator is 1:
-        q0 = center + (c - np.dot(a_hat, center)) * a_hat
-
-        # Build a long segment along the line direction (perpendicular to a_hat)
-        t = np.array([-a_hat[1], a_hat[0]])  # unit vector along the line
-        minx, miny, maxx, maxy = bounds_poly.bounds
-        diag = np.hypot(maxx - minx, maxy - miny)
-
-        L = 2.0 * diag + 1.0  # length along the line
-        H = 2.0 * diag + 1.0  # depth away from the line
-
-        p1 = q0 - L * t
-        p2 = q0 + L * t
-
-        # Half-plane for a·q <= c is the side in the -a direction (since a·(q - q0) <= 0)
-        halfplane = Polygon([tuple(p1),
-                            tuple(p2),
-                            tuple(p2 - H * a_hat),
-                            tuple(p1 - H * a_hat)])
-        
-        return bounds_poly.intersection(halfplane)
-    
-    @staticmethod
-    def max_rad_from_me(poly, pi, samples=200):
-        # Approximate max_{q in poly} ||q - pi|| by sampling boundary
-        if poly.is_empty:
-            return 0.0
-        boundary = poly.boundary
-        # Sample equidistant points along boundary length
-        L = boundary.length
-        if L == 0:
-            return np.linalg.norm(np.array(boundary.coords[0]) - pi)
-        ts = np.linspace(0, L, samples, endpoint=False)
-        dmax = 0.0
-        for t in ts:
-            q = np.array(boundary.interpolate(t).coords[0])
-            dmax = max(dmax, np.linalg.norm(q - pi))
-        return dmax
-    
-
-    def voronoi_refresh(self, agent, agent_memory, bounds_poly, eps=1e-9): # removed vmax and dt as they are not used
-        pi = np.asarray(agent.getPosition(), float)
-        candidates = []
-
-
-        # for pos, radius in agent_memory:
-        #     if pos == pi:
-        #         continue
-        #     d = self.distance(pos, pi) + radius
-        #     candidates.append(d)
-        
-        for row in agent_memory:
-            pos = np.asarray(row[0], float); rad = float(row[1])
-            if np.allclose(pos, pi): continue
-            d = self.distance(pos, pi) + rad
-            candidates.append(d)
-        R = np.min(candidates) if candidates else 0.0
-        
-        def provisional_cell(Ri):
-            """
-            Parameters:
-                Ri: float
-            Returns:
-                W: shapely Polygon
-                contacts: np.ndarray shape (n, 2) where n >= 1
-            """
-            disk_region = Point(pi[0], pi[1]).buffer(Ri)
-            W = disk_region.intersection(bounds_poly)
-            big_bounds = bounds_poly.buffer(3*max(bounds_poly.bounds[2]-bounds_poly.bounds[0], bounds_poly.bounds[3]-bounds_poly.bounds[1]))
-            # in_radius = [[pj, rad] for pj, rad in agent_memory if pj != pi and self.distance(pj, pi) <= Ri + eps]
-
-
-            # for pj, rad in in_radius:
-            #     halfplane_poly = VoronoiController.closer_to_me_halfspace(pi, pj, bounds_poly)
-            #     W = W.intersection(halfplane_poly)
-            #     if W.is_empty:
-            #         break
-            in_radius = []
-            for row in agent_memory:
-                pos = np.asarray(row[0], float); rad = float(row[1])
-                if not np.allclose(pos, pi) and self.distance(pos, pi) <= Ri + eps:
-                    in_radius.append([pos, rad])
-            contacts = np.array(in_radius, dtype=object)
-
-            for row in contacts:
-                pj = np.asarray(row[0], float)
-                H = self.closer_to_me_halfspace(pi, pj, big_bounds)
-                W = W.intersection(H)
-                if W.is_empty:
-                    break # if the halfplane intersects the boundary, then the cell is empty
-
-            return W, contacts
-
-        W, contacts = provisional_cell(R)
-
-        while True:
-            rad_needed = 0.0 if W.is_empty else 2.0 * self.max_rad_from_me(W, pi)
-            if R + eps >= rad_needed:
-                break
-            R *= 2.0
-            W, contacts = provisional_cell(R)
-
-        voronoi_poly = W
-        
-        neighbors = []
-
-        # TODO: upgrade to test if the bisector line with pj intersects voronoi_poly with positive length -> neighbor.
-        W_full = Point(pi[0], pi[1]).buffer(R).intersection(bounds_poly)
-        for j in contacts:
-            H = self.closer_to_me_halfspace(pi, j[0], bounds_poly)
-            W_new = W_full.intersection(H)
-            # If intersecting with H shrinks W_full and the boundary intersects S, j is a neighbor.
-            if not W_new.equals(W_full) and not W_new.is_empty:
-                neighbors.append(j) # might be a problem later on with how index of agents are found and stored
-            W_full = W_new  # progressively build as in the loop
-        
-        neighbors = np.array(neighbors, dtype=object) if neighbors else np.empty((0,), dtype=object)
-        refreshed = np.array([[pj, 0.0] for pj, rad in neighbors]) # this is the agents that will be used by working_memory (doesnt include self)
-        
-        return voronoi_poly, neighbors, refreshed
-    
-    def guaranteed_and_dual_gauranteed_cells(self, working_memory, bounds_poly, grid_dx, grid_dy):
-        """
-        Parameters:
-            working_memory: np.ndarray shape (n, 2) where n >= 1
-            bounds_poly: shapely Polygon
-            grid_dx: float
-            grid_dy: float
-        Returns:
-            gVi_poly: shapely Polygon
-            dgVi_poly: shapely Polygon
-        """
-        p_self = np.asarray(working_memory[0][0], float)
-        r_self = float(working_memory[0][1]) # should be zero
-
-        points_g = []
-        points_dg = []
-        for x in np.arange(bounds_poly.bounds[0], bounds_poly.bounds[2], grid_dx):
-            for y in np.arange(bounds_poly.bounds[1], bounds_poly.bounds[3], grid_dy):
-                q = [x, y]
-                if not bounds_poly.contains(Point(q)):
-                    continue
+            for i, region in enumerate(self.vor.filtered_regions):
+                vertices = self.vor.vertices[region + [region[0]], :]
+                centroid = self.centroid_region(vertices)
+                centroids.append(list(centroid[0, :]))
                 
-                left_g = self.distance(q, p_self) + r_self
-                left_dg = max(0.0, self.distance(q, p_self) - r_self)
-                right_g = np.inf
-                right_dg = np.inf
-                for row in working_memory[1:]:
-                    pj = np.asarray(row[0], float)
-                    rj = float(row[1])
-                    right_g = min(right_g, max(0.0, self.distance(q, pj) - rj))
-                    right_dg = min(right_dg, self.distance(q, pj) + rj)
+                # Find which agent this region belongs to
+                region_center = np.mean(self.vor.vertices[region], axis=0)
+                distances = [np.linalg.norm(region_center - point) for point in self.vor.filtered_points]
+                closest_point_idx = np.argmin(distances)
+                closest_point = tuple(self.vor.filtered_points[closest_point_idx])
+                
+                if closest_point in position_to_agent_id:
+                    region_agent_id = position_to_agent_id[closest_point]
+                    if region_agent_id == current_agent_id:
+                        current_agent_centroid = np.array(centroid[0, :])
+                
+                for j in range(1, len(vertices)):
+                    allpairs.append([vertices[j-1], vertices[j]])
 
-                if left_g <= right_g:
-                    points_g.append(q)
-                if left_dg <= right_dg:
-                    points_dg.append(q)
-            
-        # take all accepted grid points, make tiny cells around them, and union them to approximate the region
-        def union_of_squares(points, grid_dx, grid_dy):
-            if not points:
-                return Polygon()
-            
-            half_dx, half_dy = grid_dx / 2.0, grid_dy / 2.0
-            cells = []
-            for (x, y) in points:
-                cell = Polygon([
-                    (x - half_dx, y - half_dy),
-                    (x - half_dx, y + half_dy),
-                    (x + half_dx, y + half_dy),
-                    (x + half_dx, y - half_dy)
-                ])
-                cells.append(cell)
-                if not cells:
-                    return Polygon()
-            return unary_union(cells)
+            self.lines = np.asarray(allpairs)
+            self.centroids = np.asarray(centroids)
 
-        gVi_poly = union_of_squares(points_g, grid_dx, grid_dy).intersection(bounds_poly)
-        dgVi_poly = union_of_squares(points_dg, grid_dx, grid_dy).intersection(bounds_poly)
-
-        return gVi_poly, dgVi_poly
-    
-    
-    def centroid_and_bound(self, gVi_poly, dgVi_poly, grid_dx=None, grid_dy=None):
-        """
-        Returns:
-            target_pt: shapely Point (prefer interior if possible)
-            bound:     float
-        """
-        # Empty gVi => force refresh upstream
-        if gVi_poly.is_empty:
-            return None, np.inf
-        
-        # prefer geometric centroid else snap to an interior point
-        target_pt = gVi_poly.centroid 
-        if not target_pt.within(gVi_poly):
-            try:
-                target_pt = nearest_points(gVi_poly, target_pt)[0]
-            except Exception:
-                target_pt = gVi_poly.representative_point()
-
-        area_g = gVi_poly.area
-        area_dg = 0.0 if (dgVi_poly is None or dgVi_poly.is_empty) else dgVi_poly.area
-
-        # threshold for degenerate dgVi
-        tiny = (grid_dx * grid_dy) if (grid_dx and grid_dy) else 1e-12
-        if (area_dg <= max(tiny, 1e-12)):
-            return target_pt, np.inf
-
-        # Aprrox circumradius of dgVi about its centroid
-        C = dgVi_poly.centroid
-        Cxy = np.array([C.x, C.y], dtype=float)
-        
-        def max_rad_from_component(poly):
-            rmax = 0.0
-            for v in poly.exterior.coords:
-                rmax = max(rmax, self.distance(np.asarray(v, float), Cxy))
-            return rmax
-        
-        cr = 0.0
-        if dgVi_poly.geom_type == 'Polygon':
-            cr = max_rad_from_component(dgVi_poly)
-        elif dgVi_poly.geom_type == 'MultiPolygon':
-            for P in dgVi_poly.geoms:
-                cr = max(cr, max_rad_from_component(P))
+            if current_agent_centroid is None:
+                return 0, 0
+                
+            goal_position = current_agent_centroid
         else:
-            # Fallback for unexpected type
-            return target_pt, np.inf
-
-        # Conservative bound
-        bound = 2.0 * cr * max(0.0, (1.0 - area_g / area_dg))
-        return target_pt, bound
-    
-    def self_trigger(self, pi, target_pt, bound, eps=1e-6, hysteresis=1.05):
-        """
-        Decide whether to refresh now (Algorithm 4 step 3).
-        - pi: np.ndarray shape (2,) current position
-        - target_pt: shapely Point (or None)
-        - bound: float (bnd(gVi, dgVi))
-        - eps: small floor for distance comparison (units of world coords)
-        - hysteresis: ≥1.0; set slightly >1 (e.g., 1.05) to avoid chatter
-        """
-        if (target_pt is None) or (not np.isfinite(bound)):
-            return True
+            return 0, 0
         
-        q = np.array([target_pt.x, target_pt.y], dtype=float)
-        pi = np.asarray(pi, dtype=float)
-        d = self.distance(q, pi)
-
-        threshold = max(d, eps) * float(hysteresis)
-        return bound >= threshold
-
-
-    def tbb_controller(self, pi, heading, target_pt, bound, vmax, dt):
-        """
-        Parameters:
-            pi: np.ndarray shape (2,)
-            heading: float
-            target_pt: shapely Point
-            bound: float
-            vmax: float
-            dt: float
-        Returns:
-            v: float
-            omega: float
-        """
-        if target_pt is None:
-            return 0.0, 0.0
+        # Control logic
+        v, omega = 0, 0
+        dist_to_goal = np.linalg.norm(agent.pos - goal_position)
+        radians_to_goal = np.arctan2(goal_position[1] - agent.pos[1], goal_position[0] - agent.pos[0]) - agent.angle
         
-        q = np.array([target_pt.x, target_pt.y], dtype=float)
-        pi = np.asarray(pi, dtype=float)
-        dir_vec = q - pi
-        d = np.linalg.norm(dir_vec)
-        if d <= 1e-12:
-            return 0.0, 0.0
+        # Normalize angle
+        while radians_to_goal > np.pi:
+            radians_to_goal -= 2 * np.pi
+        while radians_to_goal < -np.pi:
+            radians_to_goal += 2 * np.pi
         
-        step_cap = vmax * dt
-        step_goal = max(0.0, d - bound)
-        s = min(step_cap, step_goal)
-
-        def wrap_angle(angle):
-            return (angle + np.pi) % (2 * np.pi) - np.pi
-
-        desired_heading = np.arctan2(dir_vec[1], dir_vec[0])
-        heading_err = wrap_angle(desired_heading - heading)
-        omega = self.tracking_pid(np.clip(heading_err, -2, 2))
-
-        v = s / dt
+        if dist_to_goal > agent.radius:
+            v = 0.3 * np.clip(dist_to_goal, 0, 1)
+            
+            if abs(radians_to_goal) > 0.1:
+                omega = np.clip(radians_to_goal, -2, 2)
+            else:
+                omega = 0
 
         return v, omega
+
+    def draw(self, screen, offset):
+        pan, zoom = np.asarray(offset[0]), offset[1]
+        super().draw(screen, offset)
+
+        # Draw uncertainty circles around agents
+        if self.population and (self.show_mode in ["guaranteed", "dual_guaranteed", "all"]):
+            for pop_agent in self.population:
+                pos = np.array(pop_agent.getPosition())
+                pygame.draw.circle(screen, (255, 255, 0), (pos * zoom + pan).astype(int), 
+                                 int(self.uncertainty_radius * zoom), width=1)
+
+        # Draw regular Voronoi diagram
+        for line in self.lines:
+            pygame.draw.line(screen, (128, 128, 128), 
+                            (line[0] * zoom + pan).astype(int), 
+                            (line[1] * zoom + pan).astype(int), width=2)
+
+        for centroid in self.centroids:
+            pygame.draw.circle(screen, (255, 255, 255), 
+                                (centroid * zoom + pan).astype(int), radius=4, width=2)
+
+        # Draw guaranteed Voronoi boundaries
+        if self.show_mode in ["guaranteed", "all"]:
+            for boundary in self.guaranteed_boundaries:
+                points = boundary['points']
+                if len(points) > 1:
+                    # Convert points to screen coordinates
+                    screen_points = [(np.array(point) * zoom + pan).astype(int) for point in points]
+                    
+                    # Draw the hyperbola curve
+                    for i in range(len(screen_points) - 1):
+                        pygame.draw.line(screen, (0, 255, 0), screen_points[i], screen_points[i + 1], width=3)
+
+        # Draw dual guaranteed Voronoi boundaries  
+        if self.show_mode in ["dual_guaranteed", "all"]:
+            for boundary in self.dual_guaranteed_boundaries:
+                points = boundary['points']
+                if len(points) > 1:
+                    # Convert points to screen coordinates
+                    screen_points = [(np.array(point) * zoom + pan).astype(int) for point in points]
+                    
+                    # Draw the hyperbola curve
+                    for i in range(len(screen_points) - 1):
+                        pygame.draw.line(screen, (0, 0, 255), screen_points[i], screen_points[i + 1], width=3)
+
+    @staticmethod
+    def in_box(towers, bounding_box):
+        if towers.size == 0 or len(towers.shape) != 2 or towers.shape[1] < 2:
+            return np.array([], dtype=bool)
+        return np.logical_and(np.logical_and(bounding_box[0] <= towers[:, 0],
+                                            towers[:, 0] <= bounding_box[1]),
+                            np.logical_and(bounding_box[2] <= towers[:, 1],
+                                            towers[:, 1] <= bounding_box[3]))
+
+    @staticmethod
+    def voronoi(towers, bounding_box):
+        if towers.size == 0 or len(towers.shape) != 2 or towers.shape[1] < 2:
+            return []
+        
+        eps = 0.01
+        i = VoronoiController.in_box(towers, bounding_box)
+        
+        if not np.any(i):
+            return []
+        
+        points_center = towers[i, :]
+        points_left = np.copy(points_center)
+        points_left[:, 0] = bounding_box[0] - (points_left[:, 0] - bounding_box[0])
+        points_right = np.copy(points_center)
+        points_right[:, 0] = bounding_box[1] + (bounding_box[1] - points_right[:, 0])
+        points_down = np.copy(points_center)
+        points_down[:, 1] = bounding_box[2] - (points_down[:, 1] - bounding_box[2])
+        points_up = np.copy(points_center)
+        points_up[:, 1] = bounding_box[3] + (bounding_box[3] - points_up[:, 1])
+        points = np.append(points_center,
+                        np.append(np.append(points_left,
+                                            points_right,
+                                            axis=0),
+                                    np.append(points_down,
+                                            points_up,
+                                            axis=0),
+                                    axis=0),
+                        axis=0)
+        
+        if len(points) != 0:
+            vor = spatial.Voronoi(points)
+        else:
+            return []
+        
+        regions = []
+        for region in vor.regions:
+            flag = True
+            for index in region:
+                if index == -1:
+                    flag = False
+                    break
+                else:
+                    x = vor.vertices[index, 0]
+                    y = vor.vertices[index, 1]
+                    if not(bounding_box[0] - eps <= x and x <= bounding_box[1] + eps and
+                        bounding_box[2] - eps <= y and y <= bounding_box[3] + eps):
+                        flag = False
+                        break
+            if region != [] and flag:
+                regions.append(region)
+        vor.filtered_points = points_center
+        vor.filtered_regions = regions
+        return vor
     
+    @staticmethod
+    def centroid_region(vertices):
+        A = 0
+        C_x = 0
+        C_y = 0
+        for i in range(0, len(vertices) - 1):
+            s = (vertices[i, 0] * vertices[i + 1, 1] - vertices[i + 1, 0] * vertices[i, 1])
+            A = A + s
+            C_x = C_x + (vertices[i, 0] + vertices[i + 1, 0]) * s
+            C_y = C_y + (vertices[i, 1] + vertices[i + 1, 1]) * s
+        A = 0.5 * A
+        if abs(A) < 1e-10:
+            return np.array([[np.mean(vertices[:-1, 0]), np.mean(vertices[:-1, 1])]])
+        C_x = (1.0 / (6.0 * A)) * C_x
+        C_y = (1.0 / (6.0 * A)) * C_y
+        return np.array([[C_x, C_y]])
+    
+    def compute_hyperbola_points(self, p1, r1, p2, r2, guaranteed=True):
+        """
+        Compute points on the hyperbola boundary between two uncertain circles.
+        For guaranteed: ||q - p1|| + r1 = ||q - p2|| - r2
+        For dual guaranteed: ||q - p1|| - r1 = ||q - p2|| + r2
+        """
+        p1, p2 = np.array(p1), np.array(p2)
+        
+        if guaranteed:
+            # Guaranteed boundary: max_dist_to_1 = min_dist_to_2
+            # ||q - p1|| + r1 = ||q - p2|| - r2
+            # ||q - p1|| - ||q - p2|| = -(r1 + r2)
+            a = (r1 + r2) / 2  # semi-major axis
+            c = np.linalg.norm(p2 - p1) / 2  # focal distance
+        else:
+            # Dual guaranteed boundary: min_dist_to_1 = max_dist_to_2  
+            # ||q - p1|| - r1 = ||q - p2|| + r2
+            # ||q - p1|| - ||q - p2|| = r1 + r2
+            a = (r1 + r2) / 2
+            c = np.linalg.norm(p2 - p1) / 2
+        
+        if a >= c:  # No hyperbola exists
+            return []
+        
+        b = np.sqrt(c*c - a*a)  # semi-minor axis
+        
+        # Center of hyperbola
+        center = (p1 + p2) / 2
+        
+        # Direction vector from p1 to p2
+        direction = (p2 - p1) / np.linalg.norm(p2 - p1)
+        perpendicular = np.array([-direction[1], direction[0]])
+        
+        # Generate hyperbola points
+        points = []
+        t_values = np.linspace(-3, 3, 50)  # Parameter range
+        
+        for t in t_values:
+            # Hyperbola equation in standard form: x²/a² - y²/b² = 1
+            x = a * np.cosh(t) if guaranteed else -a * np.cosh(t)
+            y = b * np.sinh(t)
+            
+            # Transform to world coordinates
+            point = center + x * direction + y * perpendicular
+            
+            # Check if point is within world bounds
+            if (0 <= point[0] <= self.world_size[0] and 
+                0 <= point[1] <= self.world_size[1]):
+                points.append(point)
+        
+        return points
+
+    def compute_guaranteed_dual_boundaries(self):
+        """Compute analytical boundaries for guaranteed and dual guaranteed regions"""
+        if len(self.population) < 2:
+            return
+            
+        self.guaranteed_boundaries = []
+        self.dual_guaranteed_boundaries = []
+        
+        # Get agent positions
+        agents = [(int(agent.name), np.array(agent.getPosition())) for agent in self.population]
+        
+        # For each pair of agents, compute the boundary
+        for i in range(len(agents)):
+            for j in range(i + 1, len(agents)):
+                id1, pos1 = agents[i]
+                id2, pos2 = agents[j]
+                
+                # Guaranteed boundary (hyperbola closer to agent with larger uncertainty + radius)
+                guaranteed_points = self.compute_hyperbola_points(
+                    pos1, self.uncertainty_radius, 
+                    pos2, self.uncertainty_radius, 
+                    guaranteed=True
+                )
+                
+                if guaranteed_points:
+                    self.guaranteed_boundaries.append({
+                        'agent_pair': (id1, id2),
+                        'points': guaranteed_points
+                    })
+                
+                # Dual guaranteed boundary
+                dual_guaranteed_points = self.compute_hyperbola_points(
+                    pos1, self.uncertainty_radius,
+                    pos2, self.uncertainty_radius,
+                    guaranteed=False
+                )
+                
+                if dual_guaranteed_points:
+                    self.dual_guaranteed_boundaries.append({
+                        'agent_pair': (id1, id2),
+                        'points': dual_guaranteed_points
+                    })
+
+        

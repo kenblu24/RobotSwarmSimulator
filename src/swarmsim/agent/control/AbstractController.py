@@ -26,6 +26,12 @@ class AbstractController:
         self.parent = None
         self.set_agent(agent, parent)
 
+    def attach_world(self, world):
+        self.world = world
+
+    def draw(self, screen, zoom):
+        pass
+
     def set_parent(self, parent=None):
         self.parent = self.agent if parent is None else parent
 

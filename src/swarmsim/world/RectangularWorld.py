@@ -235,6 +235,7 @@ class RectangularWorld(World):
 
     def step_agents(self):
         for agent in self.population:
+            agent.controller.attach_world(self)
             agent.step(
                 check_for_world_boundaries=self.withinWorldBoundaries if self.config.collide_walls else None,
                 check_for_agent_collisions=self.preventAgentCollisions,
@@ -271,9 +272,13 @@ class RectangularWorld(World):
 
         for world_goal in self.goals:
             world_goal.draw(screen, offset)
-
+        
         for agent in self.population:
             agent.draw(screen, offset)
+            if int(agent.name) == 0: # peformance is still too slow but this should atleast make it only draw it all once instead for each agent
+                agent.controller.draw(screen, offset)
+            # agent.controller.draw(screen, offset)
+        
 
         for metric in self.metrics:
             metric.draw(screen, offset)
