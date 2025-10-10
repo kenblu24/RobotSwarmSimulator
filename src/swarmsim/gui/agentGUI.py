@@ -30,7 +30,6 @@ class DifferentialDriveGUI(AbstractGUI):
     world = None
     title = None
     subtitle = None
-    selected = None
     text_baseline = 10
     sim_paused = False
 
@@ -41,10 +40,6 @@ class DifferentialDriveGUI(AbstractGUI):
         self.speed = None
         self.position = "absolute"
         self.mouse_pos = (0, 0)
-
-    def set_selected(self, agent: DifferentialDriveAgent):
-        super().set_selected(agent)
-        self.selected = agent
 
     def set_title(self, title, subtitle=None):
         self.title = title
@@ -78,7 +73,7 @@ class DifferentialDriveGUI(AbstractGUI):
             mx, my = round(mx, 4), round(my, 4)
             self.appendTextToGUI(screen, timing)  # type: ignore[reportAttributeAccessIssue]
             if self.selected:
-                a: MazeAgent = self.selected
+                a: MazeAgent = self.selected[0]
                 heading = a.get_heading() % (2 * PI) / 2 / PI * 360
                 dx, dy = a.dpos
                 name = a.name
