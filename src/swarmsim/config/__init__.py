@@ -187,6 +187,7 @@ class LazyKnownModules:
         from ..sensors.GenomeDependentSensor import GenomeBinarySensor
         from ..sensors.RegionalSensor import RegionalSensor
         from ..sensors.StaticSensor import StaticSensor
+        from ..sensors.RelativeAgentSensor import RelativeAgentSensor
 
         self.add_dictlike_namespace('sensors')
 
@@ -195,6 +196,7 @@ class LazyKnownModules:
         self._dictlike_types['sensors']['GenomeBinarySensor'] = GenomeBinarySensor
         self._dictlike_types['sensors']['RegionalSensor'] = RegionalSensor
         self._dictlike_types['sensors']['StaticSensor'] = StaticSensor
+        self._dictlike_types['sensors']['RelativeAgentSensor'] = RelativeAgentSensor
 
     def add_native_controllers(self):
         from ..agent.control.Controller import Controller
