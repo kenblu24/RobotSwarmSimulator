@@ -16,7 +16,7 @@ class DelaunayDiffusion(AbstractMetric):
     __badvars__ = AbstractMetric.__badvars__ + ['population']  # references to population may cause pickling errors
 
     def __init__(self, history=100, regularize=True):
-        super().__init__(name="Delaunay Dispersal", history_size=history)
+        super().__init__(name="Delaunay Diffusion", history_size=history)
         self.population = None
         self.regularize = regularize
         self.allpairs = []
