@@ -27,6 +27,8 @@ from .DelaunayDispersal import Dispersal
 from .VoronoiDispersal import VoronoiRelaxation
 from .ShapeMaker import ShapeMaker
 
+from .CoverageEfficiency import CoverageEfficiency
+
 __all__ = [
     "AbstractMetric",
     "AverageSpeedBehavior",
@@ -60,4 +62,5 @@ __all__ = [
     "Dispersal",
     "VoronoiRelaxation",
     "ShapeMaker",
+    "CoverageEfficiency",
 ]
