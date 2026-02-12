@@ -267,6 +267,8 @@ class MazeAgent(StaticAgent):
         super().draw(screen, offset)
         for sensor in self.sensors:
             sensor.draw(screen, offset)
+        if hasattr(self.controller, "draw"):
+            self.controller.draw(screen, offset)
 
     def set_color_by_id(self, id):
         if id == 0:
