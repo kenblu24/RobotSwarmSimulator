@@ -92,6 +92,15 @@ class AbstractWorldConfig:
         with open(path, "r") as f:
             return cls.from_dict(yaml.load(f))
 
+    @classmethod
+    def from_yamls(cls, s):
+        from .. import yaml
+        return cls.from_dict(yaml.load(s))
+
+    def to_yaml(self):
+        from .. import yaml
+        return yaml.dump(self.as_dict())
+
     def save_yaml(self, path):
         from .. import yaml
 

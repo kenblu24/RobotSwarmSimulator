@@ -34,9 +34,9 @@ from typing import Any, IO
 class IncludeLoader(yaml.FullLoader):
     """YAML Loader with `!include` constructor."""
 
-    def __init__(self, stream: IO) -> None:
+    def __init__(self, stream: IO | str) -> None:
         """Initialise Loader."""
-        self.file_path = pl.Path(stream.name)
+        self.file_path = pl.Path(stream.name) if hasattr(stream, "name") else pl.Path()
 
         super().__init__(stream)
 
