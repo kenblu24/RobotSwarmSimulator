@@ -26,6 +26,7 @@ import numpy as np
 
 from ..agent.control.StaticController import zero_controller
 from ..config import get_class_from_dict, filter_unexpected_fields
+from ..util.collider.CollisionMode import CollisionMode, collision_mode
 
 # typing
 from typing import Any
@@ -40,7 +41,7 @@ class BaseAgentConfig:
     name: str | Any = None
     controller: Any | None = None
     grounded: bool = False
-    collides: bool | int = False
+    collides: int | str | CollisionMode = CollisionMode.Disabled
     sensors: list = field(default_factory=list)
     team: str | None = None
 
@@ -103,7 +104,7 @@ class Agent:
         #: Colliders should set to True if a collision was detected.
         self.collision_flag = False
         #: If True, the agent should be solid.
-        self.collides = config.collides
+        self.collides = collision_mode(config.collides)
         self.stop_on_collision = False
         self.stopped_duration = 0
         self.detection_id = 0

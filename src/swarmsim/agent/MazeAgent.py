@@ -50,6 +50,7 @@ import numpy as np
 from ..config import filter_unexpected_fields, associated_type
 from .StaticAgent import StaticAgent, StaticAgentConfig
 from ..util import statistics_tools as st
+from ..util.collider.CollisionMode import CollisionMode, collision_mode
 from .control.Controller import Controller
 
 # # typing
@@ -293,16 +294,20 @@ class MazeAgent(StaticAgent):
         for _i in range(max_attempts):
             if refresh:
                 self.aabb = self.make_aabb()
-            candidates = [other for other in world.population if self != other
-                               and self.aabb.intersects_bb(other.make_aabb() if refresh else other.aabb)]
+            candidates = [other for other in world.population if
+                          self.aabb.intersects_bb(other.make_aabb() if refresh else other.aabb)]
             collided = []
             if not candidates:
                 break
             collider = self.build_collider()
             for other in candidates:
+                if self == other or CollisionMode.Detect not in collision_mode(other.collides):
+                    continue
                 other_collider = other.build_collider()
                 correction = collider.correction(other_collider, rng=rng) * nudge_amount
                 if np.isnan(correction).any():
+                    continue
+                if CollisionMode.Correct not in collision_mode(other.collides):
                     continue
                 collided.append(other)
                 self.collision_flag = True
