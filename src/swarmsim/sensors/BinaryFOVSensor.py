@@ -43,7 +43,7 @@ class BinaryFOVSensor(AbstractSensor):
     config_vars = AbstractSensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
-        'store_history', 'detect_goal_with_added_state', 'show', 'target_team'
+        'store_history', 'detect_goal_with_added_state', 'show', 'target_team', 'seed',
     ]
 
     DEBUG = False

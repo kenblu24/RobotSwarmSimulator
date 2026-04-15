@@ -53,7 +53,10 @@ class AbstractSensor:
         return str(self.get_state())
 
     def as_config_dict(self):
-        return {k: self.__dict__[k] for k in self.config_vars}
+        return {
+            "type": self.__class__.__name__,
+            **{k: self.__dict__[k] for k in self.config_vars}
+        }
 
     def set_parent(self, parent=None):
         self.parent = self.agent if parent is None else parent
