@@ -45,6 +45,7 @@ class Targeter(AbstractSensor):
         **kwargs
     ):
         super().__init__(agent=agent, parent=parent, seed=seed, **kwargs)
+        self.current_state = None
         self.fn = false_negative
         self.time_step_between_sensing = time_step_between_sensing
         self.time_since_last_sensing = 0
@@ -65,9 +66,6 @@ class Targeter(AbstractSensor):
         self.r = distance
 
     def look_for_agents(self, world: RectangularWorld):
-        # Mathematics obtained from Sundaram Ramaswamy
-        # https://legends2k.github.io/2d-fov/design.html
-        # See section 3.1.1.2
         self.time_since_last_sensing += 1
         if self.time_since_last_sensing % self.time_step_between_sensing != 0:
             # Our sensing rate occurs less frequently than our dt physics update, so we need to
@@ -77,7 +75,7 @@ class Targeter(AbstractSensor):
         self.time_since_last_sensing = 0
 
         bag = []
-        for a in world.population:
+        for a in world.population + world.objects:
             if (a is self.agent
                or (self.target_name is not None and a.name != self.target_name)
                or (self.target_team is not None and a.team != self.target_team)):
@@ -115,11 +113,12 @@ class Targeter(AbstractSensor):
         self.current_target = agent
         if self.attribute is None:
             self.current_state = agent
-        else:
+        elif agent is not None:
             self.current_state = getattr(agent, self.attribute)
 
         if self.store_history:
-            if self.attribute is None:
+            # if agent found and no agent attribute specified, store agent name (instead of agent object)
+            if self.current_state is not None and self.attribute is None:
                 self.history.append(self.current_state.name)
             else:
                 self.history.append(self.current_state)

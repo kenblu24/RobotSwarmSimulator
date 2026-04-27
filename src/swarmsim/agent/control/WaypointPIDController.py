@@ -1,53 +1,45 @@
 import numpy as np
 
 from .AbstractController import AbstractController
+from ...util.pid import PID
 
-ConstantOutputValues = tuple[float, ...] | np.ndarray
-TwoConstantOutputValues = tuple[ConstantOutputValues, ConstantOutputValues] | np.ndarray
+DEFAULT_PID_ARGS = dict(p=0.0, i=0.0, d=0.0, imax=0.0, min=None, max=None)
 
 
-class BinaryController(AbstractController):
-    def __init__(self, a: TwoConstantOutputValues | ConstantOutputValues, b: ConstantOutputValues | None = None,
-                 agent=None, parent=None, sensor_id=0, **kwargs):
+class WaypointPIDController(AbstractController):
+    def __init__(
+        self,
+        agent=None, parent=None,
+        sensor_id=None,
+        speed_pid=DEFAULT_PID_ARGS,
+        steer_pid=DEFAULT_PID_ARGS,
+        static_waypoint=None,
+        **kwargs
+    ):
         super().__init__(agent=agent, parent=parent, **kwargs)
         self.sensor_id = sensor_id  # use this to determine which sensor on the agent to use
-
-        # set self.a and self.b, the two sets of constant output values.
-        a = np.asarray(a, dtype='float64')
-        if len(a.shape) > 2:
-            raise ValueError("Expected first argument to be a 1D or 2D array")
-        if a.shape[0] == 2 and b is None:
-            self.a, self.b = a
-        elif len(a.shape) == 1:
-            if b is None and len(a) % 2 == 0:
-                self.a = a[len(a) // 2:]
-                self.b = a[:len(a) // 2]
-            else:
-                b = np.asarray(b, dtype='float64')
-                if len(b.shape) != 1 or b.shape[0] != a.shape[0]:
-                    raise ValueError("Expected constant output values to be 1D arrays of same size")
-                self.a, self.b = a, b
-        else:
-            raise ValueError("Expected argument(s) to be 1D arrays of same length or single 2D array")
-
-        # print(self.a, self.b)
+        self.speed_pid = speed_pid if isinstance(speed_pid, PID) else PID(**speed_pid)
+        self.steer_pid = steer_pid if isinstance(steer_pid, PID) else PID(**steer_pid)
+        self.static_waypoint = static_waypoint
 
     def get_actions(self, agent):
-        """
-        An example of a "from scratch" controller that you can code with any information contained within the agent class
-        """
-        other_agent_detected = bool(agent.agent_in_sight)  # Whether the agent detects another agent
-        if hasattr(agent, "sensing_avg") and other_agent_detected is not None:
-            other_agent_detected = agent.sensing_avg(other_agent_detected)
-        wall_detected = not other_agent_detected and agent.sensors[self.sensor_id].current_state == 1
-
-        if agent.goal_seen:
-            return np.zeros(self.a.shape)
-
-        if other_agent_detected or wall_detected:
-            return self.b
+        if self.sensor_id is not None:
+            sensor = agent.sensors[self.sensor_id]
+            waypoint = sensor.current_state
+        elif self.static_waypoint is not None:
+            waypoint = self.static_waypoint
         else:
-            return self.a
+            raise ValueError("WaypointPIDController must have a sensor_id or static_waypoint")
 
-    def as_config_dict(self):
-        return {'a': self.a, 'b': self.b, 'sensor_id': self.sensor_id}
+        if waypoint is None:
+            return 0.0, 0.0
+
+        vec = waypoint - agent.pos
+        heading = np.arctan2(*vec[::-1]) % (2 * np.pi)
+        omega = heading - (agent.angle % (2 * np.pi)) if heading != 0 else 0
+        omega %= (2 * np.pi)
+        if omega > np.pi:
+            omega -= (2 * np.pi)
+        v = self.speed_pid(np.linalg.norm(vec))  # * agent.world.dt
+        w = self.steer_pid(omega)  # * agent.world.dt
+        return v, w

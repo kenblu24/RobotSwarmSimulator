@@ -92,7 +92,7 @@ class PointAgentSpawner(BaseAgentSpawner):
         # modify agent config
         if isinstance(self.facing, (list, tuple, np.ndarray)):
             config.angle = self.rng.uniform(*self.facing)
-        if name is not None:
+        if name is not None and config.name is None:
             config.name = name
 
         return config
