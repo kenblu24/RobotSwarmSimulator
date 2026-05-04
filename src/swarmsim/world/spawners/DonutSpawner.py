@@ -1,5 +1,4 @@
 import numpy as np
-import random
 
 from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 
@@ -34,8 +33,8 @@ class DonutAgentSpawner(PointAgentSpawner):
         self.outer_radius = outer_radius
 
     def generate_position(self):
-        direction = random.uniform(0, 2 * np.pi)
-        radius = random.uniform(self.inner_radius, self.outer_radius)
+        direction = self.rng.uniform(0, 2 * np.pi)
+        radius = self.rng.uniform(self.inner_radius, self.outer_radius)
         vec = np.array([np.cos(direction), np.sin(direction)])
         return self.center + vec * radius
 
