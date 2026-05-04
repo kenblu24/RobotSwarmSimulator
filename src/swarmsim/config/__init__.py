@@ -207,6 +207,7 @@ class LazyKnownModules:
         from ..agent.control.AgentMethodController import AgentMethodController
         from ..agent.control.HomogeneousController import HomogeneousController
         from ..agent.control.WaypointPIDController import WaypointPIDController
+        from ..agent.control.HumanController import HumanController
 
         self.add_dictlike_namespace('controller')
 
@@ -216,6 +217,7 @@ class LazyKnownModules:
         self._dictlike_types['controller']['AgentMethodController'] = AgentMethodController
         self._dictlike_types['controller']['HomogeneousController'] = HomogeneousController
         self._dictlike_types['controller']['WaypointPIDController'] = WaypointPIDController
+        self._dictlike_types['controller']['HumanController'] = HumanController
 
     def add_native_metrics(self):
         from .. import metrics
