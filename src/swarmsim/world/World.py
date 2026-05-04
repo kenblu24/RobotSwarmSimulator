@@ -215,6 +215,35 @@ class World:
         self.rng = np.random.default_rng(self.seed)
         return self.seed
 
+    def add_agent(self, agent_config):
+        if isinstance(agent_config, Agent):  # if it's already an agent, just add it
+            agent = agent_config
+        else:  # otherwise, it's a config dict. find the class specified and create the agent
+            agent_class, agent_config = get_agent_class(agent_config)
+            agent = agent_class.from_config(agent_config, self)
+        self.population.append(agent)
+        return agent
+
+    def add_spawner(self, spawner_config):
+        if isinstance(spawner_config, Spawner):  # if it's already a spawner, just add it
+            spawner = spawner_config
+        else:  # otherwise, it's a config dict. find the class specified and create the spawner
+            spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
+            spawner = spawner_class(self, **spawner_config)
+        self.spawners.append(spawner)
+        return spawner
+
+    def add_metric(self, metric_config):
+        if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
+            metric = metric_config
+        else:  # otherwise, it's a config dict. find the class specified and create the metric
+            metric_class, metric_config = get_class_from_dict('metrics', metric_config)
+            metric = metric_class(**metric_config)
+        metric.attach_world(self)
+        metric.reset()
+        self.metrics.append(metric)
+        return metric
+
     def setup(self, step_spawners=True):
         # create agents, spawners, behaviors, objects, goals
         if self.initialized:
@@ -223,31 +252,13 @@ class World:
 
         # create agents
         for agent_config in self.config.agents:
-            if isinstance(agent_config, Agent):  # if it's already an agent, just add it
-                self.population.append(agent_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the agent
-                agent_class, agent_config = get_agent_class(agent_config)
-                self.population.append(agent_class.from_config(agent_config, self))
+            self.add_agent(agent_config)
 
         for spawner_config in self.config.spawners:
-            if isinstance(spawner_config, Spawner):  # if it's already a spawner, just add it
-                self.spawners.append(spawner_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the spawner
-                spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
-                self.spawners.append(spawner_class(self, **spawner_config))
+            self.add_spawner(spawner_config)
 
         for metric_config in self.config.metrics:
-            if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
-                self.metrics.append(metric_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the metric
-                metric_class, metric_config = get_class_from_dict('metrics', metric_config)
-                metric = metric_class(**metric_config)
-                metric.attach_world(self)
-                self.metrics.append(metric)
-
-        for b in self.metrics:
-            b.reset()
-            b.attach_world(self)
+            self.add_metric(metric_config)
 
         # self.metrics = config.metrics
         # self.objects = config.objects

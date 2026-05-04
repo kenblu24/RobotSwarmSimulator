@@ -6,11 +6,12 @@ class EntityLen(AbstractMetric):
 
     def __init__(
         self,
+        name="EntityLen",
         history=100,
         target_name=None,
         attribute=None,
     ):
-        super().__init__(name="EntityLen", history_size=history)
+        super().__init__(name=name, history_size=history)
         self.target_name = target_name
         self.target = None
         self.attribute = attribute

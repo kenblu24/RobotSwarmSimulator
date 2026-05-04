@@ -9,6 +9,8 @@ from .GroupRotationBehavior import GroupRotationBehavior
 from .DistanceToGoal import DistanceToGoal
 from .AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
 from .EntityLen import EntityLen
+from .AndMetrics import AndMetrics
+from .StepsUntil import StepsUntil
 from .TotalCollisions import TotalCollisionsBehavior
 from .RadialVariance import RadialVarianceMetric
 from .Circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
@@ -40,6 +42,8 @@ __all__ = [
     "PercentageAtGoal",
     "AgentsAtGoal",
     "EntityLen",
+    "AndMetrics",
+    "StepsUntil",
     "Circliness",
     "TotalCollisionsBehavior",
     "RadialVarianceMetric",

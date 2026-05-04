@@ -10,6 +10,7 @@ class AbstractMetric():
     def __init__(self, name: str, history_size=100):
         self.name = name
         self.history_size = history_size
+        self.world = None
         self.reset()
 
     def reset(self):

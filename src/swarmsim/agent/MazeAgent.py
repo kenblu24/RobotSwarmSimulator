@@ -291,6 +291,7 @@ class MazeAgent(StaticAgent):
         if rng is None:
             rng = self.rng
         self.collision_flag = False
+        self.collided = []
         for _i in range(max_attempts):
             if refresh:
                 self.aabb = self.make_aabb()
@@ -319,8 +320,9 @@ class MazeAgent(StaticAgent):
                     self.body_color = (200, 200, 200)
                     other.dead = True
                     other.body_color = (200, 200, 200)
-
-            if not collided:
+            if collided and not self.collided:
+                self.collided = collided
+            elif not collided:
                 return
             if self.debug and world._screen_cache:
                 world.draw(world._screen_cache)
