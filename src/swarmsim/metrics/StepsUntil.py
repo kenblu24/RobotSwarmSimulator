@@ -9,18 +9,23 @@ class StepsUntil(AbstractMetric):
         name="StepsUntil",
         history=100,
         metric=None,
-        # default='__passthrough__',
+        default='__unset__',
         sentinel='__none__',
     ):
+        self._default = default
         super().__init__(name=name, history_size=history)
         self.metric = metric
+        self.sentinel = sentinel
         try:
             self.setup_submetric()
         except ValueError:
             pass
-        # self.default = default
-        self.sentinel = sentinel
+
+    def reset(self):
+        super().reset()
         self.t = 0
+        if self._default != '__unset__':
+            self.current_value = self._default
         self.time_activated = None
 
     def attach_world(self, world):
@@ -40,7 +45,8 @@ class StepsUntil(AbstractMetric):
             if self.sentinel != '__none__':
                 if self.metric.value == self.sentinel:
                     self.time_activated = self.t
+                    self.set_value(self.time_activated)
             elif self.metric.value:
                 self.time_activated = self.t
-            self.set_value(self.time_activated)
+                self.set_value(self.time_activated)
         self.t += 1
