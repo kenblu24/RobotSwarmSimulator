@@ -36,6 +36,7 @@ dependencies = [
     "circle_fit",
     "shapely",
     "pandas",
+    "jinja2",
     "quads",
 ]
 

@@ -68,7 +68,6 @@ def main(
         gui.set_screen(screen)
         world.attach_gui(gui)
 
-    total_allowed_steps = getattr(world, 'stop_at', world.config.stop_at)
     steps_taken = 0
     steps_per_frame = step_size
     slowdown_level = 0
@@ -216,16 +215,13 @@ def main(
         # Calculate Steps - Stop if we reach desired frame
         for _ in range(steps_per_frame):
 
-            if callable(stop_detection) and stop_detection(world):
+            if (
+                callable(stop_detection) and stop_detection(world)
+                or world.check_stop_condition()
+                or isinstance(world.stop_at, int) and world.stop_at >= 0 and steps_taken > world.stop_at
+            ):
                 running = False
                 return world
-
-            try:
-                if total_allowed_steps >= 0 and steps_taken > total_allowed_steps:
-                    running = False
-                    return world
-            except TypeError:
-                pass
 
             world.step()
 

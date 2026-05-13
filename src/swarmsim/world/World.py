@@ -22,6 +22,7 @@
 import os
 
 import pygame
+import jinja2
 import numpy as np
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
@@ -55,7 +56,7 @@ class AbstractWorldConfig:
     objects: list = field(default_factory=list)
     goals: list = field(default_factory=list)
     #: int | Callable | None : The maximum number of steps to run the simulation.
-    stop_at: int | Callable | None = None
+    stop_at: int | Callable | str | None = None
     #: tuple[int, int, int] : The background color of the world. Default is black.
     background_color: tuple[int, int, int] = (0, 0, 0)
     #: int | None : The seed to use for the world.
@@ -172,6 +173,7 @@ class World:
     def __init__(self, config):
         self.config = config
         config = replace(config)
+        self.jenv = jinja2.Environment()
         #: List of agents in the world.
         self._population: HookList[Agent] = HookList()
         #: List of spawners which create agents or objects.
@@ -186,6 +188,8 @@ class World:
         self.total_steps = 0
         self.initialized = False
         self._screen_cache = None
+        self._stop_at = None
+        self.stop_at = config.stop_at
         self.seed = config.seed
         self.set_seed(self.seed)
         self.events = []
@@ -193,6 +197,24 @@ class World:
         #: Also may be used to seed RNG for agents, spawners, etc.
         self.rng: np.random.Generator
         self.flags = FlagSet(config.flags)
+
+    def check_stop_condition(self):
+        if self.stop_at is None:
+            return False
+        elif callable(self.stop_at):
+            return self.stop_at(world=self)
+        return self.total_steps > self.stop_at
+
+    @property
+    def stop_at(self):
+        return self._stop_at
+
+    @stop_at.setter
+    def stop_at(self, value):
+        if value is None or isinstance(value, (int, float)) or callable(value):
+            self._stop_at = value
+        else:
+            self._stop_at = self.jenv.compile_expression(value)
 
     @property
     def population(self):
