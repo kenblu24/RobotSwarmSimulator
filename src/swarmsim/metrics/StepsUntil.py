@@ -7,7 +7,7 @@ class StepsUntil(AbstractMetric):
     def __init__(
         self,
         name="StepsUntil",
-        history=100,
+        history=None,
         metric=None,
         default='__unset__',
         sentinel='__none__',

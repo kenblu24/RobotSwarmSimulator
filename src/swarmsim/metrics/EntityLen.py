@@ -7,7 +7,7 @@ class EntityLen(AbstractMetric):
     def __init__(
         self,
         name="EntityLen",
-        history=100,
+        history=None,
         target_name=None,
         attribute=None,
     ):

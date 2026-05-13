@@ -7,7 +7,7 @@ from ..world.goals.Goal import CylinderGoal, AreaGoal
 
 class DistanceToGoal(AbstractMetric):
 
-    def __init__(self, history=100):
+    def __init__(self, history=None):
         super().__init__(name = "Goal_Dist", history_size=history)
         self.population = None
         self.goals = None

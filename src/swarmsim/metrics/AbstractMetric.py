@@ -7,7 +7,7 @@ class AbstractMetric():
     __badvars__ = ['world']  # variables that should not be pickled
     instantaneous = True
 
-    def __init__(self, name: str, history_size=100):
+    def __init__(self, name: str, history_size: int | None = None):
         self.name = name
         self.history_size = history_size
         self.world = None
@@ -24,7 +24,7 @@ class AbstractMetric():
         # Keep Track of the [self.history_size] most recent values
         self.value_history.append(value)
         if self.history_size is not None and len(self.value_history) > self.history_size:
-            self.value_history = self.value_history[1:]
+            self.value_history = self.value_history[-self.history_size:]
 
         self.current_value = value
 

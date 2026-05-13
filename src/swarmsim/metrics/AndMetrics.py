@@ -7,7 +7,7 @@ class AndMetrics(AbstractMetric):
     def __init__(
         self,
         name="AndMetrics",
-        history=100,
+        history=None,
         metrics=None,
         and_fn='python'
     ):

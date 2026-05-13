@@ -10,7 +10,7 @@ from ..util.geometry.ConvexHull import ConvexHull as CH
 from ..util.geometry.Polygon import Polygon
 
 class ConvexHull(AbstractMetric):
-    def __init__(self, name="Convex_Hull_Area", history=100):
+    def __init__(self, name="Convex_Hull_Area", history=None):
         super().__init__(name=name, history_size=history)
         self.population = None
         self.goals = None
@@ -44,7 +44,7 @@ class ConvexHull(AbstractMetric):
 
 
 class InverseConvexHull(AbstractMetric):
-    def __init__(self, name="Inverse_Hull_Area", history=100):
+    def __init__(self, name="Inverse_Hull_Area", history=None):
         super().__init__(name=name, history_size=history)
         self.population = None
         self.goals = None
