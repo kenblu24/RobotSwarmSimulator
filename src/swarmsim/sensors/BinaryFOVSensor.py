@@ -349,7 +349,7 @@ class BinaryFOVSensor(AbstractSensor):
                 self.agent_in_sight = agent
                 self.current_state = 0 if invert else 1
                 if agent:
-                    self.detection_id = agent.detection_id
+                    self.detection_id = agent.name
 
         else:
             # Consider Reporting False Positive

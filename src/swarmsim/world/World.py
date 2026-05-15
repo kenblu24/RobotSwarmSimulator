@@ -22,7 +22,6 @@
 import os
 
 import pygame
-import jinja2
 import numpy as np
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
@@ -34,12 +33,16 @@ from ..config import store, filter_unexpected_fields, get_class_from_dict, get_a
 from ..util.asdict import asdict
 from ..util.collections import FlagSet
 from ..util.collections import HookList
+from ..util import jinja
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
 from ..metrics.AbstractMetric import AbstractMetric
 
 from typing import Any
+
+# for jinja namespace
+import math
 
 
 @filter_unexpected_fields
@@ -173,7 +176,17 @@ class World:
     def __init__(self, config):
         self.config = config
         config = replace(config)
-        self.jenv = jinja2.Environment()
+        self.jenv = jinja.Environment()
+        self.jenv.add_extension('jinja2.ext.do')
+        self.jenv.add_extension('jinja2.ext.loopcontrols')
+        self.jenv.filters['sum'] = sum
+        self.jenv.filters['bin'] = bin
+        self.jenv.filters['hex'] = hex
+        self.jenv.tests['alltrue'] = all
+        self.jenv.tests['anytrue'] = any
+        self.jenv.globals['np'] = np
+        self.jenv.globals['math'] = math
+        self.jenv.globals['world'] = self
         #: List of agents in the world.
         self._population: HookList[Agent] = HookList()
         #: List of spawners which create agents or objects.
@@ -255,7 +268,7 @@ class World:
         self.spawners.append(spawner)
         return spawner
 
-    def add_metric(self, metric_config):
+    def add_metric(self, metric_config, add_to_world=True):
         if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
             metric = metric_config
         else:  # otherwise, it's a config dict. find the class specified and create the metric
@@ -263,7 +276,8 @@ class World:
             metric = metric_class(**metric_config)
         metric.attach_world(self)
         metric.reset()
-        self.metrics.append(metric)
+        if add_to_world:
+            self.metrics.append(metric)
         return metric
 
     def setup(self, step_spawners=True):

@@ -11,6 +11,8 @@ from .AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
 from .EntityLen import EntityLen
 from .AndMetrics import AndMetrics
 from .StepsUntil import StepsUntil
+from .AnyAgent import AnyAgent
+from .JinjaMetric import JinjaMetric
 from .TotalCollisions import TotalCollisionsBehavior
 from .RadialVariance import RadialVarianceMetric
 from .Circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
@@ -44,6 +46,8 @@ __all__ = [
     "EntityLen",
     "AndMetrics",
     "StepsUntil",
+    "AnyAgent",
+    "JinjaMetric",
     "Circliness",
     "TotalCollisionsBehavior",
     "RadialVarianceMetric",

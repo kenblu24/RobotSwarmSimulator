@@ -2,6 +2,12 @@ from typing import Tuple
 
 from numpy import average
 
+import typing
+if typing.TYPE_CHECKING:
+    from ..world.World import World
+else:
+    World = None
+
 
 class AbstractMetric():
     __badvars__ = ['world']  # variables that should not be pickled
@@ -10,7 +16,7 @@ class AbstractMetric():
     def __init__(self, name: str, history_size: int | None = None):
         self.name = name
         self.history_size = history_size
-        self.world = None
+        self.world: World = None
         self.reset()
 
     def reset(self):
