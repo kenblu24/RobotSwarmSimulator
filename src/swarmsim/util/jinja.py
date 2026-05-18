@@ -2,6 +2,7 @@ from collections import ChainMap
 
 from jinja2 import Environment as BaseEnvironment
 from jinja2 import Template as BaseTemplate
+from jinja2.environment import TemplateModule
 from jinja2.environment import TemplateExpression as BaseTemplateExpression
 
 from jinja2.exceptions import TemplateSyntaxError, TemplateRuntimeError
@@ -122,9 +123,17 @@ class Template(BaseTemplate):
     def export_with(__self__, *args, **kwargs):
         __self__.export_with_context(__self__.new_context(dict(*args, **kwargs)))
 
+    @property
+    def module_from_cached_context(self):
+        return TemplateModule(self, self.new_context(self._context))
+
+    @property
+    def has_cached_context(self):
+        return self._context is not Undefined
+
 
 class Environment(BaseEnvironment):
-    template_class = Template
+    template_class: t.Type[Template] = Template
 
     def compile_expression(
         self, source: str, undefined_to_none: bool = True
