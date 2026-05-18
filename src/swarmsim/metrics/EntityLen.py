@@ -10,12 +10,14 @@ class EntityLen(AbstractMetric):
         history=None,
         target_name=None,
         attribute=None,
+        default_aggregation=None,
     ):
         super().__init__(name=name, history_size=history)
         self.target_name = target_name
         self.target = None
         self.attribute = attribute
         self.compiled_expr = None
+        self.default_aggregation = default_aggregation
 
     def attach_world(self, world):
         super().attach_world(world)

@@ -15,6 +15,7 @@ class AnyAgent(AbstractMetric):
         value_on_found='agent',
         default=None,
         error='raise',
+        default_aggregation=None,
     ):
         self.default = default
         self._expression = expression
@@ -24,6 +25,7 @@ class AnyAgent(AbstractMetric):
         self.exclude_teams = exclude_teams
         self.exclude_names = exclude_names
         self.error = error
+        self.default_aggregation = default_aggregation
 
     def reset(self):
         super().reset()

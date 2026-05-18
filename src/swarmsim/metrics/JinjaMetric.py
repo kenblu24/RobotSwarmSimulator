@@ -15,10 +15,12 @@ class JinjaMetric(AbstractMetric):
         eval_condition=None,
         save_condition=None,
         default='__unset__',
+        default_aggregation=None,
     ):
         self._default = default
         self.metric = metric
         self.metrics = metrics
+        self.default_aggregation = default_aggregation
         super().__init__(name=name, history_size=history)
         self.template_src = template
         self.template = None
@@ -35,11 +37,12 @@ class JinjaMetric(AbstractMetric):
         if self._default != '__unset__':
             self.current_value = self._default
         self.time_activated = None
-        if self.metric is not None:
+        if isinstance(self.metric, AbstractMetric):
             self.metric.reset()
         if self.metrics is not None:
             for metric in self.metrics:
-                metric.reset()
+                if isinstance(metric, AbstractMetric):
+                    metric.reset()
 
     def attach_world(self, world):
         res = super().attach_world(world)

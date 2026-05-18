@@ -9,8 +9,10 @@ class AndMetrics(AbstractMetric):
         name="AndMetrics",
         history=None,
         metrics=None,
-        and_fn='python'
+        and_fn='python',
+        default_aggregation=None,
     ):
+        self.default_aggregation = default_aggregation
         super().__init__(name=name, history_size=history)
         self.metrics = metrics
         self.and_fn = and_fn

@@ -4,6 +4,8 @@ from .RadialVariance import RadialVarianceMetric
 
 
 class RadialVarianceHelper(RadialVarianceMetric):
+    default_aggregation = 'average'
+
     def __init__(self, history=None, regularize=False, name=None, scale=1.0):
         if regularize:
             raise NotImplementedError
