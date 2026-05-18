@@ -217,7 +217,7 @@ def main(
 
             if (
                 callable(stop_detection) and stop_detection(world)
-                or world.check_stop_condition()
+                or world.check_stop_at()
                 or isinstance(world.stop_at, int) and world.stop_at >= 0 and steps_taken > world.stop_at
             ):
                 running = False

@@ -211,7 +211,7 @@ class World:
         self.rng: np.random.Generator
         self.flags = FlagSet(config.flags)
 
-    def check_stop_condition(self):
+    def check_stop_at(self):
         if self.stop_at is None:
             return False
         elif callable(self.stop_at):
