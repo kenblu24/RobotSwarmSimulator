@@ -37,7 +37,7 @@ class LevyController(AbstractController):
         if timeout_steps is not None:
             self.mode_max_time = timeout_steps
         else:
-            self.mode_max_time = timeout / self.agent.dt
+            self.mode_max_time = timeout / self.agent.world.dt
 
         self.turning = True
         self.v = self.forward_rate
@@ -65,7 +65,7 @@ class LevyController(AbstractController):
 
         self.steps_left -= 1
 
-        if self.agent.collision_flag:
+        if agent.collision_flag:
             self.steps_left = 0
 
         if self.steps_left <= 0:
