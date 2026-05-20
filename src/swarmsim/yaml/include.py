@@ -23,6 +23,8 @@ import json
 import pathlib as pl
 
 import yaml
+from yaml import MappingNode, SequenceNode, ScalarNode
+from yaml.constructor import ConstructorError
 
 from typing import Any, IO
 
@@ -39,6 +41,47 @@ class IncludeLoader(yaml.FullLoader):
         self.file_path = pl.Path(stream.name) if hasattr(stream, "name") else pl.Path()
 
         super().__init__(stream)
+
+    def flatten_mapping(self, node):
+        merge = []
+        index = 0
+        while index < len(node.value):
+            key_node, value_node = node.value[index]
+            if key_node.tag == 'tag:yaml.org,2002:merge':
+                del node.value[index]
+                if (not isinstance(value_node, (MappingNode, SequenceNode))
+                    and value_node.tag == '!include'):
+                    path = search_file(self.file_path.parent, value_node.value)
+                    with open(path, 'r') as f:
+                        value_node = yaml.compose(f)
+                    # value_node = self.construct_document(value_node)
+                if isinstance(value_node, MappingNode):
+                    self.flatten_mapping(value_node)
+                    merge.extend(value_node.value)
+                elif isinstance(value_node, SequenceNode):
+                    submerge = []
+                    for subnode in value_node.value:
+                        if not isinstance(subnode, MappingNode):
+                            raise ConstructorError("while constructing a mapping",
+                                    node.start_mark,
+                                    "expected a mapping for merging, but found %s"
+                                    % subnode.id, subnode.start_mark)
+                        self.flatten_mapping(subnode)
+                        submerge.append(subnode.value)
+                    submerge.reverse()
+                    for value in submerge:
+                        merge.extend(value)
+                else:
+                    raise ConstructorError("while constructing a mapping", node.start_mark,
+                            "expected a mapping or list of mappings for merging, but found %s"
+                            % value_node.id, value_node.start_mark)
+            elif key_node.tag == 'tag:yaml.org,2002:value':
+                key_node.tag = 'tag:yaml.org,2002:str'
+                index += 1
+            else:
+                index += 1
+        if merge:
+            node.value = merge + node.value
 
 
 def search_file(parent_path: os.PathLike, path_str: os.PathLike) -> pl.Path:
