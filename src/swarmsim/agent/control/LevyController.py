@@ -21,7 +21,7 @@ class LevyController(AbstractController):
         timeout_steps=None,
         step_scale=1.0,
     ):
-        super().__init__(parent)
+        super().__init__(agent=agent, parent=parent)
         if levy_constant is None:
             self.levy_dist_index = self.agent.rng.random() + 1
         else:
@@ -71,9 +71,11 @@ class LevyController(AbstractController):
         if self.steps_left <= 0:
             if self.turning:
                 self.new_foward_steps()
+                self.turning = False
             else:
                 self.levy_sample()
                 self.new_heading()
+                self.turning = True
 
         return self.v, self.omega
 
@@ -82,14 +84,10 @@ class LevyController(AbstractController):
             self.steps_left = int(self.X_from_levy / 2)
             self.omega = self.turning_rate
             self.v = self.forward_rate
-            self.turning = True
         else:
             d_theta = (self.agent.rng.random() * 2 * np.pi) - np.pi
             self.steps_left = abs(d_theta // self.turning_rate) + 1
-            if d_theta < 0:
-                self.omega = -self.turning_rate
-            else:
-                self.omega = self.turning_rate
+            self.omega = math.copysign(self.turning_rate, d_theta)
             self.v = 0
 
     def levy_sample(self):
@@ -104,7 +102,6 @@ class LevyController(AbstractController):
             self.steps_left = int(self.X_from_levy / 2)
             self.omega = 0
             self.v = self.forward_rate
-            self.turning = False
         else:
             step = self.sample_step_size() * self.step_scaling
             self.steps_left = (step // self.forward_rate) + 1
