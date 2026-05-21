@@ -72,10 +72,12 @@ class JinjaMetric(AbstractMetric):
     def module(self):
         if self.template is None:
             return None
-        if self._module is not None:
+        if self.template.saved_module is not None:
+            return self.template.saved_module
+        elif self._module is None:
+            self._module = self.make_module()
             return self._module
-        else:
-            return self.make_module()
+        return self._module
 
     def eval_template(self, expression):
         if self.template is None:
@@ -98,7 +100,6 @@ class JinjaMetric(AbstractMetric):
         self.calculate_submetrics()
         if self.template:
             self.template.export_with(**self.exprargs)
-            self._module = self.template.module_from_cached_context
         value = self.eval_template(self.expression)
         if self.save_condition is not None and not self.eval_template(self.save_condition):
             return
