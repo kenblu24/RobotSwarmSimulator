@@ -66,6 +66,7 @@ class ContextualExpression(BaseTemplateExpression):
 
 class Template(BaseTemplate):
     _context = Undefined  # HACK: should be set in __init__
+    saved_module = None
 
     def compile_ctxpr(self, source: str, undefined_to_none: bool = True, update: str = "raise_undefined"):
         # from jijna2.environment.compile_expression()
@@ -116,16 +117,15 @@ class Template(BaseTemplate):
         consume(self.root_render_func(ctx))
         return ctx.get_exported()
 
-    def export_with_context(self, context):
-        consume(self.root_render_func(context))
+    def export_with_context(self, context, save_module=True):
+        body_stream = list(self.root_render_func(context))
         self._context = context.get_exported()
+        if save_module:
+            self.saved_module = TemplateModule(self, context, body_stream)
 
-    def export_with(__self__, *args, **kwargs):
-        __self__.export_with_context(__self__.new_context(dict(*args, **kwargs)))
-
-    @property
-    def module_from_cached_context(self):
-        return TemplateModule(self, self.new_context(self._context))
+    def export_with(__self__, *args, save_module=True, **kwargs):
+        __self__.export_with_context(__self__.new_context(dict(*args, **kwargs)),
+                                     save_module=save_module)
 
     @property
     def has_cached_context(self):
