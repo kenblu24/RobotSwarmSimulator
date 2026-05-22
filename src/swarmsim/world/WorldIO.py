@@ -32,11 +32,7 @@ class WorldIO:
 
         d = WorldIO.load_world_dictionary(file_name)
         config = RectangularWorldConfig.from_dict(d)
-        # for c in config.agentConfig.get_configs():
-        #     c.body_filled = True
-        #     c.agent_radius = 7
         sim(config)
-
 
 
 """

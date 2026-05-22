@@ -4,7 +4,6 @@ import numpy as np
 import math
 from .AbstractSensor import AbstractSensor
 from typing import List
-from ..world.goals.Goal import CylinderGoal
 from ..util.collider.AABB import AABB
 
 from typing import TYPE_CHECKING
@@ -286,23 +285,6 @@ class BinaryFOVSensor(AbstractSensor):
                 position[0] + xmax + padding, position[1] + ymax + padding]
         # xmin, ymin, xmax, ymax
 
-    def check_goals(self, world):
-        # Add this to its own class later -- need to separate the binary from the trinary sensors
-        if self.use_goal_state:
-            sensor_origin = self.agent.getPosition()
-            for world_goal in world.goals:
-                if isinstance(world_goal, CylinderGoal):
-                    u = np.array(world_goal.center) - sensor_origin
-                    if np.linalg.norm(u) < self.goal_sensing_range + world_goal.r:
-                        d = self.circle_interesect_sensing_cone(u, world_goal.r)
-                        if d is not None:
-                            self.agent.agent_in_sight = None
-                            self.current_state = 2
-                            self.goal_detected = True
-                            return self.goal_detected
-        self.goal_detected = False
-        return self.goal_detected
-
     def lines_segments_intersect(self, l1, l2):
         p1, q1 = l1
         p2, q2 = l2
@@ -371,11 +353,8 @@ class BinaryFOVSensor(AbstractSensor):
                 self.current_state = 1 if invert else 0
                 self.detection_id = 0
 
-    def step(self, world, only_check_goals=False):
+    def step(self, world):
         super(BinaryFOVSensor, self).step(world=world)
-        goal_detected = self.check_goals(world=world)
-        if not goal_detected and not only_check_goals:
-            self.checkForLOSCollisions(world=world)
         if self.store_history:
             if self.agent.agent_in_sight:
                 self.history.append(int(self.agent.agent_in_sight.name))

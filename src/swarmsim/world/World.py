@@ -125,50 +125,6 @@ class AbstractWorldConfig:
         world_cls, _world_config_cls = store.world_types[world_type]
         return world_cls(self)
 
-    # def addAgentConfig(self, agent_config):
-    #     self.agentConfig = agent_config
-    #     if self.agentConfig:
-    #         self.agentConfig.attach_world_config(self.shallow_copy())
-
-    # def shallow_copy(self):
-    #     return RectangularWorldConfig(
-    #         size=self.size,
-    #         n_agents=self.population_size,
-    #         seed=self.seed,
-    #         init_type=self.init_type.getShallowCopy(),
-    #         padding=self.padding,
-    #         goals=self.goals,
-    #         objects=self.objects
-    #     )
-
-    # def getDeepCopy(self):
-    #     return self.from_dict(self.as_dict())
-
-    # def set_attributes(self, dictionary):
-    #     for key in dictionary:
-    #         setattr(self, key, dictionary[key])
-
-    # def factor_zoom(self, zoom):
-    #     self.size = np.asarray(self.size) * zoom
-    #     self.size *= zoom
-    #     for goal in self.goals:
-    #         goal.center[0] *= zoom
-    #         goal.center[1] *= zoom
-    #         goal.r *= zoom
-    #         goal.range *= zoom
-    #     # self.init_type.rescale(zoom)
-
-# class HookList(list):
-#     def __init__(self):
-#         super().__init__()
-#         self.listeners = {"append": []}
-#     def addListener(self, target, listener):
-#         self.listeners[target].append(listener)
-#     def append(self, item):
-#         super().append(item)
-#         for listener in self.listeners["append"]:
-#             listener(item)
-
 
 class World:
     """Base world class.
@@ -296,10 +252,6 @@ class World:
         for metric_config in self.config.metrics:
             self.add_metric(metric_config)
 
-        # self.metrics = config.metrics
-        # self.objects = config.objects
-        # self.goals = config.goals
-        # self.seed = config.seed
         if step_spawners:
             self.step_spawners()
 
