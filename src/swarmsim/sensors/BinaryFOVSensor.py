@@ -23,7 +23,8 @@ def vectorize(angle):
 
 
 # compute the vector turn value from origin→p1 to origin→p2
-# this value is positive if a left turn is the fastest way to go from p1 to p2, zero if p1 and p2 are colinear, and negative otherwise
+# this value is positive if a left turn is the fastest way to go from p1 to p2,
+# zero if p1 and p2 are colinear, and negative otherwise
 def turn(p1, p2):
     return p1[0] * p2[1] - p2[0] * p1[1]
 
@@ -33,7 +34,8 @@ def project(a, b):
     return b * (np.dot(a, b) / np.dot(b, b))
 
 
-# determine if the line in the direction of the first arugment intersects the circle defined by the second and third arguments
+# determine if the line in the direction of the first arugment intersects the
+# circle defined by the second and third arguments
 def lineCircleIntersect(line, center, radius):
     clDiffVec = center - project(center, line)
     return np.dot(clDiffVec, clDiffVec) <= radius**2
@@ -114,7 +116,8 @@ class BinaryFOVSensor(AbstractSensor):
         sensor_origin = self.agent.pos
 
         if world.quad:
-            # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
+            # use world.quad that tracks agent positions to retrieve
+            # agents within the minimal rectangle that contains the FOV sector
             quadpoints = [point.data for point in world.quad.within_bb(
                 quads.BoundingBox(*self.getAARectContainingSector(world)))]
             agents = np.array([agent for data in quadpoints for agent in data], dtype=object)
@@ -190,7 +193,8 @@ class BinaryFOVSensor(AbstractSensor):
                 return
             elif not self.detect_only_origins:
                 # circle whisker intercept correction
-                # for left and right, check that vector u to the agent is in the correct direction and if the line of the whisker intersects the agent circle
+                # for left and right, check that vector u to the agent is in the
+                # correct direction and if the line of the whisker intersects the agent circle
                 leftWhisker = (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius))
                 rightWhisker = (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius))
                 if leftWhisker or rightWhisker:
@@ -204,7 +208,8 @@ class BinaryFOVSensor(AbstractSensor):
             #     self.determineState(True, agent, world)
             #     return
 
-        # if an agent was in the fov then this function would have returned, so determine the sensing state to be false
+        # if an agent was in the fov then this function would have returned,
+        # so determine the sensing state to be false
         self.determineState(False, None, world)
         return
 
@@ -224,10 +229,12 @@ class BinaryFOVSensor(AbstractSensor):
         yaxis = (0, 1)  # vector representing positive y axis
 
         xts = np.sign(turn(xaxis, center))  # sign of turn from x axis to look direction
-        fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker))  # true if turns from x axis to whiskers have different signs
+        # true if turns from x axis to whiskers have different signs
+        fovOverXAxis = np.sign(turn(xaxis, leftWhisker)) != np.sign(turn(xaxis, rightWhisker))
 
         yts = np.sign(turn(yaxis, center))  # sign of turn from y axis to look direction
-        fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker))  # true if turns from y axis to whiskers have different signs
+        # true if turns from y axis to whiskers have different signs
+        fovOverYAxis = np.sign(turn(yaxis, leftWhisker)) != np.sign(turn(yaxis, rightWhisker))
 
         xmin = 0
         xmax = 0
@@ -254,7 +261,8 @@ class BinaryFOVSensor(AbstractSensor):
         xadd(leftWhisker[0] * radius)
         xadd(rightWhisker[0] * radius)
         if fovOverXAxis:  # if over x axis, x range is maximized to radius either left or right
-            xadd(radius * -yts)  # left or right is determined by the negated sign of the turn from the positive y axis to the look direction
+            xadd(radius * -yts)
+            # left or right is determined by -sign(turn) from the positive y axis to the look direction
             if over180:  # if also over 180, then y range is maximized to radius in the direction closer to the look direction
                 yadd(radius * xts)
                 if not fovOverYAxis:  # if over x axis, over 180, and not over y axis, y range is maximized in both directions
@@ -264,17 +272,18 @@ class BinaryFOVSensor(AbstractSensor):
         yadd(leftWhisker[1] * radius)
         yadd(rightWhisker[1] * radius)
         if fovOverYAxis:  # if over y axis, y range is maximized to radius either up or down
-            yadd(radius * xts)  # up or down is determined by the sign of the turn from the positive x axis to the look direction
+            yadd(radius * xts)  # up or down is determined by sign(turn) from the positive x axis to the look direction
             if over180:  # if also over 180, then x range is maximized to radius in the direction closer to the look direction
                 xadd(radius * -yts)
                 if not fovOverXAxis:  # if over y axis, over 180, and not over x axis, x range is maximized in both directions
                     xadd(radius * yts)
 
-        # this padding of the rectangle is to account for and detect agents that would only be seen by the whisker circle intercept correction
+        # padding of the rectangle is to account for agents that would only be seen by the whisker circle intercept correction
         padding = 0 if self.detect_only_origins else world.max_agent_r
 
         # positions are relative until now, make them absolute for the return
-        return [position[0] + xmin - padding, position[1] + ymin - padding, position[0] + xmax + padding, position[1] + ymax + padding]
+        return [position[0] + xmin - padding, position[1] + ymin - padding,
+                position[0] + xmax + padding, position[1] + ymax + padding]
         # xmin, ymin, xmax, ymax
 
     def check_goals(self, world):
@@ -418,7 +427,8 @@ class BinaryFOVSensor(AbstractSensor):
                 pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
                 detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
                 for agent in detected:
-                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"], agent.pos * zoom + pan, agent.radius * zoom, width * 3)
+                    pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"],
+                                       agent.pos * zoom + pan, agent.radius * zoom, width * 3)
 
     # this function has been replaced by a more efficient procedure in checkForLOSCollisions and is no longer called there
     def circle_interesect_sensing_cone(self, u, r):

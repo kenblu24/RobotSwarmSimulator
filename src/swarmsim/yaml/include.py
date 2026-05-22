@@ -41,7 +41,7 @@ class IncludeLoader(yaml.FullLoader):
 
     def __init__(self, stream: IO | str) -> None:
         """Initialise Loader."""
-        self.file_path = pl.Path(stream.name) if hasattr(stream, "name") else pl.Path()
+        self.file_path = pl.Path(stream.name) if hasattr(stream, "name") else pl.Path()  # pyright: ignore[reportAttributeAccessIssue]
 
         super().__init__(stream)
 
@@ -87,7 +87,7 @@ class IncludeLoader(yaml.FullLoader):
             node.value = merge + node.value
 
 
-def search_file(parent_path: os.PathLike, path_str: os.PathLike) -> pl.Path:
+def search_file(parent_path: os.PathLike | str, path_str: os.PathLike | str) -> pl.Path:
     """Include file referenced at node.
 
     resolve order:
@@ -117,7 +117,7 @@ def search_file(parent_path: os.PathLike, path_str: os.PathLike) -> pl.Path:
 
 def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
     """Read the contents of a yaml/text/json file into a node"""
-    node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))
+    node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))  # pyright: ignore[reportArgumentType]
 
     ext = node_path.suffix
 
@@ -132,7 +132,7 @@ def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
 
 def construct_relative_path(loader: IncludeLoader, node: yaml.Node) -> str:
     """Construct a path which is resolved absolutely or relative to the yaml file"""
-    node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))
+    node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))  # pyright: ignore[reportArgumentType]
     return str(node_path.resolve().absolute())
 
 

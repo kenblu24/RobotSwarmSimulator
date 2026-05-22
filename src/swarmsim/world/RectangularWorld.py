@@ -263,7 +263,7 @@ class RectangularWorld(World):
         self.step_agents()
         self.step_objects()
 
-        self.update_quadtree() # update the position of agents in the quad tree
+        self.update_quadtree()  # update the position of agents in the quad tree
 
         self.step_metrics()
 
