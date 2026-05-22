@@ -32,6 +32,9 @@ from typing import Any, IO
 # metaclass example: https://gist.github.com/joshbode/569627ced3076931b02f?permalink_comment_id=2309157#gistcomment-2309157
 # possibly helpful: https://matthewpburruss.com/post/yaml/
 
+# delete tag for yaml diff
+DELETEKEY = 'tag:yiff,2026:delete_tag'
+
 
 class IncludeLoader(yaml.FullLoader):
     """YAML Loader with `!include` constructor."""
@@ -53,7 +56,7 @@ class IncludeLoader(yaml.FullLoader):
                     and value_node.tag == '!include'):
                     path = search_file(self.file_path.parent, value_node.value)
                     with open(path, 'r') as f:
-                        value_node = yaml.compose(f)
+                        value_node = yaml.compose(f, self.__class__)
                     # value_node = self.construct_document(value_node)
                 if isinstance(value_node, MappingNode):
                     self.flatten_mapping(value_node)
@@ -132,13 +135,25 @@ def construct_relative_path(loader: IncludeLoader, node: yaml.Node) -> str:
     node_path = search_file(loader.file_path.parent, loader.construct_scalar(node))
     return str(node_path.resolve().absolute())
 
+
+def construct_delete(loader: IncludeLoader, node: yaml.Node) -> None:
+    """Replace key with DELETEKEY sentinel object"""
+    if node.value is not None:
+        msg = f"!!del tag expects no value, but found {node.value}"
+        raise ConstructorError(msg, node.start_mark)
+    return DELETEKEY
+
+
 #: str : YAML tag for !include
 INCLUDE_TAG = '!include'
 #: str : YAML tag for !relpath
 RELPATH_TAG = '!relpath'
+#: str : YAML tag for !!delete
+DELETE_TAG = '!!del'
 
 yaml.add_constructor(INCLUDE_TAG, construct_include, IncludeLoader)
 yaml.add_constructor(RELPATH_TAG, construct_relative_path, IncludeLoader)
+yaml.add_constructor(DELETE_TAG, construct_delete, IncludeLoader)
 
 
 if __name__ == '__main__':
