@@ -20,7 +20,7 @@ def main(
     step_size=1,
     start_paused=False,
     viewport_zoom=100.0,
-    framerate_limit=20,
+    framerate_limit=200,
 ):
     # initialize the pygame module
     if show_gui:
