@@ -39,11 +39,19 @@ DELETEKEY = 'tag:yiff,2026:delete_tag'
 class IncludeLoader(yaml.FullLoader):
     """YAML Loader with `!include` constructor."""
 
-    def __init__(self, stream: IO | str) -> None:
+    def __init__(self, stream: IO | str, name=None) -> None:
         """Initialise Loader."""
-        self.file_path = pl.Path(stream.name) if hasattr(stream, "name") else pl.Path()  # pyright: ignore[reportAttributeAccessIssue]
+        if name is None:
+            self.file_path = pl.Path(stream.name) if hasattr(stream, "name") else pl.Path()  # pyright: ignore[reportAttributeAccessIssue]
+        else:
+            self.file_path = pl.Path(name)
 
         super().__init__(stream)
+
+    def compose_include_merge_node(self, node):
+        path = search_file(self.file_path.parent, node.value)
+        with open(path, 'r') as f:
+            return yaml.compose(f, self.__class__)
 
     def flatten_mapping(self, node):
         merge = []
@@ -54,10 +62,7 @@ class IncludeLoader(yaml.FullLoader):
                 del node.value[index]
                 if (not isinstance(value_node, (MappingNode, SequenceNode))
                     and value_node.tag == '!include'):
-                    path = search_file(self.file_path.parent, value_node.value)
-                    with open(path, 'r') as f:
-                        value_node = yaml.compose(f, self.__class__)
-                    # value_node = self.construct_document(value_node)
+                    value_node = self.compose_include_merge_node(value_node)
                 if isinstance(value_node, MappingNode):
                     self.flatten_mapping(value_node)
                     merge.extend(value_node.value)
@@ -123,7 +128,7 @@ def construct_include(loader: IncludeLoader, node: yaml.Node) -> Any:
 
     with open(node_path, 'r') as f:
         if ext in ('.yaml', '.yml'):
-            return yaml.load(f, IncludeLoader)
+            return yaml.load(f, loader.__class__)
         elif ext in ('.json', ):
             return json.load(f)
         else:

@@ -90,6 +90,19 @@ class AbstractWorldConfig:
         return cls(**env)
 
     @classmethod
+    def from_yaml_template(cls, path, env=None, **kwargs):
+        # from .. import yaml
+        # if env is None:
+        #     from ..util.jinja import make_template_env
+        #     env = make_template_env()
+        # with open(path, "r") as f:
+        #     template = env.from_string(f.read())
+        # s = template.render(**kwargs)
+        from ..util.jinja import load_yaml_template
+        d = load_yaml_template(path, env=env, **kwargs)
+        return cls.from_dict(d)
+
+    @classmethod
     def from_yaml(cls, path):
         from .. import yaml
 
@@ -132,16 +145,7 @@ class World:
     def __init__(self, config):
         self.config = config
         config = replace(config)
-        self.jenv = jinja.Environment()
-        self.jenv.add_extension('jinja2.ext.do')
-        self.jenv.add_extension('jinja2.ext.loopcontrols')
-        self.jenv.filters['sum'] = sum
-        self.jenv.filters['bin'] = bin
-        self.jenv.filters['hex'] = hex
-        self.jenv.tests['alltrue'] = all
-        self.jenv.tests['anytrue'] = any
-        self.jenv.globals['np'] = np
-        self.jenv.globals['math'] = math
+        self.jenv = jinja.make_default_jinja_env()
         self.jenv.globals['world'] = self
         #: List of agents in the world.
         self._population: HookList[Agent] = HookList()

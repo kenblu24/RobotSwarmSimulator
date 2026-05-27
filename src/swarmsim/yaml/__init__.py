@@ -53,7 +53,19 @@ from functools import partial
 
 yaml.add_constructor("!np", construct_numexpr, IncludeLoader)
 
-load = partial(yaml.load, Loader=IncludeLoader)
+
+def load(stream, name=None):
+    """
+    Parse the first YAML document in a stream
+    and produce the corresponding Python object.
+    """
+    loader = IncludeLoader(stream, name=name)
+    try:
+        return loader.get_single_data()
+    finally:
+        loader.dispose()
+
+
 load_all = partial(yaml.load_all, Loader=IncludeLoader)
 
 
