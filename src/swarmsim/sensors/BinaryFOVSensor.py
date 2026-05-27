@@ -355,6 +355,7 @@ class BinaryFOVSensor(AbstractSensor):
 
     def step(self, world):
         super(BinaryFOVSensor, self).step(world=world)
+        self.checkForLOSCollisions(world=world)
         if self.store_history:
             if self.agent.agent_in_sight:
                 self.history.append(int(self.agent.agent_in_sight.name))
