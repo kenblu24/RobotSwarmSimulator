@@ -287,3 +287,16 @@ class HookList(list):
             for func in self._add_callbacks:
                 func(value)
         super().__setitem__(key, value)
+
+
+class NameRef(str):
+    def __new__(cls, name):
+        return super().__new__(cls, name)
+
+
+
+
+class NameList(HookList):
+    def __init__(self, iterable=None, add_callbacks=None, del_callbacks=None):
+        super().__init__(iterable, add_callbacks, del_callbacks)
+        self._name_map = {}
