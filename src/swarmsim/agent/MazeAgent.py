@@ -71,7 +71,6 @@ class MazeAgentConfig(StaticAgentConfig):
     #: list[Sensor]: The sensors used by the agent. Emtpy list by default.
     sensors: list = field(default_factory=list)
     #: AbstractController: The controller used by the agent. Zero controller by default.
-    controller: Any = None
 
     sensing_avg: int = 1
     stop_on_collision: bool = False
