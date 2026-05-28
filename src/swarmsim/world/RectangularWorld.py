@@ -4,6 +4,8 @@ The RectangularWorld is a 2D world.
 
 It is currently the only world type available.
 
+.. inheritance-diagram:: RectangularWorld
+
 Config Class
 ------------
 
