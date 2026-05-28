@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import pygame
 
@@ -12,6 +14,33 @@ trigger_remap = st.Remap([-1, 1], [0, 1])
 def decay(x, decay=0.1):
     magnitude = np.clip(abs(x) - decay, 0., None)
     return copysign(magnitude, x)
+
+
+linux_map = {
+    'x1': 0,
+    'y1': 1,
+    'x2': 3,
+    'y2': 4,
+    'lt': 2,
+    'rt': 5,
+}
+
+windows_map = {
+    'x1': 0,
+    'y1': 1,
+    'x2': 2,
+    'y2': 3,
+    'lt': 4,
+    'rt': 5,
+}
+
+
+if sys.platform == 'linux':
+    jm = linux_map
+elif sys.platform == 'win32':
+    jm = windows_map
+else:
+    raise ValueError("Unsupported platform")
 
 
 class HumanController(AbstractController):
@@ -179,10 +208,10 @@ class HumanController(AbstractController):
     def handle_controller(self):
         if self.joystick is None:
             return 0., 0.
-        x, y = self.joystick.get_axis(0), -self.joystick.get_axis(1)
-        x2, _y2 = self.joystick.get_axis(2), -self.joystick.get_axis(3)
-        lt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(4)))
-        rt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(5)))
+        x, y = self.joystick.get_axis(jm['x1']), -self.joystick.get_axis(jm['y1'])
+        x2, _y2 = self.joystick.get_axis(jm['x2']), -self.joystick.get_axis(jm['y2'])
+        lt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(jm['lt'])))
+        rt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(jm['rt'])))
         y = self.joy_speed_remap(self.joy_deadzone(y)) + rt - lt
         x = self.joy_turn_remap(self.joy_deadzone(x) + self.joy_deadzone(x2))
         v = self.speed_denorm(y)
