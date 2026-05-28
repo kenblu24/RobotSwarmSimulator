@@ -41,9 +41,6 @@ from ..metrics.AbstractMetric import AbstractMetric
 
 from typing import Any
 
-# for jinja namespace
-import math
-
 
 @filter_unexpected_fields
 @dataclass
@@ -91,14 +88,7 @@ class AbstractWorldConfig:
 
     @classmethod
     def from_yaml_template(cls, path, env=None, **kwargs):
-        # from .. import yaml
-        # if env is None:
-        #     from ..util.jinja import make_template_env
-        #     env = make_template_env()
-        # with open(path, "r") as f:
-        #     template = env.from_string(f.read())
-        # s = template.render(**kwargs)
-        from ..util.jinja import load_yaml_template
+        from ..yaml import load_yaml_template
         d = load_yaml_template(path, env=env, **kwargs)
         return cls.from_dict(d)
 
@@ -446,12 +436,11 @@ def config_from_yamls(s: str | Any):
     return config_from_dict(d)
 
 
-def config_from_yaml(path: str | os.PathLike):
-    """Load a YAML file and return a config object."""
-    with open(path, "r") as f:
-        try:
-            return config_from_yamls(f)
-        except ValueError as err:
-            if str(err) == "World config must have a 'type' key.":
-                msg = f"YAML must have a 'type' entry to indicate the world type. Please add a 'type' to {path}"
-                raise ValueError(msg) from err
+def config_from_yaml(path: str | os.PathLike, env=None, **kwargs):
+    """Load a YAML file or template and return a config object."""
+    from ..yaml import load_yaml_template
+    d = load_yaml_template(path, env=None, **kwargs)
+    if 'type' not in d:
+        msg = f"YAML must have a 'type' entry to indicate the world type. Please add a 'type' to {path}"
+        raise ValueError(msg)
+    return config_from_dict(d)
