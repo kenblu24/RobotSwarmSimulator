@@ -5,7 +5,7 @@ from .RadialVariance import RadialVarianceMetric
 
 
 class RadialVarianceHelper(RadialVarianceMetric):
-    def __init__(self, history=100, regularize=False, name=None):
+    def __init__(self, history=None, regularize=False, name=None):
         if regularize:
             raise NotImplementedError
         super().__init__(history=history, regularize=False)
@@ -21,7 +21,7 @@ class RadialVarianceHelper(RadialVarianceMetric):
 class Orbit(RadialVarianceHelper):
 
 
-    def __init__(self, history=100, avg_history_max=100, regularize=False, name=None):
+    def __init__(self, history=None, avg_history_max=100, regularize=False, name=None):
         if regularize:
             raise NotImplementedError
 

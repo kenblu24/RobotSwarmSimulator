@@ -4,7 +4,6 @@ from .World import World_from_config, World
 from ..util.timer import Timer
 
 screen = None
-FRAMERATE = 200
 
 
 def main(
@@ -21,6 +20,7 @@ def main(
     step_size=1,
     start_paused=False,
     viewport_zoom=100.0,
+    framerate_limit=200,
 ):
     # initialize the pygame module
     if show_gui:
@@ -68,7 +68,6 @@ def main(
         gui.set_screen(screen)
         world.attach_gui(gui)
 
-    total_allowed_steps = getattr(world, 'stop_at', world.config.stop_at)
     steps_taken = 0
     steps_per_frame = step_size
     slowdown_level = 0
@@ -203,7 +202,7 @@ def main(
 
         skip = False
         if slowdown_level > 0:
-            period = (1.5 ** slowdown_level) / FRAMERATE
+            period = (1.5 ** slowdown_level) / framerate_limit
             if step_timer() < period:
                 skip = True
             else:
@@ -213,21 +212,18 @@ def main(
         if paused or skip:
             draw()
             pygame.display.flip()
-            clock.tick(FRAMERATE)
+            clock.tick(framerate_limit)
             continue
         # Calculate Steps - Stop if we reach desired frame
         for _ in range(steps_per_frame):
 
-            if callable(stop_detection) and stop_detection(world):
+            if (
+                callable(stop_detection) and stop_detection(world)
+                or world.check_stop_at()
+                or isinstance(world.stop_at, int) and world.stop_at >= 0 and steps_taken > world.stop_at
+            ):
                 running = False
                 return world
-
-            try:
-                if total_allowed_steps >= 0 and steps_taken > total_allowed_steps:
-                    running = False
-                    return world
-            except TypeError:
-                pass
 
             world.step()
 
@@ -243,4 +239,4 @@ def main(
             draw()
             pygame.display.flip()
             eclock.tick()
-            clock.tick(FRAMERATE)
+            clock.tick(framerate_limit)

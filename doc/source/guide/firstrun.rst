@@ -2,7 +2,7 @@
 Basic Usage
 ***********
 
-For your first run after `installing RobotSwarmSimulator <guide/install>`_, let's walk through some simple examples.
+For your first run after :doc:`installing RobotSwarmSimulator </guide/install>`, let's walk through some simple examples.
 
 
 Your first simulation
@@ -284,7 +284,7 @@ Now let's create a controller that will read the sensor data and change how the 
 
    from swarmsim.agent.control.BinaryController import BinaryController
 
-   controller = BinaryController((0.02, -0.5), (0.02, 0.5), agent)
+   controller = BinaryController(a=(0.02, -0.5), b=(0.02, 0.5), agent=agent)
    agent.controller = controller
 
 Now, if you run ``sim(world)``\ , you should see some agents that turn left if one sees something and right if one doesn't!
@@ -363,7 +363,7 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
          agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1), world)
          sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
          agent.sensors.append(sensor)
-         controller = BinaryController(agent, (0.02, -0.5), (0.02, 0.5))
+         controller = BinaryController((0.02, -0.5), (0.02, 0.5), agent)
          agent.controller = controller
          spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
                                      agent=agent, mode="oneshot")

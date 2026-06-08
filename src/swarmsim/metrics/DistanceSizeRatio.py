@@ -23,7 +23,7 @@ class DistanceSizeRatio(RadialVarianceMetric):
             # clamp point to within rectangle, then calculate distance
             # slightly less optimized but MILES more readable
             w, h, wd = world.config.size[0], world.config.size[1], world.config.size
-        
+
             # x, y = pos
             # is_inside_world = (pos >= np.zeros(2)).all() and (pos <= wd).all()
             # if not is_inside_world:
@@ -35,11 +35,10 @@ class DistanceSizeRatio(RadialVarianceMetric):
             #     smallest_distance = min(distances)
 
             agent_radii.append(min(distances))
-            
 
-        diffusal_uneveness = np.std(agent_radii) # variability in distances
+        diffusal_uneveness = np.std(agent_radii)  # variability in distances
 
-        self.set_value(-diffusal_uneveness)
+        return -diffusal_uneveness * self.scale
         # self.set_value(agent_radii[0])
 
     def distance(a, b):

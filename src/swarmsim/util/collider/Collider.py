@@ -8,7 +8,7 @@ class Collider:
     infinitesmimal = 0.0001
     shake_amount = 0.001
 
-    def __init__(self, x, y, r):
+    def __init__(self):
         self.color = (0, 255, 0)
         self.collision_flag = False
 
@@ -27,6 +27,7 @@ class Collider:
 
 class CircularCollider(Collider):
     def __init__(self, x, y, r):
+        super().__init__()
         self.x: float
         self.y: float
         self.r: float
@@ -81,6 +82,7 @@ class CircularCollider(Collider):
 
 class PolyCollider(Collider):
     def __init__(self, points):
+        super().__init__()
         self.points: np.ndarray
         self.update(points)
 

@@ -187,6 +187,8 @@ class LazyKnownModules:
         from ..sensors.GenomeDependentSensor import GenomeBinarySensor
         from ..sensors.RegionalSensor import RegionalSensor
         from ..sensors.StaticSensor import StaticSensor
+        from ..sensors.PointCollisionSensor import PointCollisionSensor
+        from ..sensors.Targeter import Targeter
 
         self.add_dictlike_namespace('sensors')
 
@@ -195,6 +197,8 @@ class LazyKnownModules:
         self._dictlike_types['sensors']['GenomeBinarySensor'] = GenomeBinarySensor
         self._dictlike_types['sensors']['RegionalSensor'] = RegionalSensor
         self._dictlike_types['sensors']['StaticSensor'] = StaticSensor
+        self._dictlike_types['sensors']['PointCollisionSensor'] = PointCollisionSensor
+        self._dictlike_types['sensors']['Targeter'] = Targeter
 
     def add_native_controllers(self):
         from ..agent.control.Controller import Controller
@@ -202,6 +206,9 @@ class LazyKnownModules:
         from ..agent.control.BinaryController import BinaryController
         from ..agent.control.AgentMethodController import AgentMethodController
         from ..agent.control.HomogeneousController import HomogeneousController
+        from ..agent.control.WaypointPIDController import WaypointPIDController
+        from ..agent.control.HumanController import HumanController
+        from ..agent.control.LevyController import LevyController
 
         self.add_dictlike_namespace('controller')
 
@@ -210,6 +217,9 @@ class LazyKnownModules:
         self._dictlike_types['controller']['BinaryController'] = BinaryController
         self._dictlike_types['controller']['AgentMethodController'] = AgentMethodController
         self._dictlike_types['controller']['HomogeneousController'] = HomogeneousController
+        self._dictlike_types['controller']['WaypointPIDController'] = WaypointPIDController
+        self._dictlike_types['controller']['HumanController'] = HumanController
+        self._dictlike_types['controller']['LevyController'] = LevyController
 
     def add_native_metrics(self):
         from .. import metrics
@@ -244,6 +254,7 @@ class LazyKnownModules:
     def add_native_spawners(self):
         from ..world.spawners.AgentSpawner import AgentSpawner, UniformAgentSpawner, PointAgentSpawner
         from ..world.spawners.ExcelSpawner import ExcelSpawner
+        from ..world.spawners.DonutSpawner import DonutAgentSpawner
 
         self.add_dictlike_namespace('spawners')
 
@@ -252,6 +263,7 @@ class LazyKnownModules:
         self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['UniformAgentSpawner'] = UniformAgentSpawner
+        self._dictlike_types['spawners']['DonutAgentSpawner'] = DonutAgentSpawner
 
 
 #: Holds the registry of known classes.

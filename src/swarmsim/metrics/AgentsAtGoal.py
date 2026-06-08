@@ -9,7 +9,7 @@ from .AbstractMetric import AbstractMetric
 
 
 class AgentsAtGoal(AbstractMetric):
-    def __init__(self, name="Goal_Agents", history=100, as_percent=False):
+    def __init__(self, name="Goal_Agents", history=None, as_percent=False):
         super().__init__(name=name, history_size=history)
         self.population = None
         self.goals = None
@@ -44,7 +44,7 @@ class AgentsAtGoal(AbstractMetric):
         return {"name": self.name, "history_size": self.history_size, "as_percent": self.as_percent}
 
 class PercentageAtGoal(AgentsAtGoal):
-    def __init__(self, percentage, history=100):
+    def __init__(self, percentage, history=None):
         super().__init__(name=f"p{round(percentage * 100)}_at_goal", history=history)
         self.percentage = percentage
         self.found = None

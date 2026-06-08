@@ -7,7 +7,7 @@ from .AbstractMetric import AbstractMetric
 
 class GeneElementDifference(AbstractMetric):
 
-    def __init__(self, genome_a_index, genome_b_index, history=100):
+    def __init__(self, genome_a_index, genome_b_index, history=None):
         super().__init__(name="Sensor_Offset", history_size=history)
         self.population = 0
         self.a = genome_a_index

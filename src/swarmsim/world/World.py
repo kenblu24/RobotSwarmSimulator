@@ -32,6 +32,8 @@ from ..config import store, filter_unexpected_fields, get_class_from_dict, get_a
 
 from ..util.asdict import asdict
 from ..util.collections import FlagSet
+from ..util.collections import HookList
+from ..util import jinja
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
@@ -54,7 +56,7 @@ class AbstractWorldConfig:
     objects: list = field(default_factory=list)
     goals: list = field(default_factory=list)
     #: int | Callable | None : The maximum number of steps to run the simulation.
-    stop_at: int | Callable | None = None
+    stop_at: int | Callable | str | None = None
     #: tuple[int, int, int] : The background color of the world. Default is black.
     background_color: tuple[int, int, int] = (0, 0, 0)
     #: int | None : The seed to use for the world.
@@ -85,11 +87,26 @@ class AbstractWorldConfig:
         return cls(**env)
 
     @classmethod
+    def from_yaml_template(cls, path, env=None, **kwargs):
+        from ..yaml import load_yaml_template
+        d = load_yaml_template(path, env=env, **kwargs)
+        return cls.from_dict(d)
+
+    @classmethod
     def from_yaml(cls, path):
         from .. import yaml
 
         with open(path, "r") as f:
             return cls.from_dict(yaml.load(f))
+
+    @classmethod
+    def from_yamls(cls, s):
+        from .. import yaml
+        return cls.from_dict(yaml.load(s))
+
+    def to_yaml(self):
+        from .. import yaml
+        return yaml.dump(self.as_dict())
 
     def save_yaml(self, path):
         from .. import yaml
@@ -111,50 +128,6 @@ class AbstractWorldConfig:
         world_cls, _world_config_cls = store.world_types[world_type]
         return world_cls(self)
 
-    # def addAgentConfig(self, agent_config):
-    #     self.agentConfig = agent_config
-    #     if self.agentConfig:
-    #         self.agentConfig.attach_world_config(self.shallow_copy())
-
-    # def shallow_copy(self):
-    #     return RectangularWorldConfig(
-    #         size=self.size,
-    #         n_agents=self.population_size,
-    #         seed=self.seed,
-    #         init_type=self.init_type.getShallowCopy(),
-    #         padding=self.padding,
-    #         goals=self.goals,
-    #         objects=self.objects
-    #     )
-
-    # def getDeepCopy(self):
-    #     return self.from_dict(self.as_dict())
-
-    # def set_attributes(self, dictionary):
-    #     for key in dictionary:
-    #         setattr(self, key, dictionary[key])
-
-    # def factor_zoom(self, zoom):
-    #     self.size = np.asarray(self.size) * zoom
-    #     self.size *= zoom
-    #     for goal in self.goals:
-    #         goal.center[0] *= zoom
-    #         goal.center[1] *= zoom
-    #         goal.r *= zoom
-    #         goal.range *= zoom
-    #     # self.init_type.rescale(zoom)
-
-class HookList(list):
-    def __init__(self):
-        super().__init__()
-        self.listeners = {"append": []}
-    def addListener(self, target, listener):
-        self.listeners[target].append(listener)
-    def append(self, item):
-        super().append(item)
-        for listener in self.listeners["append"]:
-            listener(item)
-
 
 class World:
     """Base world class.
@@ -162,20 +135,24 @@ class World:
     def __init__(self, config):
         self.config = config
         config = replace(config)
+        self.jenv = jinja.make_default_jinja_env()
+        self.jenv.globals['world'] = self
         #: List of agents in the world.
-        self.population: HookList[Agent] = HookList()
+        self._population: HookList[Agent] = HookList()
         #: List of spawners which create agents or objects.
         self.spawners: list[Spawner] = []
         #: Metrics to calculate behaviors.
         self.metrics: list[AbstractMetric] = []
         #: The list of world objects.
-        self.objects: HookList[Agent] = HookList()
+        self._objects: HookList[Agent] = HookList()
         self.goals = config.goals
         self.meta = config.metadata
         self.gui = None
         self.total_steps = 0
         self.initialized = False
         self._screen_cache = None
+        self._stop_at = None
+        self.stop_at = config.stop_at
         self.seed = config.seed
         self.set_seed(self.seed)
         self.events = []
@@ -184,10 +161,74 @@ class World:
         self.rng: np.random.Generator
         self.flags = FlagSet(config.flags)
 
+    def check_stop_at(self):
+        if self.stop_at is None:
+            return False
+        elif callable(self.stop_at):
+            return self.stop_at(world=self)
+        return self.total_steps > self.stop_at
+
+    @property
+    def stop_at(self):
+        return self._stop_at
+
+    @stop_at.setter
+    def stop_at(self, value):
+        if value is None or isinstance(value, (int, float)) or callable(value):
+            self._stop_at = value
+        else:
+            self._stop_at = self.jenv.compile_expression(value)
+
+    @property
+    def population(self):
+        return self._population
+
+    @population.setter
+    def population(self, value):
+        self._population[:] = value
+
+    @property
+    def objects(self):
+        return self._objects
+
+    @objects.setter
+    def objects(self, value):
+        self._objects[:] = value
+
     def set_seed(self, seed):
         self.seed = np.random.randint(0, 2**31) if seed is None else seed
         self.rng = np.random.default_rng(self.seed)
         return self.seed
+
+    def add_agent(self, agent_config):
+        if isinstance(agent_config, Agent):  # if it's already an agent, just add it
+            agent = agent_config
+        else:  # otherwise, it's a config dict. find the class specified and create the agent
+            agent_class, agent_config = get_agent_class(agent_config)
+            agent = agent_class.from_config(agent_config, self)
+        self.population.append(agent)
+        return agent
+
+    def add_spawner(self, spawner_config):
+        if isinstance(spawner_config, Spawner):  # if it's already a spawner, just add it
+            spawner = spawner_config
+        else:  # otherwise, it's a config dict. find the class specified and create the spawner
+            spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
+            spawner = spawner_class(self, **spawner_config)
+        self.spawners.append(spawner)
+        return spawner
+
+    def add_metric(self, metric_config, add_to_world=True):
+        if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
+            metric = metric_config
+        else:  # otherwise, it's a config dict. find the class specified and create the metric
+            metric_class, metric_config = get_class_from_dict('metrics', metric_config)
+            metric = metric_class(**metric_config)
+        metric.attach_world(self)
+        metric.reset()
+        if add_to_world:
+            self.metrics.append(metric)
+        return metric
 
     def setup(self, step_spawners=True):
         # create agents, spawners, behaviors, objects, goals
@@ -197,34 +238,14 @@ class World:
 
         # create agents
         for agent_config in self.config.agents:
-            if isinstance(agent_config, Agent):  # if it's already an agent, just add it
-                self.population.append(agent_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the agent
-                agent_class, agent_config = get_agent_class(agent_config)
-                self.population.append(agent_class.from_config(agent_config, self))
+            self.add_agent(agent_config)
 
         for spawner_config in self.config.spawners:
-            if isinstance(spawner_config, Spawner):  # if it's already a spawner, just add it
-                self.spawners.append(spawner_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the spawner
-                spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
-                self.spawners.append(spawner_class(self, **spawner_config))
+            self.add_spawner(spawner_config)
 
         for metric_config in self.config.metrics:
-            if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
-                self.metrics.append(metric_config)
-            else:  # otherwise, it's a config dict. find the class specified and create the metric
-                metric_class, metric_config = get_class_from_dict('metrics', metric_config)
-                self.metrics.append(metric_class(self, **metric_config))
+            self.add_metric(metric_config)
 
-        for b in self.metrics:
-            b.reset()
-            b.attach_world(self)
-
-        # self.metrics = config.metrics
-        # self.objects = config.objects
-        # self.goals = config.goals
-        # self.seed = config.seed
         if step_spawners:
             self.step_spawners()
 
@@ -415,12 +436,11 @@ def config_from_yamls(s: str | Any):
     return config_from_dict(d)
 
 
-def config_from_yaml(path: str | os.PathLike):
-    """Load a YAML file and return a config object."""
-    with open(path, "r") as f:
-        try:
-            return config_from_yamls(f)
-        except ValueError as err:
-            if str(err) == "World config must have a 'type' key.":
-                msg = f"YAML must have a 'type' entry to indicate the world type. Please add a 'type' to {path}"
-                raise ValueError(msg) from err
+def config_from_yaml(path: str | os.PathLike, env=None, **kwargs):
+    """Load a YAML file or template and return a config object."""
+    from ..yaml import load_yaml_template
+    d = load_yaml_template(path, env=None, **kwargs)
+    if 'type' not in d:
+        msg = f"YAML must have a 'type' entry to indicate the world type. Please add a 'type' to {path}"
+        raise ValueError(msg)
+    return config_from_dict(d)

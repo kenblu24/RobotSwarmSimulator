@@ -4,7 +4,7 @@ from .AbstractMetric import AbstractMetric
 
 
 class AlgebraicConn(AbstractMetric):
-    def __init__(self, history=100, r_disk_size=10):
+    def __init__(self, history=None, r_disk_size=10):
         super().__init__(name="Alg_Connectivity", history_size=history)
         self.population = None
         self.r_disk_size = r_disk_size

@@ -1,9 +1,13 @@
 import pygame
-from ..agent.DiffDriveAgent import DifferentialDriveAgent
+
+# breakpoint()
 from .abstractGUI import AbstractGUI
 from ..world.World import World
 import numpy as np
 import thorpy as tp
+
+# typing:
+from ..agent.DiffDriveAgent import DifferentialDriveAgent
 
 
 class FullControlGUI(AbstractGUI):
@@ -52,7 +56,6 @@ class FullControlGUI(AbstractGUI):
         tp.set_style_attr("font_size", 12)
         self.init_gui_elements()
 
-
     def emit(event_name):
         pass
 
@@ -88,5 +91,3 @@ class FullControlGUI(AbstractGUI):
         # TODO: Implement offset/zoom
         super().draw(screen)
         self.box_updater.update(events=self.events, mouse_rel=self.mouse_rel)
-
-

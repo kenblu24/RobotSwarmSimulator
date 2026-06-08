@@ -4,7 +4,7 @@ from .AbstractMetric import AbstractMetric
 
 
 class AverageSpeedBehavior(AbstractMetric):
-    def __init__(self, history=100):
+    def __init__(self, history=None):
         super().__init__(name="Average_Speed", history_size=history)
         self.population = None
 

@@ -3,7 +3,7 @@ from typing import List
 from .AbstractMetric import AbstractMetric
 
 class AngularMomentumBehavior(AbstractMetric):
-    def __init__(self, history=100):
+    def __init__(self, history=None):
         super().__init__(name="Angular_Momentum", history_size=history)
         self.population = None
         self.world_radius = 0

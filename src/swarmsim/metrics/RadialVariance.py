@@ -6,7 +6,7 @@ from .AbstractMetric import AbstractMetric
 class RadialVarianceMetric(AbstractMetric):
     __badvars__ = AbstractMetric.__badvars__ + ['population']  # references to population may cause pickling errors
 
-    def __init__(self, history=100, regularize=True):
+    def __init__(self, history=None, regularize=True):
         super().__init__(name="Radial_Variance", history_size=history)
         self.population = None
         self.world_radius = 0

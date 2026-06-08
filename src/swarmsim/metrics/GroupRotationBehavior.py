@@ -4,7 +4,7 @@ from .AbstractMetric import AbstractMetric
 
 class GroupRotationBehavior(AbstractMetric):
 
-    def __init__(self, history=100):
+    def __init__(self, history=None):
         super().__init__(name = "Group_Rotation", history_size=history)
         self.population = None
 

@@ -1,0 +1,28 @@
+---
+expected: true
+---
+type: "RectangularWorld"
+size: [5, 5]
+time_step: !np 1 / 40
+agents:
+    - type: "MazeAgent"
+      name: "agent1"
+      position: [3, 3]
+      angle: 3.14
+      agent_radius: 0.1
+      body_color: [255, 165, 0]
+      team: "Orange"
+      sensors:
+        - type: "BinaryFOVSensor"
+          theta: 0.45
+          distance: 2
+          # Test that sensor doesn't care about team
+          # target_team: "Blue"
+    - type: "MazeAgent"
+      position: [2, 3]
+      name: "agent2"
+      angle: 0.0
+      agent_radius: 0.1
+      team: "Green"
+      body_color: [0, 255, 0]
+...

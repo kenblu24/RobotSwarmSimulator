@@ -6,8 +6,12 @@ from .AngularMomentum import AngularMomentumBehavior
 from .SensorRotation import SensorRotation
 from .ScatterBehavior import ScatterBehavior
 from .GroupRotationBehavior import GroupRotationBehavior
-from .DistanceToGoal import DistanceToGoal
 from .AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
+from .EntityLen import EntityLen
+from .AndMetrics import AndMetrics
+from .StepsUntil import StepsUntil
+from .AnyAgent import AnyAgent
+from .JinjaMetric import JinjaMetric
 from .TotalCollisions import TotalCollisionsBehavior
 from .RadialVariance import RadialVarianceMetric
 from .Circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
@@ -23,7 +27,8 @@ from .BerlingerCircularity import (
     InstantKMHCircularity,
 )
 from .DistanceSizeRatio import DistanceSizeRatio
-from .DelaunayDispersal import Dispersal
+from .DelaunayDiffusion import DelaunayDiffusion
+from .Dispersion import InteragentDispersion, ExplodingDispersion
 
 __all__ = [
     "AbstractMetric",
@@ -34,9 +39,13 @@ __all__ = [
     "SensorRotation",
     "ScatterBehavior",
     "GroupRotationBehavior",
-    "DistanceToGoal",
     "PercentageAtGoal",
     "AgentsAtGoal",
+    "EntityLen",
+    "AndMetrics",
+    "StepsUntil",
+    "AnyAgent",
+    "JinjaMetric",
     "Circliness",
     "TotalCollisionsBehavior",
     "RadialVarianceMetric",
@@ -55,5 +64,7 @@ __all__ = [
     "InstantHyperSVDCircularity",
     "InstantKMHCircularity",
     "DistanceSizeRatio",
-    "Dispersal",
+    "DelaunayDiffusion",
+    "InteragentDispersion",
+    "ExplodingDispersion",
 ]
