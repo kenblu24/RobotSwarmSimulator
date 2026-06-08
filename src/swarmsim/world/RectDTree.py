@@ -13,8 +13,7 @@ def findOptimalSplit(starts, ends, forward=True, debug=False):
     if not forward:
         starts, ends = list(reversed(ends)), list(reversed(starts))
     
-    bestScore = 0
-    bestSplit = 0
+    bestSplit = {"score": -1}
 
     n = len(starts)
 
@@ -43,15 +42,15 @@ def findOptimalSplit(starts, ends, forward=True, debug=False):
         r = n - e # number of segments right of split
         d = n - i + e # number of segments entirely left or right of split
         score = min(d, l * 2, r * 2)
-
-        if bestScore < score:
+        
+        # score is greater or score is equal but difference between l & r is lesser
+        if bestSplit["score"] < score or (bestSplit["score"] == score and abs(bestSplit["l"] - bestSplit["r"]) > abs(l - r)): 
             if debug:
                 print("l", l, "r", r, "d", d, "score", score)
-            bestScore = score
-            bestSplit = i
+            bestSplit = {"i": i, "l": l, "r": r, "score": score}
     if debug:
-        print("bestSplit", bestSplit, "bestScore", bestScore)
-    return bestSplit, bestScore
+        print("bestSplit", bestSplit)
+    return bestSplit["i"], bestSplit["score"]
 
 class NTangle:
     def __init__(self, n, minimum, maximum):
@@ -92,7 +91,7 @@ class RectDNode:
         
         xls = sorted([max(rect.minimum[0], self.boundingBox.minimum[0]) for rect in self.contents])
         xrs = sorted([min(rect.maximum[0], self.boundingBox.maximum[0]) for rect in self.contents])
-        yts = sorted([max(rect.minimum[1], self.boundingBox.minimum[1]) for rect in self.contents])
+        yts = sorted([max(rect.minimum[1], self.boundingBox.minimum[1]) for rect in self.contents]) # remember that the y axis is inverted so the top is the minimum y
         ybs = sorted([min(rect.maximum[1], self.boundingBox.maximum[1]) for rect in self.contents])
 
         xf = findOptimalSplit(xls, xrs)#, debug=(self.depth < 1))
@@ -172,8 +171,12 @@ class RectDNode:
         yMax = self.boundingBox.maximum[1]
         boundingPoints = np.array([[xMin, yMin], [xMax, yMin], [xMax, yMax], [xMin, yMax]])
         for i in range(len(boundingPoints)):
-            pygame.draw.line(screen, (100, 0, 255, 50), boundingPoints[i - 1] * zoom + pan, boundingPoints[i] * zoom + pan, width=1)
+            pygame.draw.line(screen, (100, 0, 255, 50), boundingPoints[i - 1] * zoom + pan, boundingPoints[i] * zoom + pan, width=self.depth)
         
+        topLeft = np.array([xMin, yMin])
+        for i in range(self.depth):
+            pygame.draw.line(screen, (100, 0, 255, 50), (topLeft + np.array([self.depth - i, i])) * zoom + pan, (topLeft + np.array([self.depth - i, i + 1])) * zoom + pan, width=self.depth)
+
         if self.children:
             for child in self.children:
                 child.draw(screen, offset)

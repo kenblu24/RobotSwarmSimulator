@@ -316,7 +316,7 @@ class RectangularWorld(World):
         for metric in self.metrics:
             metric.draw(screen, offset)
         
-        self.objectTree.draw(screen, offset)
+        # self.objectTree.draw(screen, offset)
 
     def getNeighborsWithinDistance(self, center: T_Vec2, r, excluded=None) -> list:
         """
