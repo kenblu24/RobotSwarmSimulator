@@ -9,6 +9,7 @@ from .world.spawners.Spawner import Spawner
 from .world.spawners.AgentSpawner import AgentSpawner, PointAgentSpawner, UniformAgentSpawner
 from .config import associated_type, filter_unexpected_fields
 from .config import register_agent_type, register_world_type, register_dictlike_namespace, register_dictlike_type
+from .util.collider.CollisionMode import CollisionMode
 
 __all__ = [
     # ---
@@ -42,6 +43,8 @@ __all__ = [
     'AgentSpawner',
     'PointAgentSpawner',
     'UniformAgentSpawner',
+    # ---
+    'CollisionMode',
     # ---
     'print_debugversions',
     'version',
