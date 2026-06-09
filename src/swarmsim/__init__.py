@@ -5,6 +5,7 @@ from .agent.Agent import Agent, BaseAgentConfig
 from .agent.StaticAgent import StaticAgent, StaticAgentConfig
 from .agent.MazeAgent import MazeAgent, MazeAgentConfig
 from .agent.control.Controller import Controller
+from .sensors.Sensor import Sensor
 from .world.spawners.Spawner import Spawner
 from .world.spawners.AgentSpawner import AgentSpawner, PointAgentSpawner, UniformAgentSpawner
 from .config import associated_type, filter_unexpected_fields
@@ -36,6 +37,8 @@ __all__ = [
     'StaticAgentConfig',
     'MazeAgent',
     'MazeAgentConfig',
+    # ---
+    'Sensor',
     # ---
     'Controller',
     # ---
