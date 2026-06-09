@@ -349,6 +349,18 @@ class World:
 
         return output
 
+    def __getstate__(self):
+        """Returns the state of the world for pickling."""
+        state = self.__dict__.copy()
+        del state["jenv"]
+        return state
+
+    def __setstate__(self, state):
+        """Sets the state of the world from the pickled state."""
+        self.__dict__.update(state)
+        self.jenv = jinja.make_default_jinja_env()
+        self.jenv.globals['world'] = self
+
 
 def World_from_config(config: dict):
     """Returns a new world instance from the given config.
