@@ -11,6 +11,7 @@ from .world.spawners.AgentSpawner import AgentSpawner, PointAgentSpawner, Unifor
 from .config import associated_type, filter_unexpected_fields
 from .config import register_agent_type, register_world_type, register_dictlike_namespace, register_dictlike_type
 from .util.collider.CollisionMode import CollisionMode
+from .world.simulate import main as run_sim
 
 __all__ = [
     # ---
@@ -48,6 +49,8 @@ __all__ = [
     'UniformAgentSpawner',
     # ---
     'CollisionMode',
+    # ---
+    'run_sim',
     # ---
     'print_debugversions',
     'version',
