@@ -1,10 +1,10 @@
 from functools import partial
 import numpy as np
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 from typing import Sequence
 
 
-class JinjaMetric(AbstractMetric):
+class JinjaMetric(Metric):
 
     def __init__(
         self,
@@ -41,11 +41,11 @@ class JinjaMetric(AbstractMetric):
         if self._default != '__unset__':
             self.current_value = self._default
         self.time_activated = None
-        if isinstance(self.metric, AbstractMetric):
+        if isinstance(self.metric, Metric):
             self.metric.reset()
         if self.metrics is not None:
             for metric in self.metrics:
-                if isinstance(metric, AbstractMetric):
+                if isinstance(metric, Metric):
                     metric.reset()
 
     def attach_world(self, world):

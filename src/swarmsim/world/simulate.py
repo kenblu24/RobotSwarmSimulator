@@ -1,6 +1,6 @@
 import pygame
 from ..gui.agentGUI import DifferentialDriveGUI
-from .World import World_from_config, World
+from .World import world_from_config, World
 from ..util.timer import Timer
 
 screen = None
@@ -30,7 +30,7 @@ def main(
     if isinstance(world_config, World):
         world = world_config
     else:
-        world = World_from_config(world_config)
+        world = world_from_config(world_config)
 
     # screen must be global so that other modules can access + draw to the window
     global screen

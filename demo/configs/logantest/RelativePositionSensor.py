@@ -1,7 +1,7 @@
 import pygame
 import numpy as np
 
-from swarmsim.sensors.AbstractSensor import AbstractSensor
+from swarmsim.sensors.Sensor import Sensor
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -14,9 +14,9 @@ def distance(a, b):
     return np.linalg.norm(b - a)
 
 
-class RelativePositionSensor(AbstractSensor):
+class RelativePositionSensor(Sensor):
     # these are the variables that should be included in the config
-    config_vars = AbstractSensor.config_vars + [
+    config_vars = Sensor.config_vars + [
         'r', 'store_history',
     ]
 

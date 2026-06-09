@@ -3,7 +3,7 @@
 .. seealso::
     :doc:`/guide/structure`
 
-.. autoclass:: AbstractWorldConfig
+.. autoclass:: BaseWorldConfig
     :members:
     :undoc-members:
 
@@ -37,14 +37,14 @@ from ..util import jinja
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
-from ..metrics.AbstractMetric import AbstractMetric
+from ..metrics.Metric import Metric
 
 from typing import Any
 
 
 @filter_unexpected_fields
 @dataclass
-class AbstractWorldConfig:
+class BaseWorldConfig:
     size: tuple[float, ...] | np.ndarray = (0, 0)
     #: list : The list of metrics configs for the world
     metrics: list = field(default_factory=list)
@@ -129,6 +129,10 @@ class AbstractWorldConfig:
         return world_cls(self)
 
 
+class AbstractWorldConfig(BaseWorldConfig):
+    pass
+
+
 class World:
     """Base world class.
     """
@@ -142,7 +146,7 @@ class World:
         #: List of spawners which create agents or objects.
         self.spawners: list[Spawner] = []
         #: Metrics to calculate behaviors.
-        self.metrics: list[AbstractMetric] = []
+        self.metrics: list[Metric] = []
         #: The list of world objects.
         self._objects: HookList[Agent] = HookList()
         self.goals = config.goals
@@ -219,7 +223,7 @@ class World:
         return spawner
 
     def add_metric(self, metric_config, add_to_world=True):
-        if isinstance(metric_config, AbstractMetric):  # if it's already a metric, just add it
+        if isinstance(metric_config, Metric):  # if it's already a metric, just add it
             metric = metric_config
         else:  # otherwise, it's a config dict. find the class specified and create the metric
             metric_class, metric_config = get_class_from_dict('metrics', metric_config)
@@ -362,7 +366,7 @@ class World:
         self.jenv.globals['world'] = self
 
 
-def World_from_config(config: dict):
+def world_from_config(config: dict):
     """Returns a new world instance from the given config.
 
     Parameters
@@ -371,7 +375,7 @@ def World_from_config(config: dict):
         The config to create the world from.
 
         The config should either be a dict with a ``'type'`` key, or an instance
-        of :py:class:`AbstractWorldConfig` with an ``associated_type`` field
+        of :py:class:`BaseWorldConfig` with an ``associated_type`` field
         (which can be set using :py:deco:`~swarmsim.config.associated_type` ).
 
         The :doc:`/guide/config` will be used to lookup the class for the world type.

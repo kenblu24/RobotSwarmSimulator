@@ -136,7 +136,7 @@ class Agent:
         Raises
         ------
         TypeError
-            if the ``element`` is not a dict or :py:class:`AbstractSensor` instance.
+            if the ``element`` is not a dict or :py:class:`Sensor` instance.
         """
         if not self.config.controller:
             return
@@ -165,28 +165,28 @@ class Agent:
 
         For each ``element`` of ``config.sensors``, if the ``element`` is a
         dict with a ``type`` key, then it is created through the :doc:`/guide/config`
-        and then added to the agent's ``sensors`` list. :py:class:`AbstractSensor` instances
+        and then added to the agent's ``sensors`` list. :py:class:`Sensor` instances
         copied and added to the list.
 
         The new sensor instances are also given a back-reference to this agent via their
-        :py:meth:`~swarmsim.sensors.AbstractSensor.set_agent`.
+        :py:meth:`~swarmsim.sensors.Sensor.set_agent`.
 
         Raises
         ------
         TypeError
-            if the ``element`` is not a dict or :py:class:`AbstractSensor` instance.
+            if the ``element`` is not a dict or :py:class:`Sensor` instance.
         """
-        from ..sensors.AbstractSensor import AbstractSensor
+        from ..sensors.Sensor import Sensor
         for sensor_config in self.config.sensors:
             # if it's already a sensor, just add it
-            if isinstance(sensor_config, AbstractSensor):
+            if isinstance(sensor_config, Sensor):
                 sensor = copy.copy(sensor_config)
                 self.sensors.append(sensor)
                 if sensor.agent is None:
                     sensor.set_agent(self)
                 continue
             if isinstance(sensor_config, type):
-                raise TypeError("Expected a config dict or AbstractSensor instance but got a class instead.")
+                raise TypeError("Expected a config dict or Sensor instance but got a class instead.")
             # otherwise, it's a config dict. find the class specified and create the sensor
             sensor_cls, sensor_config = get_class_from_dict('sensors', sensor_config)
             self.sensors.append(sensor_cls(agent=self, **sensor_config))

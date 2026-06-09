@@ -91,8 +91,8 @@ def test_pickle(xThing, lTested = []):
 
 import pickle
 import dill
-from swarmsim.world.World import World, AbstractWorldConfig
-world = World(AbstractWorldConfig())
+from swarmsim.world.World import World, BaseWorldConfig
+world = World(BaseWorldConfig())
 
 # print(dill.detect.badobjects(world))
 

@@ -1,11 +1,11 @@
 import pygame
 import numpy as np
 import math
-from .AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 from typing import List
 
 
-class BinaryLOSSensor(AbstractSensor):
+class BinaryLOSSensor(Sensor):
     def __init__(self, agent=None, parent=None, angle=None, draw=True, history_length=50, width=1):
         super().__init__(agent=agent, parent=parent, draw=draw)
         self.current_state = 0

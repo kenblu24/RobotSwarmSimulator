@@ -1,8 +1,8 @@
 import ast
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class EntityLen(AbstractMetric):
+class EntityLen(Metric):
 
     def __init__(
         self,

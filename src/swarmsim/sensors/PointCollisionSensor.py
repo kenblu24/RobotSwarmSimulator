@@ -2,7 +2,7 @@ from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
 import math
-from .AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 from typing import List
 from ..util.collider.AABB import AABB
 from shapely.geometry import Polygon
@@ -40,8 +40,8 @@ def lineCircleIntersect(line, center, radius):
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 
-class PointCollisionSensor(AbstractSensor):
-    config_vars = AbstractSensor.config_vars + [
+class PointCollisionSensor(Sensor):
+    config_vars = Sensor.config_vars + [
         'distance', 'bias', 'fp', 'fn',
         'time_step_between_sensing', 'invert',
         'store_history', 'show', 'target_team'

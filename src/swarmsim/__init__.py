@@ -1,12 +1,64 @@
-# __all__ = [
+from .world.World import config_from_dict, config_from_yaml, config_from_yamls, world_from_config
+from .world.World import World, BaseWorldConfig
+from .world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+from .agent.Agent import Agent, BaseAgentConfig
+from .agent.StaticAgent import StaticAgent, StaticAgentConfig
+from .agent.MazeAgent import MazeAgent, MazeAgentConfig
+from .agent.control.Controller import Controller
+from .world.spawners.Spawner import Spawner
+from .world.spawners.AgentSpawner import AgentSpawner, PointAgentSpawner, UniformAgentSpawner
+from .config import associated_type, filter_unexpected_fields
+from .config import register_agent_type, register_world_type, register_dictlike_namespace, register_dictlike_type
 
-# ]
+__all__ = [
+    # ---
+    'associated_type',
+    'filter_unexpected_fields',
+    'register_agent_type',
+    'register_world_type',
+    'register_dictlike_namespace',
+    'register_dictlike_type',
+    # ---
+    'config_from_dict',
+    'config_from_yaml',
+    'config_from_yamls',
+    'world_from_config',
+    # ---
+    'World',
+    'BaseWorldConfig',
+    'RectangularWorld',
+    'RectangularWorldConfig',
+    # ---
+    'Agent',
+    'BaseAgentConfig',
+    'StaticAgent',
+    'StaticAgentConfig',
+    'MazeAgent',
+    'MazeAgentConfig',
+    # ---
+    'Controller',
+    # ---
+    'Spawner',
+    'AgentSpawner',
+    'PointAgentSpawner',
+    'UniformAgentSpawner',
+    # ---
+    'print_debugversions',
+    'version',
+]
 
+
+# get version from package metadata (pyproject.toml)
+# will only work if package is installed
+# NB: this number only changes when the package is pip installed/updated
 try:
     import importlib.metadata
     __version__ = importlib.metadata.version(__package__ or "swarmsim")
 except (ImportError, StopIteration):
     __version__ = "unknown"
+
+
+version = __version__
 
 
 def print_debugversions():

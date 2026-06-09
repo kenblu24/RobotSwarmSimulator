@@ -3,13 +3,14 @@ import math
 import copy
 import numpy as np
 from typing import List
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 from ..agent.MazeAgent import MazeAgent
 from ..util.geometry.Point import Point
 from ..util.geometry.ConvexHull import ConvexHull as CH
 from ..util.geometry.Polygon import Polygon
 
-class ConvexHull(AbstractMetric):
+
+class ConvexHull(Metric):
     def __init__(self, name="Convex_Hull_Area", history=None):
         super().__init__(name=name, history_size=history)
         self.population = None
@@ -43,7 +44,7 @@ class ConvexHull(AbstractMetric):
         self.polygon.draw(screen, color=(0, 255, 0), width=4)
 
 
-class InverseConvexHull(AbstractMetric):
+class InverseConvexHull(Metric):
     def __init__(self, name="Inverse_Hull_Area", history=None):
         super().__init__(name=name, history_size=history)
         self.population = None
