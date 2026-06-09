@@ -137,9 +137,6 @@ def main(
                             slowdown_level += 1
                     # elif event.key == pygame.K_w:
                     #     draw_world = not draw_world
-                    elif event.key == pygame.K_F3:
-                        from .WorldIO import WorldIO
-                        WorldIO.save_world(world)
                     elif event.key == pygame.K_F4:
                         from .subscribers.World2Gif import World2Gif
                         world_subscribers.append(World2Gif(duration=save_duration, every_ith_frame=save_every_ith_frame, time_per_frame=save_time_per_frame))
