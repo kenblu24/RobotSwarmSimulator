@@ -215,6 +215,7 @@ def slice_indices(s: slice, max_len: int = 0) -> list[int]:
 
 
 class HookList(list):
+    # need these to exist when unpickling (since __init__ is not called then)
     _add_callbacks = ()
     _del_callbacks = ()
 
