@@ -12,8 +12,6 @@ The world is simulated by the :py:mod:`~swarmsim.world.simulate` module.
 
 .. autosummary::
 
-   generation
-   goals
    objects
    spawners
    subscribers
@@ -21,7 +19,7 @@ The world is simulated by the :py:mod:`~swarmsim.world.simulate` module.
 Functions
 =========
 
-.. autofunction:: swarmsim.world.World.World_from_config
+.. autofunction:: swarmsim.world.World.world_from_config
    :noindex:
 
 .. autofunction:: swarmsim.world.World.config_from_dict

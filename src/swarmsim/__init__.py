@@ -1,3 +1,62 @@
+"""This is the root swarmsim module.
+
+See the :doc:`/api/index` for a description of the layout of this module.
+
+Most code in the package is organized into submodules, but some commonly used
+functions and classes are available directly in the root module.
+This page lists those.
+
+
+.. currentmodule:: swarmsim
+
+Functions
+=========
+
+.. autosummary::
+
+   ~config.associated_type
+   ~config.filter_unexpected_fields
+   ~config.register_agent_type
+   ~config.register_world_type
+   ~config.register_dictlike_namespace
+   ~config.register_dictlike_type
+   ~world.World.config_from_dict
+   ~world.World.config_from_yaml
+   ~world.World.config_from_yamls
+   ~world.World.world_from_config
+   run_sim
+
+Classes
+=======
+
+.. autosummary::
+
+   ~world.World.World
+   ~world.World.BaseWorldConfig
+   ~world.RectangularWorld.RectangularWorld
+   ~world.RectangularWorld.RectangularWorldConfig
+   ~agent.Agent.Agent
+   ~agent.Agent.BaseAgentConfig
+   ~agent.StaticAgent.StaticAgent
+   ~agent.StaticAgent.StaticAgentConfig
+   ~agent.MazeAgent.MazeAgent
+   ~agent.MazeAgent.MazeAgentConfig
+   ~sensors.Sensor.Sensor
+   ~agent.control.Controller.Controller
+   ~world.spawners.Spawner.Spawner
+   ~world.spawners.AgentSpawner.PointAgentSpawner
+   ~world.spawners.AgentSpawner.UniformAgentSpawner
+   ~util.collider.CollisionMode.CollisionMode
+
+Functions in this module
+========================
+
+.. autofunction:: swarmsim.print_debugversions
+
+
+"""
+
+
 from .world.World import config_from_dict, config_from_yaml, config_from_yamls, world_from_config
 from .world.World import World, BaseWorldConfig
 from .world.RectangularWorld import RectangularWorld, RectangularWorldConfig

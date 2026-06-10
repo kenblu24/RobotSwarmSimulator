@@ -38,7 +38,7 @@ Decorators
 
 .. seealso::
    There is no ``swarmsim.config.get_world_class`` function,
-   world type lookup is handled inside :py:mod:`~swarmsim.world.World.World_from_config`.
+   world type lookup is handled inside :py:mod:`~swarmsim.world.World.world_from_config`.
 
 """
 

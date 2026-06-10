@@ -11,7 +11,7 @@
     :members:
     :undoc-members:
 
-.. autofunction:: World_from_config
+.. autofunction:: world_from_config
 
 .. autofunction:: config_from_dict
 .. autofunction:: config_from_yaml
