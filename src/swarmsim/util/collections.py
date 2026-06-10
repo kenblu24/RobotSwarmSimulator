@@ -215,6 +215,9 @@ def slice_indices(s: slice, max_len: int = 0) -> list[int]:
 
 
 class HookList(list):
+    _add_callbacks = ()
+    _del_callbacks = ()
+
     def __init__(self, iterable=None, add_callbacks=None, del_callbacks=None):
         if iterable is None:
             iterable = []
