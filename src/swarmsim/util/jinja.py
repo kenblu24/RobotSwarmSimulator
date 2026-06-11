@@ -1,3 +1,4 @@
+from warnings import warn
 from collections import ChainMap
 
 from jinja2 import Environment as BaseEnvironment
@@ -16,6 +17,8 @@ import typing as t
 
 
 class TemplateExpression(BaseTemplateExpression):
+    # unmodified except we use __self__ to avoid name collisions
+    # otherwise, if 'self' in kwargs, __call__ will receive two 'self' arguments and fail
     def __call__(__self__, *args: t.Any, **kwargs: t.Any) -> t.Optional[t.Any]:
         context = __self__._template.new_context(dict(*args, **kwargs))
         consume(__self__._template.root_render_func(context))
@@ -49,8 +52,8 @@ class ContextualExpression(BaseTemplateExpression):
                 if __self__.update == "raise_undefined":
                     raise TemplateRuntimeError(msg)
                 elif __self__.update == "warn_undefined":
-                    __self__._parent.environment.logger.warning(msg)
-            elif __self__.update == "run_undefined":
+                    warn(msg, RuntimeWarning, stacklevel=2)
+            elif __self__.update in ("run_undefined", "always"):
                 __self__._parent.export_with(**argdict)
         elif __self__.update == "always":
             __self__._parent.export_with(**argdict)
@@ -134,6 +137,49 @@ class Template(BaseTemplate):
 
 class Environment(BaseEnvironment):
     template_class: t.Type[Template] = Template
+    global_modules: t.List[t.Any] = None
+
+    # modules can't be pickled.
+    # this system allows modules to be added to env.globals
+    def add_global_module(self, name: str, modulename: str | None = None):
+        import importlib
+        if self.global_modules is None:
+            self.global_modules = []
+        if modulename is None:
+            modulename = name
+        self.global_modules.append((name, modulename))
+        self.globals[name] = importlib.import_module(modulename)
+
+    def refresh_global_modules(self):
+        import importlib
+        if self.global_modules is None:
+            return
+        for name, modulename in self.global_modules:
+            self.globals[name] = importlib.import_module(modulename)
+
+    def remove_global_module(self, name: str):
+        if self.global_modules is None:
+            return
+        self.global_modules.remove((name, self.globals[name].__name__))
+        del self.globals[name]
+
+    # called when pickling. removes modules from globals before serializing object state.
+    def __getstate__(self):
+        from inspect import ismodule
+        state = super().__getstate__()
+        if 'globals' in state:
+            state['globals'] = {k: v for k, v in state['globals'].items() if not ismodule(v)}
+        return state
+
+    # re-imports modules after unpickling.
+    # the module names are already in self.global_modules so just need to import and add to globals.
+    def __setstate__(self, state):
+        try:
+            super().__setstate__(state)
+        except AttributeError:
+            # if we're unpickling a base class, we don't have a __setstate__ method
+            self.__dict__.update(state)
+        self.refresh_global_modules()
 
     def compile_expression(
         self, source: str, undefined_to_none: bool = True
@@ -197,12 +243,12 @@ def make_default_jinja_env(*args, **kwargs):
     env.filters['hex'] = hex
     env.filters['alltrue'] = all
     env.filters['anytrue'] = any
-    env.globals['np'] = np
-    env.globals['math'] = math
+    env.add_global_module('np', 'numpy')
+    env.add_global_module('math')
     return env
 
 
-def make_template_env(env=None, **kwargs):
+def make_template_env(env: t.Optional[Environment] = None, **kwargs):
     if env is None:
         env = make_default_jinja_env()
     env.block_start_string = '<%'
