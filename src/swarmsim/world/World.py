@@ -24,7 +24,7 @@ import os
 import pygame
 import numpy as np
 from collections.abc import Callable
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field, replace, is_dataclass
 
 from ..gui.abstractGUI import AbstractGUI
 from ..config.OutputTensorConfig import OutputTensorConfig
@@ -376,10 +376,11 @@ def world_from_config(config: dict):
     world_types = store.world_types
 
     if isinstance(config, dict):
-        if not config.get('associated_type', None):
+        world_type = config.get('associated_type', None) or config.get('type', None)
+        if world_type is None:
             raise Exception(_ERRMSG_MISSING_ASSOCIATED_TYPE)
-        if config['associated_type'] in world_types:
-            world_cls = world_types[config['type']]
+        if world_type in world_types:
+            world_cls = world_types[world_type]
         else:
             msg = f"Unknown world type: {config['associated_type']}"
             raise Exception(msg)
@@ -391,9 +392,13 @@ def world_from_config(config: dict):
             raise Exception(msg)
         world_cls = world_types[config.associated_type]
     if isinstance(world_cls, (list, tuple)):
-        world_cls, _config_cls = world_cls
-    if hasattr(world_cls, 'from_config'):
+        world_cls, config_cls = world_cls
+    else:
+        config_cls = None
+    if hasattr(world_cls, 'from_config') and is_dataclass(config):
         return world_cls.from_config(config)
+    elif hasattr(config_cls, 'from_dict') and isinstance(config, dict):
+        return world_cls(config_cls.from_dict(config))
     else:
         if not isinstance(config, dict):
             config = config.as_dict()
