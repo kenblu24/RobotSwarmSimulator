@@ -8,13 +8,13 @@ from swarmsim.agent.control.BinaryController import BinaryController
 from swarmsim.world.simulate import main
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
-from ...util import load_custom_yaml
-
+from ...helpers import load_custom_yaml
 
 
 wd = pl.Path(__file__).parent.parent.parent
 path = wd / "sensors" / "configs"
 yaml_files = path.glob("*.yaml")
+
 
 @pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
 def test_binary_controller(yaml_path: str) -> None:
@@ -43,6 +43,3 @@ def test_binary_controller(yaml_path: str) -> None:
         assert (actions == on_see).all(), f"{actions} != {on_see}"
     else:
         assert (actions == on_nothing).all()
-
-
-

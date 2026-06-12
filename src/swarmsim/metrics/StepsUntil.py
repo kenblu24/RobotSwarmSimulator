@@ -1,8 +1,8 @@
 import numpy as np
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class StepsUntil(AbstractMetric):
+class StepsUntil(Metric):
 
     def __init__(
         self,

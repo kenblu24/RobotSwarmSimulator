@@ -1,7 +1,7 @@
-from ..sensors.AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 
 
-class StaticSensor(AbstractSensor):
+class StaticSensor(Sensor):
     def __init__(self, parent=None):
         super(StaticSensor, self).__init__(parent=parent)
         self.current_state = 0

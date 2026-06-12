@@ -2,7 +2,7 @@ from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
 import math
-from .AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 from typing import List
 from ..util.collider.AABB import AABB
 from shapely.geometry import Polygon
@@ -17,8 +17,8 @@ import warnings
 import quads
 
 
-class Targeter(AbstractSensor):
-    config_vars = AbstractSensor.config_vars + [
+class Targeter(Sensor):
+    config_vars = Sensor.config_vars + [
         'distance', 'bias', 'fn', 'time_step_between_sensing',
         'target_mode', 'hold', 'attribute', 'store_history', 'show',
         'target_team', 'target_name', 'seed',

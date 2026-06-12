@@ -1,6 +1,6 @@
 import pygame
 from ..gui.agentGUI import DifferentialDriveGUI
-from .World import World_from_config, World
+from .World import world_from_config, World
 from ..util.timer import Timer
 
 screen = None
@@ -30,7 +30,7 @@ def main(
     if isinstance(world_config, World):
         world = world_config
     else:
-        world = World_from_config(world_config)
+        world = world_from_config(world_config)
 
     # screen must be global so that other modules can access + draw to the window
     global screen
@@ -137,9 +137,6 @@ def main(
                             slowdown_level += 1
                     # elif event.key == pygame.K_w:
                     #     draw_world = not draw_world
-                    elif event.key == pygame.K_F3:
-                        from .WorldIO import WorldIO
-                        WorldIO.save_world(world)
                     elif event.key == pygame.K_F4:
                         from .subscribers.World2Gif import World2Gif
                         world_subscribers.append(World2Gif(duration=save_duration, every_ith_frame=save_every_ith_frame, time_per_frame=save_time_per_frame))

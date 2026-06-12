@@ -36,7 +36,7 @@ import pygame.draw
 
 from ..agent.Agent import Agent
 
-from .World import World, AbstractWorldConfig
+from .World import World, BaseWorldConfig
 from ..config import associated_type, filter_unexpected_fields
 from ..util.timer import Timer
 from ..util.collider.AABB import AABB
@@ -86,7 +86,7 @@ def get_collision_config(collides: bool | str | None):
 @associated_type('RectangularWorld')
 @filter_unexpected_fields
 @dataclass
-class RectangularWorldConfig(AbstractWorldConfig):
+class RectangularWorldConfig(BaseWorldConfig):
     """Config dataclass for a RectangularWorld."""
 
     #: size of the world.

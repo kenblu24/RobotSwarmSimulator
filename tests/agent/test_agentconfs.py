@@ -3,6 +3,7 @@ from pytest_mock import MockerFixture
 
 import numpy as np
 from swarmsim.agent.Agent import Agent, BaseAgentConfig
+from swarmsim.util.collider.CollisionMode import CollisionMode
 from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from swarmsim.agent.control.BinaryController import BinaryController
 from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
@@ -26,7 +27,7 @@ class TestAgentConf:
             name="Agent_1",
             controller=controller,
             grounded=True,
-            collides=True,
+            collides=CollisionMode.DetectAndCorrect,
             sensors=[sensor],
             team="hunter"
         )
@@ -45,7 +46,7 @@ class TestAgentConf:
     def test_grounded(self):
         assert self.agent.grounded == self.bac.grounded
 
-    def test_collided(self):
+    def test_collision_mode(self):
         assert self.agent.collides == self.bac.collides
 
     def test_team(self):

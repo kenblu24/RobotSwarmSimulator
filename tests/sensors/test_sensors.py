@@ -6,7 +6,7 @@ from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 from swarmsim.world.simulate import main
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
-from ..util import load_custom_yaml
+from ..helpers import load_custom_yaml
 
 
 def stop_after_one_step(world: RectangularWorld) -> bool:
