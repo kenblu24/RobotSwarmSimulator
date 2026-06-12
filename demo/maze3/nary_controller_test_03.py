@@ -7,9 +7,8 @@ from swarmsim.agent.control.NaryController import NaryController
 from swarmsim.agent.MazeAgent import MazeAgent, MazeAgentConfig
 from swarmsim.world.World import AbstractWorldConfig
 from swarmsim.world.simulate import main as sim
-from swarmsim import PointAgentSpawner
 
-rwc = RectangularWorldConfig.from_yaml("demo/test.yaml")
+rwc = RectangularWorldConfig.from_yaml("demo/maze3/test3.yaml")
 world = RectangularWorld(rwc)
 
 sens_dist: float = 3
@@ -36,8 +35,7 @@ agent_config = MazeAgentConfig(
     angle=np.pi/2
 )
 agent = MazeAgent(agent_config, world)
-spawner = PointAgentSpawner(world, n=1, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
-world.spawners.append(spawner)
+world.population.append(agent)
 
 sim(world, start_paused=True)
 
