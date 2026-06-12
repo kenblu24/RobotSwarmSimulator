@@ -158,8 +158,8 @@ class RectangularWorld(World):
 
         self.physics = Physics(self)
 
-        self.population.addListener("append", self.connectPhysicsObject)
-        self.objects.addListener("append", self.connectPhysicsObject)
+        self.population.register_add_callback(self.connectPhysicsObject)
+        self.objects.register_add_callback(self.connectPhysicsObject)
         """float: :math:`\\Delta t` delta time (seconds)
 
         The time step, or delta time, is used by simulated objects and agents

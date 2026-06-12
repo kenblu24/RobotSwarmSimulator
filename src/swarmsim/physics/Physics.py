@@ -3,7 +3,6 @@ from pymunk import Vec2d
 import numpy as np
 # from ..world.RectangularWorld import RectangularWorld
 # from ..agent.Agent import Agent
-from ..world.objects.Wall import Wall
 # from ..world.objects.StaticObject import StaticObject, StaticObjectConfig
 from pymunk import Shape
 

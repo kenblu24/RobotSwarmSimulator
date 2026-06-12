@@ -6,7 +6,6 @@ import numpy as np
 import math
 from .AbstractSensor import AbstractSensor
 from typing import List
-from ..world.goals.Goal import CylinderGoal
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -173,7 +172,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
         else:
             return False
 
-    def checkForLOSCollisions(self, world: World) -> None:
+    def checkForLOSCollisions(self, world: RectangularWorld) -> None:
         self.time_since_last_sensing += 1
         if self.time_since_last_sensing % self.time_step_between_sensing != 0:
             # Our sensing rate occurs less frequently than our dt physics update, so we need to
@@ -186,7 +185,7 @@ class OccludedAgentFOVSensor(AbstractSensor):
         self.objectSensor.checkForLOSCollisions(world)
 
         # use world.quad that tracks agent positions to retrieve the agents within the minimal rectangle that contains the FOV sector
-        quadpoints = [point.data for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector(world)))]
+        quadpoints = [agent for point in world.quad.within_bb(quads.BoundingBox(*self.getAARectContainingSector(world))) for agent in point.data]
         # filter agents to those within the sensing radius
         bag = [agent for agent in quadpoints if self.withinRadiusExclusiveFast(sensor_origin, agent.getPosition(), self.r)]
 
