@@ -2,12 +2,13 @@ import math
 from typing import Tuple
 import numpy as np
 from typing import List
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 import matplotlib.pyplot as plt
 
-class SensorSignalBehavior(AbstractMetric):
 
-    def __init__(self, history=100, show=True, sensor_index=0):
+class SensorSignalBehavior(Metric):
+
+    def __init__(self, history=None, show=True, sensor_index=0):
         super().__init__(name="SensorSignal", history_size=history)
         self.world = None
         self.show = show

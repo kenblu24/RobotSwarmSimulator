@@ -31,7 +31,8 @@ class PID:
     d_smoothing = 1 / (2 * pi * 20)  # derivative smoothing (RC time constant)
     i_decay = 1 / (2 * pi * 20)  # decay time for integrator (RC time constant)
 
-    def __init__(self, p: float = 0, i: float = 0, d: float = 0, imax: int = 0):
+    def __init__(self, p: float = 0, i: float = 0, d: float = 0,
+                 imax: int = 0, min: float | None = None, max: float | None = None):
         """PID Class
 
         Parameters
@@ -53,6 +54,8 @@ class PID:
         self._last_derivative = float("nan")
         self._integrator = 0
         self._last_t = 0
+        self._min = min
+        self._max = max
 
     def __call__(self, error, time=None, dt=None):
         return self.get_pid(error, time, dt)
@@ -111,6 +114,11 @@ class PID:
             if isnan(self._integrator):
                 self.reset_I()
             output += self._integrator
+
+        if self._min is not None:
+            output = max(output, self._min)
+        if self._max is not None:
+            output = min(output, self._max)
         return output
 
     def reset_I(self):

@@ -4,6 +4,8 @@ The RectangularWorld is a 2D world.
 
 It is currently the only world type available.
 
+.. inheritance-diagram:: RectangularWorld
+
 Config Class
 ------------
 
@@ -34,12 +36,10 @@ import pygame.draw
 
 from ..agent.Agent import Agent
 
-from .World import World, AbstractWorldConfig
+from .World import World, BaseWorldConfig
 from ..config import associated_type, filter_unexpected_fields
 from ..util.timer import Timer
 from ..util.collider.AABB import AABB
-from .goals.Goal import CylinderGoal
-from .objects.Wall import Wall
 
 import quads
 
@@ -87,7 +87,7 @@ def get_collision_config(collides: bool | str | None):
 @associated_type('RectangularWorld')
 @filter_unexpected_fields
 @dataclass
-class RectangularWorldConfig(AbstractWorldConfig):
+class RectangularWorldConfig(BaseWorldConfig):
     """Config dataclass for a RectangularWorld."""
 
     #: size of the world.
@@ -132,9 +132,9 @@ def minMax(arr):
     return minimum, maximum
 
 class RectangularWorld(World):
-    
+
     def __init__(self, config: RectangularWorldConfig, initialize=True):
-        self.maxAgentRadius = 0
+        self.max_agent_r = 0
         # if config is None:
         #     raise Exception("RectangularWorld must be instantiated with a WorldConfig class")
 
@@ -169,7 +169,7 @@ class RectangularWorld(World):
 
         It does not directly determine how fast the simulation runs, or the FPS.
         """
-        self.population.addListener("append", self.updateMaxRadius)
+        self.population.register_add_callback(self.update_max_agent_r)
 
         #: Agent : currently selected agent.
         self.selected = None
@@ -180,26 +180,35 @@ class RectangularWorld(World):
 
         if initialize:
             self.setup_objects(config.objects)
+            self.update_quadtree()
 
     # update the position of all agents in the quad tree (call this method AFTER updating positions in the tick)
-    def updateQuad(self):
+    def update_quadtree(self):
         # we don't need to do all this if there are no agents
         if not self.population:
+            self.quad = None
             return
-        
+
         # procedure to find the bounds of the quad
-        xMin, xMax = minMax([agent.pos[0] for agent in self.population])
-        yMin, yMax = minMax([agent.pos[1] for agent in self.population])
-        middle = (np.trunc((xMin + xMax) / 2), np.trunc((yMin + yMax) / 2))
+        positions = np.array([agent.pos for agent in self.population])
+        mins = np.min(positions, axis=0)
+        maxs = np.max(positions, axis=0)
+        wh = maxs - mins
+        quadsize = np.ceil(wh) + 4
+        middle = (mins + maxs) / 2
+        quadcenter = np.ceil(middle)
 
         # create quad that nicely contains the current population
-        newQuad = quads.QuadTree(middle, np.ceil(xMax - xMin) + 4, np.ceil(yMax - yMin) + 4)
-        
+        qt = quads.QuadTree(quadcenter.tolist(), *quadsize)
+
         # add the agents to the quad
         for agent in self.population:
-            newQuad.insert(point=agent.pos.tolist(), data=agent)
-        self.quad = newQuad
-
+            pos = agent.pos.tolist()
+            if (existing := qt.find(pos)):
+                existing.data.append(agent)
+            else:
+                qt.insert(point=pos, data=[agent])
+        self.quad = qt
     # call this method AFTER self.objects is finalized
     def createObjectTree(self):
         xVals = []
@@ -261,12 +270,12 @@ class RectangularWorld(World):
     # override the inherited setup function to call updateQuad() after setup
     def setup(self, step_spawners=True):
         super().setup(step_spawners)
-        self.updateQuad()
+        self.update_quadtree()
         self.createObjectTree()
 
-    def updateMaxRadius(self, agent):
-        if hasattr(agent, "radius") and self.maxAgentRadius < agent.radius:
-            self.maxAgentRadius = agent.radius
+    def update_max_agent_r(self, agent):
+        if hasattr(agent, "radius") and self.max_agent_r < agent.radius:
+            self.max_agent_r = agent.radius
 
     def step_agents(self):
         for agent in self.population:
@@ -275,8 +284,7 @@ class RectangularWorld(World):
                 check_for_agent_collisions=self.preventAgentCollisions,
                 world=self,
             )
-            self.handleGoalCollisions(agent)
-    
+
     def step(self):
         self.total_steps += 1
 
@@ -287,7 +295,7 @@ class RectangularWorld(World):
         if self.usePhysics:
             self.physics.step() # this is the difference from the superclass's step
 
-        self.updateQuad() # update the position of agents in the quad tree
+        self.update_quadtree() # update the position of agents in the quad tree
 
         self.step_metrics()
 
@@ -296,13 +304,6 @@ class RectangularWorld(World):
         if offset is None:
             offset = (self.pos, self.zoom)
         # pan, zoom = np.asarray(offset[0], dtype=np.int32), offset[1]
-        # if self.config.show_walls:
-        #     p = self.config.padding * zoom
-        #     size = np.asarray(self.config.size) * zoom
-        #     pad = np.array((p, p))
-        #     a = pan + pad  # upper left corner
-        #     b = pan + size - pad * 2
-        #     pygame.draw.rect(screen, (200, 200, 200), pygame.Rect(a, b), 1)
 
         for world_obj in self.objects:
             world_obj.draw(screen, offset)
@@ -418,33 +419,11 @@ class RectangularWorld(World):
         # padding = self.padding
 
         old_x, old_y = agent.get_x_pos(), agent.get_y_pos()
-
-        # # Prevent Left Collisions
-        # agent.set_x_pos(max(agent.radius + padding, agent.get_x_pos()))
-
-        # # Prevent Right Collisions
-        # agent.set_x_pos(min((self.bounded_width - agent.radius - padding), agent.get_x_pos()))
-
-        # # Prevent Top Collisions
-        # agent.set_y_pos(max(agent.radius + padding, agent.get_y_pos()))
-
-        # # Prevent Bottom Collisions
-        # agent.set_y_pos(min((self.bounded_height - agent.radius - padding), agent.get_y_pos()))
-
-        # agent.angle += (math.pi / 720)
         self.handleWallCollisions(agent)
 
         if agent.get_x_pos() != old_x or agent.get_y_pos() != old_y:
             return True
         return False
-
-    def handleGoalCollisions(self, agent):
-        for goal in self.goals:
-            if isinstance(goal, CylinderGoal):
-                correction = agent.build_collider().collision_then_correction(goal.get_collider())
-                if correction is not None:
-                    agent.set_x_pos(agent.get_x_pos() + correction[0])
-                    agent.set_y_pos(agent.get_y_pos() + correction[1])
 
     def handleWallCollisions(self, agent: StaticAgent):
         # Check for distances between the agent and the line segments

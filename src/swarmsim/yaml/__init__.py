@@ -16,8 +16,8 @@ Functions
 
 .. autofunction:: swarmsim.yaml.safe_load
 
-    This loads YAML similarly to how ``ruamel.yaml``'s safe loader does, in that it ignores
-    non-standard tags. It also handles recursively defined anchors/aliases.
+    This loads YAML similarly to how ``ruamel.yaml``'s safe loader does, only in that it
+    ignores non-standard tags. It also handles recursively defined anchors/aliases.
 
 .. autofunction:: swarmsim.yaml.dump
 
@@ -45,6 +45,7 @@ import yaml
 
 from .mathexpr import construct_numexpr
 from .include import IncludeLoader, construct_include
+from .template import load_yaml_template, TemplateYAMLLoader
 from .unknown import Tagged, construct_undefined, register_undefined
 from .pathlib_representer import pathlib, represent_path
 from .np_representer import numpy, represent_ndarray
@@ -52,8 +53,21 @@ from .np_representer import numpy, represent_ndarray
 from functools import partial
 
 yaml.add_constructor("!np", construct_numexpr, IncludeLoader)
+yaml.add_constructor("!np", construct_numexpr, TemplateYAMLLoader)
 
-load = partial(yaml.load, Loader=IncludeLoader)
+
+def load(stream, name=None, loader_cls=IncludeLoader):
+    """
+    Parse the first YAML document in a stream
+    and produce the corresponding Python object.
+    """
+    loader = loader_cls(stream, name=name)
+    try:
+        return loader.get_single_data()
+    finally:
+        loader.dispose()
+
+
 load_all = partial(yaml.load_all, Loader=IncludeLoader)
 
 

@@ -1,10 +1,10 @@
 import numpy as np
 from typing import List
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class ScatterBehavior(AbstractMetric):
-    def __init__(self, history=100, regularize=True):
+class ScatterBehavior(Metric):
+    def __init__(self, history=None, regularize=True):
         super().__init__(name="Scatter", history_size=history)
         self.population = None
         self.world_radius = 0

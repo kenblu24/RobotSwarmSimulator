@@ -35,6 +35,7 @@ from ..util.collider.Collider import CircularCollider, PolyCollider
 # typing
 from typing import override
 from ..world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+from ..util.collider.CollisionMode import CollisionMode
 
 
 @associated_type("StaticAgent")
@@ -50,7 +51,7 @@ class StaticAgentConfig(BaseAgentConfig):
     #: bool: Whether the body is filled.
     body_filled: bool = False
     #: bool | int: Whether the agent collides with other agents.
-    collides: bool | int = True
+    collides: int | str | CollisionMode = CollisionMode.DetectAndCorrect
     #: list[tuple[float, float]] | np.ndarray | str: The points of the agent shape.
     #: If points is empty, the agent will be a circle.
     points: list[tuple[float, float]] | np.ndarray | str = field(default_factory=list)

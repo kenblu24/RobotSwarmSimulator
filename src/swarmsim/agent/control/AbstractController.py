@@ -39,5 +39,8 @@ class AbstractController:
     def get_actions(self, agent):
         pass
 
+    def draw(self, screen, offset):
+        pass
+
     def as_config_dict(self):
         return {}

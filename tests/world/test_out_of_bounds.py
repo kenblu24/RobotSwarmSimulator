@@ -2,11 +2,12 @@ from pathlib import Path
 
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
-from ..util import load_custom_yaml
+from ..helpers import load_custom_yaml
 
 
 def stop_after_one_step(world: RectangularWorld, n_frames: int) -> bool:
     return world.total_steps == n_frames
+
 
 def test_out_of_bounds() -> None:
     yaml_path: Path = Path(__file__).parent / "out_of_bounds_world.yaml"
