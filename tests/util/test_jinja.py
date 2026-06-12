@@ -49,6 +49,39 @@ def test_pickle_env_module(default_env):
         env.compile_expression('math.pi')()
 
 
+def test_pickle_expression(default_env):
+    expr = default_env.compile_expression('1 + 1 + x')
+    import pickle
+    p = pickle.dumps(expr)
+    assert expr(x=2) == 4
+    expr2 = pickle.loads(p)
+    assert expr2(x=2) == 4
+
+
+def test_pickle_expression_nomodules(default_env):
+    modules_to_remove = [n for n, _m in default_env.global_modules]
+    for n in modules_to_remove:
+        default_env.remove_global_module(n)
+    expr = default_env.compile_expression('1 + 1 + x')
+    import pickle
+    p = pickle.dumps(expr)
+    assert expr(x=2) == 4
+    expr2 = pickle.loads(p)
+    assert expr2(x=2) == 4
+
+
+def test_pickle_expression_recursive_reference(default_env):
+    d = {'foo': 1}
+    default_env.globals['test'] = d
+    expr = default_env.compile_expression('test["foo"] + x')
+    d['expr'] = expr
+    import pickle
+    p = pickle.dumps(expr)
+    assert expr(x=2) == 3
+    expr2 = pickle.loads(p)
+    assert expr2(x=2) == 3
+
+
 def test_load_custom_template(template_env):
     res = load_template("tests/util/helloworld_custom.jinja", env=template_env)
     assert res == "Hello, World!"

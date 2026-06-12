@@ -70,6 +70,7 @@ class ContextualExpression(BaseTemplateExpression):
 class Template(BaseTemplate):
     _context = Undefined  # HACK: should be set in __init__
     saved_module = None
+    USE_CLOUDPICKLE = True
 
     def compile_ctxpr(self, source: str, undefined_to_none: bool = True, update: str = "raise_undefined"):
         # from jijna2.environment.compile_expression()
@@ -129,6 +130,81 @@ class Template(BaseTemplate):
     def export_with(__self__, *args, save_module=True, **kwargs):
         __self__.export_with_context(__self__.new_context(dict(*args, **kwargs)),
                                      save_module=save_module)
+
+    def __reduce_ex__(self, protocol):
+        from inspect import ismodule
+        state = super().__getstate__().copy()
+        d = dict(state['globals'])
+        modules = {k: v.__name__ for k, v in d.items() if ismodule(v)}
+        state['globals'] = {k: v for k, v in d.items() if not ismodule(v)}
+        state['__modules__'] = modules
+
+        if self.USE_CLOUDPICKLE:
+            from cloudpickle import Pickler, dumps
+            from cloudpickle.cloudpickle import _function_getstate
+
+            # dummy class so we can use Pickler._function_getnewargs as static
+            class Dummy:
+                globals_ref = {}
+
+            # extract function defaults which may contain references to things outside current scope
+            newargs = Pickler._function_getnewargs(Dummy(), self.root_render_func)
+            func_state = _function_getstate(self.root_render_func)
+            state['__root_render_func__'] = dumps(newargs, protocol=protocol)  # cloudpickle the code
+            state['__root_render_func_state__'] = func_state  # let regular pickler handle this
+            del state['root_render_func']
+        return self._from_pickle, (state,)
+        # return super().__getstate__()
+
+    @classmethod
+    def _from_pickle(
+        cls,
+        state,
+        closure=None,
+    ):
+        import importlib
+        from pickle import loads
+        func = state.pop('root_render_func', None)
+        func_newargs = state.pop('__root_render_func__', None)
+        func_state = state.pop('__root_render_func_state__', None)
+        environment = state.pop('environment')
+        globals_ = state.pop('globals')
+        modules = state.pop('__modules__', {})
+
+        # here's what cloudpickle's function reducer would usually return
+        # (_make_function, newargs, state, None, None, _function_setstate)
+        # load pickled function kinda like cloudpickle would:
+        if func_newargs is not None and func_state is not None:
+            from cloudpickle.cloudpickle import _function_setstate, _make_function
+            func_newargs = loads(func_newargs)  # load pickled code obj
+            root_render_func = _make_function(*func_newargs)
+            _function_setstate(root_render_func, func_state)
+
+        if func is not None:  # this works if template was saved using dill/cloudpickle
+            root_render_func = loads(func)
+
+        namespace = {
+            'name': state.pop('name'),
+            '__file__': state.pop('filename'),
+            'blocks': state.pop('blocks'),
+            'root': root_render_func,
+            'debug_info': state.pop('_debug_info'),
+        }
+
+        namespace['root'] = root_render_func
+
+        self = cls._from_namespace(environment, namespace, globals_)
+
+        try:
+            super().__setstate__(state)
+        except AttributeError:
+            # if we're unpickling a base class, we don't have a __setstate__ method
+            self.__dict__.update(state)
+        for k, v in modules.items():
+            self.globals[k] = importlib.import_module(v)
+
+        return self
+
 
     @property
     def has_cached_context(self):

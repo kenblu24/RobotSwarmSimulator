@@ -30,6 +30,7 @@ dependencies = [
     "pillow",
     "pygame-ce",
     "PyYAML>=6.0.1",
+    "cloudpickle",  # used for jinja templates only
     "scipy",
     "scikit-learn",
     "thorpy",
