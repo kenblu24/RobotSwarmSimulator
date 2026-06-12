@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="600cm"
+   height="600cm"
+   viewBox="0 0 6000 6000"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="../../projects/RobotSwarmSimulator/maze.svg"
+   inkscape:export-xdpi="25.656567"
+   inkscape:export-ydpi="25.656567"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="maze.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="false"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="cm"
+     showgrid="true"
+     inkscape:zoom="0.35377353"
+     inkscape:cx="771.68012"
+     inkscape:cy="873.44014"
+     inkscape:window-width="1078"
+     inkscape:window-height="1029"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       id="grid2"
+       units="cm"
+       originx="0"
+       originy="0"
+       spacingx="499.99999"
+       spacingy="499.99999"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect1"
+       width="25"
+       height="5"
+       x="0"
+       y="0"
+       inkscape:export-filename="out-maze.svg"
+       inkscape:export-xdpi="25.656567"
+       inkscape:export-ydpi="25.656567" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect2"
+       width="30"
+       height="5"
+       x="30"
+       y="0" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect3"
+       width="5"
+       height="55"
+       x="0"
+       y="5" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect5"
+       width="5"
+       height="50"
+       x="55"
+       y="5" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect6"
+       width="40"
+       height="5"
+       x="10"
+       y="10" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect7"
+       width="5"
+       height="20"
+       x="10"
+       y="15" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect8"
+       width="35"
+       height="5"
+       x="20"
+       y="20" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect9"
+       width="35"
+       height="5"
+       x="15"
+       y="30" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect10"
+       width="5"
+       height="15"
+       x="45"
+       y="35" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect11"
+       width="10"
+       height="5"
+       x="5"
+       y="40" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect12"
+       width="25"
+       height="5"
+       x="20"
+       y="40" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect13"
+       width="5"
+       height="10"
+       x="25"
+       y="45" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect14"
+       width="5"
+       height="5"
+       x="35"
+       y="50" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect15"
+       width="25"
+       height="5"
+       x="35"
+       y="55" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect16"
+       width="25"
+       height="5"
+       x="5"
+       y="55" />
+  </g>
+</svg>

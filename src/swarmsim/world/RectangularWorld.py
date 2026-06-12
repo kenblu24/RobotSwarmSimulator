@@ -43,6 +43,9 @@ from ..util.collider.AABB import AABB
 
 import quads
 
+from ..physics.Physics import Physics, snapPhysicsToAgent
+from .RectDTree import RectDNode, NTangle, PolygonBox
+
 # typing
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -118,6 +121,16 @@ class RectangularWorldConfig(BaseWorldConfig):
         # self.init_type.rescale(zoom)
 
 
+def minMax(arr):
+    minimum = arr[0]
+    maximum = arr[0]
+    for e in arr:
+        if e < minimum:
+            minimum = e
+        if maximum < e:
+            maximum = e
+    return minimum, maximum
+
 class RectangularWorld(World):
 
     def __init__(self, config: RectangularWorldConfig, initialize=True):
@@ -139,8 +152,14 @@ class RectangularWorld(World):
         self.mouse_position = np.array([0, 0])
         self._mouse_dragging_last_pos = np.array([0.0, 0.0])
 
+        self.usePhysics = True
+
         self.dt = config.time_step
 
+        self.physics = Physics(self)
+
+        self.population.register_add_callback(self.connectPhysicsObject)
+        self.objects.register_add_callback(self.connectPhysicsObject)
         """float: :math:`\\Delta t` delta time (seconds)
 
         The time step, or delta time, is used by simulated objects and agents
@@ -190,6 +209,29 @@ class RectangularWorld(World):
             else:
                 qt.insert(point=pos, data=[agent])
         self.quad = qt
+    # call this method AFTER self.objects is finalized
+    def createObjectTree(self):
+        xVals = []
+        yVals = []
+        for obj in self.objects:
+            xVals.extend([p[0] for p in obj.points])
+            yVals.extend([p[1] for p in obj.points])
+        xmm = minMax(xVals)
+        ymm = minMax(yVals)
+        self.objectTree = RectDNode(NTangle(2, (xmm[0], ymm[0]), (xmm[1], ymm[1])), capacity=3, depth=7)
+        self.objectTree.insert([PolygonBox(obj, obj.points) for obj in self.objects])
+        # self.objectTree.print()
+
+    def connectPhysicsObject(self, agent):
+        if agent.grounded:
+            self.physics.createStaticBody(agent)
+        else:
+            agent.physobj = self.physics.createAgentBody(agent)
+
+    def physicsSnap(self):
+        for agent in self.population:
+            if hasattr(agent, "physobj"):
+                snapPhysicsToAgent(agent)
 
     def setup_objects(self, objects):
         StaticObject, StaticObjectConfig = store.agent_types['StaticObject']
@@ -229,6 +271,7 @@ class RectangularWorld(World):
     def setup(self, step_spawners=True):
         super().setup(step_spawners)
         self.update_quadtree()
+        self.createObjectTree()
 
     def update_max_agent_r(self, agent):
         if hasattr(agent, "radius") and self.max_agent_r < agent.radius:
@@ -249,7 +292,10 @@ class RectangularWorld(World):
         self.step_agents()
         self.step_objects()
 
-        self.update_quadtree()  # update the position of agents in the quad tree
+        if self.usePhysics:
+            self.physics.step() # this is the difference from the superclass's step
+
+        self.update_quadtree() # update the position of agents in the quad tree
 
         self.step_metrics()
 
@@ -270,6 +316,8 @@ class RectangularWorld(World):
 
         for metric in self.metrics:
             metric.draw(screen, offset)
+        
+        # self.objectTree.draw(screen, offset)
 
     def getNeighborsWithinDistance(self, center: T_Vec2, r, excluded=None) -> list:
         """
