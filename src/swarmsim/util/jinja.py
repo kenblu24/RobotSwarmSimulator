@@ -1,3 +1,45 @@
+""" Custom modifications to Jinja templating engine.
+
+.. currentmodule:: swarmsim.util.jinja
+
+This module adjusts and extends the behavior of the Jinja2 templating engine.
+
+.. seealso::
+
+    This module is used with our custom YAML loader and config system.
+    :doc:`/guide/yaml`
+    :doc:`/guide/config`
+    :py:mod:`yaml`
+
+    It is also used by the :py:mod:`JinjaMetric` module.
+    :py:mod:`JinjaMetric`
+
+.. autoclass:: Environment
+    :members:
+    :undoc-members:
+
+.. autoclass:: Template
+    :members:
+    :undoc-members:
+
+.. autoclass:: ContextualExpression
+    :members:
+    :undoc-members:
+
+.. autoclass:: TemplateExpression
+    :members:
+    :undoc-members:
+
+.. autofunction:: make_default_jinja_env
+
+.. autofunction:: make_template_env
+
+.. autofunction:: load_template
+
+.. autofunction:: load_template_ctx
+
+"""
+
 from warnings import warn
 from collections import ChainMap
 
@@ -117,24 +159,75 @@ class Template(BaseTemplate):
         return ContextualExpression(expression_template, undefined_to_none, parent=self, update=update)
 
     def run_get_exports(self, *args, **kwargs):
+        """Compile and render the template and get exported variables.
+
+        Parameters
+        ----------
+        *args
+            Positional arguments to pass to the template.
+        **kwargs
+            Keyword arguments to pass to the template. These become variables
+            that can be accessed in the template.
+
+        Returns
+        -------
+        dict
+            Dictionary with names and values of variables set in the template.
+        """
         ctx = self.new_context(dict(*args, **kwargs))
         consume(self.root_render_func(ctx))
         return ctx.get_exported()
 
     def export_with_context(self, context, save_module=True):
+        """Render the template with injected context and save the exported variables.
+
+        The results are placed in :py:attr:`_context` and :py:attr:`saved_module` attributes.
+
+        Parameters
+        ----------
+        context : :py:class:`jinja2.runtime.Context`
+            A context object to run the template with.
+        save_module : bool, default=True
+            If True, save the module object that was created during the render.
+
+        Returns
+        -------
+        None
+        """
         body_stream = list(self.root_render_func(context))
         self._context = context.get_exported()
         if save_module:
             self.saved_module = TemplateModule(self, context, body_stream)
 
     def export_with(__self__, *args, save_module=True, **kwargs):
+        """Render the template with keyword arguments and save the exported variables.
+
+        The results are placed in :py:attr:`_context` and :py:attr:`saved_module` attributes.
+
+        Parameters
+        ----------
+        *args
+            Positional arguments to pass to the template.
+        save_module : bool, default=True
+            If True, save the module object that was created during the render.
+        **kwargs
+            Keyword arguments to pass to the template. These become variables
+            that can be accessed in the template.
+
+        Returns
+        -------
+        None
+        """
         __self__.export_with_context(__self__.new_context(dict(*args, **kwargs)),
                                      save_module=save_module)
 
     def __reduce_ex__(self, protocol):
+        # allow Template to be pickled
         from inspect import ismodule
         state = super().__getstate__().copy()
         d = dict(state['globals'])
+        # remove modules from state because they can't be pickled
+        # instead, save the module names
         modules = {k: v.__name__ for k, v in d.items() if ismodule(v)}
         state['globals'] = {k: v for k, v in d.items() if not ismodule(v)}
         state['__modules__'] = modules
@@ -153,9 +246,15 @@ class Template(BaseTemplate):
             state['__root_render_func__'] = dumps(newargs, protocol=protocol)  # cloudpickle the code
             state['__root_render_func_state__'] = func_state  # let regular pickler handle this
             del state['root_render_func']
-        return self._from_pickle, (state,)
-        # return super().__getstate__()
 
+        # USE_CLOUDPICKLE=False implies root_render_func doesn't need to be removed from state
+        # and dill/cloudpickle will handle it like normal
+
+        # return unpickler function, positional args, state, list, dict, closure
+        # https://docs.python.org/3/library/pickle.html#object.__reduce__
+        return self._from_pickle, (state,)
+
+    # unpickler calls this
     @classmethod
     def _from_pickle(
         cls,
@@ -164,7 +263,9 @@ class Template(BaseTemplate):
     ):
         import importlib
         from pickle import loads
+        # try retrieving root_render_func from state
         func = state.pop('root_render_func', None)
+        # try retrieving pickled function from state
         func_newargs = state.pop('__root_render_func__', None)
         func_state = state.pop('__root_render_func_state__', None)
         environment = state.pop('environment')
@@ -183,6 +284,7 @@ class Template(BaseTemplate):
         if func is not None:  # this works if template was saved using dill/cloudpickle
             root_render_func = loads(func)
 
+        # this is used in Template._from_namespace
         namespace = {
             'name': state.pop('name'),
             '__file__': state.pop('filename'),
@@ -195,11 +297,13 @@ class Template(BaseTemplate):
 
         self = cls._from_namespace(environment, namespace, globals_)
 
+        # set any remaining instance state
         try:
             super().__setstate__(state)
         except AttributeError:
             # if we're unpickling a base class, we don't have a __setstate__ method
             self.__dict__.update(state)
+        # import any modules that were saved in state
         for k, v in modules.items():
             self.globals[k] = importlib.import_module(v)
 
