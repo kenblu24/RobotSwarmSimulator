@@ -61,6 +61,7 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/', None),
     'numba': ('https://numba.readthedocs.io/en/stable', None),
     'cuquantum': ('https://docs.nvidia.com/cuda/cuquantum/latest', None),
+    'jinja2': ('https://jinja.palletsprojects.com/en/stable/', None),
     # blocked by data-apis/array-api#428
     # 'array-api': ('https://data-apis.org/array-api/2021.12/', None),
 }

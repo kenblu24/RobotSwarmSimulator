@@ -139,6 +139,8 @@ class World:
     def __init__(self, config):
         self.config = config
         config = replace(config)
+        #: The Jinja :py:class:`~swarmsim.util.jinja.Environment` used to compile
+        #: expressions in the world's :py:attr:`stop_at` attribute.
         self.jenv = jinja.make_default_jinja_env()
         self.jenv.globals['world'] = self
         #: List of agents in the world.
@@ -174,6 +176,33 @@ class World:
 
     @property
     def stop_at(self):
+        """Defines a stopping condition for the :py:mod:`simulator <swarmsim.run_sim>`.
+
+        The condition can be an int, Jinja expression, or callable.
+
+        If the condition is an int, the simulation will return once the world's
+        :py:attr:`total_steps` exceeds it.
+
+        If the condition supports :py:class:`~collections.abc.Callable`, it must take the world as its only argument
+        and return a value that supports ``__bool__``. It will be called once before
+        each :py:meth:`step` and if it returns ``True``, the simulation will return.
+
+        If the condition is a :any:`str`, it will be compiled to a Jinja expression
+        using the world's :py:attr:`Jinja environment <jenv>`.
+        It will have access to the ``world`` and be evaluated before each
+        :py:meth:`step`. If it evaluates as truthy, the simulation will return.
+
+        Parameters
+        ----------
+        value : int | Callable | str | None
+            The stopping condition.
+
+        Returns
+        -------
+        int | Callable | None
+            The number of steps to stop after, or a Callable
+            or Jinja :py:class:`~swarmsim.util.jinja.TemplateExpression`.
+        """
         return self._stop_at
 
     @stop_at.setter

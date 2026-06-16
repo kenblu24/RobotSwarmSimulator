@@ -6,29 +6,26 @@ This module adjusts and extends the behavior of the Jinja2 templating engine.
 
 .. seealso::
 
-    This module is used with our custom YAML loader and config system.
-    :doc:`/guide/yaml`
-    :doc:`/guide/config`
-    :py:mod:`yaml`
+    If you're looking for how to use Jinja when writing a YAML config,
+    see :doc:`/guide/yaml`.
 
-    It is also used by the :py:mod:`JinjaMetric` module.
-    :py:mod:`JinjaMetric`
+    This module is used with our custom YAML loader, :py:mod:`swarmsim.yaml`,
+    and :doc:`config system </guide/config>`.
+
+    It is also used by the :py:mod:`swarmsim.metrics.JinjaMetric` module
+    and :py:attr:`.World.stop_at`.
 
 .. autoclass:: Environment
     :members:
-    :undoc-members:
 
 .. autoclass:: Template
     :members:
-    :undoc-members:
 
 .. autoclass:: ContextualExpression
     :members:
-    :undoc-members:
 
 .. autoclass:: TemplateExpression
     :members:
-    :undoc-members:
 
 .. autofunction:: make_default_jinja_env
 
@@ -57,8 +54,29 @@ from jinja2.utils import consume
 
 import typing as t
 
+#: The default list of extensions to load in :py:func:`make_default_jinja_env`.
+DEFAULT_EXTENSIONS = ('jinja2.ext.do', 'jinja2.ext.loopcontrols')
+#: The default list of filters to load in :py:func:`make_default_jinja_env`.
+DEFAULT_EXTRA_FILTERS = {
+    'sum': sum,
+    'bin': bin,
+    'hex': hex,
+    'alltrue': all,
+    'anytrue': any,
+}
+#: The default list of modules to load in :py:func:`make_default_jinja_env`.
+DEFAULT_GLOBAL_MODULES = [
+    ('np', 'numpy'),
+    ('math', ),
+]
+
 
 class TemplateExpression(BaseTemplateExpression):
+    """The :meth:`Environment.compile_expression` method returns an
+    instance of this object.  It encapsulates the expression-like access
+    to the template with an expression it wraps.
+    """
+
     # unmodified except we use __self__ to avoid name collisions
     # otherwise, if 'self' in kwargs, __call__ will receive two 'self' arguments and fail
     def __call__(__self__, *args: t.Any, **kwargs: t.Any) -> t.Optional[t.Any]:
@@ -71,6 +89,46 @@ class TemplateExpression(BaseTemplateExpression):
 
 
 class ContextualExpression(BaseTemplateExpression):
+    """A callable which inherits context from a Template.
+
+    An instance of this class is returned by :py:meth:`.Template.compile_ctxpr`.
+
+    This is useful if you want to set variables in a template but evaluate
+    a single expression which uses those variables. This way, you get back
+    a Python object rather than a rendered string from a template.
+
+    To use this, create a :py:class:`.Template` and call its
+    :py:meth:`.Template.compile_ctxpr` method. This returns an instance of
+    this class. Then, call the instance with the arguments you want to pass
+    to the template.
+
+    Parameters
+    ----------
+    template : :py:class:`.Template`
+        The expression template.
+    undefined_to_none : bool
+        If ``True``, any :py:class:`.Undefined` values will be replaced with ``None``.
+    parent : :py:class:`.Template`
+        The template to inherit context from.
+    update : str
+        How to handle undefined values. See :py:meth:`.Template.compile_ctxpr`.
+
+    Examples
+    --------
+    >>> from swarmsim.util.jinja import make_default_jinja_env
+    >>> env = make_default_jinja_env()
+    >>> template = env.from_string("{% set foo = 'bar' %}")
+    >>> template.compile_ctxpr('foo', update='always')()
+    'bar'
+
+    You can pass variables to the parent template and expression:
+
+    >>> template = env.from_string("{% set a = b * 2 %}")
+    >>> template.compile_ctxpr('a + c', update='always')(b=2, c=1)
+    5
+
+    """
+
     def __init__(self, template: "Template", undefined_to_none: bool, parent=None, update="raise_undefined") -> None:
         self._template = template
         self._undefined_to_none = undefined_to_none
@@ -110,38 +168,73 @@ class ContextualExpression(BaseTemplateExpression):
 
 
 class Template(BaseTemplate):
+    """A compiled template that can be rendered.
+
+    This is based on :py:class:`jinja2.Template` but with some modifications.
+    Unlike :py:class:`jinja2.Template` which deletes the context after
+    rendering, we cache the context in :py:attr:`_context` which allows us to
+    access any exported variables in the template.
+
+    Also, unlike :py:class:`jinja2.Template`, our template can also be pickled
+    and unpickled. We use :py:mod:`cloudpickle` to handle pickling of the
+    template's compiled render function, since standard :py:mod:`pickle` only
+    supports pickling functions by reference. We also support pickling
+    modules in the template's global namespace.
+
+    See Also
+    --------
+    :py:class:`jinja2.Template`
+    """
     _context = Undefined  # HACK: should be set in __init__
+    #: The saved module from :py:meth:`.Template.export_with`.
     saved_module = None
+    #: If true, use cloudpickle when pickling this template's render function.
     USE_CLOUDPICKLE = True
 
     def compile_ctxpr(self, source: str, undefined_to_none: bool = True, update: str = "raise_undefined"):
-        # from jijna2.environment.compile_expression()
-        """A handy helper method that returns a callable that accepts keyword
-        arguments that appear as variables in the expression.  If called it
-        returns the result of the expression.
+        # from jinja2.environment.compile_expression()
+        """Compile a :py:class:`.ContextualExpression` which can use
+        exported variables from this template.
 
-        This is useful if applications want to use the same rules as Jinja
-        in template "configuration files" or similar situations.
+        If ``update`` is ``'always'``, the expression will always evaluate this template,
+        and cache the context in this template's :py:attr:`_context` attribute.
+        The resulting exported variables are then passed to the expression.
 
-        Example usage:
+        If ``update`` is ``'run_undefined'``, the expression will try to use cached
+        context (i.e. from running :py:meth:`.Template.export_with`). If the context is
+        :py:class:`~jinja2.Undefined`, this template will be evaluated
+        at expression call time.
 
-        >>> env = Environment()
-        >>> expr = env.compile_expression('foo == 42')
-        >>> expr(foo=23)
-        False
-        >>> expr(foo=42)
-        True
+        If ``update`` is ``'raise_undefined'`` or ``'warn_undefined'``, calling the expression
+        will raise an exception or warning if this template doesn't have a cached context.
 
-        Per default the return value is converted to `None` if the
-        expression returns an undefined value.  This can be changed
-        by setting `undefined_to_none` to `False`.
+        Parameters
+        ----------
+        source : str
+            The expression to compile.
+        undefined_to_none : bool
+            If ``True``, any :py:class:`~jinja2.Undefined` values will be replaced with ``None``.
+        update : str
+            Controls if this template should be evaluated when the expression is called.
 
-        >>> env.compile_expression('var')() is None
-        True
-        >>> env.compile_expression('var', undefined_to_none=False)()
-        Undefined
+        Returns
+        -------
+        :py:class:`.ContextualExpression`
+            A callable which inherits context from this template.
 
-        .. versionadded:: 2.1
+        Examples
+        --------
+        >>> from swarmsim.util.jinja import make_default_jinja_env
+        >>> env = make_default_jinja_env()
+        >>> template = env.from_string("{% set foo = 'bar' %}")
+        >>> template.compile_ctxpr('foo', update='always')()
+        'bar'
+
+        You can pass variables to the parent template and expression:
+
+        >>> template = env.from_string("{% set a = b * 2 %}")
+        >>> template.compile_ctxpr('a + c', update='always')(b=2, c=1)
+        5
         """
         parser = Parser(self.environment, source, state="variable")
         try:
@@ -309,19 +402,45 @@ class Template(BaseTemplate):
 
         return self
 
-
     @property
     def has_cached_context(self):
+        """Whether this template has a cached context.
+
+        Note: This simply checks if ``self._context`` is not :py:class:`~jinja2.Undefined`."""
         return self._context is not Undefined
 
 
 class Environment(BaseEnvironment):
+    """A Jinja environment.
+
+    This is based on :py:class:`jinja2.Environment`.
+
+    Notably, we implement a system which allows an Environment to be pickled
+    even if its globals contain modules. See :py:meth:`add_global_module`.
+
+    See Also
+    --------
+    :py:class:`jinja2.Environment`
+    """
     template_class: t.Type[Template] = Template
+    #: A list of modules added to the environment's globals.
     global_modules: t.List[t.Any] = None
 
-    # modules can't be pickled.
-    # this system allows modules to be added to env.globals
     def add_global_module(self, name: str, modulename: str | None = None):
+        """Add a module to the Environment's globals.
+
+        The standard library :py:mod:`pickle` cannot handle modules.
+        This function imports a module and tells us how we can reference
+        and restore it when unpickling.
+
+        Parameters
+        ----------
+        name : str
+            The name to save the module in :py:attr:`Environment.globals`.
+        modulename : str | None, optional
+            The name of the module to import, i.e. ``import modulename``.
+            If None, the ``name`` is used.
+        """
         import importlib
         if self.global_modules is None:
             self.global_modules = []
@@ -331,6 +450,8 @@ class Environment(BaseEnvironment):
         self.globals[name] = importlib.import_module(modulename)
 
     def refresh_global_modules(self):
+        """Re-import all modules in :py:attr:`Environment.global_modules`."""
+        # used by __setstate__
         import importlib
         if self.global_modules is None:
             return
@@ -338,6 +459,13 @@ class Environment(BaseEnvironment):
             self.globals[name] = importlib.import_module(modulename)
 
     def remove_global_module(self, name: str):
+        """Remove a module from the Environment's globals.
+
+        Parameters
+        ----------
+        name : str
+            The in the Environment's globals to remove.
+        """
         if self.global_modules is None:
             return
         self.global_modules.remove((name, self.globals[name].__name__))
@@ -368,28 +496,7 @@ class Environment(BaseEnvironment):
         arguments that appear as variables in the expression.  If called it
         returns the result of the expression.
 
-        This is useful if applications want to use the same rules as Jinja
-        in template "configuration files" or similar situations.
-
-        Example usage:
-
-        >>> env = Environment()
-        >>> expr = env.compile_expression('foo == 42')
-        >>> expr(foo=23)
-        False
-        >>> expr(foo=42)
-        True
-
-        Per default the return value is converted to `None` if the
-        expression returns an undefined value.  This can be changed
-        by setting `undefined_to_none` to `False`.
-
-        >>> env.compile_expression('var')() is None
-        True
-        >>> env.compile_expression('var', undefined_to_none=False)()
-        Undefined
-
-        .. versionadded:: 2.1
+        See :py:meth:`jinja2.Environment.compile_expression` for more details.
         """
         parser = Parser(self, source, state="variable")
         try:
@@ -408,29 +515,77 @@ class Environment(BaseEnvironment):
 
 
 def make_default_jinja_env(*args, **kwargs):
-    import numpy as np
-    import math
-    env = Environment(
-        *args,
-        extensions=[
-            'jinja2.ext.do',
-            'jinja2.ext.loopcontrols',
-            # 'jinja2.ext.with_',
-        ],
-        **kwargs)
-    env.filters['sum'] = sum
-    env.filters['bin'] = bin
-    env.filters['hex'] = hex
-    env.filters['alltrue'] = all
-    env.filters['anytrue'] = any
-    env.add_global_module('np', 'numpy')
-    env.add_global_module('math')
+    """Create a new Jinja Environment and add predefined extensions, filters,
+    and modules to it.
+
+    Extensions:
+
+    * :ref:`jinja2.ext.do <jinja2:extensions/#expression-statement>`
+    * :ref:`jinja2.ext.loopcontrols <jinja2:extensions/#loop-controls>`
+
+    Filters:
+
+    * :py:func:`all`
+    * :py:func:`any`
+    * :py:func:`sum`
+    * :py:func:`bin`
+    * :py:func:`hex`
+
+    Modules:
+
+    * :py:mod:`numpy`
+    * :py:mod:`math`
+
+    Parameters
+    ----------
+    *args : tuple
+        Arguments to pass to :py:class:`jinja2.Environment`.
+    **kwargs : dict
+        Keyword arguments to pass to :py:class:`jinja2.Environment`.
+
+    Returns
+    -------
+    :py:class:`Environment`
+
+    See Also
+    --------
+    :py:func:`make_template_env`
+    :py:data:`DEFAULT_EXTENSIONS`
+    :py:data:`DEFAULT_EXTRA_FILTERS`
+    :py:data:`DEFAULT_GLOBAL_MODULES`
+    """
+    env = Environment(*args, **kwargs)
+    for ext in DEFAULT_EXTENSIONS:
+        env.add_extension(ext)
+    env.filters.update(DEFAULT_EXTRA_FILTERS)
+    for entry in DEFAULT_GLOBAL_MODULES:
+        if not isinstance(entry, tuple) or len(entry) not in (1, 2):
+            msg = f"Expected tuple of ('name',) or ('name', 'modulename') for global module. Got {entry}"
+            raise ValueError(msg)
+        env.add_global_module(*entry)
     return env
 
 
 def make_template_env(env: t.Optional[Environment] = None, **kwargs):
+    """Get a default Jinja Environment, with alternative block and variable delimiters.
+
+    Parameters
+    ----------
+    env : Environment, optional
+        If None, :py:func:`make_default_jinja_env` will be used to create the environment.
+    **kwargs
+        Additional keyword arguments to pass to :py:func:`make_default_jinja_env`.
+
+    The block delimiters are ``<%`` and ``%>``, i.e. ``<% set x = 1 %>``.
+    The variable delimiters are ``<{`` and ``}>``, i.e. ``<{ x }>``.
+    The line statement prefix is ``#%>``, i.e. ``#%> set x = 1``.
+
+    Returns
+    -------
+    Environment
+    """
     if env is None:
-        env = make_default_jinja_env()
+        env = make_default_jinja_env(**kwargs)
     env.block_start_string = '<%'
     env.block_end_string = '%>'
     env.variable_start_string = '<{'
@@ -441,6 +596,23 @@ def make_template_env(env: t.Optional[Environment] = None, **kwargs):
 
 
 def load_template(path, env=None, **kwargs):
+    """Load and render a Jinja template from a file path.
+
+    Parameters
+    ----------
+    path : str | os.PathLike
+        The path to the template file.
+    env : Environment, optional
+        The Jinja environment to use. If None,
+        :py:func:`make_template_env` will be used to create an environment.
+    **kwargs
+        Keyword arguments to pass to the template.
+
+    Returns
+    -------
+    str
+        The rendered template.
+    """
     if env is None:
         from ..util.jinja import make_template_env
         env = make_template_env()
@@ -450,6 +622,24 @@ def load_template(path, env=None, **kwargs):
 
 
 def load_template_ctx(path, env=None, **kwargs):
+    """Load and render a Jinja template from a file path and
+    return the rendered template and the context.
+
+    Parameters
+    ----------
+    path : str | os.PathLike
+        The path to the template file.
+    env : Environment, optional
+        The Jinja environment to use. If None,
+        :py:func:`make_template_env` will be used to create an environment.
+    **kwargs
+        Keyword arguments to pass to the template.
+
+    Returns
+    -------
+    tuple[str, Context]
+        The rendered template and the context object.
+    """
     if env is None:
         from ..util.jinja import make_template_env
         env = make_template_env()
