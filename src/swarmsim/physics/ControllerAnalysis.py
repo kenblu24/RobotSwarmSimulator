@@ -2,6 +2,7 @@ from ..agent.control.BinaryController import BinaryController
 from ..agent.control.HumanController import HumanController
 from ..agent.control.StaticController import StaticController
 from ..agent.control.NaryController import NaryController
+from ..agent.control.WaypointPIDController import WaypointPIDController
 
 def getBinaryControllerPeaks(bc: BinaryController):
     peakV = max(bc.a[0], bc.b[0])
@@ -28,7 +29,9 @@ def getNaryControllerPeaks(nc: NaryController):
     return peak_v, peak_omega
 
 def getControllerPeaks(controller):
-    if isinstance(controller, BinaryController):
+    if hasattr(controller, "getPeaks"):
+        return controller.getPeaks()
+    elif isinstance(controller, BinaryController):
         return getBinaryControllerPeaks(controller)
     elif isinstance(controller, HumanController):
         return getHumanControllerPeaks(controller)
@@ -36,5 +39,7 @@ def getControllerPeaks(controller):
         return getStaticControllerPeaks(controller)
     elif isinstance(controller, NaryController):
         return getNaryControllerPeaks(controller)
+    elif isinstance(controller, WaypointPIDController):
+        return getStaticControllerPeaks(controller)
 
     raise TypeError(f"ERROR: controller type unanalyzable: {type(controller)}")

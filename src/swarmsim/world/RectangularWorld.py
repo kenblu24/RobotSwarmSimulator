@@ -216,9 +216,9 @@ class RectangularWorld(World):
         for obj in self.objects:
             xVals.extend([p[0] for p in obj.points])
             yVals.extend([p[1] for p in obj.points])
-        xmm = minMax(xVals)
-        ymm = minMax(yVals)
-        self.objectTree = RectDNode(NTangle(2, (xmm[0], ymm[0]), (xmm[1], ymm[1])), capacity=3, depth=7)
+        xmm = minMax(xVals) if self.objects else (-1, 1)
+        ymm = minMax(yVals) if self.objects else (-1, 1)
+        self.objectTree = RectDNode(NTangle(2, (xmm[0], ymm[0]), (xmm[1], ymm[1])), capacity=5, depth=7)
         self.objectTree.insert([PolygonBox(obj, obj.points) for obj in self.objects])
         # self.objectTree.print()
 
