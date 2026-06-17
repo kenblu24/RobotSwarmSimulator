@@ -48,7 +48,7 @@ def setup_common_agent(world: RectangularWorld) -> BinaryFOVSensor:
 wd = pl.Path(__file__).parent
 path = wd / "configs"
 
-binary_fov_yaml_files = (path / "BinaryFOV").glob("*.yaml")
+binary_fov_yaml_files = list((path / "BinaryFOV").glob("*.yaml"))
 
 
 @pytest.mark.parametrize("yaml_path", binary_fov_yaml_files, ids=lambda x: x.stem)

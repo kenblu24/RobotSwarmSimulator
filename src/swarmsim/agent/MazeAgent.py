@@ -76,7 +76,6 @@ class MazeAgentConfig(StaticAgentConfig):
     sensors: list = field(default_factory=list)
     #: AbstractController: The controller used by the agent. Zero controller by default.
 
-    sensing_avg: int = 1
     stop_on_collision: bool = False
     stop_at_goal: bool = False
     body_color: tuple[int, int, int] = (255, 255, 255)
@@ -158,7 +157,6 @@ class MazeAgent(StaticAgent):
         super().__init__(config, world, name=name, initialize=False)
 
         self.is_highlighted = False
-        self.agent_in_sight = None
         if config.idiosyncrasies:
             idiosync = config.idiosyncrasies
             self.idiosyncrasies = [np.random.normal(mean, sd) for mean, sd in zip(idiosync['mean'], idiosync['sd'])]
@@ -168,7 +166,6 @@ class MazeAgent(StaticAgent):
         # I2_MEAN, I2_SD = 0.95, 0.06
         self.delay_1 = st.Delay(delay=config.delay)  # type: ignore[reportArgumentType]
         self.delay_2 = st.Delay(delay=config.delay)  # type: ignore[reportArgumentType]
-        self.sensing_avg = st.Average(config.sensing_avg)
         self.stop_on_collision = config.stop_on_collision
         self.catastrophic_collisions = config.catastrophic_collisions
         self.iD = 0

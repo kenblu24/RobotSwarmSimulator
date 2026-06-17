@@ -1,27 +1,27 @@
 ---
-type: "Goalbot"
+type: "MazeAgent"
+position: !np [15, 15] / 2
 sensors:
-  custom_state_decision: "Linear"
-  sensors:
-    - type: "BinaryFOVSensor"
-      theta: 0.2   # Vision Angle / 2 (Radians)
-      degrees: false
-      agent_sensing_range: 3.6 # meters. previously 2.55
-      show: true
-      goal_sensing_range: 3.6
-      use_goal_state: true
-      wall_sensing_range: 3.6
-      fn: 0.00  # 0.10
-      fp: 0.00  # 0.05
-      bias: 0  # Angle Bias for Sensor
-      store_history: false
-      seed: 10
-controller: "self"
+  - type: "BinaryFOVSensor"
+    theta: 0.2   # Vision Angle / 2 (Radians)
+    degrees: false
+    distance: 3.6  # meters. previously 2.55
+    show: true
+    # fn: 0.10
+    # fp: 0.05
+    bias: 0  # Angle Bias for Sensor
+    store_history: false
+    seed: 10
+controller:
+  type: "BinaryController"
+  a: 0.2  # m/s forward speed factor
+  b: 2.0  # rad/s turning rate factor
+  sensor_id: 0
 agent_radius: 0.075
 stop_at_goal: false
-dt: 0.13
-scale_forward_speed: 0.2  # m/s
-scale_turning_rates: 2.0  # m/s
+# dt: 0.13  # moved to world config
+# scale_forward_speed: 0.2  # m/s
+# scale_turning_rates: 2.0  # m/s
 body_color:
   - 255
   - 0

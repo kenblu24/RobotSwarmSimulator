@@ -1,4 +1,6 @@
 import pytest
+import pathlib as pl
+wd = pl.Path(__file__).parent
 
 
 import swarmsim.util.jinja as jinja
@@ -18,7 +20,7 @@ def template_env():
 
 
 def test_load_template(default_env):
-    res = load_template("tests/util/helloworld.jinja", env=default_env)
+    res = load_template(wd / "helloworld.jinja", env=default_env)
     assert res == "Hello, World!"
 
 
@@ -28,7 +30,7 @@ def test_pickle_env_clean(default_env):
 
 
 def test_pickle_env_dirty(default_env):
-    res = load_template("tests/util/helloworld.jinja", env=default_env)
+    res = load_template(wd / "helloworld.jinja", env=default_env)
     assert res == "Hello, World!"
     import pickle
     pickle.dumps(default_env)
@@ -38,7 +40,7 @@ def test_pickle_env_module(default_env):
     import math
     import jinja2
     default_env.add_global_module('math')
-    res = load_template("tests/util/helloworld.jinja", env=default_env)
+    res = load_template(wd / "helloworld.jinja", env=default_env)
     assert res == "Hello, World!"
     import pickle
     p = pickle.dumps(default_env)
@@ -83,13 +85,13 @@ def test_pickle_expression_recursive_reference(default_env):
 
 
 def test_load_custom_template(template_env):
-    res = load_template("tests/util/helloworld_custom.jinja", env=template_env)
+    res = load_template(wd / "helloworld_custom.jinja", env=template_env)
     assert res == "Hello, World!"
 
 
 def test_load_custom_context(template_env):
     from swarmsim.util.jinja import load_template_ctx
-    rendered, ctx = load_template_ctx("tests/util/helloworld_custom.jinja", env=template_env)
+    rendered, ctx = load_template_ctx(wd / "helloworld_custom.jinja", env=template_env)
     assert rendered == "Hello, World!"
     assert ctx['s'] == "Hello, World!"
 
