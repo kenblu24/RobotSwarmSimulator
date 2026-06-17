@@ -79,6 +79,7 @@ class PointCollisionSensor(Sensor):
         self.goal_detected = False
         self.detection_id = 0
         self.target_team = target_team
+        self.agent_in_sight = None
 
         # self.detect_only_origins = False
         self.r = distance
@@ -157,8 +158,8 @@ class PointCollisionSensor(Sensor):
         super(PointCollisionSensor, self).step(world=world)
         self.checkForLOSCollisions(world=world)
         if self.store_history:
-            if self.agent.agent_in_sight:
-                self.history.append(int(self.agent.agent_in_sight.name))
+            if self.agent_in_sight:
+                self.history.append(int(self.agent_in_sight.name))
             else:
                 self.history.append(-1)
 
