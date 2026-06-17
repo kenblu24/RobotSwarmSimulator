@@ -2,7 +2,7 @@ import pytest
 
 # from https://kenblu24.github.io/RobotSwarmSimulator/guide/firstrun.html
 
-def test_milling():
+def test_milling(show_gui=False):
     from swarmsim import RectangularWorld, RectangularWorldConfig
     from swarmsim import MazeAgent, MazeAgentConfig
     from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
@@ -27,3 +27,7 @@ def test_milling():
     run_sim(world, show_gui=False)
 
     assert world.metrics[0].out_current()[1] > 0.5
+
+
+if __name__ == "__main__":
+    test_milling(show_gui=True)
