@@ -184,7 +184,6 @@ class LazyKnownModules:
     def add_native_sensors(self):
         from ..sensors.BinaryFOVSensor import BinaryFOVSensor
         from ..sensors.BinaryLOSSensor import BinaryLOSSensor
-        from ..sensors.GenomeDependentSensor import GenomeBinarySensor
         from ..sensors.RegionalSensor import RegionalSensor
         from ..sensors.StaticSensor import StaticSensor
         from ..sensors.PointCollisionSensor import PointCollisionSensor
@@ -194,7 +193,6 @@ class LazyKnownModules:
 
         self._dictlike_types['sensors']['BinaryFOVSensor'] = BinaryFOVSensor
         self._dictlike_types['sensors']['BinaryLOSSensor'] = BinaryLOSSensor
-        self._dictlike_types['sensors']['GenomeBinarySensor'] = GenomeBinarySensor
         self._dictlike_types['sensors']['RegionalSensor'] = RegionalSensor
         self._dictlike_types['sensors']['StaticSensor'] = StaticSensor
         self._dictlike_types['sensors']['PointCollisionSensor'] = PointCollisionSensor
@@ -205,7 +203,6 @@ class LazyKnownModules:
         from ..agent.control.StaticController import StaticController
         from ..agent.control.BinaryController import BinaryController
         from ..agent.control.AgentMethodController import AgentMethodController
-        from ..agent.control.HomogeneousController import HomogeneousController
         from ..agent.control.WaypointPIDController import WaypointPIDController
         from ..agent.control.HumanController import HumanController
         from ..agent.control.LevyController import LevyController
@@ -216,7 +213,6 @@ class LazyKnownModules:
         self._dictlike_types['controller']['StaticController'] = StaticController
         self._dictlike_types['controller']['BinaryController'] = BinaryController
         self._dictlike_types['controller']['AgentMethodController'] = AgentMethodController
-        self._dictlike_types['controller']['HomogeneousController'] = HomogeneousController
         self._dictlike_types['controller']['WaypointPIDController'] = WaypointPIDController
         self._dictlike_types['controller']['HumanController'] = HumanController
         self._dictlike_types['controller']['LevyController'] = LevyController
