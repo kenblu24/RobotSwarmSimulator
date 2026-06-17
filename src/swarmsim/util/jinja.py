@@ -183,7 +183,7 @@ class Template(BaseTemplate):
 
     See Also
     --------
-    :py:class:`jinja2.Template`
+    :py:class:`jinja2.Template` is the base class from Jinja2.
     """
     _context = Undefined  # HACK: should be set in __init__
     #: The saved module from :py:meth:`.Template.export_with`.
@@ -420,7 +420,7 @@ class Environment(BaseEnvironment):
 
     See Also
     --------
-    :py:class:`jinja2.Environment`
+    :py:class:`jinja2.Environment` is the base class from Jinja2.
     """
     template_class: t.Type[Template] = Template
     #: A list of modules added to the environment's globals.
@@ -520,8 +520,8 @@ def make_default_jinja_env(*args, **kwargs):
 
     Extensions:
 
-    * :ref:`jinja2.ext.do <jinja2:extensions/#expression-statement>`
-    * :ref:`jinja2.ext.loopcontrols <jinja2:extensions/#loop-controls>`
+    * :external+jinja2:doc:`jinja2.ext.do <extensions>`
+    * :ref:`jinja2.ext.loopcontrols <loopcontrols-extension>`
 
     Filters:
 

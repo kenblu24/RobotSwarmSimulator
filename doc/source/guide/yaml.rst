@@ -272,6 +272,12 @@ If a file isn't found at any of these locations, an error will be raised. See :p
 
 
 
+.. container::
+
+   |nbsp|
+
+
+
 Parametric YAML Configs via Jinja Templating
 ============================================
 
@@ -316,6 +322,11 @@ You can also write statements like ``<% set height = width / 2 %>`` in the YAML 
    :py:mod:`~swarmsim.metrics.JinjaMetric`.
    The different delimiters allow us to distinguish between Jinja at the YAML level and Jinja
    templates and expressions that are used to specify other behavior.
+
+
+.. seealso::
+
+   For information on our custom additions to the Jinja2 API, see :py:mod:`swarmsim.util.jinja`.
 
 
 Jinja templating is a powerful tool for creating parametric configurations. Here's some examples
@@ -391,4 +402,3 @@ See the :ref:`jinja2:list-of-control-structures` for more information.
    Jinja2 is a very powerful and widely used templating engine, and we've only
    covered a small subset of its features here. For more information, see the
    official :external+jinja2:doc:`templates` guide.
-
