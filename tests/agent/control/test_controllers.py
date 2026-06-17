@@ -13,7 +13,7 @@ from ...helpers import load_custom_yaml
 
 wd = pl.Path(__file__).parent.parent.parent
 path = wd / "sensors" / "configs"
-yaml_files = path.glob("*.yaml")
+yaml_files = list(path.glob("*.yaml"))
 
 
 @pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
