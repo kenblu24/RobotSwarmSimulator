@@ -7,9 +7,111 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import importlib as il
+import re
 import inspect
 import pathlib as pl
 from functools import lru_cache
+
+from sphinx.highlighting import lexers
+from pygments.lexers.templates import YamlJinjaLexer, RegexLexer, DelegatingLexer
+from pygments.lexer import bygroups, include
+from pygments import token as t
+
+#
+# BEGIN CUSTOM LEXER CODE
+#
+# Referenced for how to add lexer: https://stackoverflow.com/a/16470058
+# Posted by Robert Lujo, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-06-17, License - CC BY-SA 3.0
+
+# TODO: Figure out how to move this to a separate file
+# it errors if I try to import as a relative import
+
+# https://pygments.org/docs/lexerdevelopment/
+class RSSJinjaTemplateLexer(RegexLexer):
+
+    flags = re.M | re.S
+
+    tokens = {
+        'root': [
+            (r'[^<#]+', t.Other),
+            (r'<{', t.Comment.Preproc, 'var'),
+            (r'#%>', t.Comment.Preproc, 'linestatement'),
+            # jinja/django comments
+            # (r'\{#.*?#\}', t.Comment),
+            # filter blocks
+            # (r'(\{%)(-?\s*)(filter)(\s+)([a-zA-Z_]\w*)',
+            #  bygroups(Comment.Preproc, Text, Keyword, Text, Name.Function),
+            #  'block'),
+            (r'(<%)(-?\s*)([a-zA-Z_]\w*)',
+             bygroups(t.Comment.Preproc, t.Text, t.Keyword), 'block'),
+            (r'\<', t.Other),
+            (r'\#', t.Other),
+        ],
+        'varnames': [
+            (r'(\|)(\s*)([a-zA-Z_]\w*)',
+             bygroups(t.Operator, t.Text, t.Name.Function)),
+            (r'(is)(\s+)(not)?(\s+)?([a-zA-Z_]\w*)',
+             bygroups(t.Keyword, t.Text, t.Keyword, t.Text, t.Name.Function)),
+            (r'(_|true|false|none|True|False|None)\b', t.Keyword.Pseudo),
+            (r'(in|as|reversed|recursive|not|and|or|is|if|else|import|'
+             r'with(?:(?:out)?\s*context)?|scoped|ignore\s+missing)\b',
+             t.Keyword),
+            (r'(loop|block|super|forloop|set)\b', t.Name.Builtin),
+            (r'[a-zA-Z_][\w-]*', t.Name.Variable),
+            (r'\.\w+', t.Name.Variable),
+            (r':?"(\\\\|\\[^\\]|[^"\\])*"', t.String.Double),
+            (r":?'(\\\\|\\[^\\]|[^'\\])*'", t.String.Single),
+            (r'([{}()\[\]+\-*/%,:~]|[><=]=?|!=)', t.Operator),
+            (r"[0-9](\.[0-9]*)?(eE[+-][0-9])?[flFLdD]?|"
+             r"0[xX][0-9a-fA-F]+[Ll]?", t.Number),
+        ],
+        'var': [
+            (r'\s+', t.Text),
+            (r'(-?)(\}>)', bygroups(t.Text, t.Comment.Preproc), '#pop'),
+            include('varnames')
+        ],
+        'block': [
+            (r'\s+', t.Text),
+            (r'(-?)(%>)', bygroups(t.Text, t.Comment.Preproc), '#pop'),
+            include('varnames'),
+            (r'.', t.Punctuation)
+        ],
+        'linestatement': [
+            (r'\n', t.Whitespace, '#pop'),
+            (r'(-?)(%>)', bygroups(t.Text, t.Comment.Preproc), '#pop'),
+            (r'\s+', t.Text),
+            include('varnames'),
+        ]
+    }
+
+    def analyse_text(text):
+        rv = 0.0
+        if re.search(r'<%\s.*', text) is not None:
+            rv += 0.4
+        if re.search(r'#%>\s.*', text) is not None:
+            rv += 0.1
+        return rv
+
+
+class TemplateYAMLLexer(DelegatingLexer):
+    name = 'TemplateYAML'
+    aliases = ['templateyaml']
+    filenames = [
+        '*.yaml',
+        '*.yml',
+    ]
+
+    def __init__(self, **options):
+        super().__init__(RSSJinjaTemplateLexer, YamlJinjaLexer, **options)
+
+
+lexers['templateyaml'] = TemplateYAMLLexer(startinline=True)
+
+#
+#
+#
+# END CUSTOM LEXER CODE
 
 project = 'RobotSwarmSimulator'
 copyright = '2025, Connor Mattson, Kevin Zhu'

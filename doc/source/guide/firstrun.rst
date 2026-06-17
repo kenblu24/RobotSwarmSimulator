@@ -429,27 +429,27 @@ First, let's create a new file called ``world.yaml`` and add the following:
 .. code-block:: yaml
    :caption: ``world.yaml``
 
-    type: "RectangularWorld"
-    size: [10, 10]
-    time_step: !np 1 / 40
-    spawners:
-      - type: "PointAgentSpawner"
-        n: 6
-        facing: "away"
-        avoid_overlap: true
-        mode: oneshot
-        agent:
-          type: "MazeAgent"
-          position: [5, 5]
-          agent_radius: 0.1
-          sensors:
-            - type: "BinaryFOVSensor"
-              theta: 0.45
-              distance: 2
-          controller:
-            type: "BinaryController"
-            a: [0.02, -0.5]
-            b: [0.02, 0.5]
+   type: "RectangularWorld"
+   size: [10, 10]
+   time_step: !np 1 / 40
+   spawners:
+     - type: "PointAgentSpawner"
+       n: 6
+       facing: "away"
+       avoid_overlap: true
+       mode: oneshot
+       agent:
+         type: "MazeAgent"
+         position: [5, 5]
+         agent_radius: 0.1
+         sensors:
+           - type: "BinaryFOVSensor"
+             theta: 0.45
+             distance: 2
+         controller:
+           type: "BinaryController"
+           a: [0.02, -0.5]
+           b: [0.02, 0.5]
 
 Then, let's create a python file or open a new Python shell and run the following:
 
@@ -494,6 +494,11 @@ We cover the order that things are initialized in :ref:`initialization_order`\ .
    adding the ``agents:`` sequence to the ``world.yaml`` file.
 
    If you've never used YAML before, check out `Learn YAML in Y minutes <https://learnxinyminutes.com/docs/yaml/>`_
+
+
+.. seealso::
+
+   guide/yaml
 
 
 What can I change?
