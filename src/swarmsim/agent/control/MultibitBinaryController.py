@@ -9,35 +9,27 @@ ConstantOutputValues = tuple[float, ...] | np.ndarray
 
 
 class MultiBinaryController(AbstractController):
-    """Controller that returns one of two constant control inputs based on a binary sensor state.
+    """Controller that maps multiple binary sensors to constant control inputs.
 
-    There are multiple ways to specify the control values to be output:
-
-    1. If ``a`` and ``b`` are both 1D arrays, then:
-        a. ``a`` is the output when the sensor is in state 0,
-        b. ``b`` is the output when the sensor is in state 1.
-    2. If only ``a`` is specified, then it should either be a 1D array or a 2D array.
-        a. The first half or first column is the output when the sensor is in state 0,
-        b. and the second half or second column is the output when the sensor is in state 1.
-
-    If ``b`` is specified, then it should be the same length as ``a``.
+    The controller is specified by a dictionary of sensor states to output values.
 
     Parameters
     ----------
-    a : tuple[float, ...] | tuple[tuple[float, ...], ...] | np.ndarray
-    b : tuple[float, ...] | np.ndarray | None, optional
+    outputs : tuple[tuple[float, ...] | numpy.ndarray, ...] | dict[int | str, tuple[float, ...] | numpy.ndarray]
+        The output values to return for each possible sensor state.
+        If it is a dict, then each key should be a combined sensor state bitstring.
+        If it is a tuple, then the index is the combined sensor state bitstring.
+        Each output value should be a 1D array or a scalar.
+    default_output : tuple[float, ...] | numpy.ndarray | None, optional
+        The output value to return if the sensor state is not in the ``outputs`` dictionary.
+    sensor_ids : list[int] | None, optional
+        The sensor indices to use for the sensors.
     agent : Agent, optional
     parent : Agent, optional
-    sensor_id : int, default=0
-        The index in ``agent.sensors`` to use for the sensor.
-    sense_avg_time : int, default=1
-        The number of timesteps to average over when calculating the sensor state.
-        This is useful for averaging over the sensor state to smooth out noise, i.e.,
-        a low-pass filter.
 
     """
     def __init__(self, outputs: Sequence[ConstantOutputValues], default_output: ConstantOutputValues | None = None,
-                 agent=None, parent=None, sensor_ids=None, sense_avg_time=1, **kwargs):
+                 agent=None, parent=None, sensor_ids=None, **kwargs):
         super().__init__(agent=agent, parent=parent, **kwargs)
         self.outputs = outputs
         self.default_output = default_output
