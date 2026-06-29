@@ -3,7 +3,7 @@ import numpy as np
 from .AbstractController import AbstractController
 from ...util import statistics_tools as st
 
-from typing import Sequence
+from typing import Sequence, Mapping, SupportsIndex
 
 ConstantOutputValues = tuple[float, ...] | np.ndarray
 
@@ -28,7 +28,8 @@ class MultiBinaryController(AbstractController):
     parent : Agent, optional
 
     """
-    def __init__(self, outputs: Sequence[ConstantOutputValues], default_output: ConstantOutputValues | None = None,
+    def __init__(self, outputs: Sequence[ConstantOutputValues] | Mapping[int | str, ConstantOutputValues],
+                 default_output: ConstantOutputValues | None = None,
                  agent=None, parent=None, sensor_ids=None, **kwargs):
         super().__init__(agent=agent, parent=parent, **kwargs)
         self.outputs = outputs
