@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "swarmsim"
-version = "1.2.3"
+version = "1.2.4"
 requires-python = ">=3.12"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
@@ -33,7 +33,6 @@ dependencies = [
     "cloudpickle",  # used for jinja templates only
     "scipy",
     "scikit-learn",
-    "thorpy",
     "circle_fit",
     "shapely",
     "pandas",
