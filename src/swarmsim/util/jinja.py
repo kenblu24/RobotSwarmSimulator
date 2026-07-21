@@ -180,10 +180,6 @@ class Template(BaseTemplate):
     template's compiled render function, since standard :py:mod:`pickle` only
     supports pickling functions by reference. We also support pickling
     modules in the template's global namespace.
-
-    See Also
-    --------
-    :py:class:`jinja2.Template` is the base class from Jinja2.
     """
     _context = Undefined  # HACK: should be set in __init__
     #: The saved module from :py:meth:`.Template.export_with`.
@@ -417,10 +413,6 @@ class Environment(BaseEnvironment):
 
     Notably, we implement a system which allows an Environment to be pickled
     even if its globals contain modules. See :py:meth:`add_global_module`.
-
-    See Also
-    --------
-    :py:class:`jinja2.Environment` is the base class from Jinja2.
     """
     template_class: t.Type[Template] = Template
     #: A list of modules added to the environment's globals.
