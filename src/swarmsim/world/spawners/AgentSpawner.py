@@ -182,3 +182,37 @@ class UniformAgentSpawner(PointAgentSpawner):
         config = super().generate_config(name)
         config.position = self.generate_points_in_polygon(1).flatten()
         return config
+
+class UniformCircleAgentSpawner(PointAgentSpawner):
+    def __init__(
+        self,
+        world,
+        center=None,
+        radius=None,
+        **kwargs
+    ):
+        super().__init__(world, **kwargs)
+        if center is None or radius is None:
+            raise ValueError("center and radius must be specified for UniformCircleAgentSpawner")
+        self.center = np.asarray(center)
+        self.radius = radius
+    
+    def uniform_point(self):
+        theta = self.rng.uniform(0, np.pi*2)
+        radius = np.sqrt(self.rng.random()) * self.radius
+        return radius * np.array([np.cos(theta), np.sin(theta)]) + self.center
+
+    def generate_points_in_circle(self, n: int):
+        return [self.uniform_point() for i in range(n)]
+
+    def set_angle_post_spawn(self, agent):
+        if isinstance(self.facing, str):
+            if self.facing == 'towards':
+                agent.angle = self.angle_between(agent.pos, self.center)
+            elif self.facing == 'away':
+                agent.angle = self.angle_between(self.center, agent.pos)
+
+    def generate_config(self, name=None):
+        config = super().generate_config(name)
+        config.position = self.generate_points_in_circle(1).flatten()
+        return config
