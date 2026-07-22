@@ -203,7 +203,7 @@ class UniformCircleAgentSpawner(PointAgentSpawner):
         return radius * np.array([np.cos(theta), np.sin(theta)]) + self.center
 
     def generate_points_in_circle(self, n: int):
-        return [self.uniform_point() for i in range(n)]
+        return np.asarray([self.uniform_point() for i in range(n)])
 
     def set_angle_post_spawn(self, agent):
         if isinstance(self.facing, str):
