@@ -207,14 +207,12 @@ class UniformCircleAgentSpawner(PointAgentSpawner):
             raise ValueError("center and radius must be specified for UniformCircleAgentSpawner")
         self.center = np.asarray(center)
         self.radius = radius
-    
-    def uniform_point(self):
-        theta = self.rng.uniform(0, np.pi*2)
-        radius = np.sqrt(self.rng.random()) * self.radius
-        return radius * np.array([np.cos(theta), np.sin(theta)]) + self.center
 
     def generate_points_in_circle(self, n: int):
-        return np.asarray([self.uniform_point() for i in range(n)])
+        theta = self.rng.uniform(0, np.pi * 2, size=n)
+        radii = np.sqrt(self.rng.random(size=(n, 1))) * self.radius
+        points = np.array([np.cos(theta), np.sin(theta)]).reshape(-1, 2)
+        return radii * points + self.center
 
     @property
     def center_point(self):
