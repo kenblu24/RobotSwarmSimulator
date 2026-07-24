@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+from numbers import Real
 
 from shapely import Polygon
 
@@ -75,16 +76,10 @@ class PointAgentSpawner(BaseAgentSpawner):
     ):
         super().__init__(world, **kwargs)
         self.avoid_overlap = avoid_overlap
-        if isinstance(facing, str):
-            if facing.lower() == 'random':
-                self.facing = [0, np.pi]
-            elif facing.lower() in ['towards', 'away']:
-                self.facing = facing.lower()
-            else:
-                msg = f"Invalid option for key 'facing' in spawner config: {facing}"
-                raise ValueError(msg)
-        else:
-            self.facing = facing
+        if isinstance(facing, str) and facing not in ['towards', 'away', 'random']:
+            msg = f"Invalid option for key 'facing' in spawner config: {facing}"
+            raise ValueError(msg)
+        self.facing = facing
 
     def generate_config(self, name=None):
         config = super().generate_config()
@@ -116,15 +111,33 @@ class PointAgentSpawner(BaseAgentSpawner):
         vec = b - a
         return np.arctan2(*reversed(vec))
 
+    @property
+    def center_point(self):
+        return self.agent_config.position
+
     def set_angle_post_spawn(self, agent):
         d = np.linalg.norm(agent.pos - self.agent_config.position)
         if d < 0.000_001:
             return
-        if isinstance(self.facing, str):
-            if self.facing == 'towards':
-                agent.angle = self.angle_between(agent.pos, self.agent_config.position)
-            elif self.facing == 'away':
-                agent.angle = self.angle_between(self.agent_config.position, agent.pos)
+        match self.facing:
+            case None:
+                pass
+            case [Real() as theta]:
+                agent.angle = theta
+            case Real() as theta:
+                agent.angle = theta
+            case Real(), Real():
+                agent.angle = self.angle_between(agent.pos, self.facing)
+            # ^ need to handle ndarray above. otherwise comparing ndarray to str will error
+            case 'towards':
+                agent.angle = self.angle_between(agent.pos, self.center_point)
+            case 'away':
+                agent.angle = self.angle_between(self.center_point, agent.pos)
+            case 'random':
+                agent.angle = self.rng.uniform(0, np.pi * 2)
+            case _:
+                msg = f"Invalid option for key 'facing' in spawner config: {self.facing}"
+                raise ValueError(msg)
 
     def do_spawn(self, name=None):
         config = self.generate_config(name)
@@ -171,17 +184,15 @@ class UniformAgentSpawner(PointAgentSpawner):
         np.random.seed(self.rng.integers(0, 90000))
         return poisson(self.poly, size=n)
 
-    def set_angle_post_spawn(self, agent):
-        if isinstance(self.facing, str):
-            if self.facing == 'towards':
-                agent.angle = self.angle_between(agent.pos, self.poly.centroid.xy)
-            elif self.facing == 'away':
-                agent.angle = self.angle_between(self.poly.centroid.xy, agent.pos)
+    @property
+    def center_point(self):
+        return self.poly.centroid.xy
 
     def generate_config(self, name=None):
         config = super().generate_config(name)
         config.position = self.generate_points_in_polygon(1).flatten()
         return config
+
 
 class UniformCircleAgentSpawner(PointAgentSpawner):
     def __init__(
@@ -205,12 +216,9 @@ class UniformCircleAgentSpawner(PointAgentSpawner):
     def generate_points_in_circle(self, n: int):
         return np.asarray([self.uniform_point() for i in range(n)])
 
-    def set_angle_post_spawn(self, agent):
-        if isinstance(self.facing, str):
-            if self.facing == 'towards':
-                agent.angle = self.angle_between(agent.pos, self.center)
-            elif self.facing == 'away':
-                agent.angle = self.angle_between(self.center, agent.pos)
+    @property
+    def center_point(self):
+        return self.center
 
     def generate_config(self, name=None):
         config = super().generate_config(name)
