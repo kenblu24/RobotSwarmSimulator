@@ -84,9 +84,6 @@ class PointAgentSpawner(BaseAgentSpawner):
     def generate_config(self, name=None):
         config = super().generate_config()
 
-        # modify agent config
-        if isinstance(self.facing, (list, tuple, np.ndarray)):
-            config.angle = self.rng.uniform(*self.facing)
         if name is not None and config.name is None:
             config.name = name
 
@@ -116,9 +113,9 @@ class PointAgentSpawner(BaseAgentSpawner):
         return self.agent_config.position
 
     def set_angle_post_spawn(self, agent):
-        d = np.linalg.norm(agent.pos - self.agent_config.position)
-        if d < 0.000_001:
-            return
+        # d = np.linalg.norm(agent.pos - self.agent_config.position)
+        # if d < 0.000_001:
+        #     return
         match self.facing:
             case None:
                 pass
@@ -128,7 +125,11 @@ class PointAgentSpawner(BaseAgentSpawner):
                 agent.angle = theta
             case Real(), Real():
                 agent.angle = self.angle_between(agent.pos, self.facing)
+            case np.ndarray(size=2):
+                agent.angle = self.angle_between(agent.pos, self.facing)
             # ^ need to handle ndarray above. otherwise comparing ndarray to str will error
+            case np.ndarray():
+                raise ValueError("Invalid option for key 'facing' in spawner config: ndarray with more than 2 elements")
             case 'towards':
                 agent.angle = self.angle_between(agent.pos, self.center_point)
             case 'away':
