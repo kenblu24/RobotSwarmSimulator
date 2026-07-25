@@ -113,27 +113,27 @@ class PointAgentSpawner(BaseAgentSpawner):
         return self.agent_config.position
 
     def set_angle_post_spawn(self, agent):
-        # d = np.linalg.norm(agent.pos - self.agent_config.position)
-        # if d < 0.000_001:
-        #     return
+        def angle(a, b):
+            """Get angle between two points. If points are too close, return random angle."""
+            b, a = np.asarray(b, dtype=np.float64).reshape(2), np.asarray(a, dtype=np.float64).reshape(2)
+            d = np.linalg.norm(agent.pos - self.agent_config.position)
+            return self.rng.uniform(0, np.pi * 2) if d < 0.000_001 else self.angle_between(a, b)
+
         match self.facing:
             case None:
                 pass
-            case [Real() as theta]:
+            case [Real() as theta] | (Real() as theta):  # either singleton sequence of Real or Real
                 agent.angle = theta
-            case Real() as theta:
-                agent.angle = theta
-            case Real(), Real():
-                agent.angle = self.angle_between(agent.pos, self.facing)
-            case np.ndarray(size=2):
-                agent.angle = self.angle_between(agent.pos, self.facing)
+            case (Real(), Real()) | np.ndarray(size=2):  # either ordered pair tuple or ndarray with two elements
+                # nb: angle_between does reshaping, so it's okay to pass shapes like [[[]], [[]]]
+                agent.angle = angle(agent.pos, self.facing)
             # ^ need to handle ndarray above. otherwise comparing ndarray to str will error
             case np.ndarray():
                 raise ValueError("Invalid option for key 'facing' in spawner config: ndarray with more than 2 elements")
             case 'towards':
-                agent.angle = self.angle_between(agent.pos, self.center_point)
+                agent.angle = angle(agent.pos, self.center_point)
             case 'away':
-                agent.angle = self.angle_between(self.center_point, agent.pos)
+                agent.angle = angle(self.center_point, agent.pos)
             case 'random':
                 agent.angle = self.rng.uniform(0, np.pi * 2)
             case _:
