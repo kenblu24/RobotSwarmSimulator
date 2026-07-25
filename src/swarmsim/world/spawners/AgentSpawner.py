@@ -165,13 +165,15 @@ class UniformAgentSpawner(PointAgentSpawner):
         if region is None:
             raise ValueError("region must be specified for UniformAgentSpawner")
         shell = np.asarray(region, dtype=np.float64)
+        if shell.size == 4:
+            shell = AABB(shell.reshape(2, 2)).corners
         if holes is not None:
             holes = np.asarray(holes, dtype=np.float64)
         try:
             self.poly = Polygon(shell, holes)
         except ValueError as err:
             raise ValueError("Invalid region specified for UniformAgentSpawner") from err
-        self.aabb = AABB(shell)
+        self.aabb = AABB(shell)  # HACK: may happen twice if shell.size == 4
         self.is_aabb = self.aabb.is_mungible(shell, tolerance=0.000_001)
         if self.is_aabb:
             self.poly = Polygon(self.aabb.corners)
