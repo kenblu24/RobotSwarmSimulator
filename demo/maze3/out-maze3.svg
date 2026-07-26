@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="6.0000005cm"
+   height="6.0000005cm"
+   viewBox="0 0 60.000005 60.000005"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="out-maze3.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview20"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="cm"
+     showgrid="false"
+     inkscape:zoom="4.5675656"
+     inkscape:cx="74.656836"
+     inkscape:cy="-12.150893"
+     inkscape:window-width="2256"
+     inkscape:window-height="1369"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     id="layer1">
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect1"
+       width="25"
+       height="5"
+       x="0"
+       y="0" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect1-3"
+       width="25"
+       height="5"
+       x="-25"
+       y="-25"
+       transform="rotate(90)" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect1-3-6"
+       width="25"
+       height="5"
+       x="-25"
+       y="-35"
+       transform="rotate(90)" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect2"
+       width="30"
+       height="5"
+       x="30"
+       y="0" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect3"
+       width="5"
+       height="55"
+       x="0"
+       y="5" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect5"
+       width="5"
+       height="50"
+       x="55"
+       y="5" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect6"
+       width="40"
+       height="5"
+       x="10"
+       y="10" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect7"
+       width="5"
+       height="20"
+       x="10"
+       y="15" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect8"
+       width="35"
+       height="5"
+       x="20"
+       y="20" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect9"
+       width="35"
+       height="5"
+       x="15"
+       y="30" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect10"
+       width="5"
+       height="15"
+       x="45"
+       y="35" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect11"
+       width="10"
+       height="5"
+       x="5"
+       y="40" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect12"
+       width="25"
+       height="5"
+       x="20"
+       y="40" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect13"
+       width="5"
+       height="10"
+       x="25"
+       y="45" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect14"
+       width="5"
+       height="5"
+       x="35"
+       y="50" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect15"
+       width="25"
+       height="5"
+       x="35"
+       y="55" />
+    <rect
+       style="fill:#ffffff;stroke-width:0.00264583"
+       id="rect16"
+       width="25"
+       height="5"
+       x="5"
+       y="55" />
+  </g>
+</svg>

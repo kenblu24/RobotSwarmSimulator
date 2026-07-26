@@ -59,10 +59,9 @@ class HumanController(AbstractController):
         trigger_deadzone=0.03,
     ):
         super().__init__(agent=agent, parent=parent)
+        
+        keys = keys.lower()
 
-        pygame.joystick.init()
-
-        self.joy_id = joystick
         self.keys = keys
 
         self.body_color = (255, 0, 255)
@@ -70,17 +69,20 @@ class HumanController(AbstractController):
 
         self.key_speed_mult = key_speed_mult
         self.key_turn_mult = key_turn_mult
-        self.joy_speed_map = joy_speed_map
-        self.joy_turn_map = joy_turn_map
-        self.joy_deadzone = st.Deadzone(joy_deadzone)
-        self.trigger_deadzone = st.Deadzone(trigger_deadzone)
 
         self.speed_range = speed_range
         self.turn_range = turn_range
+        self.joystick = None
 
-        keys = keys.lower()
+        if keys == "joystick":
+            pygame.joystick.init()
 
-        if keys == "wasd":
+            self.joy_id = joystick
+            self.joy_speed_map = joy_speed_map
+            self.joy_turn_map = joy_turn_map
+            self.joy_deadzone = st.Deadzone(joy_deadzone)
+            self.trigger_deadzone = st.Deadzone(trigger_deadzone)
+        elif keys == "wasd":
             self.keymap = {
                 '+v': pygame.K_w,
                 '-w': pygame.K_a,
