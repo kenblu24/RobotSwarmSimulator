@@ -49,8 +49,6 @@ wd = pl.Path(__file__).parent
 path = wd / "configs"
 
 binary_fov_yaml_files = list((path / "BinaryFOV").glob("*.yaml"))
-
-
 @pytest.mark.parametrize("yaml_path", binary_fov_yaml_files, ids=lambda x: x.stem)
 def test_yaml_file(yaml_path: PathLike):
     spec, world_setup = load_custom_yaml(yaml_path)
@@ -61,9 +59,7 @@ def test_yaml_file(yaml_path: PathLike):
     assert collided == spec["expected"]
 
 
-large_fov_yaml_files = (path / "180degFOV").glob("*.yaml")
-
-
+large_fov_yaml_files = list((path / "180degFOV").glob("*.yaml"))
 @pytest.mark.parametrize("yaml_path", large_fov_yaml_files, ids=lambda x: x.stem)
 def test_180degFOV_yaml_file(yaml_path: PathLike):
     spec, world_setup = load_custom_yaml(yaml_path)
