@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+from numbers import Real
 
 from shapely import Polygon
 
@@ -75,23 +76,14 @@ class PointAgentSpawner(BaseAgentSpawner):
     ):
         super().__init__(world, **kwargs)
         self.avoid_overlap = avoid_overlap
-        if isinstance(facing, str):
-            if facing.lower() == 'random':
-                self.facing = [0, np.pi]
-            elif facing.lower() in ['towards', 'away']:
-                self.facing = facing.lower()
-            else:
-                msg = f"Invalid option for key 'facing' in spawner config: {facing}"
-                raise ValueError(msg)
-        else:
-            self.facing = facing
+        if isinstance(facing, str) and facing not in ['towards', 'away', 'random']:
+            msg = f"Invalid option for key 'facing' in spawner config: {facing}"
+            raise ValueError(msg)
+        self.facing = facing
 
     def generate_config(self, name=None):
         config = super().generate_config()
 
-        # modify agent config
-        if isinstance(self.facing, (list, tuple, np.ndarray)):
-            config.angle = self.rng.uniform(*self.facing)
         if name is not None and config.name is None:
             config.name = name
 
@@ -116,15 +108,37 @@ class PointAgentSpawner(BaseAgentSpawner):
         vec = b - a
         return np.arctan2(*reversed(vec))
 
+    @property
+    def center_point(self):
+        return self.agent_config.position
+
     def set_angle_post_spawn(self, agent):
-        d = np.linalg.norm(agent.pos - self.agent_config.position)
-        if d < 0.000_001:
-            return
-        if isinstance(self.facing, str):
-            if self.facing == 'towards':
-                agent.angle = self.angle_between(agent.pos, self.agent_config.position)
-            elif self.facing == 'away':
-                agent.angle = self.angle_between(self.agent_config.position, agent.pos)
+        def angle(a, b):
+            """Get angle between two points. If points are too close, return random angle."""
+            b, a = np.asarray(b, dtype=np.float64).reshape(2), np.asarray(a, dtype=np.float64).reshape(2)
+            d = np.linalg.norm(agent.pos - self.agent_config.position)
+            return self.rng.uniform(0, np.pi * 2) if d < 0.000_001 else self.angle_between(a, b)
+
+        match self.facing:
+            case None:
+                pass
+            case [Real() as theta] | (Real() as theta):  # either singleton sequence of Real or Real
+                agent.angle = theta
+            case (Real(), Real()) | np.ndarray(size=2):  # either ordered pair tuple or ndarray with two elements
+                # nb: angle_between does reshaping, so it's okay to pass shapes like [[[]], [[]]]
+                agent.angle = angle(agent.pos, self.facing)
+            # ^ need to handle ndarray above. otherwise comparing ndarray to str will error
+            case np.ndarray():
+                raise ValueError("Invalid option for key 'facing' in spawner config: ndarray with more than 2 elements")
+            case 'towards':
+                agent.angle = angle(agent.pos, self.center_point)
+            case 'away':
+                agent.angle = angle(self.center_point, agent.pos)
+            case 'random':
+                agent.angle = self.rng.uniform(0, np.pi * 2)
+            case _:
+                msg = f"Invalid option for key 'facing' in spawner config: {self.facing}"
+                raise ValueError(msg)
 
     def do_spawn(self, name=None):
         config = self.generate_config(name)
@@ -151,13 +165,15 @@ class UniformAgentSpawner(PointAgentSpawner):
         if region is None:
             raise ValueError("region must be specified for UniformAgentSpawner")
         shell = np.asarray(region, dtype=np.float64)
+        if shell.size == 4:
+            shell = AABB(shell.reshape(2, 2)).corners
         if holes is not None:
             holes = np.asarray(holes, dtype=np.float64)
         try:
             self.poly = Polygon(shell, holes)
         except ValueError as err:
             raise ValueError("Invalid region specified for UniformAgentSpawner") from err
-        self.aabb = AABB(shell)
+        self.aabb = AABB(shell)  # HACK: may happen twice if shell.size == 4
         self.is_aabb = self.aabb.is_mungible(shell, tolerance=0.000_001)
         if self.is_aabb:
             self.poly = Polygon(self.aabb.corners)
@@ -171,14 +187,41 @@ class UniformAgentSpawner(PointAgentSpawner):
         np.random.seed(self.rng.integers(0, 90000))
         return poisson(self.poly, size=n)
 
-    def set_angle_post_spawn(self, agent):
-        if isinstance(self.facing, str):
-            if self.facing == 'towards':
-                agent.angle = self.angle_between(agent.pos, self.poly.centroid.xy)
-            elif self.facing == 'away':
-                agent.angle = self.angle_between(self.poly.centroid.xy, agent.pos)
+    @property
+    def center_point(self):
+        return self.poly.centroid.xy
 
     def generate_config(self, name=None):
         config = super().generate_config(name)
         config.position = self.generate_points_in_polygon(1).flatten()
+        return config
+
+
+class UniformCircleAgentSpawner(PointAgentSpawner):
+    def __init__(
+        self,
+        world,
+        center=None,
+        radius=None,
+        **kwargs
+    ):
+        super().__init__(world, **kwargs)
+        if center is None or radius is None:
+            raise ValueError("center and radius must be specified for UniformCircleAgentSpawner")
+        self.center = np.asarray(center)
+        self.radius = radius
+
+    def generate_points_in_circle(self, n: int):
+        theta = self.rng.uniform(0, np.pi * 2, size=n)
+        radii = np.sqrt(self.rng.random(size=(n, 1))) * self.radius
+        points = np.array([np.cos(theta), np.sin(theta)]).reshape(-1, 2)
+        return radii * points + self.center
+
+    @property
+    def center_point(self):
+        return self.center
+
+    def generate_config(self, name=None):
+        config = super().generate_config(name)
+        config.position = self.generate_points_in_circle(1).flatten()
         return config

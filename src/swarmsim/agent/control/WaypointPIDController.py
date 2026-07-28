@@ -1,3 +1,13 @@
+"""PID-based Waypoint Controller class.
+
+.. autoclass:: WaypointPIDController
+    :members:
+    :undoc-members:
+
+.. autodata:: DEFAULT_PID_ARGS
+
+"""
+
 import numpy as np
 
 from .AbstractController import AbstractController
@@ -7,6 +17,23 @@ DEFAULT_PID_ARGS = dict(p=0.0, i=0.0, d=0.0, imax=0.0, min=None, max=None)
 
 
 class WaypointPIDController(AbstractController):
+    """A controller which generates unicycle control inputs ($v$, $\\omega$) to follow a waypoint.
+
+    For PID arguments, see :py:class:`~swarmsim.util.pid.PID`.
+
+    Parameters
+    ----------
+    sensor_id : int, default=None
+        The index in ``agent.sensors`` of the sensor to query for a waypoint.
+        If None, then ``static_waypoint`` is used.
+    speed_pid : dict, default=DEFAULT_PID_ARGS
+        The speed PID arguments.
+    steer_pid : dict, default=DEFAULT_PID_ARGS
+        The steering PID arguments, by default DEFAULT_PID_ARGS
+    static_waypoint : tuple[float, float] | list | np.ndarray, default=None
+        The waypoint to use if ``sensor_id`` is None.
+    """
+
     def __init__(
         self,
         agent=None, parent=None,

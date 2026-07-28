@@ -60,6 +60,8 @@ def test_yaml_file(yaml_path: PathLike):
 
 
 large_fov_yaml_files = list((path / "180degFOV").glob("*.yaml"))
+
+
 @pytest.mark.parametrize("yaml_path", large_fov_yaml_files, ids=lambda x: x.stem)
 def test_180degFOV_yaml_file(yaml_path: PathLike):
     spec, world_setup = load_custom_yaml(yaml_path)

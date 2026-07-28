@@ -251,6 +251,7 @@ class LazyKnownModules:
 
     def add_native_spawners(self):
         from ..world.spawners.AgentSpawner import AgentSpawner, UniformAgentSpawner, PointAgentSpawner
+        from ..world.spawners.AgentSpawner import UniformCircleAgentSpawner
         from ..world.spawners.ExcelSpawner import ExcelSpawner
         from ..world.spawners.DonutSpawner import DonutAgentSpawner
 
@@ -261,6 +262,7 @@ class LazyKnownModules:
         self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['UniformAgentSpawner'] = UniformAgentSpawner
+        self._dictlike_types['spawners']['UniformCircleAgentSpawner'] = UniformCircleAgentSpawner
         self._dictlike_types['spawners']['DonutAgentSpawner'] = DonutAgentSpawner
 
 

@@ -16,6 +16,12 @@ Example
 .. seealso::
     This class was adapted from the following micropython code:
     https://github.com/openmv/openmv/blob/master/scripts/libraries/pid.py
+
+
+.. autoclass:: PID
+    :members:
+    :undoc-members:
+
 """
 
 import time
@@ -27,26 +33,27 @@ def clamp(x, xmin, xmax):
 
 
 class PID:
+    """PID Class
+
+    Parameters
+    ----------
+    p : float, optional
+        proportional gain, by default 0
+    i : float, optional
+        integrator gain, by default 0
+    d : float, optional
+        derivative gain, by default 0
+    imax : int, optional
+        integrator max value, by default 0
+        The integrator will be clamped to within ``[-imax, imax]``
+    """
+
     reset_time = 100  # if PID hasn't been updated for this much time, reset derivative and integrator
     d_smoothing = 1 / (2 * pi * 20)  # derivative smoothing (RC time constant)
     i_decay = 1 / (2 * pi * 20)  # decay time for integrator (RC time constant)
 
     def __init__(self, p: float = 0, i: float = 0, d: float = 0,
                  imax: int = 0, min: float | None = None, max: float | None = None):
-        """PID Class
-
-        Parameters
-        ----------
-        p : float, optional
-            proportional gain, by default 0
-        i : float, optional
-            integrator gain, by default 0
-        d : float, optional
-            derivative gain, by default 0
-        imax : int, optional
-            integrator max value, by default 0
-            The integrator will be clamped to within ``[-imax, imax]``
-        """
         self._kp = float(p)
         self._ki = float(i)
         self._kd = float(d)

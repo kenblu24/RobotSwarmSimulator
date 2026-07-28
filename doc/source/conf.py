@@ -24,6 +24,7 @@ from pygments import token as t
 # Posted by Robert Lujo, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-06-17, License - CC BY-SA 3.0
 
+
 # TODO: Figure out how to move this to a separate file
 # it errors if I try to import as a relative import
 
