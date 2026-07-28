@@ -5,8 +5,6 @@ from unittest.mock import MagicMock
 import pytest
 import numpy as np
 
-from swarmsim.agent.control.StaticController import StaticController
-from swarmsim.agent.control.BinaryController import BinaryController
 from swarmsim.world.simulate import main
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
@@ -21,7 +19,6 @@ def agent():
 
 def test_static_controller(agent):
     from swarmsim.agent.control.StaticController import StaticController
-
     static_controller = StaticController(agent=agent, output=(1.5, 2.3))
     assert np.array_equal(static_controller.get_actions(agent), (1.5, 2.3))
 
@@ -34,6 +31,7 @@ def binary_sensor_active():
     sensor = MagicMock(spec=Sensor)
     sensor.current_state = 1
     return sensor
+
 
 @pytest.fixture
 def binary_sensor_inactive():
@@ -57,12 +55,13 @@ def test_binary_controller(agent, binary_sensor_active, binary_sensor_inactive):
 
 
 wd = pl.Path(__file__).parent.parent.parent
-path = wd / "sensors" / "configs"
-yaml_files = list(path.glob("*.yaml"))
+path = wd / "sensors" / "configs" / "180degFOV"
+yaml_files = tuple(path.glob("*.yaml"))
 
 
 @pytest.mark.parametrize("yaml_path", yaml_files, ids=lambda x: x.stem)
 def test_binary_controller_yaml(yaml_path: str) -> None:
+    from swarmsim.agent.control.BinaryController import BinaryController
     _, world_setup = load_custom_yaml(yaml_path)
     world_config = RectangularWorldConfig(**world_setup)
     world = RectangularWorld(world_config)
@@ -78,7 +77,7 @@ def test_binary_controller_yaml(yaml_path: str) -> None:
 
     on_see = [0.02, -0.5]
     on_nothing = [0.02, 0.5]
-    agent1.controller = BinaryController(on_nothing, on_see) # type: ignore
+    agent1.controller = BinaryController(on_nothing, on_see)
 
     world.step()
     detected = sensor.current_state == 1

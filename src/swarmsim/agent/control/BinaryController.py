@@ -11,7 +11,9 @@ import numpy as np
 from .AbstractController import AbstractController
 from ...util import statistics_tools as st
 
-ConstantOutputValues = tuple[float, ...] | np.ndarray
+from typing import Sequence
+
+ConstantOutputValues = Sequence[float] | np.ndarray
 TwoConstantOutputValues = tuple[ConstantOutputValues, ConstantOutputValues] | np.ndarray
 
 
@@ -31,8 +33,8 @@ class BinaryController(AbstractController):
 
     Parameters
     ----------
-    a : tuple[float, ...] | tuple[tuple[float, ...], ...] | np.ndarray
-    b : tuple[float, ...] | np.ndarray | None, optional
+    a : Sequence[float, ...] | Sequence[tuple[float, ...], ...] | np.ndarray
+    b : Sequence[float, ...] | np.ndarray | None, optional
     agent : Agent, optional
     parent : Agent, optional
     sensor_id : int, default=0
@@ -51,17 +53,17 @@ class BinaryController(AbstractController):
 
         # set self.a and self.b, the two sets of constant output values.
         a = np.asarray(a, dtype='float64')
-        if not 0 < len(a.shape) < 2:
+        if not 0 < a.ndim <= 2:
             raise ValueError("Expected first argument to be a 1D or 2D array")
         if a.shape[0] == 2 and b is None:
             self.a, self.b = a
-        elif len(a.shape) == 1:
+        elif a.ndim == 1:
             if b is None and len(a) % 2 == 0:
                 self.a = a[len(a) // 2:]
                 self.b = a[:len(a) // 2]
             else:
                 b = np.asarray(b, dtype='float64')
-                if len(b.shape) != 1 or b.shape[0] != a.shape[0]:
+                if b.ndim != 1 or b.shape[0] != a.shape[0]:
                     raise ValueError("Expected constant output values to be 1D arrays of same size")
                 self.a, self.b = a, b
         else:
