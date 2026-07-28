@@ -1,3 +1,11 @@
+"""Binary Controller class.
+
+.. autoclass:: BinaryController
+    :members:
+    :undoc-members:
+
+"""
+
 import numpy as np
 
 from .AbstractController import AbstractController

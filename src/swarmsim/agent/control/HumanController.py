@@ -1,3 +1,14 @@
+"""Human Controller class.
+
+.. autoclass:: HumanController
+    :members:
+    :undoc-members:
+
+.. autofunction:: decay
+.. autofunction:: trigger_remap
+
+"""
+
 import sys
 
 import numpy as np
@@ -46,6 +57,30 @@ else:
 
 
 class HumanController(AbstractController):
+    """Controller taking input from a joystick or keyboard.
+
+    Parameters
+    ----------
+    joystick : int, default=0
+        Index of the controller to use. Set to None to disable.
+    keys : str, default='wasd'
+        The keys to use for movement. Can be None, 'wasd', 'arrowkeys', or 'ijkl'.
+    speed_range : tuple, default=(-0.3, 0.3)
+        The minimum and maximum speeds to map the joystick to.
+    turn_range : tuple, default=(-1.5, 1.5)
+        The minimum and maximum angular velocities to map the joystick to.
+    key_speed_mult : float, default=0.01
+        The speed multiplier for the keyboard keys.
+    key_turn_mult : float, default=0.1
+        The turn multiplier for the keyboard keys.
+    joy_speed_map : None | tuple[tuple, tuple], default=None
+    joy_turn_map : None | tuple[tuple, tuple], default=None
+    joy_deadzone : float, default=0.1
+        Deadzone for the joystick, between 0 and 1.
+    trigger_deadzone : float, default=0.03
+        Deadzone for the trigger, between 0 and 1, where 0 is fully released.
+    """
+
     def __init__(
         self, agent=None, parent=None,
         joystick=0,
@@ -72,6 +107,8 @@ class HumanController(AbstractController):
 
         self.key_speed_mult = key_speed_mult
         self.key_turn_mult = key_turn_mult
+        self.joy_speed_map: None | tuple[tuple[float, ...], tuple[float, ...]] | list | np.ndarray
+        self.joy_turn_map: None | tuple[tuple[float, ...], tuple[float, ...]] | list | np.ndarray
         self.joy_speed_map = joy_speed_map
         self.joy_turn_map = joy_turn_map
         self.joy_deadzone = st.Deadzone(joy_deadzone)
@@ -102,6 +139,13 @@ class HumanController(AbstractController):
                 '-w': pygame.K_j,
                 '-v': pygame.K_k,
                 '+w': pygame.K_l,
+            }
+        elif keys is None or keys == "None":
+            self.keymap = {
+                '+v': None,
+                '-w': None,
+                '-v': None,
+                '+w': None,
             }
         else:
             raise ValueError("Invalid keymap specified")
