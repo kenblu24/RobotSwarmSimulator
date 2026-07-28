@@ -206,6 +206,7 @@ class LazyKnownModules:
         from ..agent.control.WaypointPIDController import WaypointPIDController
         from ..agent.control.HumanController import HumanController
         from ..agent.control.LevyController import LevyController
+        from ..agent.control.MultibitBinaryController import MultibitBinaryController
 
         self.add_dictlike_namespace('controller')
 
@@ -216,6 +217,7 @@ class LazyKnownModules:
         self._dictlike_types['controller']['WaypointPIDController'] = WaypointPIDController
         self._dictlike_types['controller']['HumanController'] = HumanController
         self._dictlike_types['controller']['LevyController'] = LevyController
+        self._dictlike_types['controller']['MultibitBinaryController'] = MultibitBinaryController
 
     def add_native_metrics(self):
         from .. import metrics

@@ -8,7 +8,7 @@ from typing import Sequence, Mapping, SupportsIndex
 ConstantOutputValues = tuple[float, ...] | np.ndarray
 
 
-class MultiBinaryController(AbstractController):
+class MultibitBinaryController(AbstractController):
     """Controller that maps multiple binary sensors to constant control inputs.
 
     The controller is specified by a dictionary of sensor states to output values.
