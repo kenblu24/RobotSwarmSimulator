@@ -39,6 +39,8 @@ if sys.platform == 'linux':
     jm = linux_map
 elif sys.platform == 'win32':
     jm = windows_map
+elif sys.platform == 'darwin':
+    jm = windows_map  # FIXME: Test on Mac
 else:
     raise ValueError("Unsupported platform")
 
