@@ -1,11 +1,9 @@
-import os
 import pathlib as pl
 from unittest.mock import MagicMock
 
 import pytest
 import numpy as np
 
-from swarmsim.world.simulate import main
 from swarmsim.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
 from swarmsim.agent.Agent import Agent
 from swarmsim.sensors.Sensor import Sensor
