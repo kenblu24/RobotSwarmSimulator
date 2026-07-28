@@ -1,3 +1,13 @@
+"""Multibit Binary Controller class.
+
+.. autoclass:: MultibitBinaryController
+    :members:
+    :undoc-members:
+
+.. autodata:: ConstantOutputValues
+
+"""
+
 import numpy as np
 
 from .AbstractController import AbstractController
