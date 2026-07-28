@@ -19,7 +19,7 @@ def check_mbc_agent(controller: MultibitBinaryController, sens_values: list[bool
     assert controller.get_actions(agent) == expected
 
 
-def test_mbc_01():
+def test_2bit():
     controller = MultibitBinaryController(
         outputs={
             0b00: (0.0, 0.0),
@@ -37,7 +37,7 @@ def test_mbc_01():
     check_mbc_agent(controller, [True, True], (1.0, 1.0))
 
 
-def test_mbc_02():
+def test_2bit_default():
     controller = MultibitBinaryController(
         outputs={
             0b00: (0.0, 0.0),
