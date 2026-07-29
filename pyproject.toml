@@ -62,5 +62,6 @@ docs = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
+"Repository" = "https://github.com/kenblu24/RobotSwarmSimulator"
 "Bug Tracker" = "https://github.com/kenblu24/RobotSwarmSimulator/issues"
+"Documentation" = "https://kenblu24.github.io/RobotSwarmSimulator/"
