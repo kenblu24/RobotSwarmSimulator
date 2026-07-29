@@ -1,3 +1,23 @@
+"""
+Agent Spawners
+
+.. autoclass:: BaseAgentSpawner
+    :members:
+    :undoc-members:
+
+.. autoclass:: PointAgentSpawner
+    :members:
+    :undoc-members:
+
+.. autoclass:: UniformAgentSpawner
+    :members:
+    :undoc-members:
+
+.. autoclass:: UniformCircleAgentSpawner
+    :members:
+    :undoc-members:
+"""
+
 import numpy as np
 import copy
 from numbers import Real
@@ -22,6 +42,27 @@ def AgentSpawner(*args, **kwargs):
 
 
 class BaseAgentSpawner(Spawner):
+    """Base class for Agent Spawners.
+
+    .. inheritance-diagram:: swarmsim.world.spawners.AgentSpawner.BaseAgentSpawner
+        :parts: 1
+
+    Parameters
+    ----------
+    world : World
+        The world to spawn agents in.
+    agent : Agent | BaseAgentConfig | dict
+        The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
+    n : int | None, default=1
+        The number of agents to spawn.
+    seed : str, default='unspecified'
+        The seed for the random number generator.
+        If ``'unspecified'``, the world's RNG is used. If ``None``, the system time is used.
+    mode : str, default='oneshot'
+        The mode to use for spawning agents. Currently, only ``'oneshot'`` is supported.
+    delay : int, default=0
+        The delay before the next spawn is allowed.
+    """
     def __init__(
         self,
         world,
@@ -67,6 +108,34 @@ class BaseAgentSpawner(Spawner):
 
 
 class PointAgentSpawner(BaseAgentSpawner):
+    """A spawner that spawns agents at a point.
+
+    The agents will be spawned at the location of the prototype agent (``agent.position``).
+
+    .. inheritance-diagram:: swarmsim.world.spawners.AgentSpawner.PointAgentSpawner
+        :parts: 1
+
+    Parameters
+    ----------
+    world : RectangularWorld
+        The world to spawn agents in.
+    agent : Agent | BaseAgentConfig | dict
+        The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
+    facing : str | float | tuple[float, float] | np.ndarray | None, default=None
+        The direction to face when spawning agents. Can be:
+
+        * :py:class:`float` representing angle heading in radians
+        * a coordinate pair representing the direction to point all agents towards
+        * ``'towards'`` to point all agents towards the center of the spawner
+        * ``'away'`` to point all agents away from the center of the spawner
+        * ``'random'`` to randomly point all agents in a random direction
+        * ``None`` to use the prototype agent's heading
+    avoid_overlap : bool, default=False
+        Whether to shift the agents post-spawn to avoid overlapping agents.
+    **kwargs
+        Additional keyword arguments to pass to the base class.
+        This spawner takes the same arguments as :class:`BaseAgentSpawner`.
+    """
     def __init__(
         self,
         world,
@@ -154,6 +223,30 @@ class PointAgentSpawner(BaseAgentSpawner):
 
 
 class UniformAgentSpawner(PointAgentSpawner):
+    """Spawn agents uniformly within a rectangular or polygonal region.
+
+    .. inheritance-diagram:: swarmsim.world.spawners.AgentSpawner.UniformAgentSpawner
+        :parts: 1
+
+    Parameters
+    ----------
+    world : RectangularWorld
+        The world to spawn agents in.
+    agent : Agent | BaseAgentConfig | dict
+        The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
+    region : Polygon | list[tuple] | np.ndarray
+        The region to spawn agents in.
+    holes : Polygon, default=None
+        holes for the ``region``
+    **kwargs
+        Additional keyword arguments to pass to the base class.
+        This spawner takes the same arguments as :class:`PointAgentSpawner` and :class:`BaseAgentSpawner`.
+
+    Raises
+    ------
+    ValueError
+        If the region is not specified or invalid.
+    """
     def __init__(
         self,
         world,
@@ -198,6 +291,25 @@ class UniformAgentSpawner(PointAgentSpawner):
 
 
 class UniformCircleAgentSpawner(PointAgentSpawner):
+    """Spawn agents uniformly within a circle.
+
+    .. inheritance-diagram:: swarmsim.world.spawners.AgentSpawner.UniformCircleAgentSpawner
+        :parts: 1
+
+    Parameters
+    ----------
+    world : RectangularWorld
+        The world to spawn agents in.
+    agent : Agent | BaseAgentConfig | dict
+        The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
+    center : tuple[float, float] | np.ndarray
+        The center of the circle.
+    radius : float
+        The radius of the circle.
+    **kwargs
+        Additional keyword arguments to pass to the base class.
+        This spawner takes the same arguments as :class:`PointAgentSpawner` and :class:`BaseAgentSpawner`.
+    """
     def __init__(
         self,
         world,
