@@ -221,7 +221,7 @@ class BinaryFOVSensor(Sensor):
         if agents.size:
             positions = np.array([agent.pos for agent in agents])
             distances = np.linalg.norm(positions - sensor_origin, axis=1)
-            is_close = distances < self.r
+            is_close = distances < (self.r + np.array([agent.radius for agent in agents]))
             bag = agents[is_close]
         else:
             bag = []
@@ -294,6 +294,13 @@ class BinaryFOVSensor(Sensor):
                 if leftWhisker or rightWhisker:
                     self.determineState(True, agent, world)
                     return
+                # check overlapping other agent
+                if np.dot(u, u) < agent.radius**2:
+                    if self.agent.name == "4" and self.target_team == "blue":
+                        print("agent 4 overlap correction", self.agent.pos)
+                    self.determineState(True, agent, world)
+                    return
+            
 
             # # OLD CODE, circle_interesect_sensing_cone is no longer used
             # d = self.circle_interesect_sensing_cone(u, self.agent.radius)
@@ -500,7 +507,7 @@ class BinaryFOVSensor(Sensor):
                 AARtl = np.array(AAR[:2]) * zoom + pan
                 AARbr = np.array(AAR[2:]) * zoom + pan
                 pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
-                detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
+                detected = [agent for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR)) for agent in point.data]
                 for agent in detected:
                     pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"],
                                        agent.pos * zoom + pan, agent.radius * zoom, width * 3)
