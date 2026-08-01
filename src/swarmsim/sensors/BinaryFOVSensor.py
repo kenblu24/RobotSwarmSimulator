@@ -296,8 +296,6 @@ class BinaryFOVSensor(Sensor):
                     return
                 # check overlapping other agent
                 if np.dot(u, u) < agent.radius**2:
-                    if self.agent.name == "4" and self.target_team == "blue":
-                        print("agent 4 overlap correction", self.agent.pos)
                     self.determineState(True, agent, world)
                     return
             
