@@ -1,11 +1,11 @@
 import pygame
 import numpy as np
 import math
-from .AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 from typing import List
 
 
-class BinaryLOSSensor(AbstractSensor):
+class BinaryLOSSensor(Sensor):
     def __init__(self, agent=None, parent=None, angle=None, draw=True, history_length=50, width=1):
         super().__init__(agent=agent, parent=parent, draw=draw)
         self.current_state = 0
@@ -14,6 +14,7 @@ class BinaryLOSSensor(AbstractSensor):
         self.hist_len = history_length
         self.width = width
         self.show = draw
+        self.agent_in_sight = None
 
     def checkForLOSCollisions(self, world) -> None:
         sensor_position = self.agent.getPosition()
@@ -24,26 +25,26 @@ class BinaryLOSSensor(AbstractSensor):
         d_hat = d / np.linalg.norm(d)
 
         # Check seen agent from last frame first, to avoid expensive computation
-        if self.agent.agent_in_sight is not None and not self.agent.agent_in_sight.deleted:
-            agent = self.agent.agent_in_sight
-            if self.agent_in_sight(agent, p_0, d_hat):
-                self.agent.agent_in_sight = agent
+        if self.agent_in_sight is not None and not self.agent_in_sight.deleted:
+            agent = self.agent_in_sight
+            if self.is_agent_in_sight(agent, p_0, d_hat):
+                self.agent_in_sight = agent
                 self.current_state = 1
                 self.add_to_history(self.current_state)
                 return
 
         for agent in world.population:
-            if self.agent_in_sight(agent, p_0, d_hat):
-                self.agent.agent_in_sight = agent
+            if self.is_agent_in_sight(agent, p_0, d_hat):
+                self.agent_in_sight = agent
                 self.current_state = 1
                 self.add_to_history(self.current_state)
                 return
 
-        self.agent.agent_in_sight = None
+        self.agent_in_sight = None
         self.current_state = 0
         self.add_to_history(self.current_state)
 
-    def agent_in_sight(self, agent, p_0, d_hat):
+    def is_agent_in_sight(self, agent, p_0, d_hat):
         if agent == self.agent:
             return False
 

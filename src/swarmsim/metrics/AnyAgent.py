@@ -1,8 +1,8 @@
 import ast
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class AnyAgent(AbstractMetric):
+class AnyAgent(Metric):
 
     def __init__(
         self,

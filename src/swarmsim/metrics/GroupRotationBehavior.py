@@ -1,8 +1,9 @@
 import numpy as np
 from typing import List
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
-class GroupRotationBehavior(AbstractMetric):
+
+class GroupRotationBehavior(Metric):
 
     def __init__(self, history=None):
         super().__init__(name = "Group_Rotation", history_size=history)
@@ -13,7 +14,7 @@ class GroupRotationBehavior(AbstractMetric):
         self.population = world.population
 
     def calculate(self):
-        n = len(self.population)
+        n = len(self.population) if self.population is not None else 0
         if n == 1:
             self.set_value(0.0)
             return

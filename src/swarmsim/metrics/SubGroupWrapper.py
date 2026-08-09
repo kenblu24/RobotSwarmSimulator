@@ -1,15 +1,15 @@
-from ..metrics.AbstractMetric import AbstractMetric
+from .Metric import Metric
 from typing import Tuple
 
-class SubGroupBehavior(AbstractMetric):
-    def __init__(self, wrapped_behavior: AbstractMetric, subgroup=0):
+
+class SubGroupBehavior(Metric):
+    def __init__(self, wrapped_behavior: Metric, subgroup=0):
         super().__init__(name=f"{wrapped_behavior.name}_{subgroup}", history_size=wrapped_behavior.history_size)
         self.group=subgroup
         self.population=[]
 
         wrapped_behavior.name = f"{wrapped_behavior.name}_{subgroup}"
         self.wrapped_b = wrapped_behavior
-
 
     def attach_world(self, world):
         self.population = []

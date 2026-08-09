@@ -116,7 +116,6 @@ class StaticAgent(Agent):
         self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
         self.dt = world.dt  #: float: Copy the world's dt at agent creation.
         self.is_highlighted = False
-        self.agent_in_sight = None
         self.body_filled = config.body_filled
         self.body_color = config.body_color
         self.debug = config.debug or self.DEBUG

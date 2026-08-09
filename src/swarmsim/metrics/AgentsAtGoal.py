@@ -4,11 +4,11 @@ import copy
 import numpy as np
 from typing import List
 import warnings
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 # from ..agent.MazeAgent import MazeAgent
 
 
-class AgentsAtGoal(AbstractMetric):
+class AgentsAtGoal(Metric):
     def __init__(self, name="Goal_Agents", history=None, as_percent=False):
         super().__init__(name=name, history_size=history)
         self.population = None

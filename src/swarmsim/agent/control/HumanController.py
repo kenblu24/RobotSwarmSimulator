@@ -1,3 +1,16 @@
+"""Human Controller class.
+
+.. autoclass:: HumanController
+    :members:
+    :undoc-members:
+
+.. autofunction:: decay
+.. autofunction:: trigger_remap
+
+"""
+
+import sys
+
 import numpy as np
 import pygame
 
@@ -14,7 +27,60 @@ def decay(x, decay=0.1):
     return copysign(magnitude, x)
 
 
+linux_map = {
+    'x1': 0,
+    'y1': 1,
+    'x2': 3,
+    'y2': 4,
+    'lt': 2,
+    'rt': 5,
+}
+
+windows_map = {
+    'x1': 0,
+    'y1': 1,
+    'x2': 2,
+    'y2': 3,
+    'lt': 4,
+    'rt': 5,
+}
+
+
+if sys.platform == 'linux':
+    jm = linux_map
+elif sys.platform == 'win32':
+    jm = windows_map
+elif sys.platform == 'darwin':
+    jm = windows_map  # FIXME: Test on Mac
+else:
+    raise ValueError("Unsupported platform")
+
+
 class HumanController(AbstractController):
+    """Controller taking input from a joystick or keyboard.
+
+    Parameters
+    ----------
+    joystick : int, default=0
+        Index of the controller to use. Set to None to disable.
+    keys : str, default='wasd'
+        The keys to use for movement. Can be None, 'wasd', 'arrowkeys', or 'ijkl'.
+    speed_range : tuple, default=(-0.3, 0.3)
+        The minimum and maximum speeds to map the joystick to.
+    turn_range : tuple, default=(-1.5, 1.5)
+        The minimum and maximum angular velocities to map the joystick to.
+    key_speed_mult : float, default=0.01
+        The speed multiplier for the keyboard keys.
+    key_turn_mult : float, default=0.1
+        The turn multiplier for the keyboard keys.
+    joy_speed_map : None | tuple[tuple, tuple], default=None
+    joy_turn_map : None | tuple[tuple, tuple], default=None
+    joy_deadzone : float, default=0.1
+        Deadzone for the joystick, between 0 and 1.
+    trigger_deadzone : float, default=0.03
+        Deadzone for the trigger, between 0 and 1, where 0 is fully released.
+    """
+
     def __init__(
         self, agent=None, parent=None,
         joystick=0,
@@ -41,6 +107,8 @@ class HumanController(AbstractController):
 
         self.key_speed_mult = key_speed_mult
         self.key_turn_mult = key_turn_mult
+        self.joy_speed_map: None | tuple[tuple[float, ...], tuple[float, ...]] | list | np.ndarray
+        self.joy_turn_map: None | tuple[tuple[float, ...], tuple[float, ...]] | list | np.ndarray
         self.joy_speed_map = joy_speed_map
         self.joy_turn_map = joy_turn_map
         self.joy_deadzone = st.Deadzone(joy_deadzone)
@@ -71,6 +139,13 @@ class HumanController(AbstractController):
                 '-w': pygame.K_j,
                 '-v': pygame.K_k,
                 '+w': pygame.K_l,
+            }
+        elif keys is None or keys == "None":
+            self.keymap = {
+                '+v': None,
+                '-w': None,
+                '-v': None,
+                '+w': None,
             }
         else:
             raise ValueError("Invalid keymap specified")
@@ -179,10 +254,10 @@ class HumanController(AbstractController):
     def handle_controller(self):
         if self.joystick is None:
             return 0., 0.
-        x, y = self.joystick.get_axis(0), -self.joystick.get_axis(1)
-        x2, _y2 = self.joystick.get_axis(2), -self.joystick.get_axis(3)
-        lt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(4)))
-        rt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(5)))
+        x, y = self.joystick.get_axis(jm['x1']), -self.joystick.get_axis(jm['y1'])
+        x2, _y2 = self.joystick.get_axis(jm['x2']), -self.joystick.get_axis(jm['y2'])
+        lt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(jm['lt'])))
+        rt = self.trigger_deadzone(trigger_remap(self.joystick.get_axis(jm['rt'])))
         y = self.joy_speed_remap(self.joy_deadzone(y)) + rt - lt
         x = self.joy_turn_remap(self.joy_deadzone(x) + self.joy_deadzone(x2))
         v = self.speed_denorm(y)

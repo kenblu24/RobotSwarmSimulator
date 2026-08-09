@@ -2,10 +2,10 @@ import math
 
 import numpy as np
 from typing import List
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class SensorRotation(AbstractMetric):
+class SensorRotation(Metric):
 
     def __init__(self, sensor_index, history=None):
         super().__init__(name="Sensor_Rotation", history_size=history)

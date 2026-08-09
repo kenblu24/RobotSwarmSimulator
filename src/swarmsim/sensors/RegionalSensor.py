@@ -1,11 +1,11 @@
 import pygame
 import numpy as np
 import math
-from .AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 from typing import List
 
 
-class RegionalSensor(AbstractSensor):
+class RegionalSensor(Sensor):
     def __init__(self, world_object_index, parent=None, draw=True, history_length=50):
         super(RegionalSensor, self).__init__(parent=parent, draw=draw)
         self.current_state = 0

@@ -61,8 +61,8 @@ class AgentConnectivityGUI(AbstractGUI):
             pygame.draw.circle(screen, (255, 255, 255), position, node_radius, 0)
 
         for i, agent in enumerate(self.world.population):
-            if agent.agent_in_sight:
-                j = int(agent.agent_in_sight.name)
+            if agent.sensors[0].agent_in_sight:
+                j = int(agent.sensors[0].agent_in_sight.name)
                 pygame.draw.line(screen, (255, 255, 255), positions[i], positions[j])
 
 

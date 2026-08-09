@@ -2,10 +2,10 @@ import math
 
 import numpy as np
 from typing import List
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class GeneElementDifference(AbstractMetric):
+class GeneElementDifference(Metric):
 
     def __init__(self, genome_a_index, genome_b_index, history=None):
         super().__init__(name="Sensor_Offset", history_size=history)

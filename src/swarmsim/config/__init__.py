@@ -38,7 +38,7 @@ Decorators
 
 .. seealso::
    There is no ``swarmsim.config.get_world_class`` function,
-   world type lookup is handled inside :py:mod:`~swarmsim.world.World.World_from_config`.
+   world type lookup is handled inside :py:mod:`~swarmsim.world.World.world_from_config`.
 
 """
 
@@ -184,7 +184,6 @@ class LazyKnownModules:
     def add_native_sensors(self):
         from ..sensors.BinaryFOVSensor import BinaryFOVSensor
         from ..sensors.BinaryLOSSensor import BinaryLOSSensor
-        from ..sensors.GenomeDependentSensor import GenomeBinarySensor
         from ..sensors.RegionalSensor import RegionalSensor
         from ..sensors.StaticSensor import StaticSensor
         from ..sensors.PointCollisionSensor import PointCollisionSensor
@@ -194,7 +193,6 @@ class LazyKnownModules:
 
         self._dictlike_types['sensors']['BinaryFOVSensor'] = BinaryFOVSensor
         self._dictlike_types['sensors']['BinaryLOSSensor'] = BinaryLOSSensor
-        self._dictlike_types['sensors']['GenomeBinarySensor'] = GenomeBinarySensor
         self._dictlike_types['sensors']['RegionalSensor'] = RegionalSensor
         self._dictlike_types['sensors']['StaticSensor'] = StaticSensor
         self._dictlike_types['sensors']['PointCollisionSensor'] = PointCollisionSensor
@@ -205,10 +203,10 @@ class LazyKnownModules:
         from ..agent.control.StaticController import StaticController
         from ..agent.control.BinaryController import BinaryController
         from ..agent.control.AgentMethodController import AgentMethodController
-        from ..agent.control.HomogeneousController import HomogeneousController
         from ..agent.control.WaypointPIDController import WaypointPIDController
         from ..agent.control.HumanController import HumanController
         from ..agent.control.LevyController import LevyController
+        from ..agent.control.MultibitBinaryController import MultibitBinaryController
 
         self.add_dictlike_namespace('controller')
 
@@ -216,10 +214,10 @@ class LazyKnownModules:
         self._dictlike_types['controller']['StaticController'] = StaticController
         self._dictlike_types['controller']['BinaryController'] = BinaryController
         self._dictlike_types['controller']['AgentMethodController'] = AgentMethodController
-        self._dictlike_types['controller']['HomogeneousController'] = HomogeneousController
         self._dictlike_types['controller']['WaypointPIDController'] = WaypointPIDController
         self._dictlike_types['controller']['HumanController'] = HumanController
         self._dictlike_types['controller']['LevyController'] = LevyController
+        self._dictlike_types['controller']['MultibitBinaryController'] = MultibitBinaryController
 
     def add_native_metrics(self):
         from .. import metrics
@@ -253,6 +251,7 @@ class LazyKnownModules:
 
     def add_native_spawners(self):
         from ..world.spawners.AgentSpawner import AgentSpawner, UniformAgentSpawner, PointAgentSpawner
+        from ..world.spawners.AgentSpawner import UniformCircleAgentSpawner
         from ..world.spawners.ExcelSpawner import ExcelSpawner
         from ..world.spawners.DonutSpawner import DonutAgentSpawner
 
@@ -263,6 +262,7 @@ class LazyKnownModules:
         self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['PointAgentSpawner'] = PointAgentSpawner
         self._dictlike_types['spawners']['UniformAgentSpawner'] = UniformAgentSpawner
+        self._dictlike_types['spawners']['UniformCircleAgentSpawner'] = UniformCircleAgentSpawner
         self._dictlike_types['spawners']['DonutAgentSpawner'] = DonutAgentSpawner
 
 

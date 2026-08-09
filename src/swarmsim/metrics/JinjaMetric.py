@@ -1,10 +1,95 @@
-from functools import partial
-import numpy as np
-from .AbstractMetric import AbstractMetric
+"""JinjaMetric Module
+
+.. inheritance-diagram:: JinjaMetric
+
+:meta public:
+
+JinjaMetric
+-----------
+
+.. autoclass:: JinjaMetric
+    :members:
+    :undoc-members:
+    :inherited-members:
+
+Examples
+--------
+
+.. code-block:: yaml+jinja
+   :caption: world.yaml
+
+   type: RectangularWorld
+   metrics:
+   - type: JinjaMetric
+     metrics:
+     - type: Circliness
+     template: |
+       {% set old_aggregation = world.metrics[1].value %}
+       {% set multiplier = 2 %}
+     expression: old_aggregation * multiplier + metrics[0].value
+   - type: Aggregation
+
+"""
+# FIXME: The above docstring will not appear since this file gets imported as a class, not a module.
+# this is because swarmsim.metrics.__all__ exports `metrics.JinjaMetric` <-- class, not module
+
+from .Metric import Metric
 from typing import Sequence
 
 
-class JinjaMetric(AbstractMetric):
+class JinjaMetric(Metric):
+    """Combine multiple metrics programmatically using a Jinja expression.
+
+    Evaluation Order on ``JinjaMetric.calculate()``:
+
+       1. Evaluate the ``template`` and ``eval_condition`` and return if False.
+       2. Call :py:meth:`Metric.calculate` on the submetrics.
+       3. Render the ``template`` and save the context.
+       4. Evaluate the ``expression``.
+       5. Evaluate the ``save_condition`` and return if False.
+       6. Call :py:meth:`Metric.set_value`.
+
+    You may reference ``self``, ``world``, ``metric``, and ``metrics`` in the
+    ``template``, ``expression``, ``eval_condition``, and ``save_condition``..
+    Additionally, any variables set in the ``template`` will be available in the
+    expressions.
+
+    Note that metrics in ``world.metrics`` are calculated in order (i.e. the order specified/added).
+    Thus, any metrics before this ``JinjaMetric`` will be up-to-date when this metric is calculated,
+    but any metrics ordered afterwards may be at least one time step behind.
+
+    Parameters
+    ----------
+    name : str
+        The name of the JinjaMetric.
+    metric : Metric | dict
+        A :py:class:`Metric` or a dict that can be used to initialize a :py:class:`Metric`.
+        Not added to :py:attr:`world.metrics`.
+        Can be referenced as ``self.metric`` or ``metric`` in the Jinja expression.
+    metrics : Iterable[Metric | dict]
+        Additional metrics to use in the Jinja expression. Not added to :py:attr:`world.metrics`.
+        This becomes a list which can be referenced as ``self.metrics`` or ``metrics`` in the Jinja expression.
+    template : str
+        A Jinja template that can be used to set variables that can be used in the expression.
+        The rendered result of the template is not used. The template is always evaluated,
+        so variables exported can be used in ``expression``, ``eval_condition``, and ``save_condition``.
+    expression : str
+        The Jinja expression to use. The return value becomes the value of the metric.
+    eval_condition : Callable | str | None
+        A Callable or Jinja expression that evaluates to a boolean.
+        If the condition evaluates to False, the submetrics and ``self.expression`` will not be evaluated.
+        If None, the Jinja expression will always be evaluated.
+    save_condition : Callable | str | None
+        A Callable or Jinja expression that evaluates to a boolean.
+        If the condition evaluates to False, ``self.set_value`` will not be called and
+        the result of ``self.expression`` will not be saved.
+        If None, the metric will always be saved.
+    default : Any, default='__unset__'
+        The initial value of the metric. If ``'__unset__'``, the value will be inherited from
+        :py:class:`Metric`.
+    default_aggregation : str
+        The default aggregation to use for the metric.
+    """
 
     def __init__(
         self,
@@ -14,7 +99,7 @@ class JinjaMetric(AbstractMetric):
         metrics=None,
         template=None,
         expression=None,
-        aux_expressions=(),
+        # aux_expressions=(),
         eval_condition=None,
         save_condition=None,
         default='__unset__',
@@ -41,11 +126,11 @@ class JinjaMetric(AbstractMetric):
         if self._default != '__unset__':
             self.current_value = self._default
         self.time_activated = None
-        if isinstance(self.metric, AbstractMetric):
+        if isinstance(self.metric, Metric):
             self.metric.reset()
         if self.metrics is not None:
             for metric in self.metrics:
-                if isinstance(metric, AbstractMetric):
+                if isinstance(metric, Metric):
                     metric.reset()
 
     def attach_world(self, world):

@@ -1,8 +1,8 @@
 import numpy as np
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 
 
-class AndMetrics(AbstractMetric):
+class AndMetrics(Metric):
 
     def __init__(
         self,

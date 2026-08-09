@@ -15,7 +15,7 @@ World Map
 Initialization Order
 ====================
 
-The initialization system machinery typically starts with the :py:func:`~swarmsim.world.World.World_from_config` function.
+The initialization system machinery typically starts with the :py:func:`~swarmsim.world.World.world_from_config` function.
 Then, the world object runs its ``__init__()`` method.
 
 If using the :py:mod:`~swarmsim.world.simulate` module, the simulation initializes the world by calling ``world.setup()``.
@@ -133,7 +133,7 @@ inside the simulation loop. On each tick of the simulation, the following happen
             For each sensor in :far:`user` :fas:`group-arrows-rotate` :py:attr:`Agent.sensors`\ :
             ^^^^
 
-            The :far:`user` agent updates its sensors so that the new :far:`compass` :py:attr:`~swarmsim.sensors.AbstractSensor.AbstractSensor.current_state`
+            The :far:`user` agent updates its sensors so that the new :far:`compass` :py:attr:`~swarmsim.sensors.Sensor.Sensor.current_state`
             will be available on the next :far:`user` ``step()``.
 
       .. card:: :fas:`draw-polygon` :py:meth:`WorldObject.step` :fas:`arrows-spin`
@@ -145,14 +145,14 @@ inside the simulation loop. On each tick of the simulation, the following happen
          method may also call ``step()`` on its :far:`user` :fas:`brain` :py:attr:`~swarmsim.world.objects.StaticObject.StaticObject.controller`
          or :far:`user` :fas:`group-arrows-rotate` :py:attr:`~swarmsim.world.objects.StaticObject.StaticObject.sensors`\ , if it has any.
 
-      .. card::  :fas:`ruler-combined` :py:func:`.AbstractMetric.calculate()` :fas:`arrows-spin`
+      .. card::  :fas:`ruler-combined` :py:func:`.Metric.calculate()` :fas:`arrows-spin`
          
          For each metric in :fas:`earth-americas` :fas:`chart-column` :py:attr:`World.metrics`\ :
          ^^^^
 
          Following the :fas:`earth-americas` ``step()`` :fas:`arrows-spin`\ , each metric takes an
          observation of the world's state and performs its calculations, storing the results in its
-         :py:attr:`~swarmsim.metrics.AbstractMetric.AbstractMetric.value_history` attribute.
+         :py:attr:`~swarmsim.metrics.Metric.Metric.value_history` attribute.
 
 
    If the simulation is not operating headlessly, then the simulator calls ``draw()`` on the world object.

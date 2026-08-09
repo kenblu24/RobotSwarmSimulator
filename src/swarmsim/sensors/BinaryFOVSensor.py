@@ -2,7 +2,7 @@ from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
 import math
-from .AbstractSensor import AbstractSensor
+from .Sensor import Sensor
 from typing import List
 from ..util.collider.AABB import AABB
 
@@ -40,8 +40,8 @@ def lineCircleIntersect(line, center, radius):
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 
-class BinaryFOVSensor(AbstractSensor):
-    config_vars = AbstractSensor.config_vars + [
+class BinaryFOVSensor(Sensor):
+    config_vars = Sensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
         'store_history', 'detect_goal_with_added_state', 'show', 'target_team', 'seed',
@@ -89,6 +89,7 @@ class BinaryFOVSensor(AbstractSensor):
         self.goal_detected = False
         self.detection_id = 0
         self.target_team = target_team
+        self.agent_in_sight = None
 
         self.detect_only_origins = False
 
@@ -357,8 +358,8 @@ class BinaryFOVSensor(AbstractSensor):
         super(BinaryFOVSensor, self).step(world=world)
         self.checkForLOSCollisions(world=world)
         if self.store_history:
-            if self.agent.agent_in_sight:
-                self.history.append(int(self.agent.agent_in_sight.name))
+            if self.agent_in_sight:
+                self.history.append(int(self.agent_in_sight.name))
             else:
                 self.history.append(-1)
 

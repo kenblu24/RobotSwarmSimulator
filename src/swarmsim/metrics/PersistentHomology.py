@@ -1,9 +1,10 @@
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 import numpy as np
 from ripser import ripser
 import pygame
 
-class PersistentHomology(AbstractMetric):
+
+class PersistentHomology(Metric):
     def __init__(self, history_size=100, dims=0, draw_cycles=False, max_death=False):
         super().__init__(name=f"{dims}D Elements", history_size=history_size)
         self.population = []

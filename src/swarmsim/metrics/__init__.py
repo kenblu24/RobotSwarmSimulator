@@ -1,4 +1,4 @@
-from .AbstractMetric import AbstractMetric
+from .Metric import Metric
 from .AverageSpeed import AverageSpeedBehavior
 from .SubGroupWrapper import SubGroupBehavior
 from .SensorOffset import GeneElementDifference
@@ -31,7 +31,7 @@ from .DelaunayDiffusion import DelaunayDiffusion
 from .Dispersion import InteragentDispersion, ExplodingDispersion
 
 __all__ = [
-    "AbstractMetric",
+    "Metric",
     "AverageSpeedBehavior",
     "SubGroupBehavior",
     "GeneElementDifference",
