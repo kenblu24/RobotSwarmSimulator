@@ -1,3 +1,18 @@
+"""
+Binary Field of View Sensor
+
+.. autoclass:: BinaryFOVSensor
+    :members:
+    :undoc-members:
+
+.. autofunction:: vectorize
+
+.. autofunction:: turn
+
+.. autofunction:: project
+
+.. autofunction:: lineCircleIntersect
+"""
 from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
@@ -16,31 +31,110 @@ import warnings
 import quads
 
 
-# convert an angle to a representative unit vector
 def vectorize(angle):
+    """Convert an angle to a representative unit vector.
+
+    Parameters
+    ----------
+    angle : float
+        Angle in radians
+
+    Returns
+    -------
+    np.ndarray
+        Vector
+    """
     return np.array((np.cos(angle), np.sin(angle)))
 
 
-# compute the vector turn value from origin→p1 to origin→p2
-# this value is positive if a left turn is the fastest way to go from p1 to p2,
-# zero if p1 and p2 are colinear, and negative otherwise
 def turn(p1, p2):
+    """Compute the vector turn value from origin→p1 to origin→p2.
+
+    This value is positive if a left turn is the fastest way to go from p1 to p2,
+    zero if p1 and p2 are colinear, and negative otherwise
+
+    Parameters
+    ----------
+    p1 : tuple | np.ndarray
+        Point
+    p2 : tuple | np.ndarray
+        Point
+
+    Returns
+    -------
+    float
+    """
     return p1[0] * p2[1] - p2[0] * p1[1]
 
 
-# project vector a onto vector b
 def project(a, b):
+    """Project vector a onto vector b.
+
+    Parameters
+    ----------
+    a : tuple | np.ndarray
+        Vector
+    b : tuple | np.ndarray
+        Vector
+
+    Returns
+    -------
+    np.ndarray
+    """
     return b * (np.dot(a, b) / np.dot(b, b))
 
 
-# determine if the line in the direction of the first arugment intersects the
-# circle defined by the second and third arguments
 def lineCircleIntersect(line, center, radius):
+    """Determine if the line in the direction of the first argument intersects the
+    circle defined by the second and third arguments.
+
+    Parameters
+    ----------
+    line : tuple | np.ndarray
+        Line
+    center : tuple | np.ndarray
+        Center of circle
+    radius : float
+        Radius of circle
+
+    Returns
+    -------
+    bool
+        True if the line intersects the circle, False otherwise.
+    """
     clDiffVec = center - project(center, line)
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 
 class BinaryFOVSensor(Sensor):
+    """A binary sensor for whether there are matching agents within the sensor's cone of vision.
+
+    Parameters
+    ----------
+    theta : float, default=10.0
+        The half-angle of the sensor cone. The effective FOV is :math:`2 \\theta`.
+    distance : float, default=100.0
+        The maximum distance from the sensor to look for targets.
+    bias : float, default=0.0
+        The angle offset of the sensor cone. Positive values shift the cone to the same direction as a positive turn.
+    false_positive : float, default=0.0
+        The probability of a negative detection being reported as a positive detection.
+    false_negative : float, default=0.0
+        The probability of a positive detection being reported as a negative detection.
+    time_step_between_sensing : int, default=1
+        The number of time steps between sensory perceptions.
+    invert : bool, default=False
+        Whether to invert the sensor's output. If True, a positive detection will be reported as a negative detection, and vice versa.
+    store_history : bool, default=False
+        Whether to store the history of targets.
+    show : bool, default=True
+        Whether to draw the sensory vector.
+    seed : int | None, default=None
+        The seed for the random number generator. If None, the parent's RNG is used.
+    target_team : int | str | None, default=None
+        The team to look for agents or objects in. If None, any team is considered.
+    """
+
     config_vars = Sensor.config_vars + [
         'theta', 'distance', 'bias', 'false_positive', 'false_negative',
         'walls', 'wall_sensing_range', 'time_step_between_sensing', 'invert',
@@ -127,7 +221,7 @@ class BinaryFOVSensor(Sensor):
         if agents.size:
             positions = np.array([agent.pos for agent in agents])
             distances = np.linalg.norm(positions - sensor_origin, axis=1)
-            is_close = distances < self.r
+            is_close = distances < (self.r + np.array([agent.radius for agent in agents]))
             bag = agents[is_close]
         else:
             bag = []
@@ -200,6 +294,11 @@ class BinaryFOVSensor(Sensor):
                 if leftWhisker or rightWhisker:
                     self.determineState(True, agent, world)
                     return
+                # check overlapping other agent
+                if np.dot(u, u) < agent.radius**2:
+                    self.determineState(True, agent, world)
+                    return
+            
 
             # # OLD CODE, circle_interesect_sensing_cone is no longer used
             # d = self.circle_interesect_sensing_cone(u, self.agent.radius)
@@ -406,7 +505,7 @@ class BinaryFOVSensor(Sensor):
                 AARtl = np.array(AAR[:2]) * zoom + pan
                 AARbr = np.array(AAR[2:]) * zoom + pan
                 pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
-                detected = [point.data for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR))]
+                detected = [agent for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR)) for agent in point.data]
                 for agent in detected:
                     pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"],
                                        agent.pos * zoom + pan, agent.radius * zoom, width * 3)

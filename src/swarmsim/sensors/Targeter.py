@@ -1,3 +1,11 @@
+"""Targeter Sensor class.
+
+.. autoclass:: Targeter
+    :members:
+    :undoc-members:
+
+"""
+
 from swarmsim.world.RectangularWorld import RectangularWorld
 import pygame
 import numpy as np
@@ -18,6 +26,40 @@ import quads
 
 
 class Targeter(Sensor):
+    """Discovers agents or objects near the sensor. Can lookup target by team or name.
+
+    Parameters
+    ----------
+    distance : float, default=float('inf')
+        The maximum distance from the sensor to look for targets.
+    false_negative : float, default=0.0
+        The probability of a target being missed.
+    time_step_between_sensing : int, default=1
+        The number of time steps between sensory perceptions.
+    target_mode : str, default=None
+        How to select the single target from the matching set. Can be 'closest', 'furthest', or None.
+    hold : str, default='retargetonloss'
+        When to change targets. Can be ``'alwaysretarget'``, ``'retargetonloss'``, ``'holdlost'``, ``'holdfirst'``.
+
+        * ``'alwaysretarget'`` Always search and acquire closest/farthest target,
+            regardless of whether the previous target is still in range.
+        * ``'retargetonloss'``: The sensor will return the same target until that target is no longer in range.
+        * ``'holdlost'``: Same as ``'retargetonloss'``, but will return the previous target until a new target is found.
+        * ``'holdfirst'``: The sensor will lock onto the first target it finds and always return that target.
+    attribute : str, default=None
+        If specified, the sensor will use attribute lookup on the target. If None, the target object itself is returned.
+    store_history : bool, default=False
+        Whether to store the history of targets.
+    show : bool, default=False
+        Whether to draw the sensory vector.
+    seed : int, default=None
+        The seed for the random number generator. If None, the parent's RNG is used.
+    target_team : str | int | None, default=None
+        The team to look for targets in. If None, any team is considered.
+    target_name : str, default=None
+        The name of the target to look for.
+    """
+
     config_vars = Sensor.config_vars + [
         'distance', 'bias', 'fn', 'time_step_between_sensing',
         'target_mode', 'hold', 'attribute', 'store_history', 'show',

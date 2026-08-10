@@ -17,7 +17,7 @@ DEFAULT_PID_ARGS = dict(p=0.0, i=0.0, d=0.0, imax=0.0, min=None, max=None)
 
 
 class WaypointPIDController(AbstractController):
-    """A controller which generates unicycle control inputs ($v$, $\\omega$) to follow a waypoint.
+    """A controller which generates unicycle control inputs (:math:`v, \\omega`) to follow a waypoint.
 
     For PID arguments, see :py:class:`~swarmsim.util.pid.PID`.
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "swarmsim"
-version = "1.2.4"
+version = "1.2.5"
 requires-python = ">=3.12"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
@@ -62,5 +62,6 @@ docs = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
+"Repository" = "https://github.com/kenblu24/RobotSwarmSimulator"
 "Bug Tracker" = "https://github.com/kenblu24/RobotSwarmSimulator/issues"
+"Documentation" = "https://kenblu24.github.io/RobotSwarmSimulator/"

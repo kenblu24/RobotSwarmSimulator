@@ -1,29 +1,46 @@
+"""
+Donut Agent Spawner
+
+.. autoclass:: DonutAgentSpawner
+    :members:
+    :undoc-members:
+"""
+
 import numpy as np
 
 from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 
 
 class DonutAgentSpawner(PointAgentSpawner):
+    """Spawn agents uniformly within an annular region about a center point.
+
+    .. inheritance-diagram:: swarmsim.world.spawners.DonutSpawner.DonutAgentSpawner
+        :parts: 1
+
+    Parameters
+    ----------
+    agent : Agent | BaseAgentConfig | dict
+        The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
+    center : tuple[float, float] | np.ndarray
+        The center of the circle.
+    inner_radius : float
+        The inner radius of the donut.
+    outer_radius : float
+        The outer radius of the donut.
+    **kwargs
+        Additional keyword arguments to pass to the base class.
+        This spawner takes the same arguments as
+        :class:`~swarmsim.world.spawners.AgentSpawner.PointAgentSpawner` and
+        :class:`~swarmsim.world.spawners.AgentSpawner.BaseAgentSpawner`.
+    """
     def __init__(
         self,
-        n=1,
-        agent=None,
-        facing=None,
-        avoid_overlap=False,
-        seed='unspecified',
-        oneshot=False,
         center=(5.0, 5.0),
         inner_radius=4.0,
         outer_radius=6.0,
         **kwargs
     ):
         super().__init__(
-            n=n,
-            agent=agent,
-            facing=facing,
-            avoid_overlap=avoid_overlap,
-            seed=seed,
-            oneshot=oneshot,
             **kwargs
         )
         self.center = center
