@@ -36,14 +36,13 @@ class WaypointPIDController(AbstractController):
 
     def __init__(
         self,
-        agent=None, parent=None,
         sensor_id=None,
         speed_pid=DEFAULT_PID_ARGS,
         steer_pid=DEFAULT_PID_ARGS,
         static_waypoint=None,
         **kwargs
     ):
-        super().__init__(agent=agent, parent=parent, **kwargs)
+        super().__init__(**kwargs)
         self.sensor_id = sensor_id  # use this to determine which sensor on the agent to use
         self.speed_pid = speed_pid if isinstance(speed_pid, PID) else PID(**speed_pid)
         self.steer_pid = steer_pid if isinstance(steer_pid, PID) else PID(**steer_pid)

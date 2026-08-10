@@ -202,7 +202,7 @@ class RectangularWorld(World):
                     self.objects.append(entry)
                 else:  # otherwise, it's a config dict. find the class specified and create the agent
                     agent_class, agent_config = get_agent_class(entry)
-                    self.objects.append(agent_class.from_config(agent_config, self))
+                    self.objects.append(agent_class.from_config(agent_config))
             # check if entry contains a "from_svg" key with a string value
             elif isinstance((svg := entry.get('svg_to_static_objects', None)), str):
                 svg = SVG(svg)
@@ -567,7 +567,7 @@ class RectangularWorld(World):
                 agent.body_color = agent.config.body_color
             for agent in self.human_controlled:
                 i = self.population.index(agent)
-                new_bot = agent.from_config(agent.config, self)
+                new_bot = agent.from_config(agent.config)
                 new_bot.x_pos = agent.get_x_pos()
                 new_bot.y_pos = agent.get_y_pos()
                 new_bot.angle = agent.angle

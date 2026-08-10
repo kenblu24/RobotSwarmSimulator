@@ -83,33 +83,22 @@ class Circliness(RadialVarianceHelper):
     instantaneous = False
 
     def __init__(self, history=None, avg_history_max=100, regularize=False, name=None):
+        self._world = None
         if regularize:
             raise NotImplementedError
         self.tangentness = Tangentness(history=avg_history_max, regularize=False)
         self.fatness = Fatness(history=avg_history_max, regularize=False)
         super().__init__(history=history, regularize=regularize, name=name)
 
-    def attach_world(self, world):
-        self.population = world.population
-        self.world_radius = world.config.radius
-
     @property
-    def population(self):
-        return self.tangentness.population
+    def world(self):
+        return self._world
 
-    @population.setter
-    def population(self, x):
-        self.tangentness.population = x
-        self.fatness.population = x
-
-    @property
-    def world_radius(self):
-        return self.tangentness.world_radius
-
-    @world_radius.setter
-    def world_radius(self, x):
-        self.tangentness.world_radius = x
-        self.fatness.world_radius = x
+    @world.setter
+    def world(self, value):
+        self._world = value
+        self.tangentness.population = getattr(value, 'population', None)
+        self.fatness.population = getattr(value, 'population', None)
 
     def _calculate(self):
         _, tau_ = self.tangentness.out_average()

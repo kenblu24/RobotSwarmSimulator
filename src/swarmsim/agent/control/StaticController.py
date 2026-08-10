@@ -18,7 +18,7 @@ shared_controllers = {}
 
 
 class StaticController(AbstractController):
-    def __init__(self, agent=None, parent=None, output: tuple | Any = (0.0, 0.0)):
+    def __init__(self, output: tuple | Any = (0.0, 0.0)):
         """Controller that always returns the same thing.
 
         Parameters
@@ -27,7 +27,7 @@ class StaticController(AbstractController):
             The control inputs to return every timestep.
         """
         self.output = output
-        super().__init__(agent=agent, parent=parent)
+        super().__init__()
 
     def as_config_dict(self):
         return {'output': self.output}

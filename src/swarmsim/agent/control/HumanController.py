@@ -82,7 +82,7 @@ class HumanController(AbstractController):
     """
 
     def __init__(
-        self, agent=None, parent=None,
+        self,
         joystick=0,
         keys='wasd',
 
@@ -95,7 +95,7 @@ class HumanController(AbstractController):
         joy_deadzone=0.1,
         trigger_deadzone=0.03,
     ):
-        super().__init__(agent=agent, parent=parent)
+        super().__init__()
 
         pygame.joystick.init()
 

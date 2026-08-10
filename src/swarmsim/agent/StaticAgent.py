@@ -66,13 +66,14 @@ class StaticAgentConfig(BaseAgentConfig):
 class StaticAgent(Agent):
     DEBUG = False
 
-    def __init__(self, config: StaticAgentConfig, world: RectangularWorld, name=None, initialize=True) -> None:
-        super().__init__(config, world, name, initialize=False)
-
+    def __init__(self, config: StaticAgentConfig, name=None, initialize=True) -> None:
         if config.seed == 'unspecified':
-            self.set_seed(int(world.rng.integers(0, 2**31)))
+            self.rng = None
+            self.seed = 'unspecified'
         else:
             self.set_seed(config.seed)
+
+        super().__init__(config, name, initialize=False)
 
         # set hull shape -> self.points from config (if any)
         if isinstance(config.points, str):
@@ -114,7 +115,6 @@ class StaticAgent(Agent):
 
         #: float: The radius of the agent.
         self.radius = self.get_simple_poly_radius() or config.agent_radius or 0.5
-        self.dt = world.dt  #: float: Copy the world's dt at agent creation.
         self.is_highlighted = False
         self.body_filled = config.body_filled
         self.body_color = config.body_color
@@ -127,6 +127,21 @@ class StaticAgent(Agent):
         if initialize:
             self.setup_controller_from_config()
             self.setup_sensors_from_config()
+
+    @property
+    def world(self):
+        return self._world
+
+    @world.setter
+    def world(self, value):
+        self._world = value
+        if self.rng is None and self.seed == 'unspecified':
+            self.set_seed(None)
+
+    @property
+    def dt(self) -> float:
+        """float: The timestep of the world."""
+        return self.world.dt
 
     @override
     def step(self, world=None, check_for_world_boundaries=None, check_for_agent_collisions=None) -> None:

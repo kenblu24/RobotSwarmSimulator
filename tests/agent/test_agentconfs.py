@@ -31,7 +31,7 @@ class TestAgentConf:
             sensors=[sensor],
             team="hunter"
         )
-        self.agent = Agent(self.bac, world)
+        self.agent = Agent(self.bac)
 
     def test_position(self):
         assert len(self.agent.pos) == len(self.bac.position)

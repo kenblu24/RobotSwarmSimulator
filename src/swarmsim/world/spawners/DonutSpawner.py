@@ -6,7 +6,6 @@ from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
 class DonutAgentSpawner(PointAgentSpawner):
     def __init__(
         self,
-        world,
         n=1,
         agent=None,
         facing=None,
@@ -19,7 +18,6 @@ class DonutAgentSpawner(PointAgentSpawner):
         **kwargs
     ):
         super().__init__(
-            world=world,
             n=n,
             agent=agent,
             facing=facing,

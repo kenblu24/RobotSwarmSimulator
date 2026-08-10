@@ -24,7 +24,6 @@ def AgentSpawner(*args, **kwargs):
 class BaseAgentSpawner(Spawner):
     def __init__(
         self,
-        world,
         agent=None,
         n: int | None = 1,
         seed='unspecified',
@@ -33,7 +32,7 @@ class BaseAgentSpawner(Spawner):
         delay=0,
         **kwargs
     ):
-        super().__init__(world, seed, **kwargs)
+        super().__init__(seed, **kwargs)
         self.type = 'agent'
         self.mode: str = 'oneshot' if oneshot else str(mode).lower()
         if oneshot:
@@ -63,18 +62,17 @@ class BaseAgentSpawner(Spawner):
         if isinstance(self.agent_config, Agent):
             return config
         else:
-            return self.agent_class.from_config(config, self.world)
+            return self.agent_class.from_config(config)
 
 
 class PointAgentSpawner(BaseAgentSpawner):
     def __init__(
         self,
-        world,
         facing=None,
         avoid_overlap=False,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(**kwargs)
         self.avoid_overlap = avoid_overlap
         if isinstance(facing, str) and facing not in ['towards', 'away', 'random']:
             msg = f"Invalid option for key 'facing' in spawner config: {facing}"
@@ -156,12 +154,11 @@ class PointAgentSpawner(BaseAgentSpawner):
 class UniformAgentSpawner(PointAgentSpawner):
     def __init__(
         self,
-        world,
         region=None,
         holes=None,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(**kwargs)
         if region is None:
             raise ValueError("region must be specified for UniformAgentSpawner")
         shell = np.asarray(region, dtype=np.float64)
@@ -200,12 +197,11 @@ class UniformAgentSpawner(PointAgentSpawner):
 class UniformCircleAgentSpawner(PointAgentSpawner):
     def __init__(
         self,
-        world,
         center=None,
         radius=None,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(**kwargs)
         if center is None or radius is None:
             raise ValueError("center and radius must be specified for UniformCircleAgentSpawner")
         self.center = np.asarray(center)

@@ -36,7 +36,7 @@ valid_facings = (
 def test_point_spawn(world, static_agent_config, facing, n):
     from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
     spawner = PointAgentSpawner(
-        world, n=n, facing=facing, avoid_overlap=True,
+        n=n, facing=facing, avoid_overlap=True,
         agent=static_agent_config,
         mode="oneshot",
     )
@@ -51,7 +51,7 @@ def test_point_spawn(world, static_agent_config, facing, n):
 def test_uniform_box_spawn(world, static_agent_config, facing, n):
     from swarmsim.world.spawners.AgentSpawner import UniformAgentSpawner
     spawner = UniformAgentSpawner(
-        world, n=n, facing=facing, avoid_overlap=True,
+        n=n, facing=facing, avoid_overlap=True,
         region=[[0, 0], [0, 5], [5, 5], [5, 0]],
         agent=static_agent_config,
         mode="oneshot",
@@ -67,7 +67,7 @@ def test_uniform_box_spawn(world, static_agent_config, facing, n):
 def test_uniform_circle_spawn(world, static_agent_config, facing, n):
     from swarmsim.world.spawners.AgentSpawner import UniformCircleAgentSpawner
     spawner = UniformCircleAgentSpawner(
-        world, n=n, facing=facing, avoid_overlap=True,
+        n=n, facing=facing, avoid_overlap=True,
         center=[2.5, 2.5], radius=10,
         agent=static_agent_config, mode="oneshot"
     )

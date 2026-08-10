@@ -37,7 +37,7 @@ def code_block_01() -> None:
 
     """ Creating an agent """
     agent_config = MazeAgentConfig(position=(5, 5), agent_radius=0.1)
-    agent = MazeAgent(agent_config, world)
+    agent = MazeAgent(agent_config)
 
     world.population.append(agent)  # add the agent to the world
 
@@ -50,7 +50,7 @@ def code_block_01() -> None:
     code_block_simulate(world)
 
     """ Spawners """
-    spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
+    spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
     world.spawners.append(spawner)
 
     del world.population[-1]
@@ -75,7 +75,7 @@ def code_block_02() -> None:
     controller = StaticController(output=[0.01, 0])
     agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1,
                                       controller=controller), world)
-    spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
+    spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True,
                                 agent=agent, mode="oneshot")
     world.spawners.append(spawner)
 

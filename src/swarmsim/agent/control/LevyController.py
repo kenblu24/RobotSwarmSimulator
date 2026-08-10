@@ -13,15 +13,13 @@ class LevyController(AbstractController):
     def __init__(self,
         velocity: float,
         angular_velocity: float,
-        agent=None,
-        parent=None,
         levy_constant=None,
         curving=False,
         timeout=5.0,
         timeout_steps=None,
         step_scale=1.0,
     ):
-        super().__init__(agent=agent, parent=parent)
+        super().__init__()
         if levy_constant is None:
             self.levy_dist_index = self.agent.rng.random() + 1
         else:

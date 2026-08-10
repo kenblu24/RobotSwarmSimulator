@@ -16,7 +16,7 @@ def test_uniform_circle_agent_spawner():
     agent = StaticAgentConfig()
 
     # spawner
-    spawner = UniformCircleAgentSpawner(world, center=[1, 1], radius=10, n=100, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
+    spawner = UniformCircleAgentSpawner(center=[1, 1], radius=10, n=100, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
     world.spawners.append(spawner)
 
 

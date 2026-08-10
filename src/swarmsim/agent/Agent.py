@@ -27,6 +27,7 @@ import numpy as np
 from ..agent.control.StaticController import zero_controller
 from ..config import get_class_from_dict, filter_unexpected_fields
 from ..util.collider.CollisionMode import CollisionMode, collision_mode
+from ..util.collections import RefProp, RefList, RefListProp
 
 # typing
 from typing import Any
@@ -82,8 +83,10 @@ class BaseAgentConfig:
 class Agent:
 
     _always_shallow_copy = ["world"]
+    controller = RefProp('agent')
+    sensors = RefListProp()
 
-    def __init__(self, config, world, name=None, group=0, initialize=True) -> None:
+    def __init__(self, config, name=None, group=0, initialize=True) -> None:
         self.marked_for_deletion = False
         #: Agent config.
         self.config = config
@@ -98,7 +101,7 @@ class Agent:
         #: Change in heading since last step.
         self.dtheta = 0
         #: List of this agent's sensors.
-        self.sensors: list = []
+        self._sensors: RefList = RefList(self, 'agent')
         #: The :py:class:`Controller <swarmsim.agent.control.Controller>` for this agent.
         self.controller = zero_controller(2)
         #: Colliders should set to True if a collision was detected.
@@ -113,7 +116,7 @@ class Agent:
         self.aabb = None
         self.group = group
         #: Back-reference to the world instance.
-        self.world = world
+        self.world = None
         #: If True, the agent should never change position or be pushed during collision resolution.
         self.grounded = config.grounded
         #: The agent's team.
@@ -144,8 +147,6 @@ class Agent:
         from ..agent.control.AbstractController import AbstractController
         if isinstance(self.config.controller, AbstractController):
             self.controller = copy.copy(self.config.controller)
-            if self.controller.agent is None:
-                self.controller.set_agent(self)
             return
         if isinstance(self.config.controller, type):
             raise TypeError("Expected a config dict or AbstractController instance but got a class instead.")
@@ -157,7 +158,7 @@ class Agent:
         if not res:
             return
         controller_cls, controller_config = res
-        self.controller = controller_cls(agent=self, **controller_config)
+        self.controller = controller_cls(**controller_config)
         self.controller: AbstractController
 
     def setup_sensors_from_config(self):
@@ -182,8 +183,6 @@ class Agent:
             if isinstance(sensor_config, Sensor):
                 sensor = copy.copy(sensor_config)
                 self.sensors.append(sensor)
-                if sensor.agent is None:
-                    sensor.set_agent(self)
                 continue
             if isinstance(sensor_config, type):
                 raise TypeError("Expected a config dict or Sensor instance but got a class instead.")
@@ -308,7 +307,7 @@ class Agent:
         self.set_heading(vec[2])
 
     @classmethod
-    def from_config(cls, config, world):
+    def from_config(cls, config, world=None):
         """Returns a new agent instance from the given config and world.
 
         Parameters
@@ -317,13 +316,14 @@ class Agent:
             The config to create the agent from.
         world : World
             This provides a back-reference to the world instance for the new agent.
+            .. deprecated:: 1.3.0
 
         Returns
         -------
         Agent
             The new agent has the same type as the class/instance it was called from.
         """
-        return cls(config, world)
+        return cls(config)
 
     def copy(self):
         """Create a copy of this agent.
