@@ -57,10 +57,10 @@ def code_block_01() -> None:
     code_block_simulate(world)  # simulate world
 
     """ Sensors & Controllers """
-    sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
+    sensor = BinaryFOVSensor(theta=0.45, distance=2,)
     agent.sensors.append(sensor)
 
-    controller = BinaryController((0.02, -0.5), (0.02, 0.5), agent)
+    controller = BinaryController((0.02, -0.5), (0.02, 0.5))
     agent.controller = controller
 
     del world.population[:]  # Delete all agents
