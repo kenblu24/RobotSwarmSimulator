@@ -1,5 +1,5 @@
 ---
-expected: false
+expected: true
 ---
 type: "RectangularWorld"
 size: [5, 5]
