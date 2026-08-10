@@ -133,6 +133,8 @@ class BinaryFOVSensor(Sensor):
         The seed for the random number generator. If None, the parent's RNG is used.
     target_team : int | str | None, default=None
         The team to look for agents or objects in. If None, any team is considered.
+    detect_only_origins : bool, default=False
+        Whether to only detect the origin of the agent.
     """
 
     config_vars = Sensor.config_vars + [
@@ -162,6 +164,7 @@ class BinaryFOVSensor(Sensor):
         show=True,
         seed=None,
         target_team=None,
+        detect_only_origins=False,
         **kwargs
     ):
         super().__init__(agent=agent, parent=parent, seed=seed, **kwargs)
@@ -183,9 +186,9 @@ class BinaryFOVSensor(Sensor):
         self.goal_detected = False
         self.detection_id = 0
         self.target_team = target_team
-        self.agent_in_sight = None
+        self.detect_only_origins = detect_only_origins
 
-        self.detect_only_origins = False
+        self.agent_in_sight = None
 
         NOTFOUND = object()
         if (degrees := kwargs.pop('degrees', NOTFOUND)) is not NOTFOUND:
@@ -298,7 +301,7 @@ class BinaryFOVSensor(Sensor):
                 if np.dot(u, u) < agent.radius**2:
                     self.determineState(True, agent, world)
                     return
-            
+
 
             # # OLD CODE, circle_interesect_sensing_cone is no longer used
             # d = self.circle_interesect_sensing_cone(u, self.agent.radius)
