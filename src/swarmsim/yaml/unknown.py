@@ -22,6 +22,11 @@ class Tagged(wrapt.ObjectProxy):
     def __repr__(self):
         return f"{type(self).__name__}({self.tag!r}, {self.__wrapped__!r})"
 
+    # https://wrapt.readthedocs.io/en/develop/issues.html#serialising-a-decorated-function
+    # https://wrapt.readthedocs.io/en/develop/examples.html#serialising-an-object-proxy
+    def __reduce__(self):
+        return type(self), (self.tag, self.__wrapped__)
+
 
 def construct_undefined(self: yaml.Loader, node: yaml.Node):
 
