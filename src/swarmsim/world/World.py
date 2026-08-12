@@ -236,7 +236,7 @@ class World:
             spawner = spawner_config
         else:  # otherwise, it's a config dict. find the class specified and create the spawner
             spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
-            spawner = spawner_class(self, **spawner_config)
+            spawner = spawner_class(**spawner_config)
         self.spawners.append(spawner)
         return spawner
 
