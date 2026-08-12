@@ -20,7 +20,6 @@ class RadialVarianceHelper(RadialVarianceMetric):
 
 class Orbit(RadialVarianceHelper):
 
-
     def __init__(self, history=None, avg_history_max=100, regularize=False, name=None):
         if regularize:
             raise NotImplementedError
@@ -28,10 +27,6 @@ class Orbit(RadialVarianceHelper):
         self.tangentness = Tangentness(history=avg_history_max, regularize=False)
         self.fatness = Fatness(history=avg_history_max, regularize=False)
         super().__init__(history=history, regularize=regularize, name=name)
-
-    def attach_world(self, world):
-        self.population = world.population
-        self.world_radius = world.config.radius
 
     @property
     def population(self):

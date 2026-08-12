@@ -6,12 +6,11 @@ from .Metric import Metric
 class AlgebraicConn(Metric):
     def __init__(self, history=None, r_disk_size=10):
         super().__init__(name="Alg_Connectivity", history_size=history)
-        self.population = None
         self.r_disk_size = r_disk_size
 
-    def attach_world(self, world):
-        super().attach_world(world)
-        self.population = world.population
+    @property
+    def population(self):
+        return self.parent.population
 
     def getLapacianMatrix(self):
         n = len(self.population)

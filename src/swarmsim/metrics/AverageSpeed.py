@@ -6,11 +6,10 @@ from .Metric import Metric
 class AverageSpeedBehavior(Metric):
     def __init__(self, history=None):
         super().__init__(name="Average_Speed", history_size=history)
-        self.population = None
 
-    def attach_world(self, world):
-        super().attach_world(world)
-        self.population = world.population
+    @property
+    def population(self):
+        return self.parent.population
 
     def calculate(self):
         n = len(self.population)

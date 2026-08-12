@@ -6,12 +6,11 @@ from .Metric import Metric
 class GroupRotationBehavior(Metric):
 
     def __init__(self, history=None):
-        super().__init__(name = "Group_Rotation", history_size=history)
-        self.population = None
+        super().__init__(name="Group_Rotation", history_size=history)
 
-    def attach_world(self, world):
-        super().attach_world(world)
-        self.population = world.population
+    @property
+    def population(self):
+        return self.parent.population
 
     def calculate(self):
         n = len(self.population) if self.population is not None else 0

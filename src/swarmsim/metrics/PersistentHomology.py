@@ -7,15 +7,15 @@ import pygame
 class PersistentHomology(Metric):
     def __init__(self, history_size=100, dims=0, draw_cycles=False, max_death=False):
         super().__init__(name=f"{dims}D Elements", history_size=history_size)
-        self.population = []
         self.pointset = []
         self.rips_data = None
         self.dims = dims
         self.draw_cycles = draw_cycles
         self.max_death = max_death
 
-    def attach_world(self, world):
-        self.population = world.population
+    @property
+    def population(self):
+        return self.parent.population
 
     def calculate(self):
         try:

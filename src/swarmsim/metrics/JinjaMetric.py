@@ -133,12 +133,12 @@ class JinjaMetric(Metric):
                 if isinstance(metric, Metric):
                     metric.reset()
 
-    def attach_world(self, world):
-        res = super().attach_world(world)
+    @Metric.world.setter
+    def world(self, value):
+        Metric.world.fset(self, value)
         self.setup_submetrics()
         if self.template_src is not None:
             self.template = self.world.jenv.from_string(self.template_src)
-        return res
 
     def setup_submetrics(self):
         if self.metric is not None:

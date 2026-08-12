@@ -246,7 +246,6 @@ class World:
         else:  # otherwise, it's a config dict. find the class specified and create the metric
             metric_class, metric_config = get_class_from_dict('metrics', metric_config)
             metric = metric_class(**metric_config)
-        metric.attach_world(self)
         metric.reset()
         if add_to_world:
             self.metrics.append(metric)

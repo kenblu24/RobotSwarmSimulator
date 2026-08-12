@@ -19,8 +19,9 @@ class EntityLen(Metric):
         self.compiled_expr = None
         self.default_aggregation = default_aggregation
 
-    def attach_world(self, world):
-        super().attach_world(world)
+    @Metric.world.setter
+    def world(self, value):
+        Metric.world.fset(self, value)
         if (
             self.world
             and self.attribute is not None

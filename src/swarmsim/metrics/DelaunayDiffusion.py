@@ -17,15 +17,13 @@ class DelaunayDiffusion(Metric):
 
     def __init__(self, history=None, regularize=True):
         super().__init__(name="Delaunay Diffusion", history_size=history)
-        self.population = None
         self.regularize = regularize
         self.allpairs = []
         self.lines = []
 
-    def attach_world(self, world: RectangularWorld):
-        super().attach_world(world)
-        self.population = world.population
-        self.world_radius = world.config.radius
+    @property
+    def population(self):
+        return self.parent.population
 
     def calculate(self):
         if not self.population:

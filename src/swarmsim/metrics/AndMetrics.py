@@ -21,10 +21,10 @@ class AndMetrics(Metric):
         except ValueError:
             pass
 
-    def attach_world(self, world):
-        res = super().attach_world(world)
+    @Metric.world.setter
+    def world(self, value):
+        Metric.world.fset(self, value)
         self.setup_submetrics()
-        return res
 
     def setup_submetrics(self):
         if self.metrics is None:
