@@ -1,6 +1,10 @@
 # Robot Swarm Simulator
 Contributors: Connor Mattson, Jeremy Clark, Daniel S. Brown, Kevin Zhu
 
+Maintainer: @kenblu24
+
+2D Agent-based Simulator designed for training and optimization of emergent behaviors using low-fidelity sensing.
+
 [<img src="https://gist.githubusercontent.com/cxmeel/0dbc95191f239b631c3874f4ccf114e2/raw/documentation.svg" alt="Documentation" height="40" />](https://kenblu24.github.io/RobotSwarmSimulator/)
 
 
@@ -35,3 +39,5 @@ Test Evolution (Novelty Search) - Will take a long time to evolve.
 **Code for novelty search has moved to https://github.com/kenblu24/novelswarms-es**
 
 We invite you to augment cautiously and carefully test output validity.
+
+Originally [forked](https://github.com/kenblu24/RobotSwarmSimulator-archive) from **[Connor-Mattson/RobotSwarmSimulator](https://github.com/Connor-Mattson/RobotSwarmSimulator)**
