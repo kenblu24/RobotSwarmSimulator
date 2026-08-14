@@ -19,6 +19,12 @@ class RadialVarianceMetric(Metric):
 
     def calculate(self):
         n = len(self.population)
+        if n == 0:
+            # Nothing to compute a radial variance over, and the scaling
+            # factor below divides by n -- avoid both the ZeroDivisionError
+            # and the numpy "Mean of empty slice" warning. See issue #1.
+            self.set_value(np.nan)
+            return
         r = self.world_radius
         mew = self.center_of_mass()
 
@@ -44,5 +50,7 @@ class RadialVarianceMetric(Metric):
         self.set_value(radial_variance * WEIGHT)
 
     def center_of_mass(self):
+        if not self.population:
+            return np.full(2, np.nan)
         positions = np.asarray([agent.getPosition() for agent in self.population])
         return positions.mean(axis=0)
