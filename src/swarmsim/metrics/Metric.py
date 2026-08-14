@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from numpy import average
+from numpy import average, nan
 
 import typing
 if typing.TYPE_CHECKING:
@@ -46,10 +46,17 @@ class Metric():
         return self.current_value
 
     def out_average(self) -> Tuple:
+        # np.average([]) raises "RuntimeWarning: Mean of empty slice" and
+        # returns nan anyway; short-circuit to the same nan without the
+        # warning spam. See issue #1.
+        if not self.value_history:
+            return (self.name, nan)
         return (self.name, average(self.value_history))
 
     @property
     def average(self):
+        if not self.value_history:
+            return nan
         return average(self.value_history)
 
     def draw(self, screen, zoom=1.0):
