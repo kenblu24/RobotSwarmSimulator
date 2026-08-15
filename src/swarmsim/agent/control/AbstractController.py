@@ -22,9 +22,9 @@ class AbstractController:
     the form of a requested movement vector.
     """
 
-    def __init__(self, agent, parent=None):  # type:ignore[reportMissingSuperCall]
+    def __init__(self):  # type:ignore[reportMissingSuperCall]
         self.parent = None
-        self.set_agent(agent, parent)
+        self.agent = None
 
     def set_parent(self, parent=None):
         self.parent = self.agent if parent is None else parent
@@ -35,6 +35,16 @@ class AbstractController:
             self.parent = parent
         elif self.parent is None or parent is ...:
             self.parent = agent
+
+    @property
+    def agent(self):
+        return self._agent
+
+    @agent.setter
+    def agent(self, value):
+        self._agent = value
+        if self.parent is None:
+            self.parent = value
 
     def get_actions(self, agent):
         pass

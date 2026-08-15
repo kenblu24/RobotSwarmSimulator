@@ -6,16 +6,27 @@ class Spawner:
     """
     Spawner: An abstract object creator
     """
-    def __init__(self, world, seed='unspecified', **kwargs):
-        self.world = world
+    def __init__(self, seed='unspecified', **kwargs):
+        self._world = None
         self.mark_for_deletion = False
         self.oneshot = False
         self.spawned = 0
 
         if seed == 'unspecified':
-            self.set_seed(world.rng.integers(0, 2**31))
+            self.rng = None
+            self.seed = 'unspecified'
         else:
             self.set_seed(seed)
+
+    @property
+    def world(self):
+        return self._world
+
+    @world.setter
+    def world(self, value):
+        self._world = value
+        if self.rng is None and self.seed == 'unspecified':
+            self.set_seed(None)
 
     def set_seed(self, seed):
         self.seed = np.random.randint(0, 2**31) if seed is None else seed

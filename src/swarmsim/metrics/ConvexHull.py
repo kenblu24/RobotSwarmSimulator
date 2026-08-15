@@ -13,15 +13,11 @@ from ..util.geometry.Polygon import Polygon
 class ConvexHull(Metric):
     def __init__(self, name="Convex_Hull_Area", history=None):
         super().__init__(name=name, history_size=history)
-        self.population = None
-        self.goals = None
-        self.world = None
         self.polygon = None
 
-    def attach_world(self, world):
-        super().attach_world(world)
-        self.population = world.population
-        self.goals = world.goals
+    @property
+    def population(self):
+        return self.parent.population
 
     def calculate(self):
         if not self.world:
@@ -47,15 +43,11 @@ class ConvexHull(Metric):
 class InverseConvexHull(Metric):
     def __init__(self, name="Inverse_Hull_Area", history=None):
         super().__init__(name=name, history_size=history)
-        self.population = None
-        self.goals = None
-        self.world = None
         self.polygon = None
 
-    def attach_world(self, world):
-        self.population = world.population
-        self.goals = world.goals
-        self.world = world
+    @property
+    def population(self):
+        return self.parent.population
 
     def get_inverse_point(self, p, centroid, inverse_dist):
         p_new = centroid.p + ((inverse_dist / p.dist(centroid)) * (p.p - centroid.p))

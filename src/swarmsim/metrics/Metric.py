@@ -1,3 +1,4 @@
+from warnings import warn
 from typing import Tuple
 
 from numpy import average
@@ -17,7 +18,8 @@ class Metric():
     def __init__(self, name: str, history_size: int | None = None):
         self.name = name
         self.history_size = history_size
-        self.world: World = None  # pyright: ignore[reportAttributeAccessIssue]
+        self._world: World = None  # pyright: ignore[reportAttributeAccessIssue]
+        self._parent = None
         self.reset()
 
     def reset(self):
@@ -25,7 +27,26 @@ class Metric():
         self.value_history = []
 
     def attach_world(self, world):
+        warn("Calling Metric.attach_world() is deprecated. There is no need to call this method directly."
+             "If you are adding run-on-attach_world logic to a metric, override the Metric.world.setter property instead."
+             , DeprecationWarning, stacklevel=2)
         self.world = world
+
+    @property
+    def world(self):
+        return self._world
+
+    @world.setter
+    def world(self, value):
+        self._world = value
+
+    @property
+    def parent(self):
+        return self._parent or self.world
+
+    @parent.setter
+    def parent(self, value):
+        self._parent = value
 
     def set_value(self, value):
         # Keep Track of the [self.history_size] most recent values

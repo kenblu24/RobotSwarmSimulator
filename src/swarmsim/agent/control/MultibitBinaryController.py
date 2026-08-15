@@ -40,8 +40,8 @@ class MultibitBinaryController(AbstractController):
     """
     def __init__(self, outputs: Sequence[ConstantOutputValues] | Mapping[int | str, ConstantOutputValues],
                  default_output: ConstantOutputValues | None = None,
-                 agent=None, parent=None, sensor_ids=None, **kwargs):
-        super().__init__(agent=agent, parent=parent, **kwargs)
+                 sensor_ids=None, **kwargs):
+        super().__init__(**kwargs)
         self.outputs = outputs
         self.default_output = default_output
         self.sensor_ids = sensor_ids

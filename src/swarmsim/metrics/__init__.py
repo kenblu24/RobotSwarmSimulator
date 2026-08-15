@@ -6,7 +6,6 @@ from .AngularMomentum import AngularMomentumBehavior
 from .SensorRotation import SensorRotation
 from .ScatterBehavior import ScatterBehavior
 from .GroupRotationBehavior import GroupRotationBehavior
-from .AgentsAtGoal import AgentsAtGoal, PercentageAtGoal
 from .EntityLen import EntityLen
 from .AndMetrics import AndMetrics
 from .StepsUntil import StepsUntil
@@ -39,8 +38,6 @@ __all__ = [
     "SensorRotation",
     "ScatterBehavior",
     "GroupRotationBehavior",
-    "PercentageAtGoal",
-    "AgentsAtGoal",
     "EntityLen",
     "AndMetrics",
     "StepsUntil",

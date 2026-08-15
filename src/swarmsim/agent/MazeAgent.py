@@ -115,7 +115,7 @@ class MazeAgentConfig(StaticAgentConfig):
 class MazeAgent(StaticAgent):
     SEED = -1
 
-    def __init__(self, config: MazeAgentConfig, world, name=None, initialize=True) -> None:
+    def __init__(self, config: MazeAgentConfig, name=None, initialize=True) -> None:
         """Agent w/ Unicycle Dynamics which can move based on sensor info.
 
         Parameters
@@ -150,7 +150,7 @@ class MazeAgent(StaticAgent):
             been developed just enough to be used as a base for other agent types.
         """
 
-        super().__init__(config, world, name=name, initialize=False)
+        super().__init__(config, name=name, initialize=False)
 
         self.is_highlighted = False
         if config.idiosyncrasies:

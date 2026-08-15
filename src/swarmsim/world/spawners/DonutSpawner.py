@@ -19,8 +19,6 @@ class DonutAgentSpawner(PointAgentSpawner):
 
     Parameters
     ----------
-    world : RectangularWorld
-        The world to spawn agents in.
     agent : Agent | BaseAgentConfig | dict
         The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
     center : tuple[float, float] | np.ndarray
@@ -37,14 +35,12 @@ class DonutAgentSpawner(PointAgentSpawner):
     """
     def __init__(
         self,
-        world,
         center=(5.0, 5.0),
         inner_radius=4.0,
         outer_radius=6.0,
         **kwargs
     ):
         super().__init__(
-            world=world,
             **kwargs
         )
         self.center = center

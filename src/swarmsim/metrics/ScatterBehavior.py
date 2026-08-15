@@ -6,18 +6,16 @@ from .Metric import Metric
 class ScatterBehavior(Metric):
     def __init__(self, history=None, regularize=True):
         super().__init__(name="Scatter", history_size=history)
-        self.population = None
         self.world_radius = 0
         self.regularize = regularize
 
-    def attach_world(self, world):
-        super().attach_world(world)
-        self.population = world.population
-        self.world_radius = world.config.radius
+    @property
+    def population(self):
+        return self.parent.population
 
     def calculate(self):
         n = len(self.population)
-        r = self.world_radius
+        r = self.world.config.radius
 
         distance_list = []
         mew = self.center_of_mass()

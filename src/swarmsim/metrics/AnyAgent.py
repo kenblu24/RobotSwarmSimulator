@@ -44,8 +44,9 @@ class AnyAgent(Metric):
         else:
             self.compiled_expr = None
 
-    def attach_world(self, world):
-        super().attach_world(world)
+    @Metric.world.setter
+    def world(self, value):
+        Metric.world.fset(self, value)
         self.expression = self.expression
 
     def apply_filter(self, bag):

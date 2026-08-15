@@ -46,8 +46,8 @@ class BinaryController(AbstractController):
 
     """
     def __init__(self, a: TwoConstantOutputValues | ConstantOutputValues, b: ConstantOutputValues | None = None,
-                 agent=None, parent=None, sensor_id=0, sense_avg_time=1, **kwargs):
-        super().__init__(agent=agent, parent=parent, **kwargs)
+                 sensor_id=0, sense_avg_time=1, **kwargs):
+        super().__init__(**kwargs)
         self.sensor_id = sensor_id  # use this to determine which sensor on the agent to use
         self.sense_avg = st.Average(sense_avg_time)
 

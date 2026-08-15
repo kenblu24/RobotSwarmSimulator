@@ -22,8 +22,8 @@ class DetectionRegionConfig(StaticAgentConfig):
 
 
 class DetectionRegion(StaticAgent):
-    def __init__(self, config: DetectionRegionConfig, world, name=None, initialize=True):
-        super().__init__(config, world, name, initialize)
+    def __init__(self, config: DetectionRegionConfig, name=None, initialize=True):
+        super().__init__(config, name, initialize)
         self.target_teams = None if config.target_teams is None else set(config.target_teams)
         self.target_name = config.target_name
 

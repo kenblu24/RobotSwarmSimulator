@@ -1,6 +1,6 @@
-import copyreg
 import numpy as np
 from .RadialVariance import RadialVarianceMetric
+from ..util.collections import RefProp
 
 
 class RadialVarianceHelper(RadialVarianceMetric):
@@ -81,6 +81,8 @@ class Tangentness(RadialVarianceHelper):
 
 class Circliness(RadialVarianceHelper):
     instantaneous = False
+    tangentness = RefProp('parent')
+    fatness = RefProp('parent')
 
     def __init__(self, history=None, avg_history_max=100, regularize=False, name=None):
         if regularize:
@@ -88,28 +90,6 @@ class Circliness(RadialVarianceHelper):
         self.tangentness = Tangentness(history=avg_history_max, regularize=False)
         self.fatness = Fatness(history=avg_history_max, regularize=False)
         super().__init__(history=history, regularize=regularize, name=name)
-
-    def attach_world(self, world):
-        self.population = world.population
-        self.world_radius = world.config.radius
-
-    @property
-    def population(self):
-        return self.tangentness.population
-
-    @population.setter
-    def population(self, x):
-        self.tangentness.population = x
-        self.fatness.population = x
-
-    @property
-    def world_radius(self):
-        return self.tangentness.world_radius
-
-    @world_radius.setter
-    def world_radius(self, x):
-        self.tangentness.world_radius = x
-        self.fatness.world_radius = x
 
     def _calculate(self):
         _, tau_ = self.tangentness.out_average()

@@ -55,12 +55,13 @@ and use it to initialize the :py:class:`~swarmsim.agent.MazeAgent.MazeAgent` cla
 
    from swarmsim import MazeAgent, MazeAgentConfig
    agent_config = MazeAgentConfig(position=(5, 5), agent_radius=0.1)
-   agent = MazeAgent(agent_config, world)
+   agent = MazeAgent(agent_config)
 
    world.population.append(agent)  # add the agent to the world
 
-Notice how we passed the ``world`` to the agent. This is so that the agent
-has a reference to the world, allowing it to access the world's properties.
+To add the agent to the world, we append the ``agent`` to the ``world.population``.
+Behind the scenes, the agent also receives a reference to the world, allowing
+it to access the world's properties.
 
 
 Starting the :fas:`arrows-spin` simulation
@@ -99,8 +100,7 @@ which sends the same movement signals to the agent every step.
 .. code-block:: python
 
    from swarmsim.agent.control.StaticController import StaticController
-   controller = StaticController(output=[0.01, 0.1])  # 10 cm/s forwards, 0.1 rad/s clockwise.
-   agent.controller = controller
+   agent.controller = StaticController(output=[0.01, 0.1])  # 10 cm/s forwards, 0.1 rad/s clockwise.
 
    run_sim(world)
 
@@ -123,7 +123,7 @@ First, we need to create a :py:class:`~swarmsim.world.spawners.AgentSpawner.Poin
 .. code-block:: python
 
    from swarmsim import PointAgentSpawner
-   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
+   spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
    world.spawners.append(spawner)
 
 Now, remove the existing agent from the :py:attr:`~swarmsim.world.World.World.population`
@@ -179,8 +179,8 @@ Here's all of the code in one file:
    world = RectangularWorld(world_config)
    controller = StaticController(output=[0.01, 0])
    agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1,
-                                     controller=controller), world)
-   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
+                                     controller=controller))
+   spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True,
                                agent=agent, mode="oneshot")
    world.spawners.append(spawner)
 
@@ -261,7 +261,7 @@ let's add a sensor to your existing agent like this:
 
     from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 
-    sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
+    sensor = BinaryFOVSensor(theta=0.45, distance=2,)
     agent.sensors.append(sensor)
 
 The ``theta`` parameter is **half** the angle of the FOV in radians, and the
@@ -284,7 +284,7 @@ Now let's create a controller that will read the sensor data and change how the 
 
    from swarmsim.agent.control.BinaryController import BinaryController
 
-   controller = BinaryController(a=(0.02, -0.5), b=(0.02, 0.5), agent=agent)
+   controller = BinaryController(a=(0.02, -0.5), b=(0.02, 0.5))
    agent.controller = controller
 
 Now, if you run ``run_sim(world)``\ , you should see some agents that turn left if one sees something and right if one doesn't!
@@ -360,12 +360,12 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
 
          world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
          world = RectangularWorld(world_config)
-         agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1), world)
-         sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
+         agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1))
+         sensor = BinaryFOVSensor(theta=0.45, distance=2,)
          agent.sensors.append(sensor)
-         controller = BinaryController((0.02, -0.5), (0.02, 0.5), agent)
+         controller = BinaryController((0.02, -0.5), (0.02, 0.5))
          agent.controller = controller
-         spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
+         spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True,
                                      agent=agent, mode="oneshot")
          world.spawners.append(spawner)
 
@@ -530,7 +530,6 @@ of an agent to a :py:mod:`~swarmsim.agent.control.BinaryController`\ :
          agent.controller = BinaryController(
              a=(0.02, -0.5),
              b=(0.02, 0.5),
-             agent=agent,
          )
 
    .. grid-item::

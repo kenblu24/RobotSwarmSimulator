@@ -31,8 +31,7 @@ from ..config.OutputTensorConfig import OutputTensorConfig
 from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class, _ERRMSG_MISSING_ASSOCIATED_TYPE
 
 from ..util.asdict import asdict
-from ..util.collections import FlagSet
-from ..util.collections import HookList
+from ..util.collections import FlagSet, RefList, RefListProp
 from ..util import jinja
 
 from ..agent.Agent import Agent
@@ -136,6 +135,16 @@ class AbstractWorldConfig(BaseWorldConfig):
 class World:
     """Base world class.
     """
+
+    #: List of agents in the world.
+    population: RefList[Agent] = RefListProp()
+    #: The list of world objects.
+    objects: RefList[Agent] = RefListProp()
+    #: List of spawners which create agents or objects.
+    spawners: RefList[Spawner] = RefListProp()
+    #: Metrics to calculate behaviors.
+    metrics: RefList[Metric] = RefListProp()
+
     def __init__(self, config):
         self.config = config
         config = replace(config)
@@ -143,14 +152,10 @@ class World:
         #: expressions in the world's :py:attr:`stop_at` attribute.
         self.jenv = jinja.make_default_jinja_env()
         self.jenv.globals['world'] = self
-        #: List of agents in the world.
-        self._population: HookList[Agent] = HookList()
-        #: List of spawners which create agents or objects.
-        self.spawners: list[Spawner] = []
-        #: Metrics to calculate behaviors.
-        self.metrics: list[Metric] = []
-        #: The list of world objects.
-        self._objects: HookList[Agent] = HookList()
+        self._population = RefList(self, 'world')
+        self._objects = RefList(self, 'world')
+        self._spawners = RefList(self, 'world')
+        self._metrics = RefList(self, 'world')
         self.goals = config.goals
         self.meta = config.metadata
         self.gui = None
@@ -212,22 +217,6 @@ class World:
         else:
             self._stop_at = self.jenv.compile_expression(value)
 
-    @property
-    def population(self):
-        return self._population
-
-    @population.setter
-    def population(self, value):
-        self._population[:] = value
-
-    @property
-    def objects(self):
-        return self._objects
-
-    @objects.setter
-    def objects(self, value):
-        self._objects[:] = value
-
     def set_seed(self, seed):
         self.seed = np.random.randint(0, 2**31) if seed is None else seed
         self.rng = np.random.default_rng(self.seed)
@@ -238,7 +227,7 @@ class World:
             agent = agent_config
         else:  # otherwise, it's a config dict. find the class specified and create the agent
             agent_class, agent_config = get_agent_class(agent_config)
-            agent = agent_class.from_config(agent_config, self)
+            agent = agent_class.from_config(agent_config)
         self.population.append(agent)
         return agent
 
@@ -247,7 +236,7 @@ class World:
             spawner = spawner_config
         else:  # otherwise, it's a config dict. find the class specified and create the spawner
             spawner_class, spawner_config = get_class_from_dict('spawners', spawner_config)
-            spawner = spawner_class(self, **spawner_config)
+            spawner = spawner_class(**spawner_config)
         self.spawners.append(spawner)
         return spawner
 
@@ -257,7 +246,6 @@ class World:
         else:  # otherwise, it's a config dict. find the class specified and create the metric
             metric_class, metric_config = get_class_from_dict('metrics', metric_config)
             metric = metric_class(**metric_config)
-        metric.attach_world(self)
         metric.reset()
         if add_to_world:
             self.metrics.append(metric)

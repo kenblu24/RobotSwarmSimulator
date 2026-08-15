@@ -49,8 +49,6 @@ class BaseAgentSpawner(Spawner):
 
     Parameters
     ----------
-    world : World
-        The world to spawn agents in.
     agent : Agent | BaseAgentConfig | dict
         The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
     n : int | None, default=1
@@ -65,7 +63,6 @@ class BaseAgentSpawner(Spawner):
     """
     def __init__(
         self,
-        world,
         agent=None,
         n: int | None = 1,
         seed='unspecified',
@@ -74,7 +71,7 @@ class BaseAgentSpawner(Spawner):
         delay=0,
         **kwargs
     ):
-        super().__init__(world, seed, **kwargs)
+        super().__init__(seed, **kwargs)
         self.type = 'agent'
         self.mode: str = 'oneshot' if oneshot else str(mode).lower()
         if oneshot:
@@ -104,7 +101,7 @@ class BaseAgentSpawner(Spawner):
         if isinstance(self.agent_config, Agent):
             return config
         else:
-            return self.agent_class.from_config(config, self.world)
+            return self.agent_class.from_config(config)
 
 
 class PointAgentSpawner(BaseAgentSpawner):
@@ -117,8 +114,6 @@ class PointAgentSpawner(BaseAgentSpawner):
 
     Parameters
     ----------
-    world : RectangularWorld
-        The world to spawn agents in.
     agent : Agent | BaseAgentConfig | dict
         The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
     facing : str | float | tuple[float, float] | np.ndarray | None, default=None
@@ -138,12 +133,11 @@ class PointAgentSpawner(BaseAgentSpawner):
     """
     def __init__(
         self,
-        world,
         facing=None,
         avoid_overlap=False,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(**kwargs)
         self.avoid_overlap = avoid_overlap
         if isinstance(facing, str) and facing not in ['towards', 'away', 'random']:
             msg = f"Invalid option for key 'facing' in spawner config: {facing}"
@@ -230,8 +224,6 @@ class UniformAgentSpawner(PointAgentSpawner):
 
     Parameters
     ----------
-    world : RectangularWorld
-        The world to spawn agents in.
     agent : Agent | BaseAgentConfig | dict
         The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
     region : Polygon | list[tuple] | np.ndarray
@@ -249,12 +241,11 @@ class UniformAgentSpawner(PointAgentSpawner):
     """
     def __init__(
         self,
-        world,
         region=None,
         holes=None,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(**kwargs)
         if region is None:
             raise ValueError("region must be specified for UniformAgentSpawner")
         shell = np.asarray(region, dtype=np.float64)
@@ -298,8 +289,6 @@ class UniformCircleAgentSpawner(PointAgentSpawner):
 
     Parameters
     ----------
-    world : RectangularWorld
-        The world to spawn agents in.
     agent : Agent | BaseAgentConfig | dict
         The agent config to use for the spawned agents. Can be a config dataclass, dictionary, or instance of an agent.
     center : tuple[float, float] | np.ndarray
@@ -312,12 +301,11 @@ class UniformCircleAgentSpawner(PointAgentSpawner):
     """
     def __init__(
         self,
-        world,
         center=None,
         radius=None,
         **kwargs
     ):
-        super().__init__(world, **kwargs)
+        super().__init__(**kwargs)
         if center is None or radius is None:
             raise ValueError("center and radius must be specified for UniformCircleAgentSpawner")
         self.center = np.asarray(center)
