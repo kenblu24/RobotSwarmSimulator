@@ -133,10 +133,10 @@ class StaticAgent(Agent):
         return self._world
 
     @world.setter
-    def world(self, value):
-        self._world = value
-        if self.rng is None and self.seed == 'unspecified':
-            self.set_seed(None)
+    def world(self, world):
+        self._world = world
+        if world and self.rng is None and self.seed == 'unspecified':
+            self.set_seed(world.rng.integers(0, 2**31))
 
     @property
     def dt(self) -> float:

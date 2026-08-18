@@ -23,10 +23,10 @@ class Spawner:
         return self._world
 
     @world.setter
-    def world(self, value):
-        self._world = value
-        if self.rng is None and self.seed == 'unspecified':
-            self.set_seed(None)
+    def world(self, world):
+        self._world = world
+        if world and self.rng is None and self.seed == 'unspecified':
+            self.set_seed(world.rng.integers(0, 2**31))
 
     def set_seed(self, seed):
         self.seed = np.random.randint(0, 2**31) if seed is None else seed
