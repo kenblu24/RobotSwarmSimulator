@@ -81,6 +81,7 @@ class Tangentness(RadialVarianceHelper):
 
 class Circliness(RadialVarianceHelper):
     instantaneous = False
+    default_aggregation = 'value'
     tangentness = RefProp('parent')
     fatness = RefProp('parent')
 
