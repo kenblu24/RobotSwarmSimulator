@@ -71,9 +71,9 @@ class Sensor:
 
     def set_seed(self, seed):
         if seed is None:
-            if hasattr(self.parent, 'rng'):
+            if hasattr(self.parent, 'rng') and self.parent.rng:
                 self.seed = self.parent.rng.integers(0, 2**31)
-            elif hasattr(self.agent, 'rng'):
+            elif hasattr(self.agent, 'rng') and self.agent.rng:
                 self.seed = self.agent.rng.integers(0, 2**31)
             else:
                 temp_rng = np.random.default_rng(None)
