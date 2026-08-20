@@ -1,5 +1,7 @@
 import bisect
 
+import numpy as np
+
 from . import pid
 
 # from typing import override
@@ -226,6 +228,34 @@ class Remap():
             i0 = i1 - 1
         inp, outp = self.in_points, self.out_points
         return fmap(x, inp[i0], inp[i1], outp[i0], outp[i1])
+
+
+class RemapNP():
+    def __init__(self, in_points, out_points):
+        in_points = np.asarray(in_points)
+        out_points = np.asarray(out_points)
+        if in_points.size != out_points.size:
+            raise ValueError("RemapNP: in_points and out_points must be the same size.")
+        # sort by in_points
+        sorted_indices = np.argsort(in_points)
+        self.in_points = np.take_along_axis(in_points, sorted_indices, axis=0)
+        self.out_points = np.take_along_axis(out_points, sorted_indices, axis=0)
+
+    def __call__(self, x):
+        a = np.empty(self.in_points.size, dtype=int)
+        b = np.searchsorted(self.in_points, x, side='left')
+        # if left of first point, use first range
+        leftmask = b == 0
+        a[leftmask] = 0
+        b[leftmask] = 1
+        # if right of last point, use last range
+        rightmask = b >= self.out_points.size
+        b[rightmask] -= 1
+        a[rightmask] = b - 1
+        # use left of b
+        a[~(leftmask | rightmask)] = b - 1
+        inp, outp = self.in_points, self.out_points
+        return fmap(x, inp[a], inp[b], outp[a], outp[b])
 
 
 # returns list as cumulative, starting at element s onwards
