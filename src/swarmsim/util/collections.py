@@ -347,8 +347,11 @@ class HookList(list):
 class RefProp:
     _remove_value = None
 
-    def __init__(self, backref_name):
+    def __init__(self, backref_name, set_callbacks=None, del_callbacks=None, extra_names=None):
         self.backref_name = backref_name
+        self._set_callbacks = set_callbacks or []
+        self._del_callbacks = del_callbacks or []
+        self.auxn = extra_names or {}
 
     def __set_name__(self, owner, name):
         self._name = name
@@ -359,14 +362,22 @@ class RefProp:
         return getattr(instance, self._prop)
 
     def __set__(self, instance, value):
+        for callback in self._set_callbacks:
+            value = callback(instance, value)
         child = getattr(instance, self._prop, self._remove_value)
         if child is not self._remove_value:  # clear the old backref
             setattr(child, self.backref_name, self._remove_value)
         setattr(instance, self._prop, value)  # set on parent
         setattr(value, self.backref_name, instance)  # set backref on child
+        for child_name, parent_name in self.auxn.items():
+            setattr(value, child_name, getattr(instance, parent_name))
 
     def __delete__(self, parent):
-        setattr(getattr(parent, self._prop), self.backref_name, self._remove_value)
+        child = getattr(parent, self._prop)
+        for callback in self._del_callbacks:
+            callback(self, parent, child)
+        for prop in self.auxn:
+            setattr(child, prop, self._remove_value)
         delattr(parent, self._prop)
 
 
@@ -390,17 +401,23 @@ class RefListProp:
 class RefList(HookList):
     _remove_value = None
 
-    def __init__(self, backref, backref_name, add_callbacks=None, del_callbacks=None):
+    def __init__(self, backref, backref_name,
+                 add_callbacks=None, del_callbacks=None, extra_names=None):
         self.backref: Any = backref
         self.backref_name = backref_name
         self._add_callbacks += (self.add_backref,)
         self._del_callbacks += (self.remove_backref,)
+        self.auxn = extra_names or {}
         super().__init__(add_callbacks, del_callbacks)
 
     def add_backref(self, obj):
         setattr(obj, self.backref_name, self.backref)
+        for child_prop, parent_prop in self.auxn.items():
+            setattr(obj, child_prop, getattr(self.backref, parent_prop))
 
     def remove_backref(self, obj):
+        for child_prop in self.auxn:
+            setattr(obj, child_prop, self._remove_value)
         if self._remove_value == '__delattr__':
             delattr(obj, self.backref_name)
         else:

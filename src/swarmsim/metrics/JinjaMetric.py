@@ -34,6 +34,7 @@ Examples
 # this is because swarmsim.metrics.__all__ exports `metrics.JinjaMetric` <-- class, not module
 
 from .Metric import Metric
+from ..util.collections import RefProp, RefListProp, RefList
 from typing import Sequence
 
 
@@ -107,7 +108,9 @@ class JinjaMetric(Metric):
     ):
         self._default = default
         self.metric = metric
-        self.metrics = metrics
+        self._metrics = RefList(self, 'parent', add_callbacks=[self.setup_submetric],
+                                extra_names={'world': 'world'})
+        self.metrics = metrics or []
         self.default_aggregation = default_aggregation
         super().__init__(name=name, history_size=history)
         self.template_src = template
@@ -116,9 +119,11 @@ class JinjaMetric(Metric):
         self.expression = expression
         self.eval_condition = eval_condition
         self.save_condition = save_condition
-        self.exprargs = {'self': self}
-        if self.world:
-            self.setup_submetrics()
+        self.exprargs = {
+            'self': self,
+            'metric': self.metric,
+            'metrics': self.metrics,
+        }
 
     def reset(self):
         super().reset()
@@ -136,17 +141,25 @@ class JinjaMetric(Metric):
     @Metric.world.setter
     def world(self, value):
         Metric.world.fset(self, value)
-        self.setup_submetrics()
         if self.template_src is not None:
             self.template = self.world.jenv.from_string(self.template_src)
+        try:
+            self.metric.world = value
+        except AttributeError:
+            pass
+        for metric in self.metrics:
+            try:
+                metric.world = value
+            except AttributeError:
+                pass
 
-    def setup_submetrics(self):
-        if self.metric is not None:
-            self.metric = self.world.add_metric(self.metric, add_to_world=False)
-            self.exprargs['metric'] = self.metric
-        if self.metrics is not None:
-            self.metrics = [self.world.add_metric(metric, add_to_world=False) for metric in self.metrics]
-            self.exprargs['metrics'] = self.metrics
+    def setup_submetric(self, metric):
+        metric = self.world.add_metric(metric, add_to_world=False)
+        metric.world = self.world
+        return metric
+
+    metric = RefProp('parent', set_callbacks=[setup_submetric], extra_names={'world': 'world'})
+    metrics = RefListProp()
 
     def make_module(self, **kwargs):
         if self.template is None:
