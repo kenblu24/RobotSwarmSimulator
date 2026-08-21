@@ -141,7 +141,7 @@ class JinjaMetric(Metric):
     @Metric.world.setter
     def world(self, value):
         Metric.world.fset(self, value)
-        if self.template_src is not None:
+        if self.world and self.template_src is not None:
             self.template = self.world.jenv.from_string(self.template_src)
         try:
             self.metric.world = value
@@ -154,8 +154,9 @@ class JinjaMetric(Metric):
                 pass
 
     def setup_submetric(self, metric):
-        metric = self.world.add_metric(metric, add_to_world=False)
-        metric.world = self.world
+        if self.world:
+            metric = self.world.add_metric(metric, add_to_world=False)
+            metric.world = self.world
         return metric
 
     metric = RefProp('parent', set_callbacks=[setup_submetric], extra_names={'world': 'world'})

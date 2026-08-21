@@ -13,6 +13,7 @@ else:
 class Metric():
     __badvars__ = ['world']  # variables that should not be pickled
     default_aggregation = None
+    _world = None
     #: Set to True if the metric should not be averaged over its history
 
     def __init__(self, name: str, history_size: int | None = None):

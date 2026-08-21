@@ -368,16 +368,25 @@ class RefProp:
         if child is not self._remove_value:  # clear the old backref
             setattr(child, self.backref_name, self._remove_value)
         setattr(instance, self._prop, value)  # set on parent
-        setattr(value, self.backref_name, instance)  # set backref on child
+        try:
+            setattr(value, self.backref_name, instance)  # set backref on child
+        except AttributeError:
+            pass
         for child_name, parent_name in self.auxn.items():
-            setattr(value, child_name, getattr(instance, parent_name))
+            try:
+                setattr(value, child_name, getattr(instance, parent_name))
+            except AttributeError:
+                pass
 
     def __delete__(self, parent):
         child = getattr(parent, self._prop)
         for callback in self._del_callbacks:
             callback(self, parent, child)
         for prop in self.auxn:
-            setattr(child, prop, self._remove_value)
+            try:
+                setattr(child, prop, self._remove_value)
+            except AttributeError:
+                pass
         delattr(parent, self._prop)
 
 
@@ -408,12 +417,18 @@ class RefList(HookList):
         self._add_callbacks += (self.add_backref,)
         self._del_callbacks += (self.remove_backref,)
         self.auxn = extra_names or {}
-        super().__init__(add_callbacks, del_callbacks)
+        super().__init__(add_callbacks=add_callbacks, del_callbacks=del_callbacks)
 
     def add_backref(self, obj):
-        setattr(obj, self.backref_name, self.backref)
+        try:
+            setattr(obj, self.backref_name, self.backref)
+        except AttributeError:
+            pass
         for child_prop, parent_prop in self.auxn.items():
-            setattr(obj, child_prop, getattr(self.backref, parent_prop))
+            try:
+                setattr(obj, child_prop, getattr(self.backref, parent_prop))
+            except AttributeError:
+                pass
 
     def remove_backref(self, obj):
         for child_prop in self.auxn:
