@@ -1,4 +1,4 @@
-from .Metric import Metric
+from .Metric import Metric, HasSubMetric, HasSubMetrics
 from .AverageSpeed import AverageSpeedBehavior
 from .SubGroupWrapper import SubGroupBehavior
 from .SensorOffset import GeneElementDifference
@@ -31,6 +31,8 @@ from .Dispersion import InteragentDispersion, ExplodingDispersion
 
 __all__ = [
     "Metric",
+    "HasSubMetric",
+    "HasSubMetrics",
     "AverageSpeedBehavior",
     "SubGroupBehavior",
     "GeneElementDifference",
