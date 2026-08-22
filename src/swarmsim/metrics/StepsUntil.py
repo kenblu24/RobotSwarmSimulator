@@ -1,9 +1,9 @@
 import numpy as np
-from .Metric import Metric
+from .Metric import Metric, HasSubMetric
 from ..util.collections import RefProp
 
 
-class StepsUntil(Metric):
+class StepsUntil(Metric, HasSubMetric):
     # TODO: metric = RefProp('parent')  # metric may be a config dict, need to allow refprop to handle that
 
     def __init__(
@@ -17,13 +17,9 @@ class StepsUntil(Metric):
     ):
         self._default = default
         self._expression = until_expression
+        HasSubMetric.__init__(self, metric=metric)
         super().__init__(name=name, history_size=history)
-        self.metric = metric
         self.sentinel = sentinel
-        try:
-            self.setup_submetric()
-        except ValueError:
-            pass
 
     def reset(self):
         super().reset()
@@ -47,17 +43,8 @@ class StepsUntil(Metric):
 
     @Metric.world.setter
     def world(self, value):
-        Metric.world.fset(self, value)
+        HasSubMetric.world.fset(self, value)
         self.expression = self.expression
-        self.setup_submetric()
-
-    def setup_submetric(self):
-        if self.metric is None:
-            raise ValueError("StepsUntil requires a metric.")
-        if self.world is None:
-            raise ValueError("World must be set before metrics can be added.")
-        self.metric = self.world.add_metric(self.metric, add_to_world=False)
-        self.metric.world = self.world
 
     def calculate(self):
         if self.time_activated is None:

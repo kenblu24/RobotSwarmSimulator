@@ -33,12 +33,11 @@ Examples
 # FIXME: The above docstring will not appear since this file gets imported as a class, not a module.
 # this is because swarmsim.metrics.__all__ exports `metrics.JinjaMetric` <-- class, not module
 
-from .Metric import Metric
-from ..util.collections import RefProp, RefListProp, RefList
+from .Metric import Metric, HasSubMetrics
 from typing import Sequence
 
 
-class JinjaMetric(Metric):
+class JinjaMetric(Metric, HasSubMetrics):
     """Combine multiple metrics programmatically using a Jinja expression.
 
     Evaluation Order on ``JinjaMetric.calculate()``:
@@ -107,11 +106,8 @@ class JinjaMetric(Metric):
         default_aggregation=None,
     ):
         self._default = default
-        self.metric = metric
-        self._metrics = RefList(self, 'parent', add_callbacks=[self.setup_submetric],
-                                extra_names={'world': 'world'})
-        self.metrics = metrics or []
         self.default_aggregation = default_aggregation
+        HasSubMetrics.__init__(self, metric=metric, metrics=metrics)
         super().__init__(name=name, history_size=history)
         self.template_src = template
         self.template = None
@@ -140,27 +136,9 @@ class JinjaMetric(Metric):
 
     @Metric.world.setter
     def world(self, value):
-        Metric.world.fset(self, value)
+        HasSubMetrics.world.fset(self, value)
         if self.world and self.template_src is not None:
             self.template = self.world.jenv.from_string(self.template_src)
-        try:
-            self.metric.world = value
-        except AttributeError:
-            pass
-        for metric in self.metrics:
-            try:
-                metric.world = value
-            except AttributeError:
-                pass
-
-    def setup_submetric(self, metric):
-        if self.world:
-            metric = self.world.add_metric(metric, add_to_world=False)
-            metric.world = self.world
-        return metric
-
-    metric = RefProp('parent', set_callbacks=[setup_submetric], extra_names={'world': 'world'})
-    metrics = RefListProp()
 
     def make_module(self, **kwargs):
         if self.template is None:
