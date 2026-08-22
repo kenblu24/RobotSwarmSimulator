@@ -1,10 +1,6 @@
 import math
 
-import copy
-import numpy as np
-from typing import List
-from .Metric import Metric
-from ..agent.MazeAgent import MazeAgent
+from .metric import Metric
 from ..util.geometry.Point import Point
 from ..util.geometry.ConvexHull import ConvexHull as CH
 from ..util.geometry.Polygon import Polygon

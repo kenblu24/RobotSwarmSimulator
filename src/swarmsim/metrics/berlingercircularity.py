@@ -1,7 +1,6 @@
 import numpy as np
-import math
 import circle_fit
-from .Circliness import RadialVarianceHelper
+from .circliness import RadialVarianceHelper
 
 # typing
 from typing import Callable

@@ -1,6 +1,5 @@
 import numpy as np
-import math
-from .RadialVariance import RadialVarianceMetric
+from .radialvariance import RadialVarianceMetric
 
 
 class DistanceSizeRatio(RadialVarianceMetric):

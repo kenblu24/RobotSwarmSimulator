@@ -1,4 +1,4 @@
-from .Metric import Metric
+from .metric import Metric
 from typing import Tuple
 
 

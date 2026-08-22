@@ -1,8 +1,6 @@
 import math
 
-import numpy as np
-from typing import List
-from .Metric import Metric
+from .metric import Metric
 
 
 class SensorRotation(Metric):
@@ -14,4 +12,3 @@ class SensorRotation(Metric):
     def calculate(self):
         sensor_angle = self.parent.population[0].controller[self.i] / (2 * math.pi)
         self.set_value(sensor_angle)
-

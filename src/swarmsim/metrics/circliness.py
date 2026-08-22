@@ -1,5 +1,5 @@
 import numpy as np
-from .RadialVariance import RadialVarianceMetric
+from .radialvariance import RadialVarianceMetric
 from ..util.collections import RefProp
 
 

@@ -1,4 +1,4 @@
-from .Metric import Metric
+from .metric import Metric
 
 
 # alias for backwards compatibility
