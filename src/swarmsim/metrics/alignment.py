@@ -1,21 +1,6 @@
 import numpy as np
 from .metric import Metric
-
-
-def vectorize(angle):
-    """Convert an angle to a representative unit vector.
-
-    Parameters
-    ----------
-    angle : float
-        Angle in radians
-
-    Returns
-    -------
-    np.ndarray
-        Vector
-    """
-    return np.array((np.cos(angle), np.sin(angle)))
+from ..util.geometry.euclidean import vectorize
 
 
 class Alignment(Metric):
