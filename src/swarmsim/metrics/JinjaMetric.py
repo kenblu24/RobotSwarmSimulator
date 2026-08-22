@@ -33,11 +33,11 @@ Examples
 # FIXME: The above docstring will not appear since this file gets imported as a class, not a module.
 # this is because swarmsim.metrics.__all__ exports `metrics.JinjaMetric` <-- class, not module
 
-from .Metric import Metric
+from .Metric import Metric, HasSubMetrics
 from typing import Sequence
 
 
-class JinjaMetric(Metric):
+class JinjaMetric(Metric, HasSubMetrics):
     """Combine multiple metrics programmatically using a Jinja expression.
 
     Evaluation Order on ``JinjaMetric.calculate()``:
@@ -106,9 +106,8 @@ class JinjaMetric(Metric):
         default_aggregation=None,
     ):
         self._default = default
-        self.metric = metric
-        self.metrics = metrics
         self.default_aggregation = default_aggregation
+        HasSubMetrics.__init__(self, metric=metric, metrics=metrics)
         super().__init__(name=name, history_size=history)
         self.template_src = template
         self.template = None
@@ -116,9 +115,11 @@ class JinjaMetric(Metric):
         self.expression = expression
         self.eval_condition = eval_condition
         self.save_condition = save_condition
-        self.exprargs = {'self': self}
-        if self.world:
-            self.setup_submetrics()
+        self.exprargs = {
+            'self': self,
+            'metric': self.metric,
+            'metrics': self.metrics,
+        }
 
     def reset(self):
         super().reset()
@@ -135,18 +136,9 @@ class JinjaMetric(Metric):
 
     @Metric.world.setter
     def world(self, value):
-        Metric.world.fset(self, value)
-        self.setup_submetrics()
-        if self.template_src is not None:
+        HasSubMetrics.world.fset(self, value)
+        if self.world and self.template_src is not None:
             self.template = self.world.jenv.from_string(self.template_src)
-
-    def setup_submetrics(self):
-        if self.metric is not None:
-            self.metric = self.world.add_metric(self.metric, add_to_world=False)
-            self.exprargs['metric'] = self.metric
-        if self.metrics is not None:
-            self.metrics = [self.world.add_metric(metric, add_to_world=False) for metric in self.metrics]
-            self.exprargs['metrics'] = self.metrics
 
     def make_module(self, **kwargs):
         if self.template is None:
