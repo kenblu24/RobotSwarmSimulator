@@ -3,7 +3,7 @@ import itertools
 import pygame
 import numpy as np
 from scipy.spatial import Delaunay
-from .Metric import Metric
+from .metric import Metric
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:

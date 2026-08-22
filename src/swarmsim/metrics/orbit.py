@@ -1,7 +1,6 @@
 import numpy as np
 import math
-from random import sample
-from .RadialVariance import RadialVarianceMetric
+from .radialvariance import RadialVarianceMetric
 
 
 class RadialVarianceHelper(RadialVarianceMetric):

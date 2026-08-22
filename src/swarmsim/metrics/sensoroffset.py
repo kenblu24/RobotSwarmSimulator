@@ -1,8 +1,6 @@
 import math
 
-import numpy as np
-from typing import List
-from .Metric import Metric
+from .metric import Metric
 
 
 class GeneElementDifference(Metric):
@@ -17,4 +15,3 @@ class GeneElementDifference(Metric):
         b_theta = self.parent.population[0].controller[self.b]
         sensor_angle = abs(a_theta - b_theta) / (2 * math.pi)
         self.set_value(sensor_angle)
-

@@ -36,7 +36,7 @@ from ..util import jinja
 
 from ..agent.Agent import Agent
 from .spawners.Spawner import Spawner
-from ..metrics.Metric import Metric
+from ..metrics.metric import Metric
 
 from typing import Any
 
