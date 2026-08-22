@@ -1,21 +1,21 @@
-from .Metric import Metric, HasSubMetric, HasSubMetrics
-from .AverageSpeed import AverageSpeedBehavior
-from .SubGroupWrapper import SubGroupBehavior
-from .SensorOffset import GeneElementDifference
-from .AngularMomentum import AngularMomentumBehavior
-from .SensorRotation import SensorRotation
-from .ScatterBehavior import ScatterBehavior
-from .GroupRotationBehavior import GroupRotationBehavior
-from .EntityLen import EntityLen
-from .AndMetrics import AndMetrics
-from .StepsUntil import StepsUntil
-from .AnyAgent import AnyAgent
-from .JinjaMetric import JinjaMetric
-from .TotalCollisions import TotalCollisionsBehavior
-from .RadialVariance import RadialVarianceMetric
-from .Circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
-from .Aggregation import Aggregation
-from .BerlingerCircularity import (
+from .metric import Metric, HasSubMetric, HasSubMetrics
+from .averagespeed import AverageSpeedBehavior
+from .subgroupwrapper import SubGroupBehavior
+from .sensoroffset import GeneElementDifference
+from .angularmomentum import AngularMomentumBehavior
+from .sensorrotation import SensorRotation
+from .scatterbehavior import ScatterBehavior
+from .grouprotationbehavior import GroupRotationBehavior
+from .entitylen import EntityLen
+from .andmetrics import AndMetrics
+from .stepsuntil import StepsUntil
+from .anyagent import AnyAgent
+from .jinjametric import JinjaMetric
+from .totalcollisions import TotalCollisionsBehavior
+from .radialvariance import RadialVarianceMetric
+from .circliness import Fatness, Fatness2, Tangentness, Circliness, RoutRin
+from .aggregation import Aggregation
+from .berlingercircularity import (
     InstantLSQCircularity,
     InstantHyperLSQCircularity,
     InstantRiemannCircularity,
@@ -25,9 +25,9 @@ from .BerlingerCircularity import (
     InstantHyperSVDCircularity,
     InstantKMHCircularity,
 )
-from .DistanceSizeRatio import DistanceSizeRatio
-from .DelaunayDiffusion import DelaunayDiffusion
-from .Dispersion import InteragentDispersion, ExplodingDispersion
+from .distancesizeratio import DistanceSizeRatio
+from .delaunaydiffusion import DelaunayDiffusion
+from .dispersion import InteragentDispersion, ExplodingDispersion
 
 __all__ = [
     "Metric",

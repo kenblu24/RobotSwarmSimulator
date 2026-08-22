@@ -30,10 +30,8 @@ Examples
    - type: Aggregation
 
 """
-# FIXME: The above docstring will not appear since this file gets imported as a class, not a module.
-# this is because swarmsim.metrics.__all__ exports `metrics.JinjaMetric` <-- class, not module
 
-from .Metric import Metric, HasSubMetrics
+from .metric import Metric, HasSubMetrics
 from typing import Sequence
 
 
