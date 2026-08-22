@@ -296,7 +296,7 @@ class HookList(list):
                 func(self[idx])
             for func in self._add_callbacks:
                 func(value)
-            super().__setitem__(idx, value)
+            super(HookList, self).__setitem__(idx, value)
 
         if isinstance(idx, (int, np.integer)):
             set_single(idx, value)
@@ -305,7 +305,7 @@ class HookList(list):
         n = len(self)
         if isinstance(idx, slice):
             sl = slicen(idx)
-            idx = slice_indices(idx)
+            idx = slice_indices(idx, max_len=n)
             if sl.step in (None, 1):
                 # need to do these separately since it's not necessarily 1-to-1
                 # HACK: performance may be O(nlogn) since using del and insert
@@ -432,11 +432,20 @@ class RefList(HookList):
 
     def remove_backref(self, obj):
         for child_prop in self.auxn:
-            setattr(obj, child_prop, self._remove_value)
+            try:
+                setattr(obj, child_prop, self._remove_value)
+            except AttributeError:
+                pass
         if self._remove_value == '__delattr__':
-            delattr(obj, self.backref_name)
+            try:
+                delattr(obj, self.backref_name)
+            except AttributeError:
+                pass
         else:
-            setattr(obj, self.backref_name, self._remove_value)
+            try:
+                setattr(obj, self.backref_name, self._remove_value)
+            except AttributeError:
+                pass
 
 
 class NameRef(str):
