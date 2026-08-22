@@ -17,6 +17,7 @@ class Boids(Metric):
         separation_metric=None,
         cohesion_metric=None,
         alignment_metric=None,
+        linear=(1, 1, 1,),
         history=None,
         default_aggregation='average',
     ):
@@ -24,6 +25,7 @@ class Boids(Metric):
         self.separation = ensure_type_tag(separation_metric, 'Cohesion')
         self.cohesion = ensure_type_tag(cohesion_metric, 'Cohesion')
         self.alignment = ensure_type_tag(alignment_metric, 'Alignment')
+        self.linear = linear
 
     @Metric.world.setter
     def world(self, value):
@@ -45,10 +47,11 @@ class Boids(Metric):
     alignment = RefProp('parent', set_callbacks=[setup_submetric], extra_names={'world': 'world'})
 
     def calculate(self):
+        a, b, c = self.linear
         separation = self.separation.calculate()
         cohesion = self.cohesion.calculate()
         alignment = self.alignment.calculate()
-        self.set_value(separation + cohesion + alignment)
+        self.set_value(a * separation + b * cohesion + c * alignment)
 
     def set_value(self, value):
         self.value_history.append(value)
