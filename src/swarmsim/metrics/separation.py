@@ -1,6 +1,6 @@
 from numbers import Number
 import numpy as np
-from .Metric import Metric
+from .metric import Metric
 from ..util.geometry.euclidean import fast_pairwise_distances
 from ..util.statistics_tools import RemapNP
 

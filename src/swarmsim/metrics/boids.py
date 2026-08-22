@@ -1,5 +1,5 @@
 import numpy as np
-from .Metric import Metric
+from .metric import Metric
 from ..util.collections import RefProp
 
 
