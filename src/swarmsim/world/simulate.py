@@ -84,15 +84,17 @@ def main(
         if gui and screen:
             gui.set_time(steps_taken)
             gui.sim_paused = paused
+            
             screen.fill(background_color())
-            if draw_world:
-                world.draw(screen)
+            # if draw_world:
+            #     world.draw(screen)
             # gui.step()
+            gui.draw(screen, draw_world)
+
             if gui.track_all_mouse:
                 gui.recieve_mouse(pygame.mouse.get_rel())
             if gui.track_all_events:
                 gui.recieve_events(pygame.event.get())
-            gui.draw(screen)
 
     # Main loop
     time_me = Timer("World Step")

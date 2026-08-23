@@ -28,7 +28,7 @@ class VizTrail:
 
             self.agent_pos[agent.name].append((agent.getPosition().copy(), agent.angle))
 
-    def draw(self, screen, world: RectangularWorld):
+    def draw(self, screen: pygame.Surface, world: RectangularWorld):
         def color_hsla(color: pygame.Color, angle_rad: float, s=0.5, l=0.5):
             color.hsla = np.rad2deg(angle_rad)%360., s*100., l*100., self.opacity*100.
 
@@ -58,9 +58,9 @@ class VizTest(DifferentialDriveGUI):
         super().__init__(x, y, w, h)
         self.tracker = VizTrail()
 
-    def draw(self, screen):
+    def draw(self, screen, draw_world=True):
         self.tracker.draw(screen, self.world)
-        super().draw(screen)
+        super().draw(screen, draw_world=True)
 
 
 world_cfg = config_from_yaml("demo/configs/turbopi-milling/world.yaml")

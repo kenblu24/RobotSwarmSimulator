@@ -11,6 +11,9 @@ class AbstractGUI:
         self.track_all_mouse = False
         self._selected = []
 
+    def set_world(self, world):
+        self.world = world
+
     def on_set_selected_single(self, agent: Agent):
         pass
 
@@ -51,9 +54,14 @@ class AbstractGUI:
         self.on_selected_event(prev, self._selected)
         self.on_clear_selected(prev)
 
-    def draw(self, screen, offset=((0, 0), 1.0)):
-        pass
-        # pygame.draw.rect(screen, color=(10,10,10), rect=Rect((self.x, self.y),(self.w, self.h)))
+    def draw(self, screen, draw_world=True):
+        """
+        Renders world and UI in simulator
+
+        Parameters:
+            screen (pygame.Surface): surface to draw onto
+            draw_world(bool): enable/disable world drawing
+        """
 
     def recieve_events(self, events):
         pass
