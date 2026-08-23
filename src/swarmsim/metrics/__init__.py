@@ -1,4 +1,7 @@
 from .metric import Metric, HasSubMetric, HasSubMetrics
+from .alignment import Alignment
+from .separation import Separation
+from .boids import Boids
 from .averagespeed import AverageSpeedBehavior
 from .subgroupwrapper import SubGroupBehavior
 from .sensoroffset import GeneElementDifference
@@ -33,6 +36,9 @@ __all__ = [
     "Metric",
     "HasSubMetric",
     "HasSubMetrics",
+    "Alignment",
+    "Separation",
+    "Boids",
     "AverageSpeedBehavior",
     "SubGroupBehavior",
     "GeneElementDifference",
