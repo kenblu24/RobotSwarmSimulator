@@ -1,0 +1,21 @@
+type: "RectangularWorld"
+size: [10, 10]
+time_step: !np 1 / 40
+spawners:
+  - type: "PointAgentSpawner"
+    n: 6
+    facing: "away"
+    avoid_overlap: true
+    mode: oneshot
+    agent:
+      type: "MazeAgent"
+      position: [5, 5]
+      agent_radius: 0.1
+      sensors:
+        - type: "BinaryFOVSensor"
+          theta: 0.45
+          distance: 2
+      controller:
+        type: "BinaryController"
+        a: [0.02, -0.5]
+        b: [0.02, 0.5]

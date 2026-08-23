@@ -1,0 +1,44 @@
+import numpy as np
+from .metric import Metric
+
+
+class RadialVarianceMetric(Metric):
+    __badvars__ = Metric.__badvars__ + ['population']  # references to population may cause pickling errors
+
+    def __init__(self, history=None, regularize=True):
+        super().__init__(name="Radial_Variance", history_size=history)
+        self.regularize = regularize
+
+    @property
+    def population(self):
+        return self.parent.population
+
+    def calculate(self):
+        n = len(self.population)
+        r = self.world.config.radius
+        mew = self.center_of_mass()
+
+        # Calculate the Average distance from C.O.M. for all agents first, save to variable 'avg_dist'
+        distance_list = []
+        for agent in self.population:
+            x_i = agent.getPosition()
+            distance = np.linalg.norm(x_i - mew)
+            distance_list.append(distance)
+        avg_dist = np.average(distance_list)
+
+        variance_list = []
+        for agent in self.population:
+            x_i = agent.getPosition()
+            distance = np.linalg.norm(x_i - mew)
+            variance = (distance - avg_dist) ** 2  # Square to make positive(?)
+            variance_list.append(variance)
+
+        scaling_factor = (1 / (r * r * n)) if self.regularize else (1 / n)
+        radial_variance = sum(variance_list) * scaling_factor
+
+        WEIGHT = 20.0
+        self.set_value(radial_variance * WEIGHT)
+
+    def center_of_mass(self):
+        positions = np.asarray([agent.getPosition() for agent in self.population])
+        return positions.mean(axis=0)

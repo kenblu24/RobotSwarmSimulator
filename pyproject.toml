@@ -3,23 +3,26 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "novel_swarms"
-version = "1.0.0a"
-requires-python = ">=3.11"
+name = "swarmsim"
+version = "2.0.0dev1"
+requires-python = ">=3.12"
 authors = [
   { name="Connor Mattson", email="c.mattson@utah.edu" },
-  { name="Kevin Zhu", email="kzhu4@gmu.edu" },
+  { name="kenblu24", email="kenblu24@hotmail.com" },
 ]
-maintainers = [{ name="Kevin Zhu", email="kzhu4@gmu.edu" }]
-description = "An agent-based swarm simulator"
+maintainers = [{ name="kenblu24", email="kenblu24@hotmail.com" }]
+description = "An agent-based swarm simulator."
 readme = {file = "README.md", content-type = "text/markdown"}
+license = "MIT"
+license-files = ["LICENSE"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Topic :: Scientific/Engineering",
 ]
+keywords = ["robotics", "swarm", "agent-based", "simulator"]
 dependencies = [
-    "cma",
     "matplotlib",
     "numpy",
     "opencv-python",
@@ -27,23 +30,23 @@ dependencies = [
     "pillow",
     "pygame-ce",
     "PyYAML>=6.0.1",
+    "cloudpickle",  # used for jinja templates only
     "scipy",
     "scikit-learn",
-    "thorpy",
     "circle_fit",
     "shapely",
     "pandas",
+    "jinja2",
+    "quads",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    "flake8",
-    "isort",
-    "mypy",
+    "ruff",
     "pytest",
     "pytest-cov",
     "pytest-xdist",
+    "pytest-mock",
 ]
 shapes = ["pointpats"]
 docs = [
@@ -59,5 +62,6 @@ docs = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/kenblu24/RobotSwarmSimulator"
+"Repository" = "https://github.com/kenblu24/RobotSwarmSimulator"
 "Bug Tracker" = "https://github.com/kenblu24/RobotSwarmSimulator/issues"
+"Documentation" = "https://kenblu24.github.io/RobotSwarmSimulator/"

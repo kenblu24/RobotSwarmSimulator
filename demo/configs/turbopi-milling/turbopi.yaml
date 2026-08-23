@@ -1,26 +1,23 @@
-# ALL UNITS ARE IN AGENT BODY LENGTHS UNLESS OTHERWISE SPECIFIED
-type: "Goalbot"
+# Units are MGS (Meters, Grams, Seconds) and radians unless otherwise specified
+type: "MazeAgent"
 sensors:
-  custom_state_decision: "Linear"
-  sensors:
-    - type: "BinaryFOVSensor"
-      theta: 0.45   # Vision Angle / 2 (Radians)
-      agent_sensing_range: 1.0 # meters. previously 2.55
-      show: true
-      goal_sensing_range: 1.0
-      use_goal_state: true
-      wall_sensing_range: 1.0
-      # fn: 0.10  # 0.10
-      # fp: 0.05  # 0.05
-      bias: 0
-      store_history: false
-      seed: 10
-controller: "self"
-agent_radius: 0.1
+  - type: "BinaryFOVSensor"
+    theta: 0.45  # Vision Angle / 2 (Radians)
+    distance: 1.0  # meters. previously 2.55
+    show: true
+    # fn: 0.10
+    # fp: 0.05
+    bias: 0
+    store_history: false
+    # seed: 10
+controller:
+  type: "BinaryController"
+  a: 0.276  # m/s forward speed factor
+  b: 0.602  # rad/s turning rate factor
+  sensor_id: 0
+agent_radius: !np 0.2 / 2
 stop_at_goal: false
-dt: 0.025
-# sensing_avg: 10
-delay: 10
+# delay: 12
 # idiosyncrasies:
 #   mean:
 #     - 0.9
@@ -30,8 +27,8 @@ delay: 10
 #     - 0.1
 #     - 0.1
 #     - 0.06
-scale_forward_speed: 0.2  # m/s
-scale_turning_rates: 2.0  # m/s
+scale_forward_speed: 0.276  # m/s
+scale_turning_rates: 0.602  # rad/s
 body_color:
   - 255
   - 0

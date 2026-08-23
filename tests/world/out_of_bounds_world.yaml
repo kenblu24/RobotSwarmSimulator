@@ -1,0 +1,51 @@
+---
+agent1CanSee: true
+agent2CanSee: true
+---
+type: "RectangularWorld"
+size: [5, 5]
+time_step: !np 1 / 40
+agents:
+    # Agents on the outside right-side of the world size
+    - type: "MazeAgent"
+      position: [6, 2.5]
+      name: "agent1"
+      angle: 0.0
+      agent_radius: 0.175
+      sensors:
+        - type: "BinaryFOVSensor"
+          theta: 0.45
+          distance: 1
+      controller:
+        type: "BinaryController"
+        a: [0.05, 0.0]
+        b: [0.0, 0.0]
+    - type: "MazeAgent"
+      position: [6.75, 2.5]
+      agent_radius: 0.175
+      angle: 0.0
+      controller:
+        type: "StaticController"
+        output: [0.05, 0.0]
+
+    # Agents on the outside top-side of the world size
+    - type: "MazeAgent"
+      position: [2.5, -1]
+      name: "agent2"
+      angle: !np -pi / 2
+      agent_radius: 0.175
+      sensors:
+        - type: "BinaryFOVSensor"
+          theta: 0.45
+          distance: 1
+      controller:
+        type: "BinaryController"
+        a: [0.05, 0.0]
+        b: [0.0, 0.0]
+    - type: "MazeAgent"
+      position: [2.5, -1.75]
+      agent_radius: 0.175
+      angle: !np -pi / 2
+      controller:
+        type: "StaticController"
+        output: [0.05, 0.0]

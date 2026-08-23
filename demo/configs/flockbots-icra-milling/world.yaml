@@ -3,18 +3,13 @@ type: "RectangularWorld"
 size:  # in meters
   - 15
   - 15
-n_agents: 20
-init_type:
-  type: "RectRandomInit"  # A starting region where agents will spawn at t=0
-  bb:
-    - - 6.9 # X (m) Upper Left Bounding Box Corner
-      - 6.9 # Y
-    - - 8.1 # X (m) Lower Right Bounding Box Corner
-      - 8.1 # Y
-  seed: 2023 # ADD SEED HERE TO ENSURE SAME INITIALIZATION EVERY TIME
-padding: 0
-collide_walls: false  # Use No Environment Walls for this problem
-show_walls: false  # Hide Default Walls,
+seed: 2023
+spawners:
+  - type: UniformAgentSpawner
+    n: 10  # default number of agents BUT may be overridden by user args
+    facing: away
+    region: [[6.9, 6.9], [6.9, 8.1], [8.1, 8.1], [8.1, 6.9]]
+    agent: !include flockbot.yaml
 metadata:
   hash: _hash
-stop_at: 1000000 # Upper Simulation Limit (timesteps)
+# stop_at: 2000 # Upper Simulation Limit (timesteps)

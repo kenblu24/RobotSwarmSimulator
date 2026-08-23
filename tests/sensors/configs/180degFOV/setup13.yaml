@@ -1,0 +1,45 @@
+---
+canSee_agent2: true
+canSee_agent3: true
+canSee_agent4: true
+canSee_agent5: false
+---
+type: "RectangularWorld"
+size: [5, 5]
+time_step: !np 1 / 40
+agents:
+  # Agent with a total FOV >180deg
+  - type: "MazeAgent"
+    position: [2.5, 2.5]
+    name: "agent1"
+    angle: 0.0
+    agent_radius: 0.175
+    sensors:
+      - type: "BinaryFOVSensor"
+        theta: !np deg2rad(135)
+        distance: 1.5
+
+  # Agents that can be seen by 'agent1'
+  - type: "MazeAgent"
+    position: [3.5, 2.5]
+    name: "agent2"
+    agent_radius: 0.175
+    angle: 0.0
+  - type: "MazeAgent"
+    position: [!np 2.5 + 1.2 * cos(deg2rad(125)), !np 2.5 + 1.2 * sin(deg2rad(125))]
+    name: "agent3"
+    agent_radius: 0.175
+    angle: 0.0
+  - type: "MazeAgent"
+    position: [!np 2.5 + 1.2 * cos(deg2rad(-135)), !np 2.5 + 1.2 * sin(deg2rad(-135))]
+    name: "agent4"
+    agent_radius: 0.175
+    angle: 0.0
+
+  # Agent that can NOT be seen by 'agent1'
+  - type: "MazeAgent"
+    position: [1.75, 2.5]
+    name: "agent5"
+    agent_radius: 0.175
+    angle: 0.0
+...

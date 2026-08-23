@@ -2,7 +2,7 @@
 Basic Usage
 ***********
 
-For your first run after `installing RobotSwarmSimulator <guide/install>`_, let's walk through some simple examples.
+For your first run after :doc:`installing RobotSwarmSimulator </guide/install>`, let's walk through some simple examples.
 
 
 Your first simulation
@@ -10,20 +10,20 @@ Your first simulation
 
 Let's start with a simple simulation.
 
-We'll use the :py:mod:`~novel_swarms.world.RectangularWorld` class to create a world with a single agent.
+We'll use the :py:mod:`~swarmsim.world.RectangularWorld` class to create a world with a single agent.
 
 .. hint::
 
-   Remember to :ref:`activate the virtual environment <activate-venv>` so that you can import ``novel_swarms``!
+   Remember to :ref:`activate the virtual environment <activate-venv>` so that you can import ``swarmsim``!
 
-Open a Python shell with ``python``, and make sure you can ``import novel_swarms`` with no errors.
+Open a Python shell with ``python``, and make sure you can ``import swarmsim`` with no errors.
 
 .. code-block:: python-console
    :caption: ``python``
 
    Python 3.11.0 (or newer)
    Type "help", "copyright", "credits" or "license" for more information.
-   >>> import novel_swarms
+   >>> import swarmsim
    >>>
 
 
@@ -31,14 +31,14 @@ Creating a :fas:`earth-americas` world
 ----------------------------------------
 
 First, let's create a world. To do that, we first need to create a
-:py:class:`~novel_swarms.world.RectangularWorld.RectangularWorldConfig` object.
+:py:class:`~swarmsim.world.RectangularWorld.RectangularWorldConfig` object.
 
 Then, we can create the world by passing the config to the
-:py:class:`~novel_swarms.world.RectangularWorld.RectangularWorld` class.
+:py:class:`~swarmsim.world.RectangularWorld.RectangularWorld` class.
 
 .. code-block:: python
 
-   from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
+   from swarmsim import RectangularWorld, RectangularWorldConfig
    world_config = RectangularWorldConfig(size=[10, 10], time_step=1 / 40)
    world = RectangularWorld(world_config)
 
@@ -48,19 +48,20 @@ Creating an :fas:`user` agent
 
 We now have a world that we can add things to. Let's add an agent to it!
 
-Let's create the :py:class:`~novel_swarms.agent.MazeAgent.MazeAgentConfig`
-and use it to initialize the :py:class:`~novel_swarms.agent.MazeAgent.MazeAgent` class.
+Let's create the :py:class:`~swarmsim.agent.MazeAgent.MazeAgentConfig`
+and use it to initialize the :py:class:`~swarmsim.agent.MazeAgent.MazeAgent` class.
 
 .. code-block:: python
 
-   from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
+   from swarmsim import MazeAgent, MazeAgentConfig
    agent_config = MazeAgentConfig(position=(5, 5), agent_radius=0.1)
-   agent = MazeAgent(agent_config, world)
+   agent = MazeAgent(agent_config)
 
    world.population.append(agent)  # add the agent to the world
 
-Notice how we passed the ``world`` to the agent. This is so that the agent
-has a reference to the world, allowing it to access the world's properties.
+To add the agent to the world, we append the ``agent`` to the ``world.population``.
+Behind the scenes, the agent also receives a reference to the world, allowing
+it to access the world's properties.
 
 
 Starting the :fas:`arrows-spin` simulation
@@ -70,8 +71,8 @@ Now that we have something to look at, let's start the simulation!
 
 .. code-block:: python
 
-   from novel_swarms.world.simulate import main as sim
-   sim(world)
+   from swarmsim import run_sim
+   run_sim(world)
 
 You should see a window pop up with a single agent in the center of the world.
 
@@ -89,20 +90,19 @@ Adding a :fas:`gamepad` controller
 ----------------------------------
 
 Let's add a controller to the agent. Controllers make the agent move.
-We'll use the :py:class:`~novel_swarms.agent.control.StaticController.StaticController` class,
+We'll use the :py:class:`~swarmsim.agent.control.StaticController.StaticController` class,
 which sends the same movement signals to the agent every step.
-:py:class:`~novel_swarms.agent.MazeAgent.MazeAgent` takes two movement signals:
+:py:class:`~swarmsim.agent.MazeAgent.MazeAgent` takes two movement signals:
 
 1. A forwards speed, in in units per second.
 2. A turning speed, in radians per second.
 
 .. code-block:: python
 
-   from novel_swarms.agent.control.StaticController import StaticController
-   controller = StaticController(output=[0.01, 0.1])  # 10 cm/s forwards, 0.1 rad/s clockwise.
-   agent.controller = controller
+   from swarmsim.agent.control.StaticController import StaticController
+   agent.controller = StaticController(output=[0.01, 0.1])  # 10 cm/s forwards, 0.1 rad/s clockwise.
 
-   sim(world)
+   run_sim(world)
 
 Now the agent should move forwards and turn slowly.
 
@@ -118,19 +118,19 @@ Now the agent should move forwards and turn slowly.
 
 But why settle for just one agent? Let's try spawning a bunch of agents.
 
-First, we need to create a :py:class:`~novel_swarms.world.spawners.AgentSpawner.PointAgentSpawner`.
+First, we need to create a :py:class:`~swarmsim.world.spawners.AgentSpawner.PointAgentSpawner`.
 
 .. code-block:: python
 
-   from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
-   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True, agent=agent, oneshot=True)
+   from swarmsim import PointAgentSpawner
+   spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True, agent=agent, mode="oneshot")
    world.spawners.append(spawner)
 
-Now, remove the existing agent from the :py:attr:`~novel_swarms.world.World.World.population`
+Now, remove the existing agent from the :py:attr:`~swarmsim.world.World.World.population`
 and run the simulation again.
 
-When you run ``sim()``, during the :py:func:`.World.setup`\ , the spawner will create copies of the agent and
-controller and add the copies to the world's population. But because of the ``oneshot=True`` argument,
+When you run ``run_sim()``, during the :py:func:`.World.setup`\ , the spawner will create copies of the agent and
+controller and add the copies to the world's population. But because of the ``mode="oneshot"`` argument,
 the spawner will then delete itself.
 
 The agents will spawn in the same location, but get pushed apart as they spawn.
@@ -138,7 +138,7 @@ The agents will spawn in the same location, but get pushed apart as they spawn.
 .. code-block:: python
 
    del world.population[-1]  # remove the most recently added agent
-   sim(world)
+   run_sim(world)
 
 
 Congrats! You've created your first simulation!
@@ -169,22 +169,22 @@ Here's all of the code in one file:
 .. code-block:: python
    :caption: ``my_first_simulation.py``
 
-   from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
-   from novel_swarms.agent.control.StaticController import StaticController
-   from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
-   from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-   from novel_swarms.world.simulate import main as sim
+   from swarmsim import RectangularWorld, RectangularWorldConfig
+   from swarmsim.agent.control.StaticController import StaticController
+   from swarmsim import PointAgentSpawner
+   from swarmsim import MazeAgent, MazeAgentConfig
+   from swarmsim import run_sim
 
    world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
    world = RectangularWorld(world_config)
    controller = StaticController(output=[0.01, 0])
    agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1,
-                                     controller=controller), world)
-   spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
+                                     controller=controller))
+   spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True,
                                agent=agent, mode="oneshot")
    world.spawners.append(spawner)
 
-   sim(world)
+   run_sim(world)
 
 
 Simulator Features
@@ -196,7 +196,7 @@ First, let's start the simulation again, but in a paused state.
 
 .. code-block:: python
 
-   sim(world, start_paused=True)
+   run_sim(world, start_paused=True)
 
 Click :fas:`arrow-pointer` on the simulation to focus the window. If you tap :kbd:`L` or the :kbd:`▷` right arrow key,
 the simulation will perform a single step :fas:`forward-step`.
@@ -259,9 +259,9 @@ let's add a sensor to your existing agent like this:
 
 .. code-block:: python
 
-    from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
+    from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
 
-    sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
+    sensor = BinaryFOVSensor(theta=0.45, distance=2,)
     agent.sensors.append(sensor)
 
 The ``theta`` parameter is **half** the angle of the FOV in radians, and the
@@ -275,19 +275,19 @@ pass a back-reference to the agent as the first argument.
    the file with the ``-i`` option: ``python -i my_first_simulation.py``. The ``-i``
    stants for "interactive" and will return control to you after running the file.
 
-   The ``sim()`` function starts the sim, so don't forget to stop the simulation with :kbd:`Ctrl+C`\ !
+   The ``run_sim()`` function starts the sim, so don't forget to stop the simulation with :kbd:`Ctrl+C`\ !
 
 
 Now let's create a controller that will read the sensor data and change how the robot moves:
 
 .. code-block:: python
 
-   from novel_swarms.agent.control.BinaryController import BinaryController
+   from swarmsim.agent.control.BinaryController import BinaryController
 
-   controller = BinaryController(agent, (0.02, -0.5), (0.02, 0.5))
+   controller = BinaryController(a=(0.02, -0.5), b=(0.02, 0.5))
    agent.controller = controller
 
-Now, if you run ``sim(world)``\ , you should see some agents that turn left if one sees something and right if one doesn't!
+Now, if you run ``run_sim(world)``\ , you should see some agents that turn left if one sees something and right if one doesn't!
 
 If not, try re-adding the spawner to the world's ``spawners`` list:
 
@@ -310,11 +310,11 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
    1. The ``Spawner()`` has the ``mode='oneshot'`` argument, which will set its ``spawner.mark_for_deletion``
    flag to ``True`` after the first simulation step, otherwise it would create new agents
    on every ``step()`` (bad). This doesn't mean the spawner deletes itself,
-   but the world will simply remove it from its :py:attr:`~novel_swarms.world.World.spawners` list.
+   but the world will simply remove it from its :py:attr:`~swarmsim.world.World.spawners` list.
    So, you don't need to re-define the spawner, you already created it before and can just
    *un-mark it for deletion* and add it back to the ``spawners`` list.
 
-   2. Our :py:mod:`~novel_swarms.spawners.AgentSpawner` stores either a config
+   2. Our :py:mod:`~swarmsim.spawners.AgentSpawner` stores either a config
    for the agent parameters, or in this example, a **reference** to the actual agent itself.
    In the case of the latter, the spawner will attempt to make a :py:func:`~copy.deepcopy`
    of the ``agent`` we gave it earlier. Because ``agent`` is a reference to the agent
@@ -351,25 +351,25 @@ If not, try re-adding the spawner to the world's ``spawners`` list:
          :caption: ``milling.py``
          :class: dropdown
 
-         from novel_swarms.world.RectangularWorld import RectangularWorld, RectangularWorldConfig
-         from novel_swarms.agent.control.BinaryController import BinaryController
-         from novel_swarms.world.spawners.AgentSpawner import PointAgentSpawner
-         from novel_swarms.agent.MazeAgent import MazeAgent, MazeAgentConfig
-         from novel_swarms.sensors.BinaryFOVSensor import BinaryFOVSensor
-         from novel_swarms.world.simulate import main as sim
+         from swarmsim import RectangularWorld, RectangularWorldConfig
+         from swarmsim import MazeAgent, MazeAgentConfig
+         from swarmsim.sensors.BinaryFOVSensor import BinaryFOVSensor
+         from swarmsim.agent.control.BinaryController import BinaryController
+         from swarmsim.world.spawners.AgentSpawner import PointAgentSpawner
+         from swarmsim import run_sim
 
          world_config = RectangularWorldConfig(size=(10, 10), time_step=1 / 40)
          world = RectangularWorld(world_config)
-         agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1), world)
-         sensor = BinaryFOVSensor(agent, theta=0.45, distance=2,)
+         agent = MazeAgent(MazeAgentConfig(position=(5, 5), agent_radius=0.1))
+         sensor = BinaryFOVSensor(theta=0.45, distance=2,)
          agent.sensors.append(sensor)
-         controller = BinaryController(agent, (0.02, -0.5), (0.02, 0.5))
+         controller = BinaryController((0.02, -0.5), (0.02, 0.5))
          agent.controller = controller
-         spawner = PointAgentSpawner(world, n=6, facing="away", avoid_overlap=True,
+         spawner = PointAgentSpawner(n=6, facing="away", avoid_overlap=True,
                                      agent=agent, mode="oneshot")
          world.spawners.append(spawner)
 
-         sim(world)
+         run_sim(world)
 
 History
 =======
@@ -410,7 +410,8 @@ train Spiking Neural Networks [#snnicons]_, and even train real robots [#snnnice
 
 .. note::
 
-   That's also why the package is called :py:mod:`novel_swarms`\ .
+   This package used to be called :py:mod:`novel_swarms`\ . This is because the simulator https://github.com/Connor-Mattson/RobotSwarmSimulator
+   was originally developed to discover novel swarm behaviors.
 
 
 YAML Configuration
@@ -428,39 +429,38 @@ First, let's create a new file called ``world.yaml`` and add the following:
 .. code-block:: yaml
    :caption: ``world.yaml``
 
-    type: "RectangularWorld"
-    size: [10, 10]
-    time_step: !np 1 / 40
-    spawners:
-      - type: "PointAgentSpawner"
-        n: 6
-        facing: "away"
-        avoid_overlap: true
-        mode: oneshot
-        agent:
-          type: "MazeAgent"
-          position: [5, 5]
-          agent_radius: 0.1
-          sensors:
-            - type: "BinaryFOVSensor"
-              theta: 0.45
-              distance: 2
-          controller:
-            type: "BinaryController"
-            a: [0.02, -0.5]
-            b: [0.02, 0.5]
+   type: "RectangularWorld"
+   size: [10, 10]
+   time_step: !np 1 / 40
+   spawners:
+     - type: "PointAgentSpawner"
+       n: 6
+       facing: "away"
+       avoid_overlap: true
+       mode: oneshot
+       agent:
+         type: "MazeAgent"
+         position: [5, 5]
+         agent_radius: 0.1
+         sensors:
+           - type: "BinaryFOVSensor"
+             theta: 0.45
+             distance: 2
+         controller:
+           type: "BinaryController"
+           a: [0.02, -0.5]
+           b: [0.02, 0.5]
 
 Then, let's create a python file or open a new Python shell and run the following:
 
 .. code-block:: python
    :caption: ``run.py``
 
-   from novel_swarms.world.RectangularWorld import RectangularWorld
-   from novel_swarms.world.simulate import main as sim
+   from swarmsim import config_from_yaml, run_sim
 
-   world_config = RectangularWorldConfig.from_yaml('world.yaml')
+   world_config = config_from_yaml('world.yaml')
 
-   sim(world_config)
+   run_sim(world_config)
 
 .. hint::
 
@@ -472,14 +472,14 @@ You should see the same milling formation as before.
 What just happened?
 -------------------
 
-:py:mod:`~novel_swarms.world`\ s and :py:mod:`~novel_swarms.agent`\ s use Config classes,
+:py:mod:`~swarmsim.world`\ s and :py:mod:`~swarmsim.agent`\ s use Config classes,
 but to see configuration options for sensors, controllers, and spawners, the arguments are simply
 passed as a ``dict`` to the constructors.
 
 The ``world.yaml`` file is a YAML file that describes the world, and :py:meth:`.RectangularWorldConfig.from_yaml`
-loads it as a ``dict`` and turns it into a :py:class:`~novel_swarms.world.RectangularWorld.RectangularWorldConfig`\ .
+loads it as a ``dict`` and turns it into a :py:class:`~swarmsim.world.RectangularWorld.RectangularWorldConfig`\ .
 Just as ``dict``\ s can contain nested ``dict``\ s, Configs can contain other configs, so the ``spawners:`` sequence
-becomes a list of dictionaries, which are then turned into :py:class:`~novel_swarms.world.spawners.AgentSpawner.AgentSpawner`\ s.
+becomes a list of dictionaries, which are then turned into :py:class:`~swarmsim.world.spawners.AgentSpawner.AgentSpawner`\ s.
 
 We cover the order that things are initialized in :ref:`initialization_order`\ .
 
@@ -491,9 +491,14 @@ We cover the order that things are initialized in :ref:`initialization_order`\ .
    Try changing the parameters in the ``world.yaml`` file and see what happens.
 
    You can also try adding a single agent to the ``world.population`` list
-   adding the ``agents: `` sequence to the ``world.yaml`` file.
+   adding the ``agents:`` sequence to the ``world.yaml`` file.
 
    If you've never used YAML before, check out `Learn YAML in Y minutes <https://learnxinyminutes.com/docs/yaml/>`_
+
+
+.. seealso::
+
+   guide/yaml
 
 
 What can I change?
@@ -502,17 +507,17 @@ What can I change?
 If you tried the exercise above, you might be wondering what the parameters are
 called and what they do. This information can be gleaned from the :doc:`/api/index`\ .
 
-For example, the options for configuring ``RectangularWorld`` are the parameters
-for the :py:class:`~novel_swarms.world.RectangularWorld.RectangularWorldConfig` class, which
-also inherits options and defaults from the :py:class:`~novel_swarms.world.World.AbstractWorldConfig` class.
+For example, the options for configuring :py:class:`~swarmsim.world.RectangularWorld.RectangularWorld` are the parameters
+for the :py:class:`~swarmsim.world.RectangularWorld.RectangularWorldConfig` class, which
+also inherits options and defaults from the :py:class:`~swarmsim.world.World.BaseWorldConfig` class.
 
-Similarly, the options for configuring ``MazeAgent`` are the parameters
-for the :py:class:`~novel_swarms.agent.MazeAgent.MazeAgentConfig` class, and so on.
+Similarly, the options for configuring :py:class:`~swarmsim.agent.MazeAgent.MazeAgent` are the parameters
+for the :py:class:`~swarmsim.agent.MazeAgent.MazeAgentConfig` class, and so on.
 
 For objects that don't use Config classes, such as sensors, controllers, and spawners,
 remember that the arguments are simply passed as a ``dict`` to the constructors. So the
 options are the parameters for the constructor. This is how you might set the controller
-of an agent to a :py:mod:`~novel_swarms.agent.control.BinaryController`\ :
+of an agent to a :py:mod:`~swarmsim.agent.control.BinaryController`\ :
 
 .. grid:: 2
    :gutter: 3
@@ -522,9 +527,9 @@ of an agent to a :py:mod:`~novel_swarms.agent.control.BinaryController`\ :
       .. code-block:: python
          :caption: Python
 
-         agent.controller = BinaryController(agent
+         agent.controller = BinaryController(
              a=(0.02, -0.5),
-             b=(0.02, 0.5)
+             b=(0.02, 0.5),
          )
 
    .. grid-item::

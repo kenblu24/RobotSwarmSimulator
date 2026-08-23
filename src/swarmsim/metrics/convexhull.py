@@ -1,0 +1,88 @@
+import math
+
+from .metric import Metric
+from ..util.geometry.Point import Point
+from ..util.geometry.ConvexHull import ConvexHull as CH
+from ..util.geometry.Polygon import Polygon
+
+
+class ConvexHull(Metric):
+    def __init__(self, name="Convex_Hull_Area", history=None):
+        super().__init__(name=name, history_size=history)
+        self.polygon = None
+
+    @property
+    def population(self):
+        return self.parent.population
+
+    def calculate(self):
+        if not self.world:
+            self.set_value(math.nan)
+        points = [Point.from_agent(a) for a in self.world.population]
+        try:
+            self.polygon = CH(method="Graham").find_hull(points)
+        except:
+            try:
+                self.polygon = CH(method="Wrapping").find_hull(points)
+            except Exception as e1:
+                print(f"ConvexHull Calculation Error! {e1}")
+                self.polygon = Polygon()
+
+        self.set_value(self.polygon.area())
+
+    def draw(self, screen, zoom=1.0):
+        if not self.polygon:
+            return
+        self.polygon.draw(screen, color=(0, 255, 0), width=4)
+
+
+class InverseConvexHull(Metric):
+    def __init__(self, name="Inverse_Hull_Area", history=None):
+        super().__init__(name=name, history_size=history)
+        self.polygon = None
+
+    @property
+    def population(self):
+        return self.parent.population
+
+    def get_inverse_point(self, p, centroid, inverse_dist):
+        p_new = centroid.p + ((inverse_dist / p.dist(centroid)) * (p.p - centroid.p))
+        return Point.from_vector(p_new)
+
+    def calculate(self):
+        if not self.world:
+            self.set_value(math.nan)
+        points = [Point.from_agent(a) for a in self.world.population]
+        centroid = Point.get_centroid(points)
+        distances = [p.dist(centroid) for p in points]
+        distance_points = zip(distances, points)
+        dp = sorted(distance_points)
+        point_length = len(dp)
+
+        # Create a mapping from inverse points to points, so we can convert the inverse Hull back into the workspace.
+        inverse_dict = {
+            self.get_inverse_point(dp[i][1], centroid, dp[point_length - 1 - i][0]): dp[i][1]
+            for i in range(point_length)
+        }
+        inv_points = list(inverse_dict.keys())
+
+        try:
+            inv_hull = CH(method="Graham").find_hull(inv_points)
+        except Exception as e:
+            try:
+                inv_hull = CH(method="Wrapping").find_hull(inv_points)
+            except Exception as e1:
+                print(f"InverseConvexHull Calculation Error! {e1}")
+                self.set_value(-1.0)
+                return
+
+        self.polygon = Polygon()
+        for p in inv_hull.boundary:
+            self.polygon.addPoint(inverse_dict[p])
+
+        self.set_value(self.polygon.area())
+
+    def draw(self, screen, zoom=1.0):
+        if not self.polygon:
+            return
+        self.polygon.draw(screen, color=(255, 0, 0), width=4)
