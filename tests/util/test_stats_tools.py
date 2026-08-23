@@ -6,8 +6,8 @@ from numpy.typing import NDArray
 from swarmsim.util.statistics_tools import Remap, RemapNP
 
 
-def remapper_helper(transform_fn: Callable[[NDArray], NDArray], step=1.):
-    inputs = np.arange(-10, 10, 0.5)
+def remapper_helper(transform_fn: Callable[[NDArray], NDArray], step=0.5):
+    inputs = np.arange(-10, 10, step)
     outputs = transform_fn(inputs)
 
     orig_rmp = Remap(inputs, outputs)
