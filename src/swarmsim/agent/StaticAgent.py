@@ -153,6 +153,11 @@ class StaticAgent(Agent):
     def set_seed(self, seed):
         self.seed = int(np.random.randint(0, 2**31)) if seed is None else seed
         self.rng = np.random.default_rng(self.seed)
+        if getattr(self.controller, 'rng', None) is None and hasattr(self, 'set_seed'):
+            self.controller.set_seed(self.seed)
+        for sensor in self.sensors:
+            if getattr(sensor, 'rng', None) is None and hasattr(sensor, 'set_seed'):
+                sensor.set_seed(self.seed)
         return self.seed
 
     @property

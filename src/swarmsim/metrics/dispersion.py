@@ -1,6 +1,6 @@
 import numpy as np
 from itertools import combinations
-from .Circliness import RadialVarianceHelper
+from .circliness import RadialVarianceHelper
 
 # typing
 from typing import Any, override

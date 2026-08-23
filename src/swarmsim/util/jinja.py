@@ -12,7 +12,7 @@ This module adjusts and extends the behavior of the Jinja2 templating engine.
     This module is used with our custom YAML loader, :py:mod:`swarmsim.yaml`,
     and :doc:`config system </guide/config>`.
 
-    It is also used by the :py:mod:`swarmsim.metrics.JinjaMetric` module
+    It is also used by the :py:mod:`swarmsim.metrics.jinjametric` module
     and :py:attr:`.World.stop_at`.
 
 .. autoclass:: Environment

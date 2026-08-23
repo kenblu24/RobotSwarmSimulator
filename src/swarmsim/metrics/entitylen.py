@@ -1,5 +1,5 @@
 import ast
-from .Metric import Metric
+from .metric import Metric
 
 
 class EntityLen(Metric):

@@ -319,7 +319,7 @@ You can also write statements like ``<% set height = width / 2 %>`` in the YAML 
    The ``<% statement %>``, ``<{ expression }>``, and ``#%> line_statement`` delimiters are
    slightly different from the usual Jinja syntax. This is because YAML files may also contain
    specifications for modules that use Jinja templating inside them, such as the
-   :py:mod:`~swarmsim.metrics.JinjaMetric`.
+   :py:mod:`~swarmsim.metrics.jinjametric`.
    The different delimiters allow us to distinguish between Jinja at the YAML level and Jinja
    templates and expressions that are used to specify other behavior.
 

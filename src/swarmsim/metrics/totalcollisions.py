@@ -1,6 +1,4 @@
-import numpy as np
-from typing import List
-from .Metric import Metric
+from .metric import Metric
 
 
 class TotalCollisionsBehavior(Metric):

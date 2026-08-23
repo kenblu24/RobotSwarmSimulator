@@ -1,8 +1,6 @@
-import math
 from typing import Tuple
 import numpy as np
-from typing import List
-from .Metric import Metric
+from .metric import Metric
 import matplotlib.pyplot as plt
 
 

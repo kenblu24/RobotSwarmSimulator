@@ -3,6 +3,8 @@ from typing import Tuple
 
 from numpy import average
 
+from ..util.collections import RefProp, RefListProp, RefList
+
 import typing
 if typing.TYPE_CHECKING:
     from ..world.World import World
@@ -13,6 +15,7 @@ else:
 class Metric():
     __badvars__ = ['world']  # variables that should not be pickled
     default_aggregation = None
+    _world = None
     #: Set to True if the metric should not be averaged over its history
 
     def __init__(self, name: str, history_size: int | None = None):
@@ -88,3 +91,47 @@ class Metric():
         for k in self.__badvars__:
             d.pop(k, None)
         return d
+
+
+class HasSubMetric:
+    def __init__(self, metric=None):
+        self.metric = metric
+
+    @Metric.world.setter
+    def world(self, value):
+        Metric.world.fset(self, value)
+        if isinstance(self.metric, dict):
+            self._metric = self.setup_submetric(self.metric)
+            return
+        try:
+            self.metric.world = value
+        except AttributeError:
+            pass
+
+    def setup_submetric(self, metric):
+        if self.world and metric is not None:
+            metric = self.world.add_metric(metric, add_to_world=False)
+            metric.world = self.world
+        return metric
+
+    metric = RefProp('parent', set_callbacks=[setup_submetric], extra_names={'world': 'world'})
+
+
+class HasSubMetrics(HasSubMetric):
+    metrics = RefListProp()
+
+    def __init__(self, metric=None, metrics=None):
+        super().__init__(metric=metric)
+        self._metrics = RefList(self, 'parent', add_callbacks=[self.setup_submetric],
+                                extra_names={'world': 'world'})
+        self.metrics = metrics or []
+
+    @Metric.world.setter
+    def world(self, value):
+        HasSubMetric.world.fset(self, value)
+        self.metrics = [self.setup_submetric(metric) for metric in self.metrics]
+        for metric in self.metrics:
+            try:
+                metric.world = value
+            except AttributeError:
+                pass

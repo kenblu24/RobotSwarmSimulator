@@ -20,7 +20,7 @@ class Sensor:
     config_vars = ['static_position', 'n_possible_states', 'show']
 
     def __init__(self, agent=None, parent=None, static_position=None, n_possible_states=0,
-                 draw=True, seed=None, **kwargs):
+                 draw=True, seed='from_parent', **kwargs):
         if agent is not None and not issubclass(type(agent), Agent):
             raise Exception("The parent must be of type Agent")
 
@@ -71,13 +71,15 @@ class Sensor:
 
     def set_seed(self, seed):
         if seed is None:
+            temp_rng = np.random.default_rng(None)
+            self.seed = int(temp_rng.integers(0, 2**31))
+        elif seed == 'from_parent':
             if hasattr(self.parent, 'rng') and self.parent.rng:
                 self.seed = self.parent.rng.integers(0, 2**31)
             elif hasattr(self.agent, 'rng') and self.agent.rng:
                 self.seed = self.agent.rng.integers(0, 2**31)
             else:
-                temp_rng = np.random.default_rng(None)
-                self.seed = int(temp_rng.integers(0, 2**31))
+                return  # wait for parent rng to be set
         else:
             self.seed = seed
         self.rng = np.random.default_rng(self.seed)

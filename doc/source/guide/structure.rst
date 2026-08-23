@@ -152,7 +152,7 @@ inside the simulation loop. On each tick of the simulation, the following happen
 
          Following the :fas:`earth-americas` ``step()`` :fas:`arrows-spin`\ , each metric takes an
          observation of the world's state and performs its calculations, storing the results in its
-         :py:attr:`~swarmsim.metrics.Metric.Metric.value_history` attribute.
+         :py:attr:`~swarmsim.metrics.metric.Metric.value_history` attribute.
 
 
    If the simulation is not operating headlessly, then the simulator calls ``draw()`` on the world object.

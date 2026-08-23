@@ -1,4 +1,4 @@
-from .Metric import Metric
+from .metric import Metric
 import numpy as np
 from ripser import ripser
 import pygame
