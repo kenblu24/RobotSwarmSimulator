@@ -251,9 +251,9 @@ class RemapNP():
         # if right of last point, use last range
         rightmask = b >= self.out_points.size
         b[rightmask] -= 1
-        a[rightmask] = b - 1
+        a[rightmask] = b[rightmask] - 1
         # use left of b
-        a[~(leftmask | rightmask)] = b - 1
+        a[~(leftmask | rightmask)] = b[~(leftmask | rightmask)] - 1
         inp, outp = self.in_points, self.out_points
         return fmap(x, inp[a], inp[b], outp[a], outp[b])
 
