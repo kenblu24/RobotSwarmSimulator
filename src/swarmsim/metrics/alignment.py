@@ -1,7 +1,7 @@
 import numpy as np
 from .metric import Metric
-from ..util.geometry.euclidean import vectorize
 
+from ..util.geometry.euclidean import vectorize
 
 class Alignment(Metric):
     def __init__(
@@ -13,7 +13,7 @@ class Alignment(Metric):
         history=None,
         default_aggregation='average',
     ):
-        super().__init__(name=name, history_size=history, default_aggregation=default_aggregation)
+        super().__init__(name=name, history_size=history)
         self.default = default
         self.pre_exponent = pre_exponent
         self.post_exponent = post_exponent
@@ -21,7 +21,9 @@ class Alignment(Metric):
     def calculate(self):
         population = self.parent.population
         angles = np.array([p.angle for p in population])
-        vectors = vectorize(angles)
+        # NOTE: This does not returns [[x1, y1], [x2, y2], ..., [xn, yn]];
+        #       it returns [[x1, x2, ..., xn], [y1, y2, ..., yn]]
+        vectors = vectorize(angles).T
         avg_heading = np.mean(vectors, axis=0)
         avg_heading /= np.linalg.norm(avg_heading)
 
