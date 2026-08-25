@@ -242,7 +242,7 @@ class RemapNP():
         self.out_points = np.take_along_axis(out_points, sorted_indices, axis=0)
 
     def __call__(self, x):
-        a = np.empty(self.in_points.size, dtype=int)
+        a = np.empty_like(x, dtype=int)
         b = np.searchsorted(self.in_points, x, side='left')
         # if left of first point, use first range
         leftmask = b == 0
