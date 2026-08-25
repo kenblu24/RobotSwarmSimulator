@@ -253,7 +253,8 @@ class RemapNP():
         b[rightmask] -= 1
         a[rightmask] = b[rightmask] - 1
         # use left of b
-        a[~(leftmask | rightmask)] = b[~(leftmask | rightmask)] - 1
+        neither = ~(leftmask | rightmask)
+        a[neither] = b[neither] - 1
         inp, outp = self.in_points, self.out_points
         return fmap(x, inp[a], inp[b], outp[a], outp[b])
 
