@@ -12,8 +12,8 @@ sensors:
     # seed: 10
 controller:
   type: "BinaryController"
-  a: 0.276  # m/s forward speed factor
-  b: 0.602  # rad/s turning rate factor
+  a: [0.276, 0.602]  # m/s forward speed factor
+  b: [0.276, -0.602]  # rad/s turning rate factor
   sensor_id: 0
 agent_radius: !np 0.2 / 2
 stop_at_goal: false
