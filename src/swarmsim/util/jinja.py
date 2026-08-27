@@ -71,6 +71,10 @@ DEFAULT_GLOBAL_MODULES = [
 ]
 
 
+def none_to_nullstr(x):
+    return 'null' if x is None else x
+
+
 class TemplateExpression(BaseTemplateExpression):
     """The :meth:`Environment.compile_expression` method returns an
     instance of this object.  It encapsulates the expression-like access
