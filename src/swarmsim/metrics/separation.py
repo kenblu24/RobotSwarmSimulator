@@ -18,6 +18,8 @@ aggregation_functions = {
     'minimum': np.min,
     'closest': np.min,
     'nearest': np.min,
+    'None': None,
+    None: None,
 }
 
 
@@ -101,6 +103,8 @@ class Separation(Metric):
         elif self.remap:
             # NOTE: 'mean' will mistakenly count agent-to-self distances
             remapped_distances = self.remap(distances)
+        else:
+            raise ValueError("Separation metric must have at least one of linear, exponential, or remapper specified.")
 
         if self.clamp:
             remapped_distances = np.clip(remapped_distances, *self.clamp)

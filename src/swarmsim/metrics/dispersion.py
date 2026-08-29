@@ -1,36 +1,35 @@
 import numpy as np
 from itertools import combinations
-from .circliness import RadialVarianceHelper
+from .metric import Metric
+from .aggregation import Aggregation, aggregation_functions
 
 # typing
 from typing import Any, override
 
 
-class InteragentDispersion(RadialVarianceHelper):
+class InteragentDispersion(Aggregation):
+    _invert_multiplier = 1
+    default_aggregation = 'average'
 
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self,
+        *args,
+        reduce_agent_distances='nearest',
+        reduce_distances='mean',
+        **kwargs
+    ):
+        super().__init__(*args, reduce_distances=reduce_distances, **kwargs)
+
+
+class ExplodingDispersion(Metric):
+    default_aggregation = 'average'
+
+    def __init__(self, *args, scale=1.0, **kwargs):
         super().__init__(*args, **kwargs)
+        self.scale = scale
 
-    @override
     def _calculate(self):
-        # This function creates a metric for the agents to follow
-
-        positions = np.array([agent.getPosition() for agent in self.population])
-        dim = positions.shape[1]
-
-        pairs = np.asarray(list(combinations(positions, 2)))
-        distances = np.linalg.norm(np.diff(pairs, axis=1).reshape(-1, dim), axis=1)
-
-        return np.average(distances) * self.scale
-
-
-class ExplodingDispersion(RadialVarianceHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    @override
-    def _calculate(self):
-        positions = np.array([agent.getPosition() for agent in self.population])
+        positions = np.array([agent.getPosition() for agent in self.parent.population])
         average_position = np.average(positions, axis=0)
         distances = np.linalg.norm(positions - average_position, axis=1)
         return np.average(distances) * self.scale

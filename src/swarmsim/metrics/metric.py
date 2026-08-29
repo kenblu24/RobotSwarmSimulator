@@ -83,7 +83,13 @@ class Metric():
         return {"name": self.name, "history_size": self.history_size}
 
     def calculate(self):
-        pass
+        try:
+            self.set_value(self._calculate())  # pyright: ignore[reportAttributeAccessIssue]
+        except AttributeError as e:
+            if hasattr(self, '_calculate'):
+                raise e
+            msg = f"Metric {self.name} does not implement _calculate()"
+            raise NotImplementedError(msg) from e
 
     # prevent pickling errors
     def __getstate__(self):
