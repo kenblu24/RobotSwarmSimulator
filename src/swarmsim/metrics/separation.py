@@ -94,10 +94,7 @@ class Separation(Metric):
 
     def calculate(self):
         positions = np.array([p.position for p in self.parent.population])
-        distances = fast_pairwise_distances(positions)
-        n = positions.shape[0]
-
-        distances = distances[~np.eye(n, dtype=bool)].reshape(n, -1)
+        distances = fast_pairwise_distances(positions, collapse_diagonal_along=0)
 
         if self.p:
             remapped_distances = self.p * distances

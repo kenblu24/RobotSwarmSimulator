@@ -76,7 +76,7 @@ def line_circle_intersect(line, center, radius):
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 
-def fast_pairwise_distances(points):
+def fast_pairwise_distances(points, collapse_diagonal_along=None):
     """Compute the pairwise distances between points in a 2D array.
 
     Parameters
@@ -93,8 +93,13 @@ def fast_pairwise_distances(points):
     --------
     https://www.ancisoft.com/blog/using-numpy-to-find-the-average-distance-in-a-set-of-points/
     """
+    points = np.asarray(points)
     n = points.shape[0]
     norms_sq = np.sum(points**2, axis=1)
     dist_sq = norms_sq[:, np.newaxis] + norms_sq - 2 * np.dot(points, points.T)
     dist_sq = np.maximum(dist_sq, 0.0)  # Avoid negative values from precision errors
-    return np.sqrt(dist_sq)
+    distances = np.sqrt(dist_sq)
+    if collapse_diagonal_along is not None:
+        shape = (n, -1) if collapse_diagonal_along == 0 else (-1, n)
+        distances = distances[~np.eye(n, dtype=bool)].reshape(shape)
+    return distances
