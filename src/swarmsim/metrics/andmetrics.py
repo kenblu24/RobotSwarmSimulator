@@ -6,14 +6,11 @@ class AndMetrics(Metric):
 
     def __init__(
         self,
-        name='__class__',
-        history=None,
         metrics=None,
         and_fn='python',
-        default_aggregation=None,
+        **kwargs
     ):
-        self.default_aggregation = default_aggregation
-        super().__init__(name=name, history_size=history)
+        super().__init__(**kwargs)
         self.metrics = metrics
         self.and_fn = and_fn
         try:

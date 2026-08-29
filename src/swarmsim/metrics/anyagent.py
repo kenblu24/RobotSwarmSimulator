@@ -5,8 +5,6 @@ class AnyAgent(Metric):
 
     def __init__(
         self,
-        name='__class__',
-        history=None,
         include_teams=None,
         exclude_teams=None,
         exclude_names=None,
@@ -14,17 +12,16 @@ class AnyAgent(Metric):
         value_on_found='agent',
         default=None,
         error='raise',
-        default_aggregation=None,
+        **kwargs
     ):
         self.default = default
         self._expression = expression
-        super().__init__(name=name, history_size=history)
+        super().__init__(**kwargs)
         self.value_on_found = value_on_found
         self.include_teams = include_teams
         self.exclude_teams = exclude_teams
         self.exclude_names = exclude_names
         self.error = error
-        self.default_aggregation = default_aggregation
 
     def reset(self):
         super().reset()

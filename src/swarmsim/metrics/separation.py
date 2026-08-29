@@ -38,7 +38,6 @@ class ExponentialFunction:
 class Separation(Metric):
     def __init__(
         self,
-        name="Separation",
         default=0,
         linear=None,
         exponential=None,
@@ -47,11 +46,9 @@ class Separation(Metric):
         remapper=None,
         reduce_agent_distances=None,
         reduce_distances='mean',
-        history=None,
-        default_aggregation='average',
+        **kwargs
     ):
-        super().__init__(name=name, history_size=history)
-        self.default_aggregation = default_aggregation
+        super().__init__(**kwargs)
         self.default = default
         self.clamp = np.sort(clamp) if clamp is not None else clamp
         self.normalize = normalize

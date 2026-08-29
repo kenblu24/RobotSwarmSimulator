@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 class SensorSignalBehavior(Metric):
 
-    def __init__(self, name='__class__', history=None, show=True, sensor_index=0):
-        super().__init__(name=name, history_size=history)
+    def __init__(self, show=True, sensor_index=0, **kwargs):
+        super().__init__(**kwargs)
         self.world = None
         self.show = show
         self.index = sensor_index

@@ -15,8 +15,8 @@ else:
 class DelaunayDiffusion(Metric):
     __badvars__ = Metric.__badvars__ + ['population']  # references to population may cause pickling errors
 
-    def __init__(self, name='__class__', history=None, regularize=True):
-        super().__init__(name=name, history_size=history)
+    def __init__(self, regularize=True, **kwargs):
+        super().__init__(**kwargs)
         self.regularize = regularize
         self.allpairs = []
         self.lines = []

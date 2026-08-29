@@ -4,10 +4,10 @@ from .radialvariance import RadialVarianceMetric
 
 
 class RadialVarianceHelper(RadialVarianceMetric):
-    def __init__(self, history=None, regularize=False, **kwargs):
+    def __init__(self, regularize=False, **kwargs):
         if regularize:
             raise NotImplementedError
-        super().__init__(history=history, regularize=False, **kwargs)
+        super().__init__(regularize=False, **kwargs)
 
     def _calculate(self):
         pass

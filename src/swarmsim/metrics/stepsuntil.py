@@ -8,17 +8,16 @@ class StepsUntil(Metric, HasSubMetric):
 
     def __init__(
         self,
-        name='__class__',
-        history=None,
         metric=None,
         until_expression=None,
         default='__unset__',
         sentinel='__none__',
+        **kwargs
     ):
         self._default = default
         self._expression = until_expression
         HasSubMetric.__init__(self, metric=metric)
-        super().__init__(name=name, history_size=history)
+        super().__init__(**kwargs)
         self.sentinel = sentinel
 
     def reset(self):

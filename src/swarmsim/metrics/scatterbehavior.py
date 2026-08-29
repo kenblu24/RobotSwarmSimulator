@@ -3,8 +3,8 @@ from .metric import Metric
 
 
 class ScatterBehavior(Metric):
-    def __init__(self, name='__class__', history=None, regularize=True):
-        super().__init__(name=name, history_size=history)
+    def __init__(self, regularize=True, **kwargs):
+        super().__init__(**kwargs)
         self.world_radius = 0
         self.regularize = regularize
 

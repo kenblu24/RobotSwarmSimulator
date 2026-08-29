@@ -3,8 +3,8 @@ from .metric import Metric
 
 
 class AverageSpeedBehavior(Metric):
-    def __init__(self, name='__class__', history=None):
-        super().__init__(name=name, history_size=history)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     @property
     def population(self):

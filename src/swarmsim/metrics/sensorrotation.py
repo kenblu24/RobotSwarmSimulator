@@ -5,8 +5,8 @@ from .metric import Metric
 
 class SensorRotation(Metric):
 
-    def __init__(self, sensor_index, name='__class__', history=None):
-        super().__init__(name=name, history_size=history)
+    def __init__(self, sensor_index, **kwargs):
+        super().__init__(**kwargs)
         self.i = sensor_index
 
     def calculate(self):

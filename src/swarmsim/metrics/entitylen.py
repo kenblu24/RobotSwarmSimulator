@@ -6,18 +6,15 @@ class EntityLen(Metric):
 
     def __init__(
         self,
-        name='__class__',
-        history=None,
         target_name=None,
         attribute=None,
-        default_aggregation=None,
+        **kwargs
     ):
-        super().__init__(name=name, history_size=history)
+        super().__init__(**kwargs)
         self.target_name = target_name
         self.target = None
         self.attribute = attribute
         self.compiled_expr = None
-        self.default_aggregation = default_aggregation
 
     @Metric.world.setter
     def world(self, value):

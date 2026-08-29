@@ -76,7 +76,7 @@ def line_circle_intersect(line, center, radius):
     return np.dot(clDiffVec, clDiffVec) <= radius**2
 
 
-def fast_pairwise_distances(points, collapse_diagonal_along=None):
+def fast_pairwise_distances(points, collapse_diagonal_along=None) -> np.ndarray:
     """Compute the pairwise distances between points in a 2D array.
 
     Parameters

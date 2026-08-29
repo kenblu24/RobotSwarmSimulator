@@ -91,8 +91,6 @@ class JinjaMetric(Metric, HasSubMetrics):
 
     def __init__(
         self,
-        name='__class__',
-        history=None,
         metric=None,
         metrics=None,
         template=None,
@@ -101,12 +99,11 @@ class JinjaMetric(Metric, HasSubMetrics):
         eval_condition=None,
         save_condition=None,
         default='__unset__',
-        default_aggregation=None,
+        **kwargs
     ):
         self._default = default
-        self.default_aggregation = default_aggregation
         HasSubMetrics.__init__(self, metric=metric, metrics=metrics)
-        super().__init__(name=name, history_size=history)
+        super().__init__(**kwargs)
         self.template_src = template
         self.template = None
         self._module = None

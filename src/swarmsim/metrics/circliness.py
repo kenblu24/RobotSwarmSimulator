@@ -6,11 +6,10 @@ from ..util.collections import RefProp
 class RadialVarianceHelper(RadialVarianceMetric):
     default_aggregation = 'average'
 
-    def __init__(self, history=None, regularize=False, name='__class__', scale=1.0):
+    def __init__(self, regularize=False, scale=1.0, **kwargs):
         if regularize:
             raise NotImplementedError
-        super().__init__(name=name, history=history, regularize=False)
-        self.name = self.__class__.__name__ if name is None else name
+        super().__init__(regularize=False, **kwargs)
         self.scale = scale
 
     def _calculate(self):
@@ -85,12 +84,12 @@ class Circliness(RadialVarianceHelper):
     tangentness = RefProp('parent')
     fatness = RefProp('parent')
 
-    def __init__(self, history=None, avg_history_max=100, regularize=False, name=None):
+    def __init__(self, avg_history_max=100, regularize=False, **kwargs):
         if regularize:
             raise NotImplementedError
         self.tangentness = Tangentness(history=avg_history_max, regularize=False)
         self.fatness = Fatness(history=avg_history_max, regularize=False)
-        super().__init__(history=history, regularize=regularize, name=name)
+        super().__init__(regularize=regularize, **kwargs)
 
     def _calculate(self):
         _, tau_ = self.tangentness.out_average()

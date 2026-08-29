@@ -13,15 +13,13 @@ def ensure_type_tag(metric, tag):
 class Boids(Metric):
     def __init__(
         self,
-        name='__class__',
         separation_metric=None,
         cohesion_metric=None,
         alignment_metric=None,
         linear=(1, 1, 1,),
-        history=None,
-        default_aggregation='average',
+        **kwargs
     ):
-        super().__init__(name=name, history_size=history, default_aggregation=default_aggregation)
+        super().__init__(**kwargs)
         self.separation = ensure_type_tag(separation_metric, 'Cohesion')
         self.cohesion = ensure_type_tag(cohesion_metric, 'Cohesion')
         self.alignment = ensure_type_tag(alignment_metric, 'Alignment')

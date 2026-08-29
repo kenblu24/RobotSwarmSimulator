@@ -18,11 +18,13 @@ class Metric():
     default_aggregation = None
     _world = None
 
-    def __init__(self, name: str = '__class__', history_size: int | None = None):
+    def __init__(self, name: str = '__class__', history_size: int | None = None, default_aggregation=None):
         self.name = self.__class__.__name__ if name == '__class__' else name
         self.history_size = history_size
         self._world: World = None  # pyright: ignore[reportAttributeAccessIssue]
         self._parent = None
+        if default_aggregation is not None:
+            self.default_aggregation = default_aggregation
         self.reset()
 
     def reset(self):

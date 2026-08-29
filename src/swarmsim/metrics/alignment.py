@@ -7,14 +7,12 @@ from ..util.geometry.euclidean import vectorize
 class Alignment(Metric):
     def __init__(
         self,
-        name='__class__',
         default=0,
         pre_exponent=1,
         post_exponent=-1,
-        history=None,
-        default_aggregation='average',
+        **kwargs
     ):
-        super().__init__(name=name, history_size=history)
+        super().__init__(**kwargs)
         self.default = default
         self.pre_exponent = pre_exponent
         self.post_exponent = post_exponent
