@@ -54,8 +54,12 @@ class DifferentialDriveGUI(AbstractGUI):
     def set_mouse_world_coordinates(self, pos):
         self.mouse_pos = pos
 
-    def draw(self, screen, zoom=1.0):
+    def draw(self, screen, draw_world=True):
+        if draw_world:
+            self.world.draw(screen)
+
         # super().draw(screen)
+
         if self.position == "sidebar_right":
             self.x = screen.get_width() - self.w
             self.y = 0
