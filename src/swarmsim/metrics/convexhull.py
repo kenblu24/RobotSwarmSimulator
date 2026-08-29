@@ -7,7 +7,7 @@ from ..util.geometry.Polygon import Polygon
 
 
 class ConvexHull(Metric):
-    def __init__(self, name="Convex_Hull_Area", history=None):
+    def __init__(self, name='__class__', history=None):
         super().__init__(name=name, history_size=history)
         self.polygon = None
 
@@ -37,7 +37,7 @@ class ConvexHull(Metric):
 
 
 class InverseConvexHull(Metric):
-    def __init__(self, name="Inverse_Hull_Area", history=None):
+    def __init__(self, name='__class__', history=None):
         super().__init__(name=name, history_size=history)
         self.polygon = None
 

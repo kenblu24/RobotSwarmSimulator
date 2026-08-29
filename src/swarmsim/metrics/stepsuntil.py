@@ -8,7 +8,7 @@ class StepsUntil(Metric, HasSubMetric):
 
     def __init__(
         self,
-        name="StepsUntil",
+        name='__class__',
         history=None,
         metric=None,
         until_expression=None,

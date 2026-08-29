@@ -3,8 +3,9 @@ from typing import Tuple
 
 
 class SubGroupBehavior(Metric):
-    def __init__(self, wrapped_behavior: Metric, subgroup=0):
-        super().__init__(name=f"{wrapped_behavior.name}_{subgroup}", history_size=wrapped_behavior.history_size)
+    def __init__(self, wrapped_behavior: Metric, subgroup=0, name='__auto__'):
+        name = f"{wrapped_behavior.name}_{subgroup}" if name == '__auto__' else name
+        super().__init__(name=name, history_size=wrapped_behavior.history_size)
         self.group=subgroup
         self.population=[]
 

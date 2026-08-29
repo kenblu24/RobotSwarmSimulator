@@ -5,8 +5,8 @@ from .metric import Metric
 
 class GeneElementDifference(Metric):
 
-    def __init__(self, genome_a_index, genome_b_index, history=None):
-        super().__init__(name="Sensor_Offset", history_size=history)
+    def __init__(self, genome_a_index, genome_b_index, name='__class__', history=None):
+        super().__init__(name=name, history_size=history)
         self.a = genome_a_index
         self.b = genome_b_index
 

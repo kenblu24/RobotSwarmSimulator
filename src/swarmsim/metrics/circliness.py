@@ -6,10 +6,10 @@ from ..util.collections import RefProp
 class RadialVarianceHelper(RadialVarianceMetric):
     default_aggregation = 'average'
 
-    def __init__(self, history=None, regularize=False, name=None, scale=1.0):
+    def __init__(self, history=None, regularize=False, name='__class__', scale=1.0):
         if regularize:
             raise NotImplementedError
-        super().__init__(history=history, regularize=False)
+        super().__init__(name=name, history=history, regularize=False)
         self.name = self.__class__.__name__ if name is None else name
         self.scale = scale
 

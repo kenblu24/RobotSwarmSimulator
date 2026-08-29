@@ -13,7 +13,7 @@ def ensure_type_tag(metric, tag):
 class Boids(Metric):
     def __init__(
         self,
-        name="Boids",
+        name='__class__',
         separation_metric=None,
         cohesion_metric=None,
         alignment_metric=None,

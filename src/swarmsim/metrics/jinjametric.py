@@ -91,7 +91,7 @@ class JinjaMetric(Metric, HasSubMetrics):
 
     def __init__(
         self,
-        name="JinjaMetric",
+        name='__class__',
         history=None,
         metric=None,
         metrics=None,

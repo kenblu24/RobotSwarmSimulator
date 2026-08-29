@@ -49,6 +49,7 @@ class Separation(Metric):
         default_aggregation='average',
     ):
         super().__init__(name=name, history_size=history)
+        self.default_aggregation = default_aggregation
         self.default = default
         self.clamp = np.sort(clamp) if clamp is not None else clamp
         self.normalize = normalize

@@ -6,7 +6,7 @@ class AndMetrics(Metric):
 
     def __init__(
         self,
-        name="AndMetrics",
+        name='__class__',
         history=None,
         metrics=None,
         and_fn='python',

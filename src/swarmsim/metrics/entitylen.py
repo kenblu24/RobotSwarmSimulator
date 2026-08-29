@@ -6,7 +6,7 @@ class EntityLen(Metric):
 
     def __init__(
         self,
-        name="EntityLen",
+        name='__class__',
         history=None,
         target_name=None,
         attribute=None,

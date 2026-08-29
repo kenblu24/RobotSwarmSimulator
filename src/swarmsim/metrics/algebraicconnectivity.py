@@ -3,8 +3,8 @@ from .metric import Metric
 
 
 class AlgebraicConn(Metric):
-    def __init__(self, history=None, r_disk_size=10):
-        super().__init__(name="Alg_Connectivity", history_size=history)
+    def __init__(self, name='__class__', history=None, r_disk_size=10):
+        super().__init__(name=name, history_size=history)
         self.r_disk_size = r_disk_size
 
     @property

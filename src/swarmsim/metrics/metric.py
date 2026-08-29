@@ -14,12 +14,12 @@ else:
 
 class Metric():
     __badvars__ = ['world']  # variables that should not be pickled
+    #: Set to True if the metric should not be averaged over its history
     default_aggregation = None
     _world = None
-    #: Set to True if the metric should not be averaged over its history
 
-    def __init__(self, name: str, history_size: int | None = None):
-        self.name = name
+    def __init__(self, name: str = '__class__', history_size: int | None = None):
+        self.name = self.__class__.__name__ if name == '__class__' else name
         self.history_size = history_size
         self._world: World = None  # pyright: ignore[reportAttributeAccessIssue]
         self._parent = None

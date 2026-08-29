@@ -3,8 +3,8 @@ from .metric import Metric
 
 
 class AngularMomentumBehavior(Metric):
-    def __init__(self, history=None):
-        super().__init__(name="Angular_Momentum", history_size=history)
+    def __init__(self, name='__class__', history=None):
+        super().__init__(name=name, history_size=history)
 
     @property
     def population(self):

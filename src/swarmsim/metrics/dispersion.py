@@ -10,7 +10,6 @@ class InteragentDispersion(RadialVarianceHelper):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = self.__class__.__name__
 
     @override
     def _calculate(self):
@@ -28,7 +27,6 @@ class InteragentDispersion(RadialVarianceHelper):
 class ExplodingDispersion(RadialVarianceHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = self.__class__.__name__
 
     @override
     def _calculate(self):

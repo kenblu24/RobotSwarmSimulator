@@ -3,10 +3,11 @@ from .metric import Metric
 
 from ..util.geometry.euclidean import vectorize
 
+
 class Alignment(Metric):
     def __init__(
         self,
-        name="Alignment",
+        name='__class__',
         default=0,
         pre_exponent=1,
         post_exponent=-1,

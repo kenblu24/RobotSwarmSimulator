@@ -6,7 +6,6 @@ class CirclePacking(RadialVarianceHelper):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = self.__class__.__name__
 
     def _calculate(self):
         world = self.world.config

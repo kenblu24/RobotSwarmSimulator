@@ -2,8 +2,8 @@ from .metric import Metric
 
 
 class TotalCollisionsBehavior(Metric):
-    def __init__(self, history=1):
-        super().__init__(name="Total_Collisions", history_size=history)
+    def __init__(self, name='__class__', history=1):
+        super().__init__(name=name, history_size=history)
         self.total_collisions = 0
 
     @property

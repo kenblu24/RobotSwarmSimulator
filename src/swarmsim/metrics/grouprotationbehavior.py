@@ -4,8 +4,8 @@ from .metric import Metric
 
 class GroupRotationBehavior(Metric):
 
-    def __init__(self, history=None):
-        super().__init__(name="Group_Rotation", history_size=history)
+    def __init__(self, name='__class__', history=None):
+        super().__init__(name=name, history_size=history)
 
     @property
     def population(self):
@@ -20,7 +20,7 @@ class GroupRotationBehavior(Metric):
         momentum_list = []
         mew = self.center_of_mass()
 
-        for agent in self.population:
+        for agent in self.parent.population:
             x_i = agent.getPosition()
             v_i = agent.getVelocity()
 

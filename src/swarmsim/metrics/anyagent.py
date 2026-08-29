@@ -5,7 +5,7 @@ class AnyAgent(Metric):
 
     def __init__(
         self,
-        name="AnyAgent",
+        name='__class__',
         history=None,
         include_teams=None,
         exclude_teams=None,

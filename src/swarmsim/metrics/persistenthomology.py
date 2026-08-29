@@ -5,8 +5,9 @@ import pygame
 
 
 class PersistentHomology(Metric):
-    def __init__(self, history_size=100, dims=0, draw_cycles=False, max_death=False):
-        super().__init__(name=f"{dims}D Elements", history_size=history_size)
+    def __init__(self, name='__auto__', history_size=100, dims=0, draw_cycles=False, max_death=False):
+        name = f"{dims}D Elements" if name == '__auto__' else name
+        super().__init__(name=name, history_size=history_size)
         self.pointset = []
         self.rips_data = None
         self.dims = dims
