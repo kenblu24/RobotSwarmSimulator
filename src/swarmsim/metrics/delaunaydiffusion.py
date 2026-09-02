@@ -50,6 +50,8 @@ class DelaunayDiffusion(Metric):
         self.set_value(dispersal if dispersal is not None else 0)
 
     def draw(self, screen, offset):
+        if not self.show:
+            return
         pan, zoom = np.asarray(offset[0]), offset[1]
         super().draw(screen, offset)
 

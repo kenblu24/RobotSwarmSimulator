@@ -20,6 +20,7 @@ import math
 from .Sensor import Sensor
 from typing import List
 from ..util.collider.AABB import AABB
+from ..util.geometry.euclidean import vectorize, turn, line_circle_intersect
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -31,79 +32,10 @@ import warnings
 import quads
 
 
-def vectorize(angle):
-    """Convert an angle to a representative unit vector.
-
-    Parameters
-    ----------
-    angle : float
-        Angle in radians
-
-    Returns
-    -------
-    np.ndarray
-        Vector
-    """
-    return np.array((np.cos(angle), np.sin(angle)))
-
-
-def turn(p1, p2):
-    """Compute the vector turn value from origin→p1 to origin→p2.
-
-    This value is positive if a left turn is the fastest way to go from p1 to p2,
-    zero if p1 and p2 are colinear, and negative otherwise
-
-    Parameters
-    ----------
-    p1 : tuple | np.ndarray
-        Point
-    p2 : tuple | np.ndarray
-        Point
-
-    Returns
-    -------
-    float
-    """
-    return p1[0] * p2[1] - p2[0] * p1[1]
-
-
-def project(a, b):
-    """Project vector a onto vector b.
-
-    Parameters
-    ----------
-    a : tuple | np.ndarray
-        Vector
-    b : tuple | np.ndarray
-        Vector
-
-    Returns
-    -------
-    np.ndarray
-    """
-    return b * (np.dot(a, b) / np.dot(b, b))
-
-
-def lineCircleIntersect(line, center, radius):
-    """Determine if the line in the direction of the first argument intersects the
-    circle defined by the second and third arguments.
-
-    Parameters
-    ----------
-    line : tuple | np.ndarray
-        Line
-    center : tuple | np.ndarray
-        Center of circle
-    radius : float
-        Radius of circle
-
-    Returns
-    -------
-    bool
-        True if the line intersects the circle, False otherwise.
-    """
-    clDiffVec = center - project(center, line)
-    return np.dot(clDiffVec, clDiffVec) <= radius**2
+DEFAULT_BINARY_FOV_COLORS = (
+    (96, 96, 96),
+    (255, 128, 0)
+)
 
 
 class BinaryFOVSensor(Sensor):
@@ -162,6 +94,9 @@ class BinaryFOVSensor(Sensor):
         store_history=False,
         detect_goal_with_added_state=False,
         show=True,
+        only_show_whiskers=True,
+        stroke_colors=DEFAULT_BINARY_FOV_COLORS,
+        stroke_width=1.0,
         seed=None,
         target_team=None,
         detect_only_origins=False,
@@ -182,6 +117,10 @@ class BinaryFOVSensor(Sensor):
         self.use_goal_state = detect_goal_with_added_state
         self.goal_sensing_range = goal_sensing_range
         self.show = show
+        self.only_show_whiskers = only_show_whiskers
+        self.stroke_colors = [pygame.Color(color) for color in stroke_colors]
+        self.stroke_color = self.stroke_colors[0]
+        self.stroke_width = stroke_width
         self.invert = invert
         self.goal_detected = False
         self.detection_id = 0
@@ -292,8 +231,8 @@ class BinaryFOVSensor(Sensor):
                 # circle whisker intercept correction
                 # for left and right, check that vector u to the agent is in the
                 # correct direction and if the line of the whisker intersects the agent circle
-                leftWhisker = (0 < np.dot(u, e_left[:2]) and lineCircleIntersect(e_left[:2], u, agent.radius))
-                rightWhisker = (0 < np.dot(u, e_right[:2]) and lineCircleIntersect(e_right[:2], u, agent.radius))
+                leftWhisker = (0 < np.dot(u, e_left[:2]) and line_circle_intersect(e_left[:2], u, agent.radius))
+                rightWhisker = (0 < np.dot(u, e_right[:2]) and line_circle_intersect(e_right[:2], u, agent.radius))
                 if leftWhisker or rightWhisker:
                     self.determineState(True, agent, world)
                     return
@@ -301,7 +240,6 @@ class BinaryFOVSensor(Sensor):
                 if np.dot(u, u) < agent.radius**2:
                     self.determineState(True, agent, world)
                     return
-
 
             # # OLD CODE, circle_interesect_sensing_cone is no longer used
             # d = self.circle_interesect_sensing_cone(u, self.agent.radius)
@@ -464,40 +402,42 @@ class BinaryFOVSensor(Sensor):
                 self.history.append(int(self.agent_in_sight.name))
             else:
                 self.history.append(-1)
+        self.stroke_color = self.stroke_colors[int(self.current_state)] if self.show else None
 
     def draw(self, screen, offset=((0, 0), 1.0)):
         super(BinaryFOVSensor, self).draw(screen, offset)
         pan, zoom = np.asarray(offset[0]), np.asarray(offset[1])
         zoom: float
+
         if self.show:
             # Draw Sensory Vector (Vision Vector)
-            sight_color = (255, 0, 0)
-            if self.current_state == 1:
-                sight_color = (0, 255, 0)
-            if self.current_state == 2:
-                sight_color = (255, 255, 0)
+            fc: pygame.Color = self.stroke_color
+
+            show_full = self.agent.is_highlighted or not self.only_show_whiskers
 
             # draw the whiskers
+            width = max(1, round(0.01 * zoom * self.stroke_width)) if show_full else 1
             # length = actual sensor range if agent is selected/highlighted, otherwise draw relative to agent radius
-            magnitude = self.r if self.agent.is_highlighted else self.agent.radius * 5
+            magnitude = self.r if show_full else self.agent.radius * 5
 
             head = np.asarray(self.agent.getPosition()) * zoom + pan
+            # always draw the whiskers
             e_left, e_right = self.getSectorVectors()
             e_left, e_right = np.asarray(e_left[:2]), np.asarray(e_right[:2])
 
             tail_l = head + magnitude * e_left * zoom
             tail_r = head + magnitude * e_right * zoom
 
-            pygame.draw.line(screen, sight_color, head, tail_l)
-            pygame.draw.line(screen, sight_color, head, tail_r)
-            if self.agent.is_highlighted:
-                width = max(1, round(0.01 * zoom))
+            pygame.draw.line(screen, fc, head, tail_l, width)
+            pygame.draw.line(screen, fc, head, tail_r, width)
+
+            if show_full:
                 # pygame.draw.circle(screen, sight_color + (50,), head, self.r * zoom, width)
                 # draw the arc of the sensor cone
                 range_bbox = AABB.from_center_wh(head, self.r * 2 * zoom)
                 langle = self.agent.angle + self.angle + self.theta
                 rangle = self.agent.angle + self.angle - self.theta
-                pygame.draw.arc(screen, sight_color + (50,), range_bbox.to_rect(), -langle, -rangle, width)
+                pygame.draw.arc(screen, fc, range_bbox.to_rect(), -langle, -rangle, width)
 
                 if not self.DEBUG:
                     return
@@ -507,7 +447,7 @@ class BinaryFOVSensor(Sensor):
                 AAR = self.getAARectContainingSector(self.agent.world)
                 AARtl = np.array(AAR[:2]) * zoom + pan
                 AARbr = np.array(AAR[2:]) * zoom + pan
-                pygame.draw.rect(screen, sight_color + (50,), pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
+                pygame.draw.rect(screen, fc, pygame.Rect(*AARtl, *(AARbr - AARtl)), width)
                 detected = [agent for point in self.agent.world.quad.within_bb(quads.BoundingBox(*AAR)) for agent in point.data]
                 for agent in detected:
                     pygame.draw.circle(screen, pygame.colordict.THECOLORS["blue"],

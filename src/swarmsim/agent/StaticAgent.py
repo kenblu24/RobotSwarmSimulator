@@ -50,6 +50,7 @@ class StaticAgentConfig(BaseAgentConfig):
     body_color: tuple[int, int, int] = (255, 255, 255)
     #: bool: Whether the body is filled.
     body_filled: bool = False
+    stroke_width: float = 1.0
     #: bool | int: Whether the agent collides with other agents.
     collides: int | str | CollisionMode = CollisionMode.DetectAndCorrect
     #: list[tuple[float, float]] | np.ndarray | str: The points of the agent shape.
@@ -193,10 +194,10 @@ class StaticAgent(Agent):
         super().draw(screen)
 
         # Draw Cell Membrane
-        filled = False if (self.is_highlighted or self.stopped_duration or self.body_filled) else True
+        filled = self.is_highlighted or self.stopped_duration or self.body_filled
         color = self.body_color if not self.stopped_duration else (255, 255, 51)
         pos = np.asarray(self.getPosition()) * zoom + pan
-        width = int(filled)
+        width = 0 if filled else max(1, round(0.01 * zoom * self.config.stroke_width))
 
         if self.is_poly:
             pygame.draw.polygon(screen, color, self.poly_rotated * zoom + pos, width=width)
