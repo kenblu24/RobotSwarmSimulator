@@ -84,7 +84,21 @@
 import yaml
 
 import numpy as np
+import copyreg
 import numpy
+
+
+# allow pickling of numpy ufuncs i.e. np.max
+def _reduce_arrayfunctiondispatcher(func):
+    return getattr, (numpy, func.__name__)
+
+
+try:
+    _ArrayFunctionDispatcher = numpy.core._multiarray_umath._ArrayFunctionDispatcher
+    if _ArrayFunctionDispatcher not in copyreg.dispatch_table:
+        copyreg.dispatch_table[_ArrayFunctionDispatcher] = _reduce_arrayfunctiondispatcher
+except AttributeError:
+    pass
 
 
 def represent_ndarray(dumper: yaml.Dumper, data: np.ndarray):
