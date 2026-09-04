@@ -31,7 +31,7 @@ from ..config.OutputTensorConfig import OutputTensorConfig
 from ..config import store, filter_unexpected_fields, get_class_from_dict, get_agent_class, _ERRMSG_MISSING_ASSOCIATED_TYPE
 
 from ..util.asdict import asdict
-from ..util.collections import FlagSet, RefList, RefListProp
+from ..util.collections import FlagSet, RefList, RefListProp, RefProp
 from ..util import jinja
 
 from ..agent.Agent import Agent
@@ -145,6 +145,10 @@ class World:
     #: Metrics to calculate behaviors.
     metrics: RefList[Metric] = RefListProp()
 
+    #: Reference to the GUI.
+    gui = RefProp('world')  # TODO: add type
+    _gui = None
+
     def __init__(self, config):
         self.config = config
         config = replace(config)
@@ -158,7 +162,6 @@ class World:
         self._metrics = RefList(self, 'world')
         self.goals = config.goals
         self.meta = config.metadata
-        self.gui = None
         self.total_steps = 0
         self.initialized = False
         self._screen_cache = None
