@@ -18,7 +18,7 @@ class Alignment(Metric):
         self.post_exponent = post_exponent
 
     def calculate(self):
-        population = self.parent.population
+        population = self.world.population
         angles = np.array([p.angle for p in population])
         # NOTE: This does not returns [[x1, y1], [x2, y2], ..., [xn, yn]];
         #       it returns [[x1, x2, ..., xn], [y1, y2, ..., yn]]

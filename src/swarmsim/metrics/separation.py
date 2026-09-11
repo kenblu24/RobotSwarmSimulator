@@ -4,6 +4,7 @@ from .metric import Metric
 from ..util.geometry.euclidean import fast_pairwise_distances
 from ..util.statistics_tools import RemapNP
 
+import pygame
 
 aggregation_functions = {
     'mean': np.mean,
@@ -92,7 +93,7 @@ class Separation(Metric):
             self.remap = remapper
 
     def calculate(self):
-        positions = np.array([p.position for p in self.parent.population])
+        positions = np.array([p.position for p in self.world.population])
         distances = fast_pairwise_distances(positions, collapse_diagonal_along=0)
 
         if self.p:
@@ -103,10 +104,25 @@ class Separation(Metric):
         else:
             raise ValueError("Separation metric must have at least one of linear, exponential, or remapper specified.")
 
-        if self.clamp:
+        if self.clamp is not None:
             remapped_distances = np.clip(remapped_distances, *self.clamp)
         if self.normalize:
             remapped_distances /= np.linalg.norm(remapped_distances)
         if self.reduce_agent_distances:
             remapped_distances = self.reduce_agent_distances(remapped_distances, axis=1)
         self.set_value(self.reduce_distances(remapped_distances))
+
+    def draw(self, screen, zoom=1.0):
+        pan, zoom = self.world.pos, self.world.zoom
+        colors = ["#ff0000", "#00ff00", "#0000ff"]
+        for agent in self.world.population[:1]:
+            center = agent.getPosition()
+            for i, (r, v) in enumerate(zip(*self.linear)):
+                color = None
+                match v:
+                    case -1.: color = colors[0]
+                    case  0.: color = colors[1]
+                    case  1.: color = colors[2]
+
+                assert color is not None
+                pygame.draw.circle(screen, color, center * zoom + pan, r * zoom, width=1)
