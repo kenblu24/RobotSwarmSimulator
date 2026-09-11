@@ -1,5 +1,6 @@
 import numpy as np
-from swarmsim.metrics.aggregation import Aggregation
+
+from .aggregation import Aggregation
 
 
 class MovingMass(Aggregation):
@@ -8,7 +9,12 @@ class MovingMass(Aggregation):
 
         self.centroids = []
 
+    def center_of_mass(self):
+        # NOTE(mabay): Copied this over from 'RadialVarianceMetric'
+        positions = np.asarray([agent.getPosition() for agent in self.population])
+        return positions.mean(axis=0)
+
     def _calculate(self):
         centroid = self.center_of_mass()
         self.centroids.append(centroid)
-        return super()._calculate() + np.linalg.norm(centroid - self.centroids[0])
+        return self.agg._calculate() + np.linalg.norm(centroid - self.centroids[0])
