@@ -31,6 +31,7 @@ from .berlingercircularity import (
 from .distancesizeratio import DistanceSizeRatio
 from .delaunaydiffusion import DelaunayDiffusion
 from .dispersion import InteragentDispersion, ExplodingDispersion
+from .movingmass import MovingMass
 
 __all__ = [
     "Metric",
@@ -72,4 +73,5 @@ __all__ = [
     "DelaunayDiffusion",
     "InteragentDispersion",
     "ExplodingDispersion",
+    "MovingMass"
 ]
