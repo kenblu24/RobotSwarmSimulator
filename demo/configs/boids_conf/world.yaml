@@ -1,0 +1,47 @@
+---
+type: "RectangularWorld"
+size:  [8, 8]
+time_step: !np 1 / 40  # 0.025 seconds
+seed: <{ seed|default(2023) }>
+
+agents:
+  - type: "MazeAgent"
+    position: [4, 3]
+    agent_radius: 0.1
+
+  - type: "MazeAgent"
+    position: [4.5, 3]
+    agent_radius: 0.1
+    controller:
+      type: HumanController
+      joystick: ~
+
+# spawners:
+#   - type: UniformAgentSpawner
+#     n: 8  # default number of agents BUT may be overridden by user args
+#     facing: away
+#     region: [[3.4, 3.4], [3.4, 4.6], [4.6, 4.6], [4.6, 3.4]]
+#     agent: !include turbopi.yaml
+metrics:
+  - type: MovingMass
+    weights: [0.5, 1]
+  - type: Separation
+    linear: [[0, 0.3], [0, 1]]
+    clamp: [0, 1]
+  - type: Separation
+    linear: [[0.65, 0.75, 0.9], [3, 0, -3]]
+    clamp: [-3, 3]
+  - type: Alignment
+    pre_exponent: 1
+    post_exponent: 2
+
+  - type: Boids
+    separation_metric:
+      linear: [[0, 0.3], [0, 1]]
+      clamp: [0, 1]
+    cohesion_metric:
+      linear: [[0.65, 0.75, 0.9], [3, 0, -3]]
+      clamp: [-3, 3]
+    alignment_metric:
+      pre_exponent: 1
+      post_exponent: 2

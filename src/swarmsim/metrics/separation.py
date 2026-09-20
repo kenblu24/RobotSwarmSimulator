@@ -117,12 +117,14 @@ class Separation(Metric):
         colors = ["#ff0000", "#00ff00", "#0000ff"]
         for agent in self.world.population[:1]:
             center = agent.getPosition()
-            for i, (r, v) in enumerate(zip(*self.linear)):
+            for (r, v) in zip(*self.linear):
                 color = None
-                match v:
-                    case -1.: color = colors[0]
-                    case  0.: color = colors[1]
-                    case  1.: color = colors[2]
-
-                assert color is not None
+                if v < 0.:
+                    color = colors[0]
+                elif v == 0.:
+                    color = colors[1]
+                elif v > 0.:
+                    color = colors[2]
+                else:
+                    assert color is not None
                 pygame.draw.circle(screen, color, center * zoom + pan, r * zoom, width=1)
