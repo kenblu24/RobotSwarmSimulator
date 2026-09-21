@@ -24,24 +24,21 @@ agents:
 #     agent: !include turbopi.yaml
 metrics:
   - type: MovingMass
-    weights: [1, 3]
-  - type: Separation
-    linear: [[0, 0.3], [0, 1]]
-    clamp: [0, 1]
-  - type: Separation
-    linear: [[0.9, 1., 1.1], [3, 0, -3]]
-    clamp: [-3, 3]
-  - type: Alignment
-    pre_exponent: 1
-    post_exponent: 2
-
-  # - type: Boids
-  #   separation_metric:
-  #     linear: [[0, 0.3], [0, 1]]
-  #     clamp: [0, 1]
-  #   cohesion_metric:
-  #     linear: [[0.65, 0.75, 0.9], [3, 0, -3]]
-  #     clamp: [-3, 3]
-  #   alignment_metric:
-  #     pre_exponent: 1
-  #     post_exponent: 2
+    history_size: 225
+    linear: [1, 1]
+  - type: Boids
+    linear: [1, 1, 3]
+    separation_metric:
+      history_size: 450
+      # 0.2 - distance between the centers of two agent centers
+      # +0.05 - a bit more padding
+      linear: [[0.2, !np "0.2+0.1", !np "0.2+2*0.1"], [-1, 0, 1]]
+      clamp: [-1, 1]
+    cohesion_metric:
+      history_size: 450
+      linear: [[0.9, 1., 1.1], [1, 0, -1]]
+      clamp: [-1, 1]
+    alignment_metric:
+      history_size: 450
+      pre_exponent: 1
+      post_exponent: 2

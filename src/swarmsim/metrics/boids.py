@@ -53,5 +53,5 @@ class Boids(Metric):
         self.separation.calculate()
         self.cohesion.calculate()
         self.alignment.calculate()
-        self.set_value(a * self.separation.value + b * self.cohesion.value + c * self.alignment.value)
+        self.set_value(a * self.separation.average + b * self.cohesion.average + c * self.alignment.average)
 
