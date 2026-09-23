@@ -18,7 +18,7 @@ class MovingMass(Aggregation):
 
     @property
     def min_travel(self):
-        # TODO: This is meant to be an agent's radius
+        # NOTE: This is meant to be an agent's radius
         return 0.1
 
     def center_of_mass(self):
@@ -42,7 +42,7 @@ class MovingMass(Aggregation):
 
         score = dist
         if dist < self.min_travel:
-            score = dist / self.min_travel
+            score = -1
         return score
 
     def draw(self, screen, zoom=1.0):
