@@ -25,6 +25,8 @@ class Boids(Metric):
         self.cohesion = ensure_type_tag(cohesion_metric, 'Separation')
         self.alignment = ensure_type_tag(alignment_metric, 'Alignment')
         self.linear = linear
+
+        self.centroids = []
         self.min_travel = 0.1
 
     @Metric.world.setter
@@ -75,3 +77,7 @@ class Boids(Metric):
     def center_of_mass(self):
         # NOTE(mabay): Copied this over from 'RadialVarianceMetric'
         return self.positions.mean(axis=0)
+
+    @property
+    def positions(self):
+        return np.asarray([agent.getPosition() for agent in self.parent.population])
