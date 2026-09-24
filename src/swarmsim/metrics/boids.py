@@ -25,6 +25,7 @@ class Boids(Metric):
         self.cohesion = ensure_type_tag(cohesion_metric, 'Separation')
         self.alignment = ensure_type_tag(alignment_metric, 'Alignment')
         self.linear = linear
+        self.min_travel = 0.1
 
     @Metric.world.setter
     def world(self, value):
@@ -53,5 +54,24 @@ class Boids(Metric):
         self.separation.calculate()
         self.cohesion.calculate()
         self.alignment.calculate()
-        self.set_value(a * self.separation.average + b * self.cohesion.average + c * self.alignment.average)
 
+        score = a * self.separation.average + b * self.cohesion.average + c * self.alignment.average
+        dist = self.distance_reward()
+        self.set_value(score + score*dist)
+
+    # TODO: Give this method a better name
+    def distance_reward(self) -> float:
+        curr_centroid = self.center_of_mass()
+
+        # Update centroids list
+        self.centroids.append(curr_centroid)
+
+        T = self.history_size
+        prev_centroid = self.centroids[-T if len(self.centroids) >= T else 0]
+        dist = np.linalg.norm(curr_centroid - prev_centroid)
+
+        return 0. if dist < self.min_travel else dist
+
+    def center_of_mass(self):
+        # NOTE(mabay): Copied this over from 'RadialVarianceMetric'
+        return self.positions.mean(axis=0)

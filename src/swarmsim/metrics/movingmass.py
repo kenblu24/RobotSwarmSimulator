@@ -11,15 +11,11 @@ class MovingMass(Aggregation):
 
         self.centroids = []
         self.linear = linear
+        self.min_travel = 0.1
 
     @property
     def positions(self):
         return np.asarray([agent.getPosition() for agent in self.parent.population])
-
-    @property
-    def min_travel(self):
-        # NOTE: This is meant to be an agent's radius
-        return 0.1
 
     def center_of_mass(self):
         # NOTE(mabay): Copied this over from 'RadialVarianceMetric'
@@ -27,12 +23,12 @@ class MovingMass(Aggregation):
 
     def _calculate(self):
         agg_wt, disp_wt = self.linear
-        centroid = self.center_of_mass()
-
-        return agg_wt * super()._calculate() + disp_wt * self.f(centroid)
+        return agg_wt * super()._calculate() + disp_wt * self.distance_reward()
 
     # TODO: Give this method a better name
-    def f(self, curr_centroid) -> float:
+    def distance_reward(self) -> float:
+        curr_centroid = self.center_of_mass()
+
         # Update centroids list
         self.centroids.append(curr_centroid)
 
@@ -40,10 +36,7 @@ class MovingMass(Aggregation):
         prev_centroid = self.centroids[-T if len(self.centroids) >= T else 0]
         dist = np.linalg.norm(curr_centroid - prev_centroid)
 
-        score = dist
-        if dist < self.min_travel:
-            score = -1
-        return score
+        return 0. if dist < self.min_travel else dist
 
     def draw(self, screen, zoom=1.0):
         if len(self.centroids) == 0:
