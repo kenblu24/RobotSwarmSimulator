@@ -36,7 +36,7 @@ class MovingMass(Aggregation):
         prev_centroid = self.centroids[-T if len(self.centroids) >= T else 0]
         dist = np.linalg.norm(curr_centroid - prev_centroid)
 
-        return 0. if dist < self.min_travel else dist
+        return -1. if dist < self.min_travel else dist
 
     def draw(self, screen, zoom=1.0):
         if len(self.centroids) == 0:
