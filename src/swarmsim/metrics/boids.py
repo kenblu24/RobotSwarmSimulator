@@ -57,9 +57,10 @@ class Boids(Metric):
         self.cohesion.calculate()
         self.alignment.calculate()
 
-        score = a * self.separation.average + b * self.cohesion.average + c * self.alignment.average
+        wt_alignment = c * self.alignment.average
+        score = a * self.separation.average + b * self.cohesion.average + wt_alignment
         dist = self.distance_reward()
-        self.set_value(score + score*dist)
+        self.set_value(score + wt_alignment*dist)
 
     # TODO: Give this method a better name
     def distance_reward(self) -> float:
@@ -72,7 +73,7 @@ class Boids(Metric):
         prev_centroid = self.centroids[-T if len(self.centroids) >= T else 0]
         dist = np.linalg.norm(curr_centroid - prev_centroid)
 
-        return -1. if dist < self.min_travel else dist
+        return 0. if dist < self.min_travel else dist
 
     def center_of_mass(self):
         # NOTE(mabay): Copied this over from 'RadialVarianceMetric'
