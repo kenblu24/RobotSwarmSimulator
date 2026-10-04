@@ -60,7 +60,7 @@ class Boids(Metric):
         wt_alignment = c * self.alignment.average
         score = a * self.separation.average + b * self.cohesion.average + wt_alignment
         dist = self.distance_reward()
-        self.set_value(score + max(1., wt_alignment*dist))
+        self.set_value(score + wt_alignment*dist)
 
     # TODO: Give this method a better name
     def distance_reward(self) -> float:
