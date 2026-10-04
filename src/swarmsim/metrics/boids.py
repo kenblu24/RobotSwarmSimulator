@@ -27,7 +27,7 @@ class Boids(Metric):
         self.linear = linear
 
         self.centroids = []
-        self.min_travel = 0.2
+        self.min_travel = 4 * 0.1 # 4 times one agent's radius
 
     @Metric.world.setter
     def world(self, value):
