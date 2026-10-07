@@ -27,7 +27,7 @@ class Boids(Metric):
         self.linear = linear
 
         self.centroids = []
-        self.min_travel = 2 * 0.1 # Multiple of an agent's radius
+        self.min_travel = 10 * 0.1 # Multiple of an agent's radius
 
     @Metric.world.setter
     def world(self, value):
@@ -73,7 +73,7 @@ class Boids(Metric):
         prev_centroid = self.centroids[-T if len(self.centroids) >= T else 0]
         dist = np.linalg.norm(curr_centroid - prev_centroid)
 
-        return -1 if dist < self.min_travel else dist
+        return 0 if dist < self.min_travel else dist
 
     def center_of_mass(self):
         # NOTE(mabay): Copied this over from 'RadialVarianceMetric'
